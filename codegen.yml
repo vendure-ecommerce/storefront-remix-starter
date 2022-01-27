@@ -1,0 +1,12 @@
+overwrite: true
+schema: "http://localhost:3001/shop-api"
+documents: "app/**/*.{ts,tsx}"
+generates:
+  app/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-generic-sdk
+  app/generated/schema.graphql:
+    plugins:
+      - schema-ast

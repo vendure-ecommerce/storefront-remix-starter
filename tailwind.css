@@ -1,0 +1,22 @@
+@tailwind base;
+/* @tailwind components; */
+@tailwind utilities;
+
+@layer utilities {
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .shadow-divider {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 10px 9px -10px inset;
+  }
+
+  .mirror-x {
+    --tw-scale-x: -1;
+  }
+
+  .text-inherit {
+    color: inherit;
+  }
+}
