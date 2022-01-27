@@ -3098,12 +3098,22 @@ export type Zone = Node & {
 export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CollectionsQuery = { __typename?: 'Query', collections: { __typename?: 'CollectionList', items: Array<{ __typename?: 'Collection', id: string, name: string }> } };
+export type CollectionsQuery = { __typename?: 'Query', collections: { __typename?: 'CollectionList', items: Array<{ __typename?: 'Collection', id: string, name: string, slug: string }> } };
+
+export type CollectionQueryVariables = Exact<{
+  slug?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string } | null | undefined };
 
 export type ListedProductFragment = { __typename?: 'SearchResult', productId: string, productName: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } };
 
 export type CollectionProductsQueryVariables = Exact<{
-  collectionId: Scalars['ID'];
+  collectionId?: InputMaybe<Scalars['ID']>;
+  collectionSlug?: InputMaybe<Scalars['String']>;
+  take?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -3135,13 +3145,25 @@ export const CollectionsDocument = gql`
     items {
       id
       name
+      slug
     }
   }
 }
     `;
+export const CollectionDocument = gql`
+    query collection($slug: String, $id: ID) {
+  collection(slug: $slug, id: $id) {
+    id
+    name
+    slug
+  }
+}
+    `;
 export const CollectionProductsDocument = gql`
-    query collectionProducts($collectionId: ID!) {
-  search(input: {take: 12, groupByProduct: true, collectionId: $collectionId}) {
+    query collectionProducts($collectionId: ID, $collectionSlug: String, $take: Int = 12) {
+  search(
+    input: {take: $take, groupByProduct: true, collectionId: $collectionId, collectionSlug: $collectionSlug}
+  ) {
     items {
       ...ListedProduct
     }
@@ -3154,7 +3176,10 @@ export function getSdk<C>(requester: Requester<C>) {
     collections(variables?: CollectionsQueryVariables, options?: C): Promise<CollectionsQuery> {
       return requester<CollectionsQuery, CollectionsQueryVariables>(CollectionsDocument, variables, options);
     },
-    collectionProducts(variables: CollectionProductsQueryVariables, options?: C): Promise<CollectionProductsQuery> {
+    collection(variables?: CollectionQueryVariables, options?: C): Promise<CollectionQuery> {
+      return requester<CollectionQuery, CollectionQueryVariables>(CollectionDocument, variables, options);
+    },
+    collectionProducts(variables?: CollectionProductsQueryVariables, options?: C): Promise<CollectionProductsQuery> {
       return requester<CollectionProductsQuery, CollectionProductsQueryVariables>(CollectionProductsDocument, variables, options);
     }
   };

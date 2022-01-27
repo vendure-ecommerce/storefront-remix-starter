@@ -1,6 +1,7 @@
 import { Button, IconButton } from "@mui/material";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { Logo } from "../Logo";
+import { Link } from "remix";
 
 export function Header() {
   return (
@@ -11,7 +12,9 @@ export function Header() {
             <Menu />
           </IconButton>
         </div>
-        <Logo className="justify-self-center" />
+        <Link className="justify-self-center" to="/">
+          <Logo />
+        </Link>
         <div className="justify-self-end">
           <Button color="inherit" className="bg-white">
             <ShoppingCart />

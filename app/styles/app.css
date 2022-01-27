@@ -507,8 +507,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 100%;
 }
 
+#app .w-28 {
+  width: 7rem;
+}
+
 #app .max-w-5xl {
   max-width: 64rem;
+}
+
+#app .flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 #app .flex-grow {
@@ -519,8 +527,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+#app .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 #app .flex-col {
   flex-direction: column;
+}
+
+#app .flex-nowrap {
+  flex-wrap: nowrap;
 }
 
 #app .items-center {

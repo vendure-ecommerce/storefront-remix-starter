@@ -1,11 +1,11 @@
 import gql from "graphql-tag";
-import { sdk } from "../graphqlWrapper";
+import { sdk } from "../../graphqlWrapper";
 
 export function getCollectionProducts(collectionId: string) {
-  return sdk.collectionProducts({ collectionId });
+  return sdk.collectionProducts({ collectionId, take: 12 });
 }
 
-const listedProductFragment = gql`
+export const listedProductFragment = gql`
   fragment ListedProduct on SearchResult {
     productId
     productName
@@ -27,9 +27,18 @@ const listedProductFragment = gql`
 `;
 
 gql`
-  query collectionProducts($collectionId: ID!) {
+  query collectionProducts(
+    $collectionId: ID
+    $collectionSlug: String
+    $take: Int = 12
+  ) {
     search(
-      input: { take: 12, groupByProduct: true, collectionId: $collectionId }
+      input: {
+        take: $take
+        groupByProduct: true
+        collectionId: $collectionId
+        collectionSlug: $collectionSlug
+      }
     ) {
       items {
         ...ListedProduct

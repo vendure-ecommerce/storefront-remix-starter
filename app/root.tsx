@@ -10,6 +10,7 @@ import type { MetaFunction } from "remix";
 import styles from "./styles/app.css";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
+import { Header } from "./components/header/Header";
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
@@ -35,7 +36,11 @@ export default function App() {
           <Links />
         </head>
         <body>
+          <Header />
+
+      <main className="max-w-5xl p-4 m-auto">
           <Outlet />
+          </main>
           <ScrollRestoration />
           <Scripts />
           {process.env.NODE_ENV === "development" && <LiveReload />}
