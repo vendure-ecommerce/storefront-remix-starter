@@ -11,6 +11,8 @@ import styles from "./styles/app.css";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
 import { Header } from "./components/header/Header";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { activeOrder } from "./providers/orders/order";
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
@@ -25,6 +27,17 @@ export function links() {
     { rel: "stylesheet", href: styles },
   ];
 }
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+export async function loader({ request }: DataFunctionArgs) {
+  console.log('req', request.headers)
+  return {
+    activeOrder: await activeOrder({
+      headers: request.headers
+    }),
+  };
+}
+
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -38,8 +51,8 @@ export default function App() {
         <body>
           <Header />
 
-      <main className="max-w-5xl p-4 m-auto">
-          <Outlet />
+          <main className="max-w-5xl p-4 m-auto">
+            <Outlet />
           </main>
           <ScrollRestoration />
           <Scripts />

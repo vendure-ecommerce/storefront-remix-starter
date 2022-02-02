@@ -479,6 +479,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 2rem;
 }
 
+#app .my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 #app .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -499,16 +504,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 0.5rem;
 }
 
-#app .max-h-40 {
-  max-height: 10rem;
+#app .h-8 {
+  height: 2rem;
 }
 
-#app .w-full {
-  width: 100%;
+#app .h-4 {
+  height: 1rem;
 }
 
 #app .w-28 {
   width: 7rem;
+}
+
+#app .w-full {
+  width: 100%;
 }
 
 #app .max-w-5xl {
@@ -547,12 +556,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   justify-content: space-between;
 }
 
+#app .gap-6 {
+  gap: 1.5rem;
+}
+
 #app .gap-4 {
   gap: 1rem;
 }
 
-#app .gap-6 {
-  gap: 1.5rem;
+#app .gap-2 {
+  gap: 0.5rem;
 }
 
 #app .justify-self-end {
@@ -563,12 +576,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   justify-self: center;
 }
 
-#app .justify-self-stretch {
-  justify-self: stretch;
-}
-
-#app .rounded {
-  border-radius: 0.25rem;
+#app .whitespace-nowrap {
+  white-space: nowrap;
 }
 
 #app .rounded-xl {
@@ -585,6 +594,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+#app .bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
 #app .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -592,6 +606,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 #app .p-4 {
   padding: 1rem;
+}
+
+#app .p-8 {
+  padding: 2rem;
 }
 
 #app .text-2xl {
@@ -602,6 +620,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 #app .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+#app .text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 #app .font-extralight {
@@ -629,12 +652,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(17 94 92 / var(--tw-text-opacity));
 }
 
-#app .opacity-70 {
-  opacity: 0.7;
-}
-
 #app .opacity-80 {
   opacity: 0.8;
+}
+
+#app .opacity-50 {
+  opacity: 0.5;
+}
+
+#app .opacity-30 {
+  opacity: 0.3;
 }
 
 #app .filter {

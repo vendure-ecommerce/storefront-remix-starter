@@ -6,7 +6,7 @@ module.exports = {
   // },
   // plugins: [],
   mode: "jit",
-  purge: ["./app/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx}"],
   important: "#app",
 
   theme: {

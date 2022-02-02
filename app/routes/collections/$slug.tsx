@@ -13,7 +13,6 @@ export async function loader({ params }: DataFunctionArgs) {
   const collection = (await sdk.collection({ slug: params.slug })).collection;
   if (!collection?.id || !collection?.name) throw "Collection not found";
   const products = (await productsPromise).search.items;
-  console.log(products.length);
 
   return {
     ...collection,

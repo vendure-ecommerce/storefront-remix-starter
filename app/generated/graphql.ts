@@ -3108,7 +3108,30 @@ export type CollectionQueryVariables = Exact<{
 
 export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string } | null | undefined };
 
-export type ListedProductFragment = { __typename?: 'SearchResult', productId: string, productName: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } };
+export type AddItemToOrderMutationVariables = Exact<{
+  productVariantId: Scalars['ID'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename?: 'InsufficientStockError' } | { __typename?: 'NegativeQuantityError' } | { __typename?: 'Order', id: string, createdAt: any, state: string, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | { __typename?: 'OrderLimitError' } | { __typename?: 'OrderModificationError' } };
+
+export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, subTotalWithTax: number, currencyCode: CurrencyCode, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | null | undefined };
+
+export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, assets: Array<{ __typename?: 'Asset', id: string, source: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> };
+
+export type ProductQueryVariables = Exact<{
+  slug?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description: string, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, assets: Array<{ __typename?: 'Asset', id: string, source: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> } | null | undefined };
+
+export type ListedProductFragment = { __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } };
 
 export type CollectionProductsQueryVariables = Exact<{
   collectionId?: InputMaybe<Scalars['ID']>;
@@ -3117,12 +3140,37 @@ export type CollectionProductsQueryVariables = Exact<{
 }>;
 
 
-export type CollectionProductsQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
+export type CollectionProductsQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
 
+export const DetailedProductFragmentDoc = gql`
+    fragment DetailedProduct on Product {
+  id
+  name
+  description
+  facetValues {
+    facet {
+      code
+    }
+    name
+  }
+  assets {
+    id
+    source
+  }
+  variants {
+    id
+    name
+    priceWithTax
+    currencyCode
+    sku
+  }
+}
+    `;
 export const ListedProductFragmentDoc = gql`
     fragment ListedProduct on SearchResult {
   productId
   productName
+  slug
   productAsset {
     id
     preview
@@ -3159,6 +3207,51 @@ export const CollectionDocument = gql`
   }
 }
     `;
+export const AddItemToOrderDocument = gql`
+    mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
+  addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+    ... on Order {
+      id
+      createdAt
+      state
+      lines {
+        id
+        productVariant {
+          id
+          name
+          price
+        }
+      }
+    }
+  }
+}
+    `;
+export const ActiveOrderDocument = gql`
+    query activeOrder {
+  activeOrder {
+    id
+    createdAt
+    state
+    subTotalWithTax
+    currencyCode
+    lines {
+      id
+      productVariant {
+        id
+        name
+        price
+      }
+    }
+  }
+}
+    `;
+export const ProductDocument = gql`
+    query product($slug: String, $id: ID) {
+  product(slug: $slug, id: $id) {
+    ...DetailedProduct
+  }
+}
+    ${DetailedProductFragmentDoc}`;
 export const CollectionProductsDocument = gql`
     query collectionProducts($collectionId: ID, $collectionSlug: String, $take: Int = 12) {
   search(
@@ -3178,6 +3271,15 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     collection(variables?: CollectionQueryVariables, options?: C): Promise<CollectionQuery> {
       return requester<CollectionQuery, CollectionQueryVariables>(CollectionDocument, variables, options);
+    },
+    addItemToOrder(variables: AddItemToOrderMutationVariables, options?: C): Promise<AddItemToOrderMutation> {
+      return requester<AddItemToOrderMutation, AddItemToOrderMutationVariables>(AddItemToOrderDocument, variables, options);
+    },
+    activeOrder(variables?: ActiveOrderQueryVariables, options?: C): Promise<ActiveOrderQuery> {
+      return requester<ActiveOrderQuery, ActiveOrderQueryVariables>(ActiveOrderDocument, variables, options);
+    },
+    product(variables?: ProductQueryVariables, options?: C): Promise<ProductQuery> {
+      return requester<ProductQuery, ProductQueryVariables>(ProductDocument, variables, options);
     },
     collectionProducts(variables?: CollectionProductsQueryVariables, options?: C): Promise<CollectionProductsQuery> {
       return requester<CollectionProductsQuery, CollectionProductsQueryVariables>(CollectionProductsDocument, variables, options);

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:css && remix build",
     "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+    "dev": "concurrently \"npm run dev:css\" \"node -r dotenv/config node_modules/.bin/remix dev\"",
     "dev:css": "tailwindcss -w -i ./tailwind.css -o app/styles/app.css",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
@@ -22,6 +22,7 @@
     "@remix-run/react": "^1.1.3",
     "@remix-run/serve": "^1.1.3",
     "clsx": "^1.1.1",
+    "dotenv": "^15.0.0",
     "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",

@@ -5,10 +5,51 @@ export function getCollectionProducts(collectionId: string) {
   return sdk.collectionProducts({ collectionId, take: 12 });
 }
 
+export function getProductBySlug(slug: string) {
+  return sdk.product({ slug });
+}
+
+export const detailedProductFragment = gql`
+  fragment DetailedProduct on Product {
+    id
+    name
+    description
+
+    facetValues {
+      facet {
+        code
+      }
+      name
+    }
+
+    assets {
+      id
+      source
+    }
+
+    variants {
+      id
+      name
+      priceWithTax
+      currencyCode
+      sku
+    }
+  }
+`;
+
+gql`
+  query product($slug: String, $id: ID) {
+    product(slug: $slug, id: $id) {
+      ...DetailedProduct
+    }
+  }
+`;
+
 export const listedProductFragment = gql`
   fragment ListedProduct on SearchResult {
     productId
     productName
+    slug
     productAsset {
       id
       preview

@@ -8,29 +8,27 @@ export interface GraphqlResponse<Response> {
 
 // const agent = request.agent(app);
 function sendQuery<Response, Variables = {}>(
-  options: { query: string; variables?: Variables }
+  options: { query: string; variables?: Variables, headers?: Headers }
   // token?: string
-): Promise<GraphqlResponse<Response>> {
+): Promise<GraphqlResponse<Response> & { headers: Headers }> {
   // const req = agent.post("/graphql").set("Accept", "application/json");
 
   // if (token) {
   //   req.set("Authorization", `Bearer ${token}`);
   // }
 
+  const headers = new Headers(options.headers);
+  headers.append("Content-Type", "application/json");
+
   return fetch("http://localhost:3001/shop-api", {
     method: "POST",
     body: JSON.stringify(options),
-    headers: {
-      // "Accept-Language": locale,
-      "Content-Type": "application/json",
-  },
-  })
-  // .then(async res => {
-  //   console.log('ttt', await res.text());
-  //   return res;
-  // })
-
-  .then((res) => res.json());
+    credentials: "include",
+    headers,
+  }).then(async (res) => ({
+    ...(await res.json()),
+    headers: res.headers,
+  }));
   // .then((res) => {
   //   if (res.error) {
   //     if (res.text) throw new Error(res.text);
@@ -43,17 +41,24 @@ function sendQuery<Response, Variables = {}>(
   // });
 }
 
+export const sdk: SdkWithHeaders = getSdk(requester) as any;
 
-export const sdk = getSdk(requester);
+type Sdk = ReturnType<typeof getSdk>;
+type SdkWithHeaders = {
+  [k in keyof Sdk]: (
+    ...args: Parameters<Sdk[k]>
+  ) => Promise<Awaited<ReturnType<Sdk[k]>> & { _headers: Headers }>;
+};
+
+type X = ReturnType<SdkWithHeaders['collection']>;
 
 function requester<R, V>(
   doc: DocumentNode,
   vars?: V,
-  // options?: { token?: string }
-): Promise<R> {
+  options?: { headers?: Headers }
+): Promise<R & { _headers: Headers }> {
   return sendQuery<R, V>(
-    { query: print(doc), variables: vars },
-    // options?.token
+    { query: print(doc), variables: vars, ...options },
   ).then((response) => {
     if (response.errors) {
       console.log(
@@ -61,6 +66,6 @@ function requester<R, V>(
       );
       throw new Error(response.errors[0].message);
     }
-    return response.data;
+    return { ...response.data, _headers: response.headers };
   });
 }
