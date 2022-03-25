@@ -1,11 +1,11 @@
 import gql from "graphql-tag";
-import { sdk } from "../../graphqlWrapper";
+import { QueryOptions, sdk } from "../../graphqlWrapper";
 
-export function addItemToOrder(productVariantId: string, quantity: number) {
+export function addItemToOrder(productVariantId: string, quantity: number, options: QueryOptions) {
   return sdk.addItemToOrder({
     productVariantId,
     quantity,
-  });
+  }, options);
 }
 
 gql`
@@ -28,7 +28,7 @@ gql`
   }
 `;
 
-export function activeOrder(options: { headers?: Headers}) {
+export function activeOrder(options: QueryOptions) {
   return sdk.activeOrder(undefined, options);
 }
 

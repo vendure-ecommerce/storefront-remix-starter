@@ -34,7 +34,7 @@ export async function action({ request, params }: DataFunctionArgs) {
   if (!variantId || !(quantity > 0)) {
     return { errors: ["Oops, invalid input"] };
   }
-  const res = await addItemToOrder(variantId, quantity);
+  const res = await addItemToOrder(variantId, quantity, { request });
   return redirect(`/products/${params.slug}`, { headers: res._headers });
 }
 
