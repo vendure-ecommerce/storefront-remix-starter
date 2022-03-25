@@ -8,10 +8,10 @@ import { getCollectionProducts } from "../providers/products/products";
 export type CollectionWithProducts = Awaited<
   ReturnType<typeof loader>
 >["collections"][number];
-export async function loader() {
+export async function loader({ request }: any) {
   const collections = await Promise.all(
     (
-      await getCollectionsHome()
+      await getCollectionsHome(request)
     )
       .sort((a, b) => {
         // 11 is the "Featured" collection

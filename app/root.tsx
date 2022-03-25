@@ -30,11 +30,8 @@ export function links() {
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export async function loader({ request }: DataFunctionArgs) {
-  console.log('req', request.headers)
   return {
-    activeOrder: await activeOrder({
-      headers: request.headers
-    }),
+    activeOrder: await activeOrder({ request }),
   };
 }
 

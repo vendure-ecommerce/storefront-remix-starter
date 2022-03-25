@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import { sdk } from "../../graphqlWrapper";
 import { listedProductFragment } from "../products/products";
 
-export function getCollectionsHome() {
-  return sdk.collections().then((result) => result.collections.items);
+export function getCollectionsHome(request: Request) {
+  return sdk.collections(undefined, { request }).then((result) => result.collections?.items);
 }
 
 gql`
