@@ -1,5 +1,5 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { LoaderFunction, useLoaderData } from "remix";
+import { useLoaderData } from '@remix-run/react';
 import { Collection } from "../../components/collections/Collection";
 import { sdk } from "../../graphqlWrapper";
 

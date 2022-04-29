@@ -1,7 +1,7 @@
 import { CurrencyCode, CollectionProductsQuery } from "../../generated/graphql";
 import { memoize } from "lodash/fp";
 import { Typography } from "@mui/material";
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import { Price } from "./Price";
 
 export type ProductCardProps = CollectionProductsQuery["search"]["items"][number];

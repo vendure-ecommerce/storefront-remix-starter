@@ -1,5 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import { CollectionWithProducts } from "../../routes";
 import { ProductCard } from "../products/ProductCard";
 

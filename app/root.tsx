@@ -5,13 +5,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
-import type { MetaFunction } from "remix";
+} from "@remix-run/react";
 import styles from "./styles/app.css";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
 import { Header } from "./components/header/Header";
-import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { activeOrder } from "./providers/orders/order";
 
 export const meta: MetaFunction = () => {

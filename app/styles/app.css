@@ -540,6 +540,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+#app .grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 #app .flex-col {
   flex-direction: column;
 }
@@ -599,6 +603,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+#app .bg-indigo-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(199 210 254 / var(--tw-bg-opacity));
+}
+
+#app .bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 #app .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -610,6 +624,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 #app .p-8 {
   padding: 2rem;
+}
+
+#app .p-4 {
+  padding: 1rem;
 }
 
 #app .text-2xl {

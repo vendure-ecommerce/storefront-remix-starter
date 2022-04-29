@@ -1,18 +1,10 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import { DataFunctionArgs, redirect } from "@remix-run/server-runtime";
 import { useState } from "react";
-import { Form, useLoaderData } from "remix";
 import { Price } from "../../components/products/Price";
 import { addItemToOrder } from "../../providers/orders/order";
 import { getProductBySlug } from "../../providers/products/products";
+import { useLoaderData, Form } from '@remix-run/react';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 

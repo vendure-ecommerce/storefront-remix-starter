@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "remix";
+import { createCookieSessionStorage } from '@remix-run/node';
 
 if (!process.env.ENCRYPTION_KEY) {
   throw new Error("ENCRYPTION_KEY environment variable is not set");

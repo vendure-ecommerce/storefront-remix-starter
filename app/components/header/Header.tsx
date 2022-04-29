@@ -1,7 +1,7 @@
 import { Button, IconButton } from "@mui/material";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { Logo } from "../Logo";
-import { Link, useLoaderData } from "remix";
+import { Link, useLoaderData } from "@remix-run/react";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { Price } from "../products/Price";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData } from "remix";
+import { useLoaderData } from "@remix-run/react";
 import { Collection } from "../components/collections/Collection";
 import { Header } from "../components/header/Header";
 import { getCollectionsHome } from "../providers/collections/collections";
