@@ -38,8 +38,10 @@ gql`
       id
       createdAt
       state
-      subTotalWithTax
       currencyCode
+      totalQuantity
+      subTotalWithTax
+      totalWithTax
       lines {
         id
         productVariant {

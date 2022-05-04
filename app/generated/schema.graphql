@@ -1,5 +1,14 @@
 union ActiveOrderResult = NoActiveOrderError | Order
 
+input AddGiftCardToOrderInput {
+  deliveryDate: DateTime
+  message: String
+  recipientEmailAddress: String
+  senderName: String
+  templateId: ID
+  value: Int!
+}
+
 union AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
 
 type Address implements Node {
@@ -29,18 +38,30 @@ type Adjustment {
 
 enum AdjustmentType {
   DISTRIBUTED_ORDER_PROMOTION
+  OTHER
   PROMOTION
 }
 
 """
-Retured when attemting to set the Customer for an Order when already logged in.
+Returned when attempting to set the Customer for an Order when already logged in.
 """
 type AlreadyLoggedInError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
 }
 
+type AppliedGiftCard {
+  balance: Int!
+  code: String!
+}
+
 union ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order
+
+input ApplyGiftCardToOrderInput {
+  code: String!
+}
+
+union ApplyGiftCardToOrderResult = GiftCardError | Order
 
 type Asset implements Node {
   createdAt: DateTime!
@@ -92,6 +113,11 @@ type BooleanCustomFieldConfig implements CustomField {
   readonly: Boolean
   type: String!
   ui: JSON
+}
+
+"""Operators for filtering on a list of Boolean fields"""
+input BooleanListOperators {
+  inList: Boolean!
 }
 
 """Operators for filtering on a Boolean field"""
@@ -894,6 +920,11 @@ input CustomerSortParameter {
   updatedAt: SortOrder
 }
 
+"""Operators for filtering on a list of Date fields"""
+input DateListOperators {
+  inList: DateTime!
+}
+
 """Operators for filtering on a DateTime field"""
 input DateOperators {
   after: DateTime
@@ -953,7 +984,7 @@ type Discount {
 }
 
 """
-Retured when attemting to create a Customer with an email address already registered to an existing User.
+Returned when attempting to create a Customer with an email address already registered to an existing User.
 """
 type EmailAddressConflictError implements ErrorResult {
   errorCode: ErrorCode!
@@ -966,6 +997,7 @@ enum ErrorCode {
   COUPON_CODE_INVALID_ERROR
   COUPON_CODE_LIMIT_ERROR
   EMAIL_ADDRESS_CONFLICT_ERROR
+  GIFT_CARD_ERROR
   IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR
   IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR
   INELIGIBLE_PAYMENT_METHOD_ERROR
@@ -984,6 +1016,7 @@ enum ErrorCode {
   PASSWORD_ALREADY_SET_ERROR
   PASSWORD_RESET_TOKEN_EXPIRED_ERROR
   PASSWORD_RESET_TOKEN_INVALID_ERROR
+  PASSWORD_VALIDATION_ERROR
   PAYMENT_DECLINED_ERROR
   PAYMENT_FAILED_ERROR
   UNKNOWN_ERROR
@@ -1125,6 +1158,21 @@ type Fulfillment implements Node {
   updatedAt: DateTime!
 }
 
+type GiftCardError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+"""The config for the Gift Card to be purchased"""
+type GiftCardInput {
+  deliveryDate: DateTime
+  message: String
+  recipientEmailAddress: String
+  senderName: String
+  templateId: ID
+  value: Int!
+}
+
 enum GlobalFlag {
   FALSE
   INHERIT
@@ -1203,6 +1251,11 @@ enum HistoryEntryType {
   ORDER_STATE_TRANSITION
 }
 
+"""Operators for filtering on a list of ID fields"""
+input IDListOperators {
+  inList: ID!
+}
+
 """Operators for filtering on an ID field"""
 input IDOperators {
   eq: String
@@ -1212,7 +1265,7 @@ input IDOperators {
 }
 
 """
-Retured if the token used to change a Customer's email address is valid, but has
+Returned if the token used to change a Customer's email address is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type IdentifierChangeTokenExpiredError implements ErrorResult {
@@ -1221,7 +1274,7 @@ type IdentifierChangeTokenExpiredError implements ErrorResult {
 }
 
 """
-Retured if the token used to change a Customer's email address is either
+Returned if the token used to change a Customer's email address is either
 invalid or does not match any expected tokens.
 """
 type IdentifierChangeTokenInvalidError implements ErrorResult {
@@ -1790,7 +1843,7 @@ enum LogicalOperator {
 }
 
 """
-Retured when attemting to register or verify a customer account without a password, when one is required.
+Returned when attempting to register or verify a customer account without a password, when one is required.
 """
 type MissingPasswordError implements ErrorResult {
   errorCode: ErrorCode!
@@ -1798,6 +1851,8 @@ type MissingPasswordError implements ErrorResult {
 }
 
 type Mutation {
+  addGiftCardToOrder(input: AddGiftCardToOrderInput!): UpdateOrderItemsResult!
+
   """
   Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available.
   """
@@ -1813,6 +1868,7 @@ type Mutation {
 
   """Applies the given coupon code to the active Order"""
   applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
+  applyGiftCardToOrder(code: String!): ApplyGiftCardToOrderResult!
 
   """Authenticates the user using a named authentication strategy"""
   authenticate(input: AuthenticationInput!, rememberMe: Boolean): AuthenticationResult!
@@ -1845,7 +1901,7 @@ type Mutation {
      verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
      verified and authenticated in one step.
   2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-     verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
+     verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
      verified and authenticated in one step.
   
   _If `authOptions.requireVerification` is set to `false`:_
@@ -1859,6 +1915,7 @@ type Mutation {
 
   """Removes the given coupon code from the active Order"""
   removeCouponCode(couponCode: String!): Order
+  removeGiftCardFromOrder(code: String!): Order!
 
   """Remove an OrderLine from the Order"""
   removeOrderLine(orderLineId: ID!): RemoveOrderItemsResult!
@@ -1919,7 +1976,7 @@ type Mutation {
   """
   Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
   
-  If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+  If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
   provided here.
   """
   verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
@@ -1931,7 +1988,7 @@ input NativeAuthInput {
 }
 
 """
-Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured.
+Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured.
 """
 type NativeAuthStrategyError implements ErrorResult {
   errorCode: ErrorCode!
@@ -1940,7 +1997,7 @@ type NativeAuthStrategyError implements ErrorResult {
 
 union NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError
 
-"""Retured when attemting to set a negative OrderLine quantity."""
+"""Returned when attempting to set a negative OrderLine quantity."""
 type NegativeQuantityError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
@@ -1966,6 +2023,11 @@ and an unverified user attempts to authenticate.
 type NotVerifiedError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
+}
+
+"""Operators for filtering on a list of Number fields"""
+input NumberListOperators {
+  inList: Float!
 }
 
 """Operators for filtering on a Int or Float field"""
@@ -2001,6 +2063,7 @@ type Order implements Node {
   customer: Customer
   discounts: [Discount!]!
   fulfillments: [Fulfillment!]
+  giftCardsApplied: [AppliedGiftCard!]!
   history(options: HistoryEntryListOptions): HistoryEntryList!
   id: ID!
   lines: [OrderLine!]!
@@ -2052,6 +2115,7 @@ type Order implements Node {
   The final payable amount. Equal to subTotalWithTax plus shippingWithTax
   """
   totalWithTax: Int!
+  totalWithTaxAfterGiftCard: Int!
   updatedAt: DateTime!
 }
 
@@ -2084,6 +2148,7 @@ input OrderFilterParameter {
   total: NumberOperators
   totalQuantity: NumberOperators
   totalWithTax: NumberOperators
+  totalWithTaxAfterGiftCard: NumberOperators
   updatedAt: DateOperators
 }
 
@@ -2129,7 +2194,7 @@ type OrderItem implements Node {
   updatedAt: DateTime!
 }
 
-"""Retured when the maximum order size limit has been reached."""
+"""Returned when the maximum order size limit has been reached."""
 type OrderLimitError implements ErrorResult {
   errorCode: ErrorCode!
   maxItems: Int!
@@ -2160,6 +2225,7 @@ type OrderLine implements Node {
   discountedUnitPriceWithTax: Int!
   discounts: [Discount!]!
   featuredAsset: Asset
+  giftCardInput: GiftCardInput
   id: ID!
   items: [OrderItem!]!
 
@@ -2268,6 +2334,7 @@ input OrderSortParameter {
   total: SortOrder
   totalQuantity: SortOrder
   totalWithTax: SortOrder
+  totalWithTaxAfterGiftCard: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2304,7 +2371,7 @@ interface PaginatedList {
 }
 
 """
-Retured when attemting to verify a customer account with a password, when a password has already been set.
+Returned when attempting to verify a customer account with a password, when a password has already been set.
 """
 type PasswordAlreadySetError implements ErrorResult {
   errorCode: ErrorCode!
@@ -2312,7 +2379,7 @@ type PasswordAlreadySetError implements ErrorResult {
 }
 
 """
-Retured if the token used to reset a Customer's password is valid, but has
+Returned if the token used to reset a Customer's password is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type PasswordResetTokenExpiredError implements ErrorResult {
@@ -2321,12 +2388,21 @@ type PasswordResetTokenExpiredError implements ErrorResult {
 }
 
 """
-Retured if the token used to reset a Customer's password is either
+Returned if the token used to reset a Customer's password is either
 invalid or does not match any expected tokens.
 """
 type PasswordResetTokenInvalidError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
+}
+
+"""
+Returned when attempting to register or verify a customer account where the given password fails password validation.
+"""
+type PasswordValidationError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  validationErrorMessage: String!
 }
 
 type Payment implements Node {
@@ -2399,6 +2475,31 @@ type PaymentMethodQuote {
 Permissions for administrators and customers. Used to control access to
 GraphQL resolvers via the {@link Allow} decorator.
 
+## Understanding Permission.Owner
+
+`Permission.Owner` is a special permission which is used in some of the Vendure resolvers to indicate that that resolver should only
+be accessible to the "owner" of that resource.
+
+For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+based on the activeUserId of the current session. As a result, the resolver code looks like this:
+
+@example
+```TypeScript
+\@Query()
+\@Allow(Permission.Owner)
+async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+  const userId = ctx.activeUserId;
+  if (userId) {
+    return this.customerService.findOneByUserId(ctx, userId);
+  }
+}
+```
+
+Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+
+
 @docsCategory common
 """
 enum Permission {
@@ -2431,6 +2532,9 @@ enum Permission {
 
   """Grants permission to create Facet"""
   CreateFacet
+
+  """Grants permission to create GiftCard"""
+  CreateGiftCard
 
   """Grants permission to create Order"""
   CreateOrder
@@ -2493,6 +2597,9 @@ enum Permission {
 
   """Grants permission to delete Facet"""
   DeleteFacet
+
+  """Grants permission to delete GiftCard"""
+  DeleteGiftCard
 
   """Grants permission to delete Order"""
   DeleteOrder
@@ -2562,6 +2669,9 @@ enum Permission {
   """Grants permission to read Facet"""
   ReadFacet
 
+  """Grants permission to read GiftCard"""
+  ReadGiftCard
+
   """Grants permission to read Order"""
   ReadOrder
 
@@ -2626,6 +2736,9 @@ enum Permission {
 
   """Grants permission to update Facet"""
   UpdateFacet
+
+  """Grants permission to update GiftCard"""
+  UpdateGiftCard
 
   """Grants permission to update GlobalSettings"""
   UpdateGlobalSettings
@@ -2899,7 +3012,7 @@ type Query {
 
   """
   The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-  state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+  state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
   query will once again return `null`.
   """
   activeOrder: Order
@@ -2908,7 +3021,7 @@ type Query {
   availableCountries: [Country!]!
 
   """
-  Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
+  Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is specified, an error will result.
   """
   collection(id: ID, slug: String): Collection
 
@@ -2930,6 +3043,7 @@ type Query {
 
   """A list of Facets available to the shop"""
   facets(options: FacetListOptions): FacetList!
+  giftCardTemplates: [Asset!]!
 
   """Returns information about the current authenticated User"""
   me: CurrentUser
@@ -2954,7 +3068,7 @@ type Query {
   orderByCode(code: String!): Order
 
   """
-  Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
+  Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result.
   """
   product(id: ID, slug: String): Product
 
@@ -2984,7 +3098,7 @@ type Refund implements Node {
   updatedAt: DateTime!
 }
 
-union RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | Success
+union RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | PasswordValidationError | Success
 
 input RegisterCustomerInput {
   emailAddress: String!
@@ -3015,7 +3129,7 @@ union RequestPasswordResetResult = NativeAuthStrategyError | Success
 
 union RequestUpdateCustomerEmailAddressResult = EmailAddressConflictError | InvalidCredentialsError | NativeAuthStrategyError | Success
 
-union ResetPasswordResult = CurrentUser | NativeAuthStrategyError | NotVerifiedError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError
+union ResetPasswordResult = CurrentUser | NativeAuthStrategyError | NotVerifiedError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError | PasswordValidationError
 
 type Role implements Node {
   channels: [Channel!]!
@@ -3075,7 +3189,7 @@ type SearchResult {
   productVariantName: String!
 
   """
-  A relevence score for the result. Differs between database implementations
+  A relevance score for the result. Differs between database implementations
   """
   score: Float!
   sku: String!
@@ -3182,6 +3296,11 @@ type StringCustomFieldConfig implements CustomField {
 type StringFieldOption {
   label: [LocalizedString!]
   value: String!
+}
+
+"""Operators for filtering on a list of String fields"""
+input StringListOperators {
+  inList: String!
 }
 
 """Operators for filtering on a String field"""
@@ -3298,7 +3417,7 @@ input UpdateCustomerInput {
   title: String
 }
 
-union UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | Success
+union UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | PasswordValidationError | Success
 
 input UpdateOrderInput {
   customFields: JSON
@@ -3331,7 +3450,7 @@ type VerificationTokenExpiredError implements ErrorResult {
 }
 
 """
-Retured if the verification token (used to verify a Customer's email address) is either
+Returned if the verification token (used to verify a Customer's email address) is either
 invalid or does not match any expected tokens.
 """
 type VerificationTokenInvalidError implements ErrorResult {
@@ -3339,7 +3458,7 @@ type VerificationTokenInvalidError implements ErrorResult {
   message: String!
 }
 
-union VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | VerificationTokenExpiredError | VerificationTokenInvalidError
+union VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | PasswordValidationError | VerificationTokenExpiredError | VerificationTokenInvalidError
 
 type Zone implements Node {
   createdAt: DateTime!

@@ -22,5 +22,5 @@ export async function loader({ params }: DataFunctionArgs) {
 
 export default function CollectionSlug() {
   const collection = useLoaderData<CollectionWithProducts>();
-  return <Collection collection={collection} />;
+  return <div>Hello</div>;
 }

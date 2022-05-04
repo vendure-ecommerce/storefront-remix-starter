@@ -22,6 +22,15 @@ export type Scalars = {
 
 export type ActiveOrderResult = NoActiveOrderError | Order;
 
+export type AddGiftCardToOrderInput = {
+  deliveryDate?: InputMaybe<Scalars['DateTime']>;
+  message?: InputMaybe<Scalars['String']>;
+  recipientEmailAddress?: InputMaybe<Scalars['String']>;
+  senderName?: InputMaybe<Scalars['String']>;
+  templateId?: InputMaybe<Scalars['ID']>;
+  value: Scalars['Int'];
+};
+
 export type AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError;
 
 export type Address = Node & {
@@ -53,17 +62,30 @@ export type Adjustment = {
 
 export enum AdjustmentType {
   DistributedOrderPromotion = 'DISTRIBUTED_ORDER_PROMOTION',
+  Other = 'OTHER',
   Promotion = 'PROMOTION'
 }
 
-/** Retured when attemting to set the Customer for an Order when already logged in. */
+/** Returned when attempting to set the Customer for an Order when already logged in. */
 export type AlreadyLoggedInError = ErrorResult & {
   __typename?: 'AlreadyLoggedInError';
   errorCode: ErrorCode;
   message: Scalars['String'];
 };
 
+export type AppliedGiftCard = {
+  __typename?: 'AppliedGiftCard';
+  balance: Scalars['Int'];
+  code: Scalars['String'];
+};
+
 export type ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order;
+
+export type ApplyGiftCardToOrderInput = {
+  code: Scalars['String'];
+};
+
+export type ApplyGiftCardToOrderResult = GiftCardError | Order;
 
 export type Asset = Node & {
   __typename?: 'Asset';
@@ -119,6 +141,11 @@ export type BooleanCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars['Boolean']>;
   type: Scalars['String'];
   ui?: Maybe<Scalars['JSON']>;
+};
+
+/** Operators for filtering on a list of Boolean fields */
+export type BooleanListOperators = {
+  inList: Scalars['Boolean'];
 };
 
 /** Operators for filtering on a Boolean field */
@@ -789,6 +816,11 @@ export type CustomerSortParameter = {
   updatedAt?: InputMaybe<SortOrder>;
 };
 
+/** Operators for filtering on a list of Date fields */
+export type DateListOperators = {
+  inList: Scalars['DateTime'];
+};
+
 /** Operators for filtering on a DateTime field */
 export type DateOperators = {
   after?: InputMaybe<Scalars['DateTime']>;
@@ -844,7 +876,7 @@ export type Discount = {
   type: AdjustmentType;
 };
 
-/** Retured when attemting to create a Customer with an email address already registered to an existing User. */
+/** Returned when attempting to create a Customer with an email address already registered to an existing User. */
 export type EmailAddressConflictError = ErrorResult & {
   __typename?: 'EmailAddressConflictError';
   errorCode: ErrorCode;
@@ -857,6 +889,7 @@ export enum ErrorCode {
   CouponCodeInvalidError = 'COUPON_CODE_INVALID_ERROR',
   CouponCodeLimitError = 'COUPON_CODE_LIMIT_ERROR',
   EmailAddressConflictError = 'EMAIL_ADDRESS_CONFLICT_ERROR',
+  GiftCardError = 'GIFT_CARD_ERROR',
   IdentifierChangeTokenExpiredError = 'IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR',
   IdentifierChangeTokenInvalidError = 'IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR',
   IneligiblePaymentMethodError = 'INELIGIBLE_PAYMENT_METHOD_ERROR',
@@ -875,6 +908,7 @@ export enum ErrorCode {
   PasswordAlreadySetError = 'PASSWORD_ALREADY_SET_ERROR',
   PasswordResetTokenExpiredError = 'PASSWORD_RESET_TOKEN_EXPIRED_ERROR',
   PasswordResetTokenInvalidError = 'PASSWORD_RESET_TOKEN_INVALID_ERROR',
+  PasswordValidationError = 'PASSWORD_VALIDATION_ERROR',
   PaymentDeclinedError = 'PAYMENT_DECLINED_ERROR',
   PaymentFailedError = 'PAYMENT_FAILED_ERROR',
   UnknownError = 'UNKNOWN_ERROR',
@@ -1018,6 +1052,23 @@ export type Fulfillment = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type GiftCardError = ErrorResult & {
+  __typename?: 'GiftCardError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+};
+
+/** The config for the Gift Card to be purchased */
+export type GiftCardInput = {
+  __typename?: 'GiftCardInput';
+  deliveryDate?: Maybe<Scalars['DateTime']>;
+  message?: Maybe<Scalars['String']>;
+  recipientEmailAddress?: Maybe<Scalars['String']>;
+  senderName?: Maybe<Scalars['String']>;
+  templateId?: Maybe<Scalars['ID']>;
+  value: Scalars['Int'];
+};
+
 export enum GlobalFlag {
   False = 'FALSE',
   Inherit = 'INHERIT',
@@ -1092,6 +1143,11 @@ export enum HistoryEntryType {
   OrderStateTransition = 'ORDER_STATE_TRANSITION'
 }
 
+/** Operators for filtering on a list of ID fields */
+export type IdListOperators = {
+  inList: Scalars['ID'];
+};
+
 /** Operators for filtering on an ID field */
 export type IdOperators = {
   eq?: InputMaybe<Scalars['String']>;
@@ -1101,7 +1157,7 @@ export type IdOperators = {
 };
 
 /**
- * Retured if the token used to change a Customer's email address is valid, but has
+ * Returned if the token used to change a Customer's email address is valid, but has
  * expired according to the `verificationTokenDuration` setting in the AuthOptions.
  */
 export type IdentifierChangeTokenExpiredError = ErrorResult & {
@@ -1111,7 +1167,7 @@ export type IdentifierChangeTokenExpiredError = ErrorResult & {
 };
 
 /**
- * Retured if the token used to change a Customer's email address is either
+ * Returned if the token used to change a Customer's email address is either
  * invalid or does not match any expected tokens.
  */
 export type IdentifierChangeTokenInvalidError = ErrorResult & {
@@ -1520,7 +1576,7 @@ export enum LogicalOperator {
   Or = 'OR'
 }
 
-/** Retured when attemting to register or verify a customer account without a password, when one is required. */
+/** Returned when attempting to register or verify a customer account without a password, when one is required. */
 export type MissingPasswordError = ErrorResult & {
   __typename?: 'MissingPasswordError';
   errorCode: ErrorCode;
@@ -1529,6 +1585,7 @@ export type MissingPasswordError = ErrorResult & {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addGiftCardToOrder: UpdateOrderItemsResult;
   /** Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available. */
   addItemToOrder: UpdateOrderItemsResult;
   /** Add a Payment to the Order */
@@ -1537,6 +1594,7 @@ export type Mutation = {
   adjustOrderLine: UpdateOrderItemsResult;
   /** Applies the given coupon code to the active Order */
   applyCouponCode: ApplyCouponCodeResult;
+  applyGiftCardToOrder: ApplyGiftCardToOrderResult;
   /** Authenticates the user using a named authentication strategy */
   authenticate: AuthenticationResult;
   /** Create a new Customer Address */
@@ -1558,7 +1616,7 @@ export type Mutation = {
    *    verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
    *    verified and authenticated in one step.
    * 2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-   *    verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
+   *    verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
    *    verified and authenticated in one step.
    *
    * _If `authOptions.requireVerification` is set to `false`:_
@@ -1570,6 +1628,7 @@ export type Mutation = {
   removeAllOrderLines: RemoveOrderItemsResult;
   /** Removes the given coupon code from the active Order */
   removeCouponCode?: Maybe<Order>;
+  removeGiftCardFromOrder: Order;
   /** Remove an OrderLine from the Order */
   removeOrderLine: RemoveOrderItemsResult;
   /** Requests a password reset email to be sent */
@@ -1609,10 +1668,15 @@ export type Mutation = {
   /**
    * Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
    *
-   * If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+   * If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
    * provided here.
    */
   verifyCustomerAccount: VerifyCustomerAccountResult;
+};
+
+
+export type MutationAddGiftCardToOrderArgs = {
+  input: AddGiftCardToOrderInput;
 };
 
 
@@ -1635,6 +1699,11 @@ export type MutationAdjustOrderLineArgs = {
 
 export type MutationApplyCouponCodeArgs = {
   couponCode: Scalars['String'];
+};
+
+
+export type MutationApplyGiftCardToOrderArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -1673,6 +1742,11 @@ export type MutationRegisterCustomerAccountArgs = {
 
 export type MutationRemoveCouponCodeArgs = {
   couponCode: Scalars['String'];
+};
+
+
+export type MutationRemoveGiftCardFromOrderArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -1759,7 +1833,7 @@ export type NativeAuthInput = {
   username: Scalars['String'];
 };
 
-/** Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured. */
+/** Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured. */
 export type NativeAuthStrategyError = ErrorResult & {
   __typename?: 'NativeAuthStrategyError';
   errorCode: ErrorCode;
@@ -1768,7 +1842,7 @@ export type NativeAuthStrategyError = ErrorResult & {
 
 export type NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError;
 
-/** Retured when attemting to set a negative OrderLine quantity. */
+/** Returned when attempting to set a negative OrderLine quantity. */
 export type NegativeQuantityError = ErrorResult & {
   __typename?: 'NegativeQuantityError';
   errorCode: ErrorCode;
@@ -1797,6 +1871,11 @@ export type NotVerifiedError = ErrorResult & {
   __typename?: 'NotVerifiedError';
   errorCode: ErrorCode;
   message: Scalars['String'];
+};
+
+/** Operators for filtering on a list of Number fields */
+export type NumberListOperators = {
+  inList: Scalars['Float'];
 };
 
 /** Operators for filtering on a Int or Float field */
@@ -1829,6 +1908,7 @@ export type Order = Node & {
   customer?: Maybe<Customer>;
   discounts: Array<Discount>;
   fulfillments?: Maybe<Array<Fulfillment>>;
+  giftCardsApplied: Array<AppliedGiftCard>;
   history: HistoryEntryList;
   id: Scalars['ID'];
   lines: Array<OrderLine>;
@@ -1868,6 +1948,7 @@ export type Order = Node & {
   totalQuantity: Scalars['Int'];
   /** The final payable amount. Equal to subTotalWithTax plus shippingWithTax */
   totalWithTax: Scalars['Int'];
+  totalWithTaxAfterGiftCard: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -1906,6 +1987,7 @@ export type OrderFilterParameter = {
   total?: InputMaybe<NumberOperators>;
   totalQuantity?: InputMaybe<NumberOperators>;
   totalWithTax?: InputMaybe<NumberOperators>;
+  totalWithTaxAfterGiftCard?: InputMaybe<NumberOperators>;
   updatedAt?: InputMaybe<DateOperators>;
 };
 
@@ -1946,7 +2028,7 @@ export type OrderItem = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
-/** Retured when the maximum order size limit has been reached. */
+/** Returned when the maximum order size limit has been reached. */
 export type OrderLimitError = ErrorResult & {
   __typename?: 'OrderLimitError';
   errorCode: ErrorCode;
@@ -1975,6 +2057,7 @@ export type OrderLine = Node & {
   discountedUnitPriceWithTax: Scalars['Int'];
   discounts: Array<Discount>;
   featuredAsset?: Maybe<Asset>;
+  giftCardInput?: Maybe<GiftCardInput>;
   id: Scalars['ID'];
   items: Array<OrderItem>;
   /** The total price of the line excluding tax and discounts. */
@@ -2061,6 +2144,7 @@ export type OrderSortParameter = {
   total?: InputMaybe<SortOrder>;
   totalQuantity?: InputMaybe<SortOrder>;
   totalWithTax?: InputMaybe<SortOrder>;
+  totalWithTaxAfterGiftCard?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
 
@@ -2095,7 +2179,7 @@ export type PaginatedList = {
   totalItems: Scalars['Int'];
 };
 
-/** Retured when attemting to verify a customer account with a password, when a password has already been set. */
+/** Returned when attempting to verify a customer account with a password, when a password has already been set. */
 export type PasswordAlreadySetError = ErrorResult & {
   __typename?: 'PasswordAlreadySetError';
   errorCode: ErrorCode;
@@ -2103,7 +2187,7 @@ export type PasswordAlreadySetError = ErrorResult & {
 };
 
 /**
- * Retured if the token used to reset a Customer's password is valid, but has
+ * Returned if the token used to reset a Customer's password is valid, but has
  * expired according to the `verificationTokenDuration` setting in the AuthOptions.
  */
 export type PasswordResetTokenExpiredError = ErrorResult & {
@@ -2113,13 +2197,21 @@ export type PasswordResetTokenExpiredError = ErrorResult & {
 };
 
 /**
- * Retured if the token used to reset a Customer's password is either
+ * Returned if the token used to reset a Customer's password is either
  * invalid or does not match any expected tokens.
  */
 export type PasswordResetTokenInvalidError = ErrorResult & {
   __typename?: 'PasswordResetTokenInvalidError';
   errorCode: ErrorCode;
   message: Scalars['String'];
+};
+
+/** Returned when attempting to register or verify a customer account where the given password fails password validation. */
+export type PasswordValidationError = ErrorResult & {
+  __typename?: 'PasswordValidationError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+  validationErrorMessage: Scalars['String'];
 };
 
 export type Payment = Node & {
@@ -2194,6 +2286,31 @@ export type PaymentMethodQuote = {
  * Permissions for administrators and customers. Used to control access to
  * GraphQL resolvers via the {@link Allow} decorator.
  *
+ * ## Understanding Permission.Owner
+ *
+ * `Permission.Owner` is a special permission which is used in some of the Vendure resolvers to indicate that that resolver should only
+ * be accessible to the "owner" of that resource.
+ *
+ * For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+ * based on the activeUserId of the current session. As a result, the resolver code looks like this:
+ *
+ * @example
+ * ```TypeScript
+ * \@Query()
+ * \@Allow(Permission.Owner)
+ * async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+ *   const userId = ctx.activeUserId;
+ *   if (userId) {
+ *     return this.customerService.findOneByUserId(ctx, userId);
+ *   }
+ * }
+ * ```
+ *
+ * Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+ * nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+ * of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+ *
+ *
  * @docsCategory common
  */
 export enum Permission {
@@ -2217,6 +2334,8 @@ export enum Permission {
   CreateCustomerGroup = 'CreateCustomerGroup',
   /** Grants permission to create Facet */
   CreateFacet = 'CreateFacet',
+  /** Grants permission to create GiftCard */
+  CreateGiftCard = 'CreateGiftCard',
   /** Grants permission to create Order */
   CreateOrder = 'CreateOrder',
   /** Grants permission to create PaymentMethod */
@@ -2257,6 +2376,8 @@ export enum Permission {
   DeleteCustomerGroup = 'DeleteCustomerGroup',
   /** Grants permission to delete Facet */
   DeleteFacet = 'DeleteFacet',
+  /** Grants permission to delete GiftCard */
+  DeleteGiftCard = 'DeleteGiftCard',
   /** Grants permission to delete Order */
   DeleteOrder = 'DeleteOrder',
   /** Grants permission to delete PaymentMethod */
@@ -2301,6 +2422,8 @@ export enum Permission {
   ReadCustomerGroup = 'ReadCustomerGroup',
   /** Grants permission to read Facet */
   ReadFacet = 'ReadFacet',
+  /** Grants permission to read GiftCard */
+  ReadGiftCard = 'ReadGiftCard',
   /** Grants permission to read Order */
   ReadOrder = 'ReadOrder',
   /** Grants permission to read PaymentMethod */
@@ -2343,6 +2466,8 @@ export enum Permission {
   UpdateCustomerGroup = 'UpdateCustomerGroup',
   /** Grants permission to update Facet */
   UpdateFacet = 'UpdateFacet',
+  /** Grants permission to update GiftCard */
+  UpdateGiftCard = 'UpdateGiftCard',
   /** Grants permission to update GlobalSettings */
   UpdateGlobalSettings = 'UpdateGlobalSettings',
   /** Grants permission to update Order */
@@ -2605,13 +2730,13 @@ export type Query = {
   activeCustomer?: Maybe<Customer>;
   /**
    * The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-   * state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+   * state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
    * query will once again return `null`.
    */
   activeOrder?: Maybe<Order>;
   /** An array of supported Countries */
   availableCountries: Array<Country>;
-  /** Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result. */
+  /** Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
   collection?: Maybe<Collection>;
   /** A list of Collections available to the shop */
   collections: CollectionList;
@@ -2623,6 +2748,7 @@ export type Query = {
   facet?: Maybe<Facet>;
   /** A list of Facets available to the shop */
   facets: FacetList;
+  giftCardTemplates: Array<Asset>;
   /** Returns information about the current authenticated User */
   me?: Maybe<CurrentUser>;
   /** Returns the possible next states that the activeOrder can transition to */
@@ -2639,7 +2765,7 @@ export type Query = {
    * general anonymous access to Order data.
    */
   orderByCode?: Maybe<Order>;
-  /** Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result. */
+  /** Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
   product?: Maybe<Product>;
   /** Get a list of Products */
   products: ProductList;
@@ -2714,7 +2840,7 @@ export type Refund = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
-export type RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | Success;
+export type RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | PasswordValidationError | Success;
 
 export type RegisterCustomerInput = {
   emailAddress: Scalars['String'];
@@ -2746,7 +2872,7 @@ export type RequestPasswordResetResult = NativeAuthStrategyError | Success;
 
 export type RequestUpdateCustomerEmailAddressResult = EmailAddressConflictError | InvalidCredentialsError | NativeAuthStrategyError | Success;
 
-export type ResetPasswordResult = CurrentUser | NativeAuthStrategyError | NotVerifiedError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError;
+export type ResetPasswordResult = CurrentUser | NativeAuthStrategyError | NotVerifiedError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError | PasswordValidationError;
 
 export type Role = Node & {
   __typename?: 'Role';
@@ -2809,7 +2935,7 @@ export type SearchResult = {
   productVariantAsset?: Maybe<SearchResultAsset>;
   productVariantId: Scalars['ID'];
   productVariantName: Scalars['String'];
-  /** A relevence score for the result. Differs between database implementations */
+  /** A relevance score for the result. Differs between database implementations */
   score: Scalars['Float'];
   sku: Scalars['String'];
   slug: Scalars['String'];
@@ -2919,6 +3045,11 @@ export type StringFieldOption = {
   __typename?: 'StringFieldOption';
   label?: Maybe<Array<LocalizedString>>;
   value: Scalars['String'];
+};
+
+/** Operators for filtering on a list of String fields */
+export type StringListOperators = {
+  inList: Scalars['String'];
 };
 
 /** Operators for filtering on a String field */
@@ -3042,7 +3173,7 @@ export type UpdateCustomerInput = {
   title?: InputMaybe<Scalars['String']>;
 };
 
-export type UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | Success;
+export type UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | PasswordValidationError | Success;
 
 export type UpdateOrderInput = {
   customFields?: InputMaybe<Scalars['JSON']>;
@@ -3074,7 +3205,7 @@ export type VerificationTokenExpiredError = ErrorResult & {
 };
 
 /**
- * Retured if the verification token (used to verify a Customer's email address) is either
+ * Returned if the verification token (used to verify a Customer's email address) is either
  * invalid or does not match any expected tokens.
  */
 export type VerificationTokenInvalidError = ErrorResult & {
@@ -3083,7 +3214,7 @@ export type VerificationTokenInvalidError = ErrorResult & {
   message: Scalars['String'];
 };
 
-export type VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | VerificationTokenExpiredError | VerificationTokenInvalidError;
+export type VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | PasswordValidationError | VerificationTokenExpiredError | VerificationTokenInvalidError;
 
 export type Zone = Node & {
   __typename?: 'Zone';
@@ -3098,7 +3229,7 @@ export type Zone = Node & {
 export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CollectionsQuery = { __typename?: 'Query', collections: { __typename?: 'CollectionList', items: Array<{ __typename?: 'Collection', id: string, name: string, slug: string }> } };
+export type CollectionsQuery = { __typename?: 'Query', collections: { __typename?: 'CollectionList', items: Array<{ __typename?: 'Collection', id: string, name: string, slug: string, parent?: { __typename?: 'Collection', name: string } | null | undefined, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined }> } };
 
 export type CollectionQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']>;
@@ -3119,7 +3250,7 @@ export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: 
 export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, subTotalWithTax: number, currencyCode: CurrencyCode, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | null | undefined };
+export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | null | undefined };
 
 export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, assets: Array<{ __typename?: 'Asset', id: string, source: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> };
 
@@ -3194,6 +3325,13 @@ export const CollectionsDocument = gql`
       id
       name
       slug
+      parent {
+        name
+      }
+      featuredAsset {
+        id
+        preview
+      }
     }
   }
 }
@@ -3232,8 +3370,10 @@ export const ActiveOrderDocument = gql`
     id
     createdAt
     state
-    subTotalWithTax
     currencyCode
+    totalQuantity
+    subTotalWithTax
+    totalWithTax
     lines {
       id
       productVariant {
