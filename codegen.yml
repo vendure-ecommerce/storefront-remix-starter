@@ -1,6 +1,8 @@
 overwrite: true
 schema: "http://localhost:3001/shop-api"
-documents: "app/**/*.{ts,tsx}"
+documents:
+  - "app/**/*.{ts,tsx}"
+  - "!app/generated/*"
 generates:
   app/generated/graphql.ts:
     plugins:
