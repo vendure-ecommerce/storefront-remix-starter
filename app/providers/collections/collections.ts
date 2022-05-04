@@ -31,6 +31,20 @@ gql`
       id
       name
       slug
+      breadcrumbs {
+        id
+        name
+        slug
+      }
+      children {
+        id
+        name
+        slug
+        featuredAsset {
+          id
+          preview
+        }
+      }
     }
   }
 `;

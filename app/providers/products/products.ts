@@ -1,8 +1,9 @@
 import gql from "graphql-tag";
 import { sdk } from "../../graphqlWrapper";
+import { CollectionProductsQueryVariables } from '~/generated/graphql';
 
-export function getCollectionProducts(collectionId: string) {
-  return sdk.collectionProducts({ collectionId, take: 12 });
+export function getCollectionProducts(variables: CollectionProductsQueryVariables) {
+  return sdk.collectionProducts(variables);
 }
 
 export function getProductBySlug(slug: string) {

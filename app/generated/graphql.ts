@@ -3237,7 +3237,7 @@ export type CollectionQueryVariables = Exact<{
 }>;
 
 
-export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string } | null | undefined };
+export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }>, children?: Array<{ __typename?: 'Collection', id: string, name: string, slug: string, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined }> | null | undefined } | null | undefined };
 
 export type AddItemToOrderMutationVariables = Exact<{
   productVariantId: Scalars['ID'];
@@ -3342,6 +3342,20 @@ export const CollectionDocument = gql`
     id
     name
     slug
+    breadcrumbs {
+      id
+      name
+      slug
+    }
+    children {
+      id
+      name
+      slug
+      featuredAsset {
+        id
+        preview
+      }
+    }
   }
 }
     `;

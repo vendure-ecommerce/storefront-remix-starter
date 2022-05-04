@@ -1,8 +1,6 @@
 import React from "react";
 import { useLoaderData } from "@remix-run/react";
-import { Header } from "../components/header/Header";
 import { getCollections } from "../providers/collections/collections";
-import { getCollectionProducts } from "../providers/products/products";
 import { CollectionCard } from '~/components/collections/CollectionCard';
 
 export async function loader({request}: any) {

@@ -6,6 +6,7 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { ShoppingBagIcon } from "@heroicons/react/outline"
 import { Price } from "../products/Price";
 import { loader } from '~/root';
+import { SearchBar } from '~/components/header/SearchBar';
 
 type LoaderDataType = Awaited<ReturnType<typeof loader>>;
 
@@ -20,14 +21,10 @@ export function Header() {
             <div className="max-w-6xl mx-auto p-4 flex items-center space-x-4">
                 <h1 className="text-white w-10">
                     <Link to="/">
-                        {/*<StaticImage*/}
-                        {/*    src="../images/cube-logo-line-icon-nostroke-white.png"*/}
-                        {/*    width={75}*/}
-                        {/*    quality={95}*/}
-                        {/*    placeholder={""}*/}
-                        {/*    formats={["auto", "webp", "avif"]}*/}
-                        {/*    alt="Vendure logo"*/}
-                        {/*/>*/}
+                        <img
+                            src="/cube-logo-line-icon-nostroke-white.png"
+                            alt="Vendure logo"
+                        />
                     </Link>
                 </h1>
                 <div className="flex space-x-4 hidden sm:block">
@@ -42,7 +39,7 @@ export function Header() {
                     ))}
                 </div>
                 <div className="flex-1 md:pr-8">
-                    {/*<SearchBar></SearchBar>*/}
+                    <SearchBar></SearchBar>
                 </div>
                 <div className="">
                     <button

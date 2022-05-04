@@ -1,11 +1,4 @@
-import {
-    Links,
-    LiveReload,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-} from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, } from "@remix-run/react";
 import styles from "./styles/app.css";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme";
@@ -13,7 +6,6 @@ import { Header } from "./components/header/Header";
 import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { activeOrder } from "./providers/orders/order";
 import { getCollections } from '~/providers/collections/collections';
-import { getCollectionProducts } from '~/providers/products/products';
 
 export const meta: MetaFunction = () => {
     return {title: "New Remix App"};
