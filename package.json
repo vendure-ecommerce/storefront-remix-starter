@@ -13,6 +13,8 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@netlify/functions": "^0.10.0",
+    "@remix-run/netlify": "^1.4.3",
     "@graphql-codegen/cli": "^2.4.0",
     "@graphql-codegen/typescript-generic-sdk": "^2.3.1",
     "@headlessui/react": "^1.6.1",
