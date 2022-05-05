@@ -15,17 +15,29 @@ export const detailedProductFragment = gql`
     id
     name
     description
-
+    collections {
+      id
+      slug
+      name
+      breadcrumbs {
+        id
+        name
+        slug
+      }
+    }
     facetValues {
       facet {
         code
       }
       name
     }
-
+    featuredAsset {
+      id
+      preview
+    }
     assets {
       id
-      source
+      preview
     }
 
     variants {

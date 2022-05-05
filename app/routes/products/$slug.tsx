@@ -1,121 +1,143 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography, } from "@mui/material";
 import { DataFunctionArgs, redirect } from "@remix-run/server-runtime";
 import { useState } from "react";
-import { Price } from "../../components/products/Price";
-import { addItemToOrder } from "../../providers/orders/order";
-import { getProductBySlug } from "../../providers/products/products";
-import { useLoaderData, Form } from '@remix-run/react';
+import { Price } from "~/components/products/Price";
+import { addItemToOrder } from "~/providers/orders/order";
+import { getProductBySlug } from "~/providers/products/products";
+import { Form, useLoaderData } from '@remix-run/react';
+import { HeartIcon } from '@heroicons/react/solid';
+import { Breadcrumbs } from '~/components/Breadcrumbs';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 
-export async function loader({ params }: DataFunctionArgs) {
-  const productRes = await getProductBySlug(params.slug!);
-  if (!productRes.product) {
-    throw new Response("Not Found", {
-      status: 404,
-    });
-  }
+export async function loader({params}: DataFunctionArgs) {
+    const productRes = await getProductBySlug(params.slug!);
+    if (!productRes.product) {
+        throw new Response("Not Found", {
+            status: 404,
+        });
+    }
 
-  return productRes.product!;
+    return productRes.product!;
 }
 
-export async function action({ request, params }: DataFunctionArgs) {
-  const body = await request.formData();
-  const variantId = body.get("variantId")?.toString();
-  const quantity = Number(body.get("quantity")?.toString());
-  if (!variantId || !(quantity > 0)) {
-    return { errors: ["Oops, invalid input"] };
-  }
-  const res = await addItemToOrder(variantId, quantity, { request });
-  return redirect(`/products/${params.slug}`, { headers: res._headers });
+export async function action({request, params}: DataFunctionArgs) {
+    const body = await request.formData();
+    const variantId = body.get("variantId")?.toString();
+    const quantity = Number(body.get("quantity")?.toString() ?? 1);
+    if (!variantId || !(quantity > 0)) {
+        return {errors: ["Oops, invalid input" + quantity + variantId]};
+    }
+    const res = await addItemToOrder(variantId, quantity, {request});
+    return redirect(`/products/${params.slug}`, {headers: res._headers});
 }
 
 export default function ProductSlug() {
-  const product = useLoaderData<Product>();
-  const [selectedVariantId, setSelectedVariantId] = useState(
-    product.variants[0].id
-  );
-  const selectedVariant = product.variants.find(
-    (v) => v.id === selectedVariantId
-  )!;
+    const product = useLoaderData<Product>();
+    const [selectedVariantId, setSelectedVariantId] = useState(
+        product.variants[0].id
+    );
+    const selectedVariant = product.variants.find(
+        (v) => v.id === selectedVariantId
+    )!;
 
-  const asset = product.assets[0];
-  const brandName = product.facetValues.find(
-    (fv) => fv.facet.code === "brand"
-  )?.name;
+    const asset = product.assets[0];
+    const brandName = product.facetValues.find(
+        (fv) => fv.facet.code === "brand"
+    )?.name;
 
-  return (
-    <div>
-      <div className="grid grid-cols-2 gap-4">
-        {asset ? (
-          <img src={asset.source} alt="" />
-        ) : (
-          <span>No Image Available</span>
-        )}
-        <section className="bg-gray-100 p-8">
-          <div className="h-8" />
-          {brandName && (
-            <Typography variant="body2" className="opacity-50 mb-2">
-              {brandName}
-            </Typography>
-          )}
-          <Typography variant="h3">{product.name}</Typography>
-          <Form method="post">
-            <FormControl fullWidth className="my-4">
-              <InputLabel id="productVariantLabel">Variant</InputLabel>
-              <Select
-                labelId="productVariantLabel"
-                id="productVariant"
-                value={selectedVariantId}
-                name="variantId"
-                label="Variant"
-                onChange={(e) => setSelectedVariantId(e.target.value)}
-              >
-                {product.variants.map((v) => (
-                  <MenuItem key={v.id} value={v.id}>
-                    {v.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+    return (
+        <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+                {product.name}
+            </h2>
+            <Breadcrumbs
+                items={
+                    product.collections[product.collections.length - 1]?.breadcrumbs ?? []
+                }
+            ></Breadcrumbs>
+            <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
+                {/* Image gallery */}
+                <div className="w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                  <span className="rounded-md overflow-hidden">
+                    <div className="w-full h-full object-center object-cover rounded-lg">
+                      <img
+                          src={product.featuredAsset?.preview}
+                          alt={product.name}
+                          className="w-full h-full object-center object-cover rounded-lg"
+                      />
+                    </div>
+                  </span>
+                </div>
 
-            <div className="grid grid-cols-2">
-              <div>
-                <Typography variant="body2" className="opacity-30 text-xs">
-                  {selectedVariant.sku}
-                </Typography>
-                <Typography className="font-bold">
-                  <Price
-                    priceWithTax={selectedVariant.priceWithTax}
-                    currencyCode={selectedVariant.currencyCode}
-                  />
-                </Typography>
-              </div>
-              <div className="flex gap-2">
-                <TextField
-                  type="number"
-                  name="quantity"
-                  defaultValue={1}
-                  className="w-28"
-                  size="small"
-                />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  className="whitespace-nowrap"
-                  type="submit"
-                >
-                  Add to Cart
-                </Button>
-              </div>
+                {/* Product info */}
+                <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+                    <div className="mt-6">
+                        <h3 className="sr-only">Description</h3>
+
+                        <div
+                            className="text-base text-gray-700 space-y-6"
+                            dangerouslySetInnerHTML={{__html: product.description}}
+                        />
+                    </div>
+                    <Form method="post">
+                        {1 < product.variants.length ? (
+                            <div>
+                                <label
+                                    htmlFor="option"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Location
+                                </label>
+                                <select
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                    id="productVariant"
+                                    value={selectedVariantId}
+                                    name="variantId"
+                                    onChange={(e) => setSelectedVariantId(e.target.value)}
+                                >
+                                    {product.variants.map(variant => (
+                                        <option value={variant.id}>{variant.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        ) : (
+                            ""
+                        )}
+
+                        <div className="mt-10 flex flex-col md:flex-row items-center">
+                            <p className="text-3xl text-gray-900 mr-4">
+                                <Price priceWithTax={selectedVariant.priceWithTax}
+                                       currencyCode={selectedVariant.currencyCode}></Price>
+                            </p>
+                            <div className="flex sm:flex-col1 align-baseline">
+                                <button
+                                    type="submit"
+                                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                                >
+                                    Add to cart
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                                >
+                                    <HeartIcon
+                                        className="h-6 w-6 flex-shrink-0"
+                                        aria-hidden="true"
+                                    />
+                                    <span className="sr-only">Add to favorites</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <section aria-labelledby="details-heading" className="mt-12">
+                            <h2 id="details-heading" className="sr-only">
+                                Additional details
+                            </h2>
+                        </section>
+                    </Form>
+                </div>
             </div>
-          </Form>
-
-          <div className="h-4" />
-
-          <Typography>{product.description}</Typography>
-        </section>
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
