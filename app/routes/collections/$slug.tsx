@@ -1,16 +1,15 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { useLoaderData } from '@remix-run/react';
-import { Collection } from "../../components/collections/Collection";
 import { sdk } from "../../graphqlWrapper";
 import { CollectionCard } from '~/components/collections/CollectionCard';
-import { getCollectionProducts } from '~/providers/products/products';
+import { search } from '~/providers/products/products';
 import { ProductCard } from '~/components/products/ProductCard';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 
 export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
 
 export async function loader({ params }: DataFunctionArgs) {
-  const { search: { items: products }} = await getCollectionProducts({ collectionSlug: params.slug, take: 999 });
+  const { search: { items: products }} = await search({ input: { collectionSlug: params.slug, take: 999 } });
   const collection = (await sdk.collection({ slug: params.slug })).collection;
   if (!collection?.id || !collection?.name) throw "Collection not found";
 

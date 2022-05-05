@@ -1,13 +1,13 @@
 import gql from "graphql-tag";
 import { sdk } from "../../graphqlWrapper";
-import { CollectionProductsQueryVariables } from '~/generated/graphql';
+import { SearchQueryVariables } from '~/generated/graphql';
 
-export function getCollectionProducts(variables: CollectionProductsQueryVariables) {
-  return sdk.collectionProducts(variables);
+export function search(variables: SearchQueryVariables) {
+    return sdk.search(variables);
 }
 
 export function getProductBySlug(slug: string) {
-  return sdk.product({ slug });
+    return sdk.product({slug});
 }
 
 export const detailedProductFragment = gql`
@@ -69,18 +69,11 @@ export const listedProductFragment = gql`
 `;
 
 gql`
-  query collectionProducts(
-    $collectionId: ID
-    $collectionSlug: String
-    $take: Int = 12
+  query search(
+    $input: SearchInput!
   ) {
     search(
-      input: {
-        take: $take
-        groupByProduct: true
-        collectionId: $collectionId
-        collectionSlug: $collectionSlug
-      }
+      input: $input
     ) {
       items {
         ...ListedProduct

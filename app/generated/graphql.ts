@@ -3264,14 +3264,12 @@ export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Pro
 
 export type ListedProductFragment = { __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } };
 
-export type CollectionProductsQueryVariables = Exact<{
-  collectionId?: InputMaybe<Scalars['ID']>;
-  collectionSlug?: InputMaybe<Scalars['String']>;
-  take?: InputMaybe<Scalars['Int']>;
+export type SearchQueryVariables = Exact<{
+  input: SearchInput;
 }>;
 
 
-export type CollectionProductsQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
+export type SearchQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
 
 export const DetailedProductFragmentDoc = gql`
     fragment DetailedProduct on Product {
@@ -3406,11 +3404,9 @@ export const ProductDocument = gql`
   }
 }
     ${DetailedProductFragmentDoc}`;
-export const CollectionProductsDocument = gql`
-    query collectionProducts($collectionId: ID, $collectionSlug: String, $take: Int = 12) {
-  search(
-    input: {take: $take, groupByProduct: true, collectionId: $collectionId, collectionSlug: $collectionSlug}
-  ) {
+export const SearchDocument = gql`
+    query search($input: SearchInput!) {
+  search(input: $input) {
     items {
       ...ListedProduct
     }
@@ -3435,8 +3431,8 @@ export function getSdk<C>(requester: Requester<C>) {
     product(variables?: ProductQueryVariables, options?: C): Promise<ProductQuery> {
       return requester<ProductQuery, ProductQueryVariables>(ProductDocument, variables, options);
     },
-    collectionProducts(variables?: CollectionProductsQueryVariables, options?: C): Promise<CollectionProductsQuery> {
-      return requester<CollectionProductsQuery, CollectionProductsQueryVariables>(CollectionProductsDocument, variables, options);
+    search(variables: SearchQueryVariables, options?: C): Promise<SearchQuery> {
+      return requester<SearchQuery, SearchQueryVariables>(SearchDocument, variables, options);
     }
   };
 }
