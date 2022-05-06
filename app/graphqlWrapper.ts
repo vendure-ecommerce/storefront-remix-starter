@@ -2,9 +2,7 @@ import { DocumentNode, print } from "graphql";
 import { getSdk } from "./generated/graphql";
 import { sessionStorage } from './sessions';
 
-if (!process.env.VENDURE_API_URL) {
-  throw new Error("VENDURE_API_URL environment variable is not set");
-}
+const DEMO_API_URL = 'https://readonlydemo.vendure.io/shop-api';
 
 export interface QueryOptions {
   request: Request;
@@ -32,7 +30,7 @@ async function sendQuery<Response, Variables = {}>(
     }
   }
 
-  return fetch(process.env.VENDURE_API_URL!, {
+  return fetch(process.env.VENDURE_API_URL ?? DEMO_API_URL, {
     method: "POST",
     body: JSON.stringify(options),
     credentials: "include",
