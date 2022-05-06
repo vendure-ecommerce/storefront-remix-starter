@@ -101,7 +101,7 @@ export default function ProductSlug() {
                                 </select>
                             </div>
                         ) : (
-                            ""
+                            <input type="hidden" name="variantId" value={selectedVariantId}></input>
                         )}
 
                         <div className="mt-10 flex flex-col md:flex-row items-center">
