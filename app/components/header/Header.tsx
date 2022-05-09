@@ -32,6 +32,7 @@ export function Header() {
                         <Link
                             className="text-sm md:text-base text-gray-200 hover:text-white"
                             to={"/collections/" + collection.slug}
+                            prefetch='intent'
                             key={collection.id}
                         >
                             {collection.name}
