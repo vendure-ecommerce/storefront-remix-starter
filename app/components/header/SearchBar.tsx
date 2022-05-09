@@ -5,14 +5,14 @@ import { Form } from '@remix-run/react';
 export function SearchBar() {
     let initialQuery = '';
     if (typeof window === "undefined") {
-      // running in a server environment
+        // running in a server environment
     } else {
-      // running in a browser environment
+        // running in a browser environment
         initialQuery = new URL(window.location.href).searchParams.get("q") ?? '';
     }
 
     return (
-        <Form method="get" action="/search">
+        <Form method="get" action="/search" key={initialQuery}>
             <input type='search'
                    name="q"
                    defaultValue={initialQuery}
