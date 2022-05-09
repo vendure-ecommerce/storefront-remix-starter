@@ -1,4 +1,4 @@
-import { DataFunctionArgs, redirect } from "@remix-run/server-runtime";
+import { DataFunctionArgs, MetaFunction, redirect } from "@remix-run/server-runtime";
 import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { addItemToOrder } from "~/providers/orders/order";
@@ -6,8 +6,13 @@ import { getProductBySlug } from "~/providers/products/products";
 import { Form, useLoaderData } from '@remix-run/react';
 import { HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
+import { APP_META_TITLE } from '~/constants';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
+
+export const meta: MetaFunction = ({ data }) => {
+    return {title: `${data.name} - ${APP_META_TITLE}`};
+};
 
 export async function loader({params}: DataFunctionArgs) {
     const productRes = await getProductBySlug(params.slug!);

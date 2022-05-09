@@ -1,12 +1,17 @@
-import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { useLoaderData } from '@remix-run/react';
 import { sdk } from "../../graphqlWrapper";
 import { CollectionCard } from '~/components/collections/CollectionCard';
 import { search } from '~/providers/products/products';
 import { ProductCard } from '~/components/products/ProductCard';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
+import { APP_META_TITLE } from '~/constants';
 
 export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
+
+export const meta: MetaFunction = ({ data }) => {
+    return {title: `${data.collection.name} - ${APP_META_TITLE}`};
+};
 
 export async function loader({params}: DataFunctionArgs) {
     const {search: {items: products}} = await search({

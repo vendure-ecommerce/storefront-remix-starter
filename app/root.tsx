@@ -6,9 +6,10 @@ import { Header } from "./components/header/Header";
 import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { activeOrder } from "./providers/orders/order";
 import { getCollections } from '~/providers/collections/collections';
+import { APP_META_TITLE } from '~/constants';
 
 export const meta: MetaFunction = () => {
-    return {title: "New Remix App"};
+    return {title: APP_META_TITLE};
 };
 
 export function links() {
