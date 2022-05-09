@@ -1,10 +1,5 @@
-import { Button, IconButton } from "@mui/material";
-import { Menu, ShoppingCart } from "@mui/icons-material";
-import { Logo } from "../Logo";
 import { Link, useLoaderData } from "@remix-run/react";
-import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { ShoppingBagIcon } from "@heroicons/react/outline"
-import { Price } from "../products/Price";
 import { loader } from '~/root';
 import { SearchBar } from '~/components/header/SearchBar';
 
