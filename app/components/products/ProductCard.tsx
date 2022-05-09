@@ -1,5 +1,4 @@
 import { SearchQuery } from "~/generated/graphql";
-import { Typography } from "@mui/material";
 import { Link } from "@remix-run/react";
 import { Price } from "./Price";
 
@@ -14,17 +13,17 @@ export function ProductCard({
   return (
     <Link className="flex flex-col" prefetch='intent' to={`/products/${slug}`}>
       <img
-        className="rounded-xl flex-grow object-cover"
+        className="rounded-xl flex-grow object-cover aspect-[7/8]"
         alt=""
-        src={productAsset?.preview}
+        src={productAsset?.preview + '?w=300&h=400'}
       />
       <div className="h-2" />
-      <Typography variant="body2" className="opacity-80">
+      <div className="text-sm text-gray-700">
         {productName}
-      </Typography>
-      <Typography className="font-bold tracking-tighter">
+      </div>
+      <div className="text-sm font-medium text-gray-900">
         <Price priceWithTax={priceWithTax} currencyCode={currencyCode} />
-      </Typography>
+      </div>
     </Link>
   );
 }

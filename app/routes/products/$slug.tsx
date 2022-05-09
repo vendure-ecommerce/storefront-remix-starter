@@ -66,7 +66,7 @@ export default function ProductSlug() {
                   <span className="rounded-md overflow-hidden">
                     <div className="w-full h-full object-center object-cover rounded-lg">
                       <img
-                          src={product.featuredAsset?.preview}
+                          src={product.featuredAsset?.preview + '?w=800'}
                           alt={product.name}
                           className="w-full h-full object-center object-cover rounded-lg"
                       />
