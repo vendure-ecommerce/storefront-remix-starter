@@ -38,7 +38,7 @@ export default function CollectionSlug() {
                 <h2 className="text-2xl font-light text-gray-900">Collections</h2>
                 <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                     {collection.children.map(child => (
-                        <CollectionCard collection={child}></CollectionCard>
+                        <CollectionCard key={child.id} collection={child}></CollectionCard>
                     ))}
                 </div>
             </div>
@@ -49,7 +49,7 @@ export default function CollectionSlug() {
         <div className="max-w-2xl mx-auto py-16 px-4 lg:max-w-6xl">
             <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                 {products.map(item => (
-                    <ProductCard {...item}></ProductCard>
+                    <ProductCard key={item.productId} {...item}></ProductCard>
                 ))}
             </div>
         </div>

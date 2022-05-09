@@ -84,7 +84,7 @@ export default function Index() {
                             <div
                                 className="grid justify-items-center grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
                                 {collections.map(collection => (
-                                    <CollectionCard collection={collection}/>
+                                    <CollectionCard key={collection.id} collection={collection}/>
                                 ))}
                             </div>
                         </div>

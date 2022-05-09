@@ -96,7 +96,7 @@ export default function ProductSlug() {
                                     onChange={(e) => setSelectedVariantId(e.target.value)}
                                 >
                                     {product.variants.map(variant => (
-                                        <option value={variant.id}>{variant.name}</option>
+                                        <option key={variant.id} value={variant.id}>{variant.name}</option>
                                     ))}
                                 </select>
                             </div>
