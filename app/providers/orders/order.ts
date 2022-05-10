@@ -29,7 +29,7 @@ gql`
 `;
 
 export function activeOrder(options: QueryOptions) {
-  return sdk.activeOrder(undefined, options);
+  return sdk.activeOrder(undefined, options).then(({ activeOrder }) => activeOrder);
 }
 
 gql`
@@ -44,10 +44,20 @@ gql`
       totalWithTax
       lines {
         id
+        unitPriceWithTax
+        linePriceWithTax
+        quantity
+        featuredAsset {
+          id
+          preview
+        }
         productVariant {
           id
           name
           price
+          product {
+            slug
+          }
         }
       }
     }

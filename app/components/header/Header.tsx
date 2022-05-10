@@ -5,9 +5,9 @@ import { SearchBar } from '~/components/header/SearchBar';
 
 type LoaderDataType = Awaited<ReturnType<typeof loader>>;
 
-export function Header() {
+export function Header({ onCartIconClick }: { onCartIconClick: () => void }) {
     const data = useLoaderData<LoaderDataType>();
-    const order = data?.activeOrder?.activeOrder;
+    const order = data?.activeOrder;
     const total = order?.subTotalWithTax ?? 0;
     const cartQuantity = order?.totalQuantity ?? 0;
     const currency = order?.currencyCode ?? "USD";
@@ -40,7 +40,7 @@ export function Header() {
                 <div className="">
                     <button
                         className="relative w-9 h-9 bg-white bg-opacity-20 rounded text-white p-1"
-
+                        onClick={onCartIconClick}
                     >
                         <ShoppingBagIcon></ShoppingBagIcon>
                         {cartQuantity ? (<div

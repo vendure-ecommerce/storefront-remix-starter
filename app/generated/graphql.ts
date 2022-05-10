@@ -3226,6 +3226,11 @@ export type Zone = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ActiveChannelQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveChannelQuery = { __typename?: 'Query', activeChannel: { __typename?: 'Channel', id: string, currencyCode: CurrencyCode } };
+
 export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3250,7 +3255,7 @@ export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: 
 export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | null | undefined };
+export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', slug: string } } }> } | null | undefined };
 
 export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> };
 
@@ -3330,6 +3335,14 @@ export const ListedProductFragmentDoc = gql`
   }
 }
     `;
+export const ActiveChannelDocument = gql`
+    query activeChannel {
+  activeChannel {
+    id
+    currencyCode
+  }
+}
+    `;
 export const CollectionsDocument = gql`
     query collections {
   collections {
@@ -3402,10 +3415,20 @@ export const ActiveOrderDocument = gql`
     totalWithTax
     lines {
       id
+      unitPriceWithTax
+      linePriceWithTax
+      quantity
+      featuredAsset {
+        id
+        preview
+      }
       productVariant {
         id
         name
         price
+        product {
+          slug
+        }
       }
     }
   }
@@ -3430,6 +3453,9 @@ export const SearchDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
+    activeChannel(variables?: ActiveChannelQueryVariables, options?: C): Promise<ActiveChannelQuery> {
+      return requester<ActiveChannelQuery, ActiveChannelQueryVariables>(ActiveChannelDocument, variables, options);
+    },
     collections(variables?: CollectionsQueryVariables, options?: C): Promise<CollectionsQuery> {
       return requester<CollectionsQuery, CollectionsQueryVariables>(CollectionsDocument, variables, options);
     },

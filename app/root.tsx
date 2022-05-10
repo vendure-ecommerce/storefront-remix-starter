@@ -4,7 +4,10 @@ import { Header } from "./components/header/Header";
 import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { activeOrder } from "./providers/orders/order";
 import { getCollections } from '~/providers/collections/collections';
+import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
+import { useState } from 'react';
+import { CartTray } from '~/components/cart/CartTray';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -29,11 +32,13 @@ export async function loader({request}: DataFunctionArgs) {
     )
     return {
         activeOrder: await activeOrder({request}),
+        activeChannel: await activeChannel({request}),
         collections: topLevelCollections,
     };
 }
 
 export default function App() {
+    const [open, setOpen] = useState(false)
     return (
         <html lang="en" id="app">
         <head>
@@ -44,10 +49,11 @@ export default function App() {
             <Links/>
         </head>
         <body>
-        <Header/>
+        <Header onCartIconClick={() => setOpen(!open)}/>
         <main className="">
             <Outlet/>
         </main>
+        <CartTray open={open} onClose={setOpen} />
         <ScrollRestoration/>
         <Scripts/>
         {process.env.NODE_ENV === "development" && <LiveReload/>}

@@ -3,14 +3,14 @@ import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { addItemToOrder } from "~/providers/orders/order";
 import { getProductBySlug } from "~/providers/products/products";
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useTransition } from '@remix-run/react';
 import { HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({data}) => {
     return {title: `${data.name} - ${APP_META_TITLE}`};
 };
 
@@ -41,6 +41,7 @@ export default function ProductSlug() {
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id
     );
+    const transition = useTransition();
     const selectedVariant = product.variants.find(
         (v) => v.id === selectedVariantId
     )!;
@@ -117,7 +118,8 @@ export default function ProductSlug() {
                             <div className="flex sm:flex-col1 align-baseline">
                                 <button
                                     type="submit"
-                                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                                    className={`max-w-xs flex-1 ${transition.state === 'idle' ? 'bg-indigo-600' : 'bg-gray-400'} transition-colors border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
+                                    disabled={transition.state !== 'idle'}
                                 >
                                     Add to cart
                                 </button>
