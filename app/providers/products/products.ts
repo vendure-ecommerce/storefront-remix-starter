@@ -39,7 +39,6 @@ export const detailedProductFragment = gql`
       id
       preview
     }
-
     variants {
       id
       name

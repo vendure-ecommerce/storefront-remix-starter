@@ -3,10 +3,11 @@ import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { addItemToOrder } from "~/providers/orders/order";
 import { getProductBySlug } from "~/providers/products/products";
-import { Form, useLoaderData, useTransition } from '@remix-run/react';
-import { HeartIcon } from '@heroicons/react/solid';
+import { Form, useLoaderData, useMatches, useTransition } from '@remix-run/react';
+import { CheckIcon, HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
+import { CartLoaderData } from '~/routes/__cart';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 
@@ -38,6 +39,7 @@ export async function action({request, params}: DataFunctionArgs) {
 
 export default function ProductSlug() {
     const product = useLoaderData<Product>();
+    const cartLoaderData = useMatches().find(match => match.id === 'routes/__cart')?.data as CartLoaderData | undefined;
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id
     );
@@ -45,6 +47,7 @@ export default function ProductSlug() {
     const selectedVariant = product.variants.find(
         (v) => v.id === selectedVariantId
     )!;
+    const qtyInCart = cartLoaderData?.activeOrder?.lines.find(l => l.productVariant.id === selectedVariantId)?.quantity ?? 0;
 
     const asset = product.assets[0];
     const brandName = product.facetValues.find(
@@ -118,10 +121,13 @@ export default function ProductSlug() {
                             <div className="flex sm:flex-col1 align-baseline">
                                 <button
                                     type="submit"
-                                    className={`max-w-xs flex-1 ${transition.state === 'idle' ? 'bg-indigo-600' : 'bg-gray-400'} transition-colors border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
+                                    className={`max-w-xs flex-1 ${transition.state !== 'idle' ? 'bg-gray-400' : qtyInCart === 0 ? 'bg-indigo-600' : 'bg-green-600'}
+                                     transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
+                                      justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none 
+                                      focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
                                     disabled={transition.state !== 'idle'}
                                 >
-                                    Add to cart
+                                    {qtyInCart ? <span className='flex items-center'><CheckIcon className='w-5 h-5 mr-1' /> {qtyInCart} in cart</span> : `Add to cart`}
                                 </button>
 
                                 <button

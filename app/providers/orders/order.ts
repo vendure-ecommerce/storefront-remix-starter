@@ -56,6 +56,7 @@ gql`
           name
           price
           product {
+            id
             slug
           }
         }
