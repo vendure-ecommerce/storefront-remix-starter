@@ -13,14 +13,14 @@ export const meta: MetaFunction = ({ data }) => {
     return {title: `${data.collection.name} - ${APP_META_TITLE}`};
 };
 
-export async function loader({params}: DataFunctionArgs) {
+export async function loader({params, request}: DataFunctionArgs) {
     const {search: {items: products}} = await search({
         input: {
             collectionSlug: params.slug,
             take: 999,
             groupByProduct: true
         }
-    });
+    }, { request });
     const collection = (await sdk.collection({slug: params.slug})).collection;
     if (!collection?.id || !collection?.name) throw "Collection not found";
 

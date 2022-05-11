@@ -15,8 +15,8 @@ export const meta: MetaFunction = ({data}) => {
     return {title: `${data.name} - ${APP_META_TITLE}`};
 };
 
-export async function loader({params}: DataFunctionArgs) {
-    const productRes = await getProductBySlug(params.slug!);
+export async function loader({params, request}: DataFunctionArgs) {
+    const productRes = await getProductBySlug(params.slug!, { request });
     if (!productRes.product) {
         throw new Response("Not Found", {
             status: 404,

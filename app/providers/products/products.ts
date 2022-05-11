@@ -1,13 +1,13 @@
 import gql from "graphql-tag";
-import { sdk } from "../../graphqlWrapper";
+import { QueryOptions, sdk } from "../../graphqlWrapper";
 import { SearchQueryVariables } from '~/generated/graphql';
 
-export function search(variables: SearchQueryVariables) {
-    return sdk.search(variables);
+export function search(variables: SearchQueryVariables, options: QueryOptions) {
+    return sdk.search(variables, options);
 }
 
-export function getProductBySlug(slug: string) {
-    return sdk.product({slug});
+export function getProductBySlug(slug: string, options: QueryOptions) {
+    return sdk.product({slug}, options);
 }
 
 export const detailedProductFragment = gql`

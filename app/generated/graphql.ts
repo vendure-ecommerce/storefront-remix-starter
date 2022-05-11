@@ -3244,6 +3244,11 @@ export type CollectionQueryVariables = Exact<{
 
 export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }>, children?: Array<{ __typename?: 'Collection', id: string, name: string, slug: string, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined }> | null | undefined } | null | undefined };
 
+export type ActiveCustomerQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveCustomerQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, firstName: string, lastName: string } | null | undefined };
+
 export type AddItemToOrderMutationVariables = Exact<{
   productVariantId: Scalars['ID'];
   quantity: Scalars['Int'];
@@ -3431,6 +3436,15 @@ export const CollectionDocument = gql`
   }
 }
     `;
+export const ActiveCustomerDocument = gql`
+    query activeCustomer {
+  activeCustomer {
+    id
+    firstName
+    lastName
+  }
+}
+    `;
 export const AddItemToOrderDocument = gql`
     mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
   addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
@@ -3498,6 +3512,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     collection(variables?: CollectionQueryVariables, options?: C): Promise<CollectionQuery> {
       return requester<CollectionQuery, CollectionQueryVariables>(CollectionDocument, variables, options);
+    },
+    activeCustomer(variables?: ActiveCustomerQueryVariables, options?: C): Promise<ActiveCustomerQuery> {
+      return requester<ActiveCustomerQuery, ActiveCustomerQueryVariables>(ActiveCustomerDocument, variables, options);
     },
     addItemToOrder(variables: AddItemToOrderMutationVariables, options?: C): Promise<AddItemToOrderMutation> {
       return requester<AddItemToOrderMutation, AddItemToOrderMutationVariables>(AddItemToOrderDocument, variables, options);

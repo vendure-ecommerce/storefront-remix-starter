@@ -13,7 +13,7 @@ export async function loader({params, request}: DataFunctionArgs) {
             groupByProduct: true,
             term,
         }
-    })
+    }, { request })
     return {
         term,
         result: result.search,

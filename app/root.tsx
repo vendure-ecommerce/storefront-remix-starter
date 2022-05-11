@@ -10,13 +10,14 @@ import {
 } from "@remix-run/react";
 import styles from "./styles/app.css";
 import { Header } from "./components/header/Header";
-import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
+import { DataFunctionArgs, json, MetaFunction } from "@remix-run/server-runtime";
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { CartLoaderData } from '~/routes/active-order';
+import { getActiveCustomer } from '~/providers/customer/customer';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -40,10 +41,12 @@ export async function loader({request}: DataFunctionArgs) {
     const topLevelCollections = collections.filter(
         collection => collection.parent?.name === "__root_collection__"
     )
-    return {
+    const activeCustomer = await getActiveCustomer(request);
+    return json({
+        activeCustomer,
         activeChannel: await activeChannel({request}),
         collections: topLevelCollections,
-    };
+    }, { headers: activeCustomer._headers });
 }
 
 export default function App() {

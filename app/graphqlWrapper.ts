@@ -19,6 +19,7 @@ async function sendQuery<Response, Variables = {}>(
   options: { query: string; variables?: Variables, headers?: Headers, request?: Request }
 ): Promise<GraphqlResponse<Response> & { headers: Headers }> {
   const headers = new Headers(options.headers);
+  const req = options.request;
   headers.append("Content-Type", "application/json");
   const session = await sessionStorage.getSession(options.request?.headers.get('Cookie'));
   if (session) {
