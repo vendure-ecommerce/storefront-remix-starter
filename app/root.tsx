@@ -1,4 +1,4 @@
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, } from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, ShouldReloadFunction, } from "@remix-run/react";
 import styles from "./styles/app.css";
 import { Header } from "./components/header/Header";
 import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
@@ -8,6 +8,7 @@ import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
 import { useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
+import Cart from '~/routes/__cart';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -23,7 +24,8 @@ export function links() {
     ];
 }
 
-type LoaderData = Awaited<ReturnType<typeof loader>>;
+// The root data does not change once loaded.
+export const unstable_shouldReload: ShouldReloadFunction = () => false;
 
 export async function loader({request}: DataFunctionArgs) {
     const collections = await getCollections(request);
@@ -31,14 +33,12 @@ export async function loader({request}: DataFunctionArgs) {
         collection => collection.parent?.name === "__root_collection__"
     )
     return {
-        activeOrder: await activeOrder({request}),
         activeChannel: await activeChannel({request}),
         collections: topLevelCollections,
     };
 }
 
 export default function App() {
-    const [open, setOpen] = useState(false)
     return (
         <html lang="en" id="app">
         <head>
@@ -49,11 +49,7 @@ export default function App() {
             <Links/>
         </head>
         <body>
-        <Header onCartIconClick={() => setOpen(!open)}/>
-        <main className="">
-            <Outlet/>
-        </main>
-        <CartTray open={open} onClose={setOpen} />
+        <Outlet/>
         <ScrollRestoration/>
         <Scripts/>
         {process.env.NODE_ENV === "development" && <LiveReload/>}

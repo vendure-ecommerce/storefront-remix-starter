@@ -1,13 +1,13 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { ShoppingBagIcon } from "@heroicons/react/outline"
-import { loader } from '~/root';
 import { SearchBar } from '~/components/header/SearchBar';
-
-type LoaderDataType = Awaited<ReturnType<typeof loader>>;
+import { useRootLoader } from '~/hooks/use-root-loader';
+import { CartLoaderData } from '~/routes/__cart';
 
 export function Header({ onCartIconClick }: { onCartIconClick: () => void }) {
-    const data = useLoaderData<LoaderDataType>();
-    const order = data?.activeOrder;
+    const data = useRootLoader();
+    const {activeOrder} = useLoaderData<CartLoaderData>();
+    const order = activeOrder;
     const total = order?.subTotalWithTax ?? 0;
     const cartQuantity = order?.totalQuantity ?? 0;
     const currency = order?.currencyCode ?? "USD";

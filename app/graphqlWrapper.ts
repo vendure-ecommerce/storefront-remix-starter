@@ -30,6 +30,8 @@ async function sendQuery<Response, Variables = {}>(
     }
   }
 
+  // console.log(`fetching`, options.query.substring(0, 20));
+
   return fetch(process.env.VENDURE_API_URL ?? DEMO_API_URL, {
     method: "POST",
     body: JSON.stringify(options),

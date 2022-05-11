@@ -1,6 +1,6 @@
 import React from "react";
 import { useLoaderData } from "@remix-run/react";
-import { getCollections } from "../providers/collections/collections";
+import { getCollections } from "~/providers/collections/collections";
 import { CollectionCard } from '~/components/collections/CollectionCard';
 
 export async function loader({request}: any) {
@@ -55,7 +55,7 @@ export default function Index() {
                         </a>{" "}
                         &{" "}
                         <a
-                            href="https://remix.run/"
+                            href="~/routes/__cart/index"
                             className="text-red-300 hover:text-red-500"
                         >
                             Remix
@@ -93,7 +93,7 @@ export default function Index() {
 
                 <div className="mt-6 px-4 sm:hidden">
                     <a
-                        href="#"
+                        href="~/routes/__cart/index#"
                         className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
                     >
                         Browse all categories<span aria-hidden="true"> &rarr;</span>
