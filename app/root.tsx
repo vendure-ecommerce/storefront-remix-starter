@@ -1,14 +1,23 @@
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, ShouldReloadFunction, } from "@remix-run/react";
+import {
+    Links,
+    LiveReload,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    ShouldReloadFunction,
+    useFetcher,
+} from "@remix-run/react";
 import styles from "./styles/app.css";
 import { Header } from "./components/header/Header";
-import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
-import { activeOrder } from "./providers/orders/order";
+import { DataFunctionArgs, MetaFunction, redirect } from "@remix-run/server-runtime";
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
-import Cart from '~/routes/__cart';
+import { CartLoaderData } from '~/routes/active-order';
+import { Fetcher } from '@remix-run/react/transition';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -38,7 +47,32 @@ export async function loader({request}: DataFunctionArgs) {
     };
 }
 
+
+export async function action({request, params}: DataFunctionArgs) {
+    // const body = await request.formData();
+    // const variantId = body.get("variantId")?.toString();
+    // const quantity = Number(body.get("quantity")?.toString() ?? 1);
+    // if (!variantId || !(quantity > 0)) {
+    //     return {errors: ["Oops, invalid input" + quantity + variantId]};
+    // }
+    // const res = await addItemToOrder(variantId, quantity, {request});
+    // return redirect(`/products/${params.slug}`, {headers: res._headers});
+    const formData = await request.formData();
+    console.log(`Root action called`, formData);
+    console.log(`request.url`, request.url);
+    return redirect(request.url);
+}
+
 export default function App() {
+    const [open, setOpen] = useState(false);
+    const activeOrderFetcher = useFetcher<CartLoaderData>();
+    useEffect(() => {
+        if (activeOrderFetcher.type === "init") {
+            activeOrderFetcher.load("/active-order");
+        }
+    }, [activeOrderFetcher]);
+
+    const {activeOrder} = activeOrderFetcher.data ?? {};
     return (
         <html lang="en" id="app">
         <head>
@@ -49,7 +83,11 @@ export default function App() {
             <Links/>
         </head>
         <body>
-        <Outlet/>
+        <Header onCartIconClick={() => setOpen(!open)} cartQuantity={activeOrder?.totalQuantity ?? 0}/>
+        <main className="">
+            <Outlet context={{ activeOrderFetcher }}/>
+        </main>
+        <CartTray open={open} onClose={setOpen} activeOrder={activeOrder}/>
         <ScrollRestoration/>
         <Scripts/>
         {process.env.NODE_ENV === "development" && <LiveReload/>}

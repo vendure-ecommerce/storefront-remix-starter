@@ -3,11 +3,12 @@ import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { addItemToOrder } from "~/providers/orders/order";
 import { getProductBySlug } from "~/providers/products/products";
-import { Form, useLoaderData, useMatches, useTransition } from '@remix-run/react';
+import { Form, useFetcher, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
 import { CheckIcon, HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
-import { CartLoaderData } from '~/routes/__cart';
+import { CartLoaderData } from '~/routes/active-order';
+import { Fetcher } from '@remix-run/react/transition';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 
@@ -39,7 +40,9 @@ export async function action({request, params}: DataFunctionArgs) {
 
 export default function ProductSlug() {
     const product = useLoaderData<Product>();
-    const cartLoaderData = useMatches().find(match => match.id === 'routes/__cart')?.data as CartLoaderData | undefined;
+    const fetcher = useFetcher<CartLoaderData>();
+    const { activeOrderFetcher } = useOutletContext<{ activeOrderFetcher: ReturnType<typeof useFetcher> }>();
+    const {activeOrder} = activeOrderFetcher.data as CartLoaderData ?? {};
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id
     );
@@ -47,7 +50,7 @@ export default function ProductSlug() {
     const selectedVariant = product.variants.find(
         (v) => v.id === selectedVariantId
     )!;
-    const qtyInCart = cartLoaderData?.activeOrder?.lines.find(l => l.productVariant.id === selectedVariantId)?.quantity ?? 0;
+    const qtyInCart = activeOrder?.lines.find(l => l.productVariant.id === selectedVariantId)?.quantity ?? 0;
 
     const asset = product.assets[0];
     const brandName = product.facetValues.find(
@@ -88,7 +91,7 @@ export default function ProductSlug() {
                             dangerouslySetInnerHTML={{__html: product.description}}
                         />
                     </div>
-                    <Form method="post">
+                    <activeOrderFetcher.Form method="post" action="/active-order">
                         {1 < product.variants.length ? (
                             <div>
                                 <label
@@ -127,7 +130,8 @@ export default function ProductSlug() {
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
                                     disabled={transition.state !== 'idle'}
                                 >
-                                    {qtyInCart ? <span className='flex items-center'><CheckIcon className='w-5 h-5 mr-1' /> {qtyInCart} in cart</span> : `Add to cart`}
+                                    {qtyInCart ? <span className='flex items-center'><CheckIcon
+                                        className='w-5 h-5 mr-1'/> {qtyInCart} in cart</span> : `Add to cart`}
                                 </button>
 
                                 <button
@@ -148,7 +152,7 @@ export default function ProductSlug() {
                                 Additional details
                             </h2>
                         </section>
-                    </Form>
+                    </activeOrderFetcher.Form>
                 </div>
             </div>
         </div>

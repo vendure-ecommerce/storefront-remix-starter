@@ -1,6 +1,6 @@
 import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { useLoaderData } from '@remix-run/react';
-import { sdk } from "../../../graphqlWrapper";
+import { sdk } from "../../graphqlWrapper";
 import { CollectionCard } from '~/components/collections/CollectionCard';
 import { search } from '~/providers/products/products';
 import { ProductCard } from '~/components/products/ProductCard';

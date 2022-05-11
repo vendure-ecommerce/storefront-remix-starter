@@ -2,15 +2,9 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { ShoppingBagIcon } from "@heroicons/react/outline"
 import { SearchBar } from '~/components/header/SearchBar';
 import { useRootLoader } from '~/hooks/use-root-loader';
-import { CartLoaderData } from '~/routes/__cart';
 
-export function Header({ onCartIconClick }: { onCartIconClick: () => void }) {
+export function Header({onCartIconClick, cartQuantity}: { onCartIconClick: () => void, cartQuantity: number }) {
     const data = useRootLoader();
-    const {activeOrder} = useLoaderData<CartLoaderData>();
-    const order = activeOrder;
-    const total = order?.subTotalWithTax ?? 0;
-    const cartQuantity = order?.totalQuantity ?? 0;
-    const currency = order?.currencyCode ?? "USD";
     return (
         <header className="bg-gradient-to-r from-zinc-700 to-zinc-900 shadow-lg">
             <div className="max-w-6xl mx-auto p-4 flex items-center space-x-4">

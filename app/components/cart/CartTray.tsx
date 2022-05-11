@@ -1,18 +1,17 @@
 import * as React from "react"
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XIcon } from "@heroicons/react/outline"
 import { CartContents } from "./CartContents"
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useFetcher, useLoaderData } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { loader } from '~/root';
+import { CartLoaderData } from '~/routes/active-order';
 
-type LoaderDataType = Awaited<ReturnType<typeof loader>>;
 
-export function CartTray({open, onClose}: { open: boolean; onClose: (closed: boolean) => void; }) {
-    const data = useLoaderData<LoaderDataType>();
-    const {activeOrder, activeChannel} = data ?? {}
-    const currencyCode = (activeOrder || activeChannel)?.currencyCode;
+export function CartTray({activeOrder, open, onClose}: { activeOrder?: CartLoaderData['activeOrder']; open: boolean; onClose: (closed: boolean) => void; }) {
+
+    const currencyCode = (activeOrder)?.currencyCode;
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
@@ -65,7 +64,7 @@ export function CartTray({open, onClose}: { open: boolean; onClose: (closed: boo
                                         <div className="mt-8">
                                             <CartContents
                                                 orderLines={activeOrder?.lines ?? []}
-                                                currencyCode={currencyCode}
+                                                currencyCode={currencyCode!}
                                                 editable={true}
                                             ></CartContents>
                                         </div>

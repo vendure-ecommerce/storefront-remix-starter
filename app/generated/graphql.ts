@@ -3250,7 +3250,9 @@ export type AddItemToOrderMutationVariables = Exact<{
 }>;
 
 
-export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename?: 'InsufficientStockError' } | { __typename?: 'NegativeQuantityError' } | { __typename?: 'Order', id: string, createdAt: any, state: string, lines: Array<{ __typename?: 'OrderLine', id: string, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number } }> } | { __typename?: 'OrderLimitError' } | { __typename?: 'OrderModificationError' } };
+export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+
+export type OrderDetailFragment = { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> };
 
 export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3276,6 +3278,36 @@ export type SearchQueryVariables = Exact<{
 
 export type SearchQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
 
+export const OrderDetailFragmentDoc = gql`
+    fragment OrderDetail on Order {
+  id
+  createdAt
+  state
+  currencyCode
+  totalQuantity
+  subTotalWithTax
+  totalWithTax
+  lines {
+    id
+    unitPriceWithTax
+    linePriceWithTax
+    quantity
+    featuredAsset {
+      id
+      preview
+    }
+    productVariant {
+      id
+      name
+      price
+      product {
+        id
+        slug
+      }
+    }
+  }
+}
+    `;
 export const DetailedProductFragmentDoc = gql`
     fragment DetailedProduct on Product {
   id
@@ -3387,54 +3419,21 @@ export const CollectionDocument = gql`
 export const AddItemToOrderDocument = gql`
     mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
   addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
-    ... on Order {
-      id
-      createdAt
-      state
-      lines {
-        id
-        productVariant {
-          id
-          name
-          price
-        }
-      }
+    ...OrderDetail
+    ... on ErrorResult {
+      errorCode
+      message
     }
   }
 }
-    `;
+    ${OrderDetailFragmentDoc}`;
 export const ActiveOrderDocument = gql`
     query activeOrder {
   activeOrder {
-    id
-    createdAt
-    state
-    currencyCode
-    totalQuantity
-    subTotalWithTax
-    totalWithTax
-    lines {
-      id
-      unitPriceWithTax
-      linePriceWithTax
-      quantity
-      featuredAsset {
-        id
-        preview
-      }
-      productVariant {
-        id
-        name
-        price
-        product {
-          id
-          slug
-        }
-      }
-    }
+    ...OrderDetail
   }
 }
-    `;
+    ${OrderDetailFragmentDoc}`;
 export const ProductDocument = gql`
     query product($slug: String, $id: ID) {
   product(slug: $slug, id: $id) {

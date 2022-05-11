@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Link } from "@remix-run/react"
+import { Form, Link } from "@remix-run/react"
 import { Price } from '~/components/products/Price';
 import { ActiveOrderQuery, CurrencyCode } from '~/generated/graphql';
 
@@ -45,6 +45,7 @@ export function CartContents({
                                 </div>
                             </div>
                             <div className="flex-1 flex items-center text-sm">
+                                <Form>
                                 <label htmlFor={`quantity-${line.id}`} className='mr-2'>Quantity</label>
                                 <select
                                     disabled={!isEditable}
@@ -63,15 +64,18 @@ export function CartContents({
                                     <option value={7}>7</option>
                                     <option value={8}>8</option>
                                 </select>
+                                </Form>
                                 <div className="flex-1"></div>
                                 <div className="flex">
-                                    {isEditable && <button
-                                        type="button"
+                                    {isEditable && <Form action="/" method="post"><button
+                                        type="submit"
+                                        name="removeItem"
+                                        value={line.id}
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                         onClick={() => removeItem && removeItem(line.id)}
                                     >
                                         Remove
-                                    </button>}
+                                    </button></Form>}
                                 </div>
                             </div>
                         </div>
