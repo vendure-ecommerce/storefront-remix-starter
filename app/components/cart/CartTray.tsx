@@ -7,11 +7,38 @@ import { Link, useFetcher, useLoaderData } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { loader } from '~/root';
 import { CartLoaderData } from '~/routes/active-order';
+import { FetcherWithComponents } from '~/types';
+import { CurrencyCode } from '~/generated/graphql';
 
 
-export function CartTray({activeOrder, open, onClose}: { activeOrder?: CartLoaderData['activeOrder']; open: boolean; onClose: (closed: boolean) => void; }) {
+export function CartTray({
+                             activeOrderFetcher,
+                             open,
+                             onClose
+                         }: { activeOrderFetcher: FetcherWithComponents<CartLoaderData>; open: boolean; onClose: (closed: boolean) => void; }) {
 
-    const currencyCode = (activeOrder)?.currencyCode;
+    const activeOrder = activeOrderFetcher.data?.activeOrder;
+    const currencyCode = activeOrder?.currencyCode || CurrencyCode.Usd;
+
+    const removeItem = (lineId: string) => {
+        activeOrderFetcher.submit({
+            action: 'removeItem',
+            lineId,
+        }, {
+            method: 'post',
+            action: '/active-order'
+        });
+    }
+    const adjustOrderLine = (lineId: string, quantity: number) => {
+        activeOrderFetcher.submit({
+            action: 'adjustItem',
+            lineId,
+            quantity: quantity.toString(),
+        }, {
+            method: 'post',
+            action: '/active-order'
+        });
+    }
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
@@ -66,6 +93,8 @@ export function CartTray({activeOrder, open, onClose}: { activeOrder?: CartLoade
                                                 orderLines={activeOrder?.lines ?? []}
                                                 currencyCode={currencyCode!}
                                                 editable={true}
+                                                removeItem={removeItem}
+                                                adjustOrderLine={adjustOrderLine}
                                             ></CartContents>
                                         </div>
                                     </div>

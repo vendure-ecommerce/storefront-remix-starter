@@ -10,14 +10,13 @@ import {
 } from "@remix-run/react";
 import styles from "./styles/app.css";
 import { Header } from "./components/header/Header";
-import { DataFunctionArgs, MetaFunction, redirect } from "@remix-run/server-runtime";
+import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { CartLoaderData } from '~/routes/active-order';
-import { Fetcher } from '@remix-run/react/transition';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -47,22 +46,6 @@ export async function loader({request}: DataFunctionArgs) {
     };
 }
 
-
-export async function action({request, params}: DataFunctionArgs) {
-    // const body = await request.formData();
-    // const variantId = body.get("variantId")?.toString();
-    // const quantity = Number(body.get("quantity")?.toString() ?? 1);
-    // if (!variantId || !(quantity > 0)) {
-    //     return {errors: ["Oops, invalid input" + quantity + variantId]};
-    // }
-    // const res = await addItemToOrder(variantId, quantity, {request});
-    // return redirect(`/products/${params.slug}`, {headers: res._headers});
-    const formData = await request.formData();
-    console.log(`Root action called`, formData);
-    console.log(`request.url`, request.url);
-    return redirect(request.url);
-}
-
 export default function App() {
     const [open, setOpen] = useState(false);
     const activeOrderFetcher = useFetcher<CartLoaderData>();
@@ -87,7 +70,7 @@ export default function App() {
         <main className="">
             <Outlet context={{ activeOrderFetcher }}/>
         </main>
-        <CartTray open={open} onClose={setOpen} activeOrder={activeOrder}/>
+        <CartTray open={open} onClose={setOpen} activeOrderFetcher={activeOrderFetcher}/>
         <ScrollRestoration/>
         <Scripts/>
         {process.env.NODE_ENV === "development" && <LiveReload/>}

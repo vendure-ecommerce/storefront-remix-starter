@@ -8,9 +8,42 @@ export function addItemToOrder(productVariantId: string, quantity: number, optio
     }, options);
 }
 
+export function removeOrderLine(lineId: string, options: QueryOptions) {
+    return sdk.removeOrderLine({ orderLineId: lineId }, options);
+}
+
+
+export function adjustOrderLine(lineId: string, quantity: number, options: QueryOptions) {
+    return sdk.adjustOrderLine({ orderLineId: lineId, quantity }, options);
+}
+
 gql`
   mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
     addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+      ...OrderDetail
+      ...on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation removeOrderLine($orderLineId: ID!) {
+    removeOrderLine(orderLineId: $orderLineId) {
+      ...OrderDetail
+      ...on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
       ...OrderDetail
       ...on ErrorResult {
         errorCode

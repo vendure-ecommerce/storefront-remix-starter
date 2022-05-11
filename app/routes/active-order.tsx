@@ -1,18 +1,7 @@
-import { Header } from '~/components/header/Header';
-import { Outlet, ShouldReloadFunction } from '@remix-run/react';
-import { CartTray } from '~/components/cart/CartTray';
-import { useState } from 'react';
-import { activeOrder, addItemToOrder } from '~/providers/orders/order';
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { activeOrder, addItemToOrder, adjustOrderLine, removeOrderLine } from '~/providers/orders/order';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
-
-
-export const unstable_shouldReload: ShouldReloadFunction =
-    ({params, submission}) => {
-        const shouldReload = submission && submission.action.startsWith('/search') !== true;
-        return !!shouldReload;
-    };
 
 export async function loader({request}: DataFunctionArgs) {
     return {
@@ -22,17 +11,26 @@ export async function loader({request}: DataFunctionArgs) {
 
 export async function action({request, params}: DataFunctionArgs) {
     const body = await request.formData();
-    const variantId = body.get("variantId")?.toString();
-    const quantity = Number(body.get("quantity")?.toString() ?? 1);
-    if (!variantId || !(quantity > 0)) {
-        return {errors: ["Oops, invalid input" + quantity + variantId]};
+    if (body.get("action") === 'removeItem') {
+        const lineId = body.get("lineId");
+        if (lineId) {
+            const result = await removeOrderLine(lineId?.toString(), {request});
+            return {activeOrder: result.removeOrderLine}
+        }
+    } else if (body.get("action") === 'adjustItem') {
+        const lineId = body.get("lineId");
+        const quantity = body.get("quantity");
+        if (lineId && quantity != null) {
+            const result = await adjustOrderLine(lineId?.toString(), +quantity, {request});
+            return {activeOrder: result.adjustOrderLine}
+        }
+    } else {
+        const variantId = body.get("variantId")?.toString();
+        const quantity = Number(body.get("quantity")?.toString() ?? 1);
+        if (!variantId || !(quantity > 0)) {
+            return {errors: ["Oops, invalid input" + quantity + variantId]};
+        }
+        const result = await addItemToOrder(variantId, quantity, {request});
+        return {activeOrder: result.addItemToOrder}
     }
-    const result = await addItemToOrder(variantId, quantity, {request});
-    return { activeOrder: result.addItemToOrder }
-}
-
-
-
-export default function Cart({children}: any) {
-    return (<></>)
 }

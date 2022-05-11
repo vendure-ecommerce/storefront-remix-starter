@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Form, Link } from "@remix-run/react"
+import { Form, Link, useFetcher, useOutletContext } from "@remix-run/react"
 import { Price } from '~/components/products/Price';
 import { ActiveOrderQuery, CurrencyCode } from '~/generated/graphql';
 
@@ -67,7 +67,7 @@ export function CartContents({
                                 </Form>
                                 <div className="flex-1"></div>
                                 <div className="flex">
-                                    {isEditable && <Form action="/" method="post"><button
+                                    {isEditable && <button
                                         type="submit"
                                         name="removeItem"
                                         value={line.id}
@@ -75,7 +75,7 @@ export function CartContents({
                                         onClick={() => removeItem && removeItem(line.id)}
                                     >
                                         Remove
-                                    </button></Form>}
+                                    </button>}
                                 </div>
                             </div>
                         </div>

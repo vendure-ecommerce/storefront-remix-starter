@@ -1,14 +1,13 @@
-import { DataFunctionArgs, MetaFunction, redirect } from "@remix-run/server-runtime";
+import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { useState } from "react";
 import { Price } from "~/components/products/Price";
-import { addItemToOrder } from "~/providers/orders/order";
 import { getProductBySlug } from "~/providers/products/products";
-import { Form, useFetcher, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
+import { ShouldReloadFunction, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
 import { CheckIcon, HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/active-order';
-import { Fetcher } from '@remix-run/react/transition';
+import { FetcherWithComponents } from '~/types';
 
 export type Product = Awaited<ReturnType<typeof loader>>;
 
@@ -23,26 +22,14 @@ export async function loader({params}: DataFunctionArgs) {
             status: 404,
         });
     }
-
     return productRes.product!;
 }
-
-export async function action({request, params}: DataFunctionArgs) {
-    const body = await request.formData();
-    const variantId = body.get("variantId")?.toString();
-    const quantity = Number(body.get("quantity")?.toString() ?? 1);
-    if (!variantId || !(quantity > 0)) {
-        return {errors: ["Oops, invalid input" + quantity + variantId]};
-    }
-    const res = await addItemToOrder(variantId, quantity, {request});
-    return redirect(`/products/${params.slug}`, {headers: res._headers});
-}
+export const unstable_shouldReload: ShouldReloadFunction = () => false;
 
 export default function ProductSlug() {
     const product = useLoaderData<Product>();
-    const fetcher = useFetcher<CartLoaderData>();
-    const { activeOrderFetcher } = useOutletContext<{ activeOrderFetcher: ReturnType<typeof useFetcher> }>();
-    const {activeOrder} = activeOrderFetcher.data as CartLoaderData ?? {};
+    const { activeOrderFetcher } = useOutletContext<{ activeOrderFetcher: FetcherWithComponents<CartLoaderData> }>();
+    const {activeOrder} = activeOrderFetcher.data ?? {};
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id
     );

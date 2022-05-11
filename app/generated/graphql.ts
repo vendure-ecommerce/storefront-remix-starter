@@ -3252,6 +3252,21 @@ export type AddItemToOrderMutationVariables = Exact<{
 
 export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
+export type RemoveOrderLineMutationVariables = Exact<{
+  orderLineId: Scalars['ID'];
+}>;
+
+
+export type RemoveOrderLineMutation = { __typename?: 'Mutation', removeOrderLine: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+
+export type AdjustOrderLineMutationVariables = Exact<{
+  orderLineId: Scalars['ID'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type AdjustOrderLineMutation = { __typename?: 'Mutation', adjustOrderLine: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+
 export type OrderDetailFragment = { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> };
 
 export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
@@ -3427,6 +3442,28 @@ export const AddItemToOrderDocument = gql`
   }
 }
     ${OrderDetailFragmentDoc}`;
+export const RemoveOrderLineDocument = gql`
+    mutation removeOrderLine($orderLineId: ID!) {
+  removeOrderLine(orderLineId: $orderLineId) {
+    ...OrderDetail
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    ${OrderDetailFragmentDoc}`;
+export const AdjustOrderLineDocument = gql`
+    mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+  adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+    ...OrderDetail
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    ${OrderDetailFragmentDoc}`;
 export const ActiveOrderDocument = gql`
     query activeOrder {
   activeOrder {
@@ -3464,6 +3501,12 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     addItemToOrder(variables: AddItemToOrderMutationVariables, options?: C): Promise<AddItemToOrderMutation> {
       return requester<AddItemToOrderMutation, AddItemToOrderMutationVariables>(AddItemToOrderDocument, variables, options);
+    },
+    removeOrderLine(variables: RemoveOrderLineMutationVariables, options?: C): Promise<RemoveOrderLineMutation> {
+      return requester<RemoveOrderLineMutation, RemoveOrderLineMutationVariables>(RemoveOrderLineDocument, variables, options);
+    },
+    adjustOrderLine(variables: AdjustOrderLineMutationVariables, options?: C): Promise<AdjustOrderLineMutation> {
+      return requester<AdjustOrderLineMutation, AdjustOrderLineMutationVariables>(AdjustOrderLineDocument, variables, options);
     },
     activeOrder(variables?: ActiveOrderQueryVariables, options?: C): Promise<ActiveOrderQuery> {
       return requester<ActiveOrderQuery, ActiveOrderQueryVariables>(ActiveOrderDocument, variables, options);
