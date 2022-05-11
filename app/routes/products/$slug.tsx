@@ -1,42 +1,61 @@
-import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
+import { DataFunctionArgs, json, MetaFunction } from "@remix-run/server-runtime";
 import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { getProductBySlug } from "~/providers/products/products";
-import { ShouldReloadFunction, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
+import { ShouldReloadFunction, useCatch, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
 import { CheckIcon, HeartIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/active-order';
 import { FetcherWithComponents } from '~/types';
+import { sessionStorage } from '~/sessions';
+import { ErrorResult } from '~/generated/graphql';
+import Alert from '~/components/Alert';
 
-export type Product = Awaited<ReturnType<typeof loader>>;
+export type ProductLoaderData = { product: Awaited<ReturnType<typeof getProductBySlug>>['product'], error?: ErrorResult };
 
 export const meta: MetaFunction = ({data}) => {
     return {title: `${data.name} - ${APP_META_TITLE}`};
 };
 
 export async function loader({params, request}: DataFunctionArgs) {
-    const productRes = await getProductBySlug(params.slug!, { request });
+    const productRes = await getProductBySlug(params.slug!, {request});
     if (!productRes.product) {
         throw new Response("Not Found", {
             status: 404,
         });
     }
-    return productRes.product!;
+    const session = await sessionStorage.getSession(request?.headers.get('Cookie'));
+    const error = session.get('activeOrderError');
+    return json({product: productRes.product!, error}, {
+        headers: {
+            "Set-Cookie": await sessionStorage.commitSession(session),
+        }
+    });
 }
-export const unstable_shouldReload: ShouldReloadFunction = () => false;
+
+export const unstable_shouldReload: ShouldReloadFunction = () => true;
 
 export default function ProductSlug() {
-    const product = useLoaderData<Product>();
-    const { activeOrderFetcher } = useOutletContext<{ activeOrderFetcher: FetcherWithComponents<CartLoaderData> }>();
+    const {product, error} = useLoaderData<ProductLoaderData>();
+    const caught = useCatch();
+    const {activeOrderFetcher} = useOutletContext<{ activeOrderFetcher: FetcherWithComponents<CartLoaderData> }>();
     const {activeOrder} = activeOrderFetcher.data ?? {};
+
+    if (!product) {
+        return (<div>Product not found!</div>);
+    }
+
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id
     );
     const transition = useTransition();
     const selectedVariant = product.variants.find(
         (v) => v.id === selectedVariantId
-    )!;
+    );
+    if (!selectedVariant) {
+        setSelectedVariantId(product.variants[0].id);
+    }
     const qtyInCart = activeOrder?.lines.find(l => l.productVariant.id === selectedVariantId)?.quantity ?? 0;
 
     const asset = product.assets[0];
@@ -105,8 +124,8 @@ export default function ProductSlug() {
 
                         <div className="mt-10 flex flex-col md:flex-row items-center">
                             <p className="text-3xl text-gray-900 mr-4">
-                                <Price priceWithTax={selectedVariant.priceWithTax}
-                                       currencyCode={selectedVariant.currencyCode}></Price>
+                                <Price priceWithTax={selectedVariant?.priceWithTax}
+                                       currencyCode={selectedVariant?.currencyCode}></Price>
                             </p>
                             <div className="flex sm:flex-col1 align-baseline">
                                 <button
@@ -133,6 +152,7 @@ export default function ProductSlug() {
                                 </button>
                             </div>
                         </div>
+                        {error && <div className="mt-4"><Alert message={error.message} /></div>}
 
                         <section aria-labelledby="details-heading" className="mt-12">
                             <h2 id="details-heading" className="sr-only">

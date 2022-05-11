@@ -34,7 +34,7 @@ export function CartContents({
                             <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                     <h3>
-                                        <Link to={`/product/${line.productVariant.product.slug}`}>
+                                        <Link to={`/products/${line.productVariant.product.slug}`}>
                                             {line.productVariant.name}
                                         </Link>
                                     </h3>

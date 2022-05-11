@@ -3255,14 +3255,14 @@ export type AddItemToOrderMutationVariables = Exact<{
 }>;
 
 
-export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+export type AddItemToOrderMutation = { __typename?: 'Mutation', addItemToOrder: { __typename: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
 export type RemoveOrderLineMutationVariables = Exact<{
   orderLineId: Scalars['ID'];
 }>;
 
 
-export type RemoveOrderLineMutation = { __typename?: 'Mutation', removeOrderLine: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+export type RemoveOrderLineMutation = { __typename?: 'Mutation', removeOrderLine: { __typename: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
 export type AdjustOrderLineMutationVariables = Exact<{
   orderLineId: Scalars['ID'];
@@ -3270,7 +3270,7 @@ export type AdjustOrderLineMutationVariables = Exact<{
 }>;
 
 
-export type AdjustOrderLineMutation = { __typename?: 'Mutation', adjustOrderLine: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+export type AdjustOrderLineMutation = { __typename?: 'Mutation', adjustOrderLine: { __typename: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | { __typename: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
 export type OrderDetailFragment = { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> };
 
@@ -3448,6 +3448,7 @@ export const ActiveCustomerDocument = gql`
 export const AddItemToOrderDocument = gql`
     mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
   addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+    __typename
     ...OrderDetail
     ... on ErrorResult {
       errorCode
@@ -3459,6 +3460,7 @@ export const AddItemToOrderDocument = gql`
 export const RemoveOrderLineDocument = gql`
     mutation removeOrderLine($orderLineId: ID!) {
   removeOrderLine(orderLineId: $orderLineId) {
+    __typename
     ...OrderDetail
     ... on ErrorResult {
       errorCode
@@ -3470,6 +3472,7 @@ export const RemoveOrderLineDocument = gql`
 export const AdjustOrderLineDocument = gql`
     mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
   adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+    __typename
     ...OrderDetail
     ... on ErrorResult {
       errorCode

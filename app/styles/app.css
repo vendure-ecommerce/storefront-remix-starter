@@ -737,6 +737,14 @@ select {
   margin-top: 1.5rem;
 }
 
+#app .ml-3 {
+  margin-left: 0.75rem;
+}
+
+#app .mt-2 {
+  margin-top: 0.5rem;
+}
+
 #app .ml-2 {
   margin-left: 0.5rem;
 }
@@ -751,10 +759,6 @@ select {
 
 #app .mr-2 {
   margin-right: 0.5rem;
-}
-
-#app .ml-3 {
-  margin-left: 0.75rem;
 }
 
 #app .mt-8 {
@@ -1034,12 +1038,12 @@ select {
   overflow-y: scroll;
 }
 
-#app .rounded-lg {
-  border-radius: 0.5rem;
-}
-
 #app .rounded-md {
   border-radius: 0.375rem;
+}
+
+#app .rounded-lg {
+  border-radius: 0.5rem;
 }
 
 #app .rounded {
@@ -1074,6 +1078,11 @@ select {
 
 #app .border-transparent {
   border-color: transparent;
+}
+
+#app .bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity));
 }
 
 #app .bg-gray-900 {
@@ -1186,16 +1195,16 @@ select {
      object-position: center;
 }
 
+#app .p-4 {
+  padding: 1rem;
+}
+
 #app .p-0 {
   padding: 0px;
 }
 
 #app .p-2 {
   padding: 0.5rem;
-}
-
-#app .p-4 {
-  padding: 1rem;
 }
 
 #app .p-1 {
@@ -1300,6 +1309,11 @@ select {
   line-height: 1rem;
 }
 
+#app .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 #app .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -1308,11 +1322,6 @@ select {
 #app .text-6xl {
   font-size: 3.75rem;
   line-height: 1;
-}
-
-#app .text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
 }
 
 #app .text-5xl {
@@ -1397,6 +1406,21 @@ select {
 #app .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+#app .text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity));
+}
+
+#app .text-red-800 {
+  --tw-text-opacity: 1;
+  color: rgb(153 27 27 / var(--tw-text-opacity));
+}
+
+#app .text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 #app .text-gray-400 {

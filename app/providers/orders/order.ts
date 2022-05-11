@@ -17,9 +17,10 @@ export function adjustOrderLine(lineId: string, quantity: number, options: Query
     return sdk.adjustOrderLine({ orderLineId: lineId, quantity }, options);
 }
 
-gql`
+gql` 
   mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
     addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+      __typename
       ...OrderDetail
       ...on ErrorResult {
         errorCode
@@ -32,6 +33,7 @@ gql`
 gql`
   mutation removeOrderLine($orderLineId: ID!) {
     removeOrderLine(orderLineId: $orderLineId) {
+      __typename
       ...OrderDetail
       ...on ErrorResult {
         errorCode
@@ -44,6 +46,7 @@ gql`
 gql`
   mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
     adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+      __typename
       ...OrderDetail
       ...on ErrorResult {
         errorCode
@@ -53,7 +56,7 @@ gql`
   }
 `;
 
-export function activeOrder(options: QueryOptions) {
+export function getActiveOrder(options: QueryOptions) {
     return sdk.activeOrder(undefined, options).then(({activeOrder}) => activeOrder);
 }
 

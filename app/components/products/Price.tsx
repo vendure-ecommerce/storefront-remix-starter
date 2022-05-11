@@ -6,9 +6,12 @@ export function Price({
   priceWithTax,
   currencyCode,
 }: {
-  priceWithTax: number | ProductCardProps["priceWithTax"];
-  currencyCode: ProductCardProps["currencyCode"];
+  priceWithTax?: number | ProductCardProps["priceWithTax"];
+  currencyCode?: ProductCardProps["currencyCode"];
 }) {
+  if (!priceWithTax || !currencyCode) {
+    return <></>;
+  }
   if (typeof priceWithTax === "number") {
     return <>{formatPrice(priceWithTax, currencyCode)}</>;
   }
