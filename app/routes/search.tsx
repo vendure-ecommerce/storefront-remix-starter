@@ -1,37 +1,76 @@
-import { search } from '~/providers/products/products';
+import { search, searchFacetValues } from '~/providers/products/products';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
-import { Breadcrumbs } from '~/components/Breadcrumbs';
-import { CollectionCard } from '~/components/collections/CollectionCard';
 import { ProductCard } from '~/components/products/ProductCard';
+import { useRef, useState } from 'react';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
+import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
+import { FilterIcon } from '@heroicons/react/solid';
 
 export async function loader({params, request}: DataFunctionArgs) {
     const url = new URL(request.url);
     const term = url.searchParams.get("q");
-    const result = await search({
+    const facetValueIds = url.searchParams.getAll("fvid");
+    let resultPromises: [ReturnType<typeof search>, ReturnType<typeof searchFacetValues>];
+    const searchResultPromise = search({
         input: {
             groupByProduct: true,
             term,
+            facetValueIds,
         }
-    }, { request })
+    }, {request})
+    if (facetValueIds.length) {
+        resultPromises = [searchResultPromise, searchFacetValues({
+            input: {
+                groupByProduct: true,
+                term,
+            }
+        }, {request})]
+    } else {
+        resultPromises = [searchResultPromise, searchResultPromise];
+    }
+    const [result, resultWithoutFacetValueFilters] = await Promise.all(resultPromises);
     return {
         term,
+        facetValueIds,
         result: result.search,
+        resultWithoutFacetValueFilters: resultWithoutFacetValueFilters.search,
     }
 }
 
-export default function Search() {
-    const { result, term } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
-    return (<div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
-            { term ? `Results for "${term}"` : 'All results' }
-        </h2>
 
-        <div className="max-w-2xl mx-auto py-16 px-4 lg:max-w-6xl">
-            <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {result.items.map(item => (
-                    <ProductCard key={item.productId} {...item}></ProductCard>
-                ))}
+export default function Search() {
+    const {result, resultWithoutFacetValueFilters, term, facetValueIds} = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const facetValuesTracker = useRef(new FacetFilterTracker());
+    facetValuesTracker.current.update(result, resultWithoutFacetValueFilters, facetValueIds);
+    return (<div className="max-w-6xl mx-auto px-4">
+        <div className="flex justify-between items-center">
+            <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
+                {term ? `Results for "${term}"` : 'All results'}
+            </h2>
+
+            <button
+                type="button"
+                className="flex space-x-2 items-center border rounded p-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
+                onClick={() => setMobileFiltersOpen(true)}
+            >
+                <span>Filters</span>
+                <FilterIcon className="w-5 h-5" aria-hidden="true"/>
+            </button>
+        </div>
+
+
+        <div className="mt-6 grid sm:grid-cols-5 gap-x-4">
+            <FacetFilterControls facetFilterTracker={facetValuesTracker.current}
+                                 mobileFiltersOpen={mobileFiltersOpen}
+                                 setMobileFiltersOpen={setMobileFiltersOpen}/>
+            <div className="sm:col-span-5 lg:col-span-4">
+                <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                    {result.items.map(item => (
+                        <ProductCard key={item.productId} {...item}></ProductCard>
+                    ))}
+                </div>
             </div>
         </div>
     </div>)

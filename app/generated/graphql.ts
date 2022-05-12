@@ -3279,7 +3279,7 @@ export type ActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ActiveOrderQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotalWithTax: number, totalWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }> } | null | undefined };
 
-export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> };
+export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', id: string, code: string, name: string, facet: { __typename?: 'Facet', id: string, code: string, name: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> };
 
 export type ProductQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']>;
@@ -3287,7 +3287,7 @@ export type ProductQueryVariables = Exact<{
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', name: string, facet: { __typename?: 'Facet', code: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> } | null | undefined };
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', id: string, code: string, name: string, facet: { __typename?: 'Facet', id: string, code: string, name: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null | undefined, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string }> } | null | undefined };
 
 export type ListedProductFragment = { __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } };
 
@@ -3296,7 +3296,14 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }> } };
+export type SearchQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productId: string, productName: string, slug: string, currencyCode: CurrencyCode, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string } | null | undefined, priceWithTax: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice', value: number } }>, facetValues: Array<{ __typename?: 'FacetValueResult', count: number, facetValue: { __typename?: 'FacetValue', id: string, name: string, facet: { __typename?: 'Facet', id: string, name: string } } }> } };
+
+export type SearchFacetValuesQueryVariables = Exact<{
+  input: SearchInput;
+}>;
+
+
+export type SearchFacetValuesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, facetValues: Array<{ __typename?: 'FacetValueResult', count: number, facetValue: { __typename?: 'FacetValue', id: string, name: string, facet: { __typename?: 'Facet', id: string, name: string } } }> } };
 
 export const OrderDetailFragmentDoc = gql`
     fragment OrderDetail on Order {
@@ -3345,8 +3352,12 @@ export const DetailedProductFragmentDoc = gql`
   }
   facetValues {
     facet {
+      id
       code
+      name
     }
+    id
+    code
     name
   }
   featuredAsset {
@@ -3498,12 +3509,42 @@ export const ProductDocument = gql`
 export const SearchDocument = gql`
     query search($input: SearchInput!) {
   search(input: $input) {
+    totalItems
     items {
       ...ListedProduct
+    }
+    facetValues {
+      count
+      facetValue {
+        id
+        name
+        facet {
+          id
+          name
+        }
+      }
     }
   }
 }
     ${ListedProductFragmentDoc}`;
+export const SearchFacetValuesDocument = gql`
+    query searchFacetValues($input: SearchInput!) {
+  search(input: $input) {
+    totalItems
+    facetValues {
+      count
+      facetValue {
+        id
+        name
+        facet {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
@@ -3536,6 +3577,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     search(variables: SearchQueryVariables, options?: C): Promise<SearchQuery> {
       return requester<SearchQuery, SearchQueryVariables>(SearchDocument, variables, options);
+    },
+    searchFacetValues(variables: SearchFacetValuesQueryVariables, options?: C): Promise<SearchFacetValuesQuery> {
+      return requester<SearchFacetValuesQuery, SearchFacetValuesQueryVariables>(SearchFacetValuesDocument, variables, options);
     }
   };
 }

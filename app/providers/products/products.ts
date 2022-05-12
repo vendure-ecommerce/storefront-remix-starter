@@ -6,6 +6,10 @@ export function search(variables: SearchQueryVariables, options: QueryOptions) {
     return sdk.search(variables, options);
 }
 
+export function searchFacetValues(variables: SearchQueryVariables, options: QueryOptions) {
+    return sdk.searchFacetValues(variables, options);
+}
+
 export function getProductBySlug(slug: string, options: QueryOptions) {
     return sdk.product({slug}, options);
 }
@@ -27,8 +31,12 @@ export const detailedProductFragment = gql`
     }
     facetValues {
       facet {
+        id
         code
+        name
       }
+      id
+      code
       name
     }
     featuredAsset {
@@ -86,8 +94,44 @@ gql`
     search(
       input: $input
     ) {
+      totalItems
       items {
         ...ListedProduct
+      }
+      facetValues {
+        count
+        facetValue {
+          id
+          name
+          facet {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+  ${listedProductFragment}
+`;
+
+gql`
+  query searchFacetValues(
+    $input: SearchInput!
+  ) {
+    search(
+      input: $input
+    ) {
+      totalItems
+      facetValues {
+        count
+        facetValue {
+          id
+          name
+          facet {
+            id
+            name
+          }
+        }
       }
     }
   }
