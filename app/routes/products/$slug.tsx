@@ -15,7 +15,7 @@ import Alert from '~/components/Alert';
 export type ProductLoaderData = { product: Awaited<ReturnType<typeof getProductBySlug>>['product'], error?: ErrorResult };
 
 export const meta: MetaFunction = ({data}) => {
-    return {title: `${data.name} - ${APP_META_TITLE}`};
+    return {title: data.product.name ? `${data.product.name} - ${APP_META_TITLE}` : APP_META_TITLE};
 };
 
 export async function loader({params, request}: DataFunctionArgs) {
