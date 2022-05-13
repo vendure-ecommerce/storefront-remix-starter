@@ -1,12 +1,10 @@
-import { search, searchFacetValues } from '~/providers/products/products';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
 import { ProductCard } from '~/components/products/ProductCard';
 import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
-import { FilterIcon } from '@heroicons/react/solid';
 import { filteredSearchLoader } from '~/utils/filtered-search-loader';
+import { FiltersButton } from '~/components/FiltersButton';
 
 export const loader = filteredSearchLoader;
 
@@ -21,14 +19,8 @@ export default function Search() {
                 {term ? `Results for "${term}"` : 'All results'}
             </h2>
 
-            <button
-                type="button"
-                className="flex space-x-2 items-center border rounded p-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
-                onClick={() => setMobileFiltersOpen(true)}
-            >
-                <span>Filters</span>
-                <FilterIcon className="w-5 h-5" aria-hidden="true"/>
-            </button>
+
+            <FiltersButton filterCount={facetValueIds.length} onClick={() => setMobileFiltersOpen(true)}/>
         </div>
 
 

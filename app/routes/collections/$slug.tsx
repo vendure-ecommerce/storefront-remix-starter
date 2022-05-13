@@ -2,7 +2,6 @@ import { DataFunctionArgs, MetaFunction } from "@remix-run/server-runtime";
 import { useLoaderData } from '@remix-run/react';
 import { sdk } from "../../graphqlWrapper";
 import { CollectionCard } from '~/components/collections/CollectionCard';
-import { search } from '~/providers/products/products';
 import { ProductCard } from '~/components/products/ProductCard';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
@@ -10,7 +9,7 @@ import { filteredSearchLoader } from '~/utils/filtered-search-loader';
 import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
-import { FilterIcon } from '@heroicons/react/solid';
+import { FiltersButton } from '~/components/FiltersButton';
 
 export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
 
@@ -47,14 +46,7 @@ export default function CollectionSlug() {
                 {collection.name}
             </h2>
 
-            <button
-                type="button"
-                className="flex space-x-2 items-center border rounded p-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
-                onClick={() => setMobileFiltersOpen(true)}
-            >
-                <span>Filters</span>
-                <FilterIcon className="w-5 h-5" aria-hidden="true"/>
-            </button>
+            <FiltersButton filterCount={facetValueIds.length} onClick={() => setMobileFiltersOpen(true)}/>
         </div>
 
         <Breadcrumbs items={collection.breadcrumbs}></Breadcrumbs>
