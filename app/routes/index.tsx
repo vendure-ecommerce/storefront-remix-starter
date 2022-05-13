@@ -34,15 +34,10 @@ export default function Index() {
                 />
                 <div
                     className="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
-                    <div className="relative group">
-                        <div
-                            className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 via-red-500 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-                        <div className="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
-                            <h1 className="text-6xl font-extrabold tracking-normal text-white lg:text-6xl">
-                                Vendure Remix Starter
-                            </h1>
-
-                        </div>
+                    <div className="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
+                        <h1 className="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-yellow-600 via-red-500 to-blue-600">
+                            Vendure Remix Starter
+                        </h1>
                     </div>
 
                     <p className="mt-4 text-2xl text-white">
