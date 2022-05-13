@@ -6,42 +6,62 @@ import { search } from '~/providers/products/products';
 import { ProductCard } from '~/components/products/ProductCard';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
+import { filteredSearchLoader } from '~/utils/filtered-search-loader';
+import { useRef, useState } from 'react';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
+import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
+import { FilterIcon } from '@heroicons/react/solid';
 
 export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({data}) => {
     return {title: `${data.collection.name} - ${APP_META_TITLE}`};
 };
 
-export async function loader({params, request}: DataFunctionArgs) {
-    const {search: {items: products}} = await search({
-        input: {
-            collectionSlug: params.slug,
-            take: 999,
-            groupByProduct: true
-        }
-    }, { request });
+export async function loader({params, request, context}: DataFunctionArgs) {
+    const {result, resultWithoutFacetValueFilters, facetValueIds} = await filteredSearchLoader({
+        params,
+        request,
+        context
+    });
     const collection = (await sdk.collection({slug: params.slug})).collection;
     if (!collection?.id || !collection?.name) throw "Collection not found";
 
     return {
         collection,
-        products,
+        result,
+        resultWithoutFacetValueFilters,
+        facetValueIds
     };
 }
 
 export default function CollectionSlug() {
-    const {collection, products} = useLoaderData<CollectionWithProducts>();
+    const {collection, result, resultWithoutFacetValueFilters, facetValueIds} = useLoaderData<CollectionWithProducts>();
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const facetValuesTracker = useRef(new FacetFilterTracker());
+    facetValuesTracker.current.update(result, resultWithoutFacetValueFilters, facetValueIds);
     return (<div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
-            {collection.name}
-        </h2>
+
+        <div className="flex justify-between items-center">
+            <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+                {collection.name}
+            </h2>
+
+            <button
+                type="button"
+                className="flex space-x-2 items-center border rounded p-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
+                onClick={() => setMobileFiltersOpen(true)}
+            >
+                <span>Filters</span>
+                <FilterIcon className="w-5 h-5" aria-hidden="true"/>
+            </button>
+        </div>
 
         <Breadcrumbs items={collection.breadcrumbs}></Breadcrumbs>
         {collection.children?.length ? (
-            <div className="max-w-2xl mx-auto px-4 py-16 sm:py-16 lg:max-w-none">
+            <div className="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
                 <h2 className="text-2xl font-light text-gray-900">Collections</h2>
-                <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                <div className="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                     {collection.children.map(child => (
                         <CollectionCard key={child.id} collection={child}></CollectionCard>
                     ))}
@@ -51,11 +71,16 @@ export default function CollectionSlug() {
             ""
         )}
 
-        <div className="max-w-2xl mx-auto py-16 px-4 lg:max-w-6xl">
-            <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {products.map(item => (
-                    <ProductCard key={item.productId} {...item}></ProductCard>
-                ))}
+        <div className="mt-6 grid sm:grid-cols-5 gap-x-4">
+            <FacetFilterControls facetFilterTracker={facetValuesTracker.current}
+                                 mobileFiltersOpen={mobileFiltersOpen}
+                                 setMobileFiltersOpen={setMobileFiltersOpen}/>
+            <div className="sm:col-span-5 lg:col-span-4">
+                <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                    {result.items.map(item => (
+                        <ProductCard key={item.productId} {...item}></ProductCard>
+                    ))}
+                </div>
             </div>
         </div>
     </div>)

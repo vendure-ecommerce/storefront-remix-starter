@@ -8,7 +8,7 @@ export function CollectionCard({ collection }: { collection: CollectionsQuery['c
       to={"/collections/" + collection.slug}
       prefetch='intent'
       key={collection.id}
-      className="relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto"
+      className="max-w-[300px] relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto"
     >
       <span aria-hidden="true" className="">
         <div className="w-full h-full object-center object-cover">

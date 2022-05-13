@@ -1,5 +1,6 @@
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { search, searchFacetValues } from '~/providers/products/products';
+import { sdk } from '~/graphqlWrapper';
 
 /**
  * This loader deals with loading product searches, which is used in both the search page and the
@@ -9,12 +10,15 @@ export async function filteredSearchLoader({params, request}: DataFunctionArgs) 
     const url = new URL(request.url);
     const term = url.searchParams.get("q");
     const facetValueIds = url.searchParams.getAll("fvid");
+    const collectionSlug = params.slug;
+
     let resultPromises: [ReturnType<typeof search>, ReturnType<typeof searchFacetValues>];
     const searchResultPromise = search({
         input: {
             groupByProduct: true,
             term,
             facetValueIds,
+            collectionSlug: params.slug,
         }
     }, {request})
     if (facetValueIds.length) {
@@ -22,6 +26,7 @@ export async function filteredSearchLoader({params, request}: DataFunctionArgs) 
             input: {
                 groupByProduct: true,
                 term,
+                collectionSlug: params.slug,
             }
         }, {request})]
     } else {
