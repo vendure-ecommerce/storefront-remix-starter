@@ -53,6 +53,7 @@ export const detailedProductFragment = gql`
       priceWithTax
       currencyCode
       sku
+      stockLevel
     }
   }
 `;
