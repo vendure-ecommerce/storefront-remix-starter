@@ -36,17 +36,24 @@ export function links() {
 // The root data does not change once loaded.
 export const unstable_shouldReload: ShouldReloadFunction = () => false;
 
+export type RootLoaderData = {
+    activeCustomer: Awaited<ReturnType<typeof getActiveCustomer>>;
+    activeChannel: Awaited<ReturnType<typeof activeChannel>>;
+    collections: Awaited<ReturnType<typeof getCollections>>;
+}
+
 export async function loader({request}: DataFunctionArgs) {
     const collections = await getCollections(request);
     const topLevelCollections = collections.filter(
         collection => collection.parent?.name === "__root_collection__"
     )
     const activeCustomer = await getActiveCustomer(request);
-    return json({
+    const loaderData: RootLoaderData = {
         activeCustomer,
         activeChannel: await activeChannel({request}),
         collections: topLevelCollections,
-    }, { headers: activeCustomer._headers });
+    };
+    return json(loaderData, {headers: activeCustomer._headers});
 }
 
 export default function App() {
@@ -71,7 +78,7 @@ export default function App() {
         <body>
         <Header onCartIconClick={() => setOpen(!open)} cartQuantity={activeOrder?.totalQuantity ?? 0}/>
         <main className="">
-            <Outlet context={{ activeOrderFetcher }}/>
+            <Outlet context={{activeOrderFetcher}}/>
         </main>
         <CartTray open={open} onClose={setOpen} activeOrderFetcher={activeOrderFetcher}/>
         <ScrollRestoration/>

@@ -6,38 +6,9 @@ import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
 import { FilterIcon } from '@heroicons/react/solid';
+import { filteredSearchLoader } from '~/utils/filtered-search-loader';
 
-export async function loader({params, request}: DataFunctionArgs) {
-    const url = new URL(request.url);
-    const term = url.searchParams.get("q");
-    const facetValueIds = url.searchParams.getAll("fvid");
-    let resultPromises: [ReturnType<typeof search>, ReturnType<typeof searchFacetValues>];
-    const searchResultPromise = search({
-        input: {
-            groupByProduct: true,
-            term,
-            facetValueIds,
-        }
-    }, {request})
-    if (facetValueIds.length) {
-        resultPromises = [searchResultPromise, searchFacetValues({
-            input: {
-                groupByProduct: true,
-                term,
-            }
-        }, {request})]
-    } else {
-        resultPromises = [searchResultPromise, searchResultPromise];
-    }
-    const [result, resultWithoutFacetValueFilters] = await Promise.all(resultPromises);
-    return {
-        term,
-        facetValueIds,
-        result: result.search,
-        resultWithoutFacetValueFilters: resultWithoutFacetValueFilters.search,
-    }
-}
-
+export const loader = filteredSearchLoader;
 
 export default function Search() {
     const {result, resultWithoutFacetValueFilters, term, facetValueIds} = useLoaderData<Awaited<ReturnType<typeof loader>>>();

@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { ShoppingBagIcon } from "@heroicons/react/outline"
 import { SearchBar } from '~/components/header/SearchBar';
-import { useRootLoader } from '~/hooks/use-root-loader';
+import { useRootLoader } from '~/utils/use-root-loader';
 
 export function Header({onCartIconClick, cartQuantity}: { onCartIconClick: () => void, cartQuantity: number }) {
     const data = useRootLoader();
