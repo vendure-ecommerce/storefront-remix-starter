@@ -6,7 +6,22 @@ import { useRootLoader } from '~/utils/use-root-loader';
 export function Header({onCartIconClick, cartQuantity}: { onCartIconClick: () => void, cartQuantity: number }) {
     const data = useRootLoader();
     return (
-        <header className="bg-gradient-to-r from-zinc-700 to-zinc-900 shadow-lg">
+        <header className="bg-gradient-to-r from-zinc-700 to-gray-900 shadow-lg">
+            <div className="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-1">
+                <div className="max-w-6xl mx-2 md:mx-auto flex items-center justify-between">
+                    <div>
+                        <p className="hidden sm:block">
+                            Exclusive: Get your own FREE storefront starter kit <a
+                            href="https://github.com/vendure-ecommerce/storefront-remix-starter"
+                            target="_blank"
+                            className="underline">here</a>
+                        </p>
+                    </div>
+                    <div>
+                        <a>Sign In</a>
+                    </div>
+                </div>
+            </div>
             <div className="max-w-6xl mx-auto p-4 flex items-center space-x-4">
                 <h1 className="text-white w-10">
                     <Link to="/">

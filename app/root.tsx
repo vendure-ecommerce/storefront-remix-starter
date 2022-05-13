@@ -6,7 +6,7 @@ import {
     Scripts,
     ScrollRestoration,
     ShouldReloadFunction,
-    useFetcher,
+    useFetcher, useLoaderData,
 } from "@remix-run/react";
 import styles from "./styles/app.css";
 import { Header } from "./components/header/Header";
@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { CartLoaderData } from '~/routes/active-order';
 import { getActiveCustomer } from '~/providers/customer/customer';
+import Footer from '~/components/footer/Footer';
 
 export const meta: MetaFunction = () => {
     return {title: APP_META_TITLE};
@@ -58,6 +59,7 @@ export async function loader({request}: DataFunctionArgs) {
 
 export default function App() {
     const [open, setOpen] = useState(false);
+    const { collections } = useLoaderData<RootLoaderData>();
     const activeOrderFetcher = useFetcher<CartLoaderData>();
     useEffect(() => {
         if (activeOrderFetcher.type === "init") {
@@ -84,34 +86,7 @@ export default function App() {
         <ScrollRestoration/>
         <Scripts/>
         {process.env.NODE_ENV === "development" && <LiveReload/>}
-        <footer className="py-24 px-2 border-t mt-6">
-            <div className="max-w-6xl mx-auto text-xs md:text-sm">
-                <p>
-                    Built with{" "}
-                    <a
-                        href="https://www.vendure.io/"
-                        className="text-blue-500 hover:text-blue-700"
-                    >
-                        Vendure
-                    </a>{" "}
-                    &{" "}
-                    <a
-                        href="https://remix.run"
-                        className="text-red-500 hover:text-red-700"
-                    >
-                        Remix
-                    </a>
-                </p>
-                <p>
-                    <a
-                        className="font-medium text-gray-500 hover:text-gray-700"
-                        href="https://github.com/vendure-ecommerce/storefront-remix-starter"
-                    >
-                        github.com/vendure-ecommerce/storefront-remix-starter
-                    </a>
-                </p>
-            </div>
-        </footer>
+        <Footer collections={collections}></Footer>
         </body>
         </html>
     );
