@@ -10,11 +10,12 @@ import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
 import { FiltersButton } from '~/components/FiltersButton';
+import { PhotographIcon } from '@heroicons/react/solid';
 
 export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
 
 export const meta: MetaFunction = ({data}) => {
-    return {title: `${data.collection.name} - ${APP_META_TITLE}`};
+    return {title: data?.collection ? `${data.collection?.name} - ${APP_META_TITLE}` : APP_META_TITLE};
 };
 
 export async function loader({params, request, context}: DataFunctionArgs) {
@@ -24,7 +25,11 @@ export async function loader({params, request, context}: DataFunctionArgs) {
         context
     });
     const collection = (await sdk.collection({slug: params.slug})).collection;
-    if (!collection?.id || !collection?.name) throw "Collection not found";
+    if (!collection?.id || !collection?.name) {
+        throw new Response("Not Found", {
+            status: 404,
+        });
+    }
 
     return {
         collection,
@@ -76,4 +81,31 @@ export default function CollectionSlug() {
             </div>
         </div>
     </div>)
+}
+
+
+export function CatchBoundary() {
+    return (
+        <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+                Collection not found!
+            </h2>
+            <div className="mt-6 grid sm:grid-cols-5 gap-x-4">
+                <div className="space-y-6">
+                    <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                    <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                    <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+
+                </div>
+                <div className="sm:col-span-5 lg:col-span-4">
+                    <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                        <div className="h-64 bg-slate-200 rounded"></div>
+                        <div className="h-64 bg-slate-200 rounded"></div>
+                        <div className="h-64 bg-slate-200 rounded"></div>
+                        <div className="h-64 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }

@@ -2,8 +2,8 @@ import { DataFunctionArgs, json, MetaFunction } from "@remix-run/server-runtime"
 import { useState } from "react";
 import { Price } from "~/components/products/Price";
 import { getProductBySlug } from "~/providers/products/products";
-import { ShouldReloadFunction, useCatch, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
-import { CheckIcon, HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid';
+import { Link, ShouldReloadFunction, useCatch, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
+import { CheckIcon, HeartIcon, MinusSmIcon, PlusSmIcon, PhotographIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/active-order';
@@ -18,7 +18,7 @@ import TopReviews from '~/components/products/TopReviews';
 export type ProductLoaderData = { product: Awaited<ReturnType<typeof getProductBySlug>>['product'], error?: ErrorResult };
 
 export const meta: MetaFunction = ({data}) => {
-    return {title: data.product.name ? `${data.product.name} - ${APP_META_TITLE}` : APP_META_TITLE};
+    return {title: data?.product?.name ? `${data.product.name} - ${APP_META_TITLE}` : APP_META_TITLE};
 };
 
 export async function loader({params, request}: DataFunctionArgs) {
@@ -191,4 +191,43 @@ export default function ProductSlug() {
             </div>
         </div>
     );
+}
+
+export function CatchBoundary() {
+    return (
+        <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+                Product not found!
+            </h2>
+            <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
+                {/* Image gallery */}
+                <div className="w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                    <span className="rounded-md overflow-hidden">
+                            <div
+                                className="w-full h-96 bg-slate-200 rounded-lg flex content-center justify-center">
+                                <PhotographIcon className="w-48 text-white"></PhotographIcon>
+                            </div>
+                    </span>
+                </div>
+
+                {/* Product info */}
+                <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+                    <div className="">
+                        We couldn't find any product at that address!
+                    </div>
+                    <div className="flex-1 space-y-3 py-1">
+
+                        <div className="h-2 bg-slate-200 rounded"></div>
+                        <div className="space-y-3">
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                                <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                            </div>
+                            <div className="h-2 bg-slate-200 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
