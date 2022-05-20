@@ -84,7 +84,14 @@ export default function App() {
                     cartQuantity={activeOrder?.totalQuantity ?? 0}
                 />
                 <main className="">
-                    <Outlet context={{ activeOrderFetcher }} />
+                    <Outlet
+                        context={{
+                            activeOrderFetcher,
+                            activeOrder,
+                            adjustOrderLine,
+                            removeItem,
+                        }}
+                    />
                 </main>
                 <CartTray
                     open={open}
