@@ -1,6 +1,11 @@
-import { DataFunctionArgs } from '@remix-run/server-runtime';
-import { getEligiblePaymentMethods } from '~/providers/checkout/checkout';
-import { useLoaderData } from '@remix-run/react';
+import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import {
+    addPaymentToOrder,
+    getEligiblePaymentMethods,
+    getNextOrderStates,
+    transitionOrderToState,
+} from '~/providers/checkout/checkout';
+import { Form, useLoaderData } from '@remix-run/react';
 import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
 import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
@@ -18,6 +23,46 @@ export async function loader({ params, request }: DataFunctionArgs) {
     return { eligiblePaymentMethods, error };
 }
 
+export async function action({ params, request }: DataFunctionArgs) {
+    const body = await request.formData();
+    const paymentMethodCode = body.get('paymentMethodCode');
+    if (typeof paymentMethodCode === 'string') {
+        const { nextOrderStates } = await getNextOrderStates({
+            request,
+        });
+        if (nextOrderStates.includes('ArrangingPayment')) {
+            const transitionResult = await transitionOrderToState(
+                'ArrangingPayment',
+                { request },
+            );
+            if (
+                transitionResult.transitionOrderToState?.__typename !== 'Order'
+            ) {
+                throw new Response('Not Found', {
+                    status: 400,
+                    statusText:
+                        transitionResult.transitionOrderToState?.message,
+                });
+            }
+        }
+
+        const result = await addPaymentToOrder(
+            { method: paymentMethodCode, metadata: {} },
+            { request },
+        );
+        if (result.addPaymentToOrder.__typename === 'Order') {
+            return redirect(
+                `/checkout/confirmation/${result.addPaymentToOrder.code}`,
+            );
+        } else {
+            throw new Response('Not Found', {
+                status: 400,
+                statusText: result.addPaymentToOrder?.message,
+            });
+        }
+    }
+}
+
 export default function CheckoutPayment() {
     const { eligiblePaymentMethods, error } =
         useLoaderData<Awaited<ReturnType<typeof loader>>>();
@@ -25,19 +70,6 @@ export default function CheckoutPayment() {
         useOutletContext<OutletContext>();
 
     const paymentError = getPaymentError(error);
-
-    function addPaymentToOrder(paymentMethodCode: string) {
-        activeOrderFetcher.submit(
-            {
-                action: 'addPaymentToOrder',
-                paymentMethodCode,
-            },
-            {
-                method: 'post',
-                action: '/api/active-order',
-            },
-        );
-    }
 
     return (
         <div className="flex flex-col space-y-24 items-center">
@@ -70,13 +102,20 @@ export default function CheckoutPayment() {
                             </div>
                         </div>
                     )}
-                    <button
-                        onClick={() => addPaymentToOrder(paymentMethod.code)}
-                        className="flex px-6 bg-indigo-600 hover:bg-indigo-700 items-center justify-center space-x-2 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        <CreditCardIcon className="w-5 h-5"></CreditCardIcon>
-                        <span>Pay with {paymentMethod.name}</span>
-                    </button>
+                    <Form method="post">
+                        <input
+                            type="hidden"
+                            name="paymentMethodCode"
+                            value={paymentMethod.code}
+                        />
+                        <button
+                            type="submit"
+                            className="flex px-6 bg-indigo-600 hover:bg-indigo-700 items-center justify-center space-x-2 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            <CreditCardIcon className="w-5 h-5"></CreditCardIcon>
+                            <span>Pay with {paymentMethod.name}</span>
+                        </button>
+                    </Form>
                 </div>
             ))}
         </div>

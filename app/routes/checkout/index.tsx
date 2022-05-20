@@ -13,10 +13,7 @@ import {
 import { Price } from '~/components/products/Price';
 import { shippingFormDataIsValid } from '~/utils/validation';
 import { sessionStorage } from '~/sessions';
-
-function classNames(...classes: any[]) {
-    return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '~/utils/class-names';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(

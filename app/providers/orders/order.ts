@@ -8,6 +8,12 @@ export function getActiveOrder(options: QueryOptions) {
         .then(({ activeOrder }) => activeOrder);
 }
 
+export function getOrderByCode(code: string, options: QueryOptions) {
+    return sdk
+        .orderByCode({ code }, options)
+        .then(({ orderByCode }) => orderByCode);
+}
+
 export function addItemToOrder(
     productVariantId: string,
     quantity: number,
@@ -145,6 +151,8 @@ gql`
     fragment OrderDetail on Order {
         __typename
         id
+        code
+        active
         createdAt
         state
         currencyCode
@@ -207,6 +215,14 @@ gql`
 gql`
     query activeOrder {
         activeOrder {
+            ...OrderDetail
+        }
+    }
+`;
+
+gql`
+    query orderByCode($code: String!) {
+        orderByCode(code: $code) {
             ...OrderDetail
         }
     }

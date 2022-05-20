@@ -5,6 +5,8 @@ import { CartContents } from '~/components/cart/CartContents';
 import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
 import { Price } from '~/components/products/Price';
+import { classNames } from '~/utils/class-names';
+import { CartTotals } from '~/components/cart/CartTotals';
 
 const steps = [
     { name: 'Shipping', state: 'shipping' },
@@ -19,13 +21,21 @@ export default function Checkout() {
     let state = 'shipping';
     if (location.pathname === '/checkout/payment') {
         state = 'payment';
-    } else if (location.pathname === '/checkout/confirmation') {
+    } else if (location.pathname.startsWith('/checkout/confirmation')) {
         state = 'confirmation';
     }
+    let isConfirmationPage = state === 'confirmation';
 
     return (
         <div className="bg-gray-50">
-            <div className="max-w-2xl mx-auto pt-8 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div
+                className={classNames(
+                    isConfirmationPage
+                        ? 'lg:max-w-3xl mx-auto'
+                        : 'lg:max-w-7xl',
+                    'max-w-2xl mx-auto pt-8 pb-24 px-4 sm:px-6 lg:px-8',
+                )}
+            >
                 <h2 className="sr-only">Checkout</h2>
                 <nav
                     aria-label="Progress"
@@ -56,55 +66,27 @@ export default function Checkout() {
                     </ol>
                 </nav>
                 <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-                    <Outlet context={outletContext} />
+                    <div className={isConfirmationPage ? 'lg:col-span-2' : ''}>
+                        <Outlet context={outletContext} />
+                    </div>
 
                     {/* Order summary */}
-                    <div className="mt-10 lg:mt-0">
-                        <h2 className="text-lg font-medium text-gray-900">
-                            Order summary
-                        </h2>
+                    {!isConfirmationPage && (
+                        <div className="mt-10 lg:mt-0">
+                            <h2 className="text-lg font-medium text-gray-900">
+                                Order summary
+                            </h2>
 
-                        <CartContents
-                            orderLines={activeOrder?.lines ?? []}
-                            currencyCode={activeOrder?.currencyCode!}
-                            editable={state === 'shipping'}
-                            removeItem={removeItem}
-                            adjustOrderLine={adjustOrderLine}
-                        ></CartContents>
-                        <dl className="border-t border-gray-200 py-6 px-4 space-y-6">
-                            <div className="flex items-center justify-between">
-                                <dt className="text-sm">Subtotal</dt>
-                                <dd className="text-sm font-medium text-gray-900">
-                                    <Price
-                                        priceWithTax={
-                                            activeOrder?.subTotalWithTax
-                                        }
-                                        currencyCode={activeOrder?.currencyCode}
-                                    ></Price>
-                                </dd>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <dt className="text-sm">Shipping</dt>
-                                <dd className="text-sm font-medium text-gray-900">
-                                    <Price
-                                        priceWithTax={
-                                            activeOrder?.shippingWithTax ?? 0
-                                        }
-                                        currencyCode={activeOrder?.currencyCode}
-                                    ></Price>
-                                </dd>
-                            </div>
-                            <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                                <dt className="text-base font-medium">Total</dt>
-                                <dd className="text-base font-medium text-gray-900">
-                                    <Price
-                                        priceWithTax={activeOrder?.totalWithTax}
-                                        currencyCode={activeOrder?.currencyCode}
-                                    ></Price>
-                                </dd>
-                            </div>
-                        </dl>
-                    </div>
+                            <CartContents
+                                orderLines={activeOrder?.lines ?? []}
+                                currencyCode={activeOrder?.currencyCode!}
+                                editable={state === 'shipping'}
+                                removeItem={removeItem}
+                                adjustOrderLine={adjustOrderLine}
+                            ></CartContents>
+                            <CartTotals order={activeOrder}></CartTotals>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

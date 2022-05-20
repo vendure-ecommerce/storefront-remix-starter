@@ -144,37 +144,6 @@ export async function action({ request, params }: DataFunctionArgs) {
             break;
         }
         case 'addPaymentToOrder': {
-            const paymentMethodCode = body.get('paymentMethodCode');
-            if (typeof paymentMethodCode === 'string') {
-                const { nextOrderStates } = await getNextOrderStates({
-                    request,
-                });
-                if (nextOrderStates.includes('ArrangingPayment')) {
-                    const transitionResult = await transitionOrderToState(
-                        'ArrangingPayment',
-                        { request },
-                    );
-                    if (
-                        transitionResult.transitionOrderToState?.__typename ===
-                        'Order'
-                    ) {
-                        activeOrder = transitionResult.transitionOrderToState;
-                    } else if (transitionResult.transitionOrderToState) {
-                        error = transitionResult.transitionOrderToState;
-                    }
-                }
-                if (!error) {
-                    const result = await addPaymentToOrder(
-                        { method: paymentMethodCode, metadata: {} },
-                        { request },
-                    );
-                    if (result.addPaymentToOrder.__typename === 'Order') {
-                        activeOrder = result.addPaymentToOrder;
-                    } else {
-                        error = result.addPaymentToOrder;
-                    }
-                }
-            }
         }
         default:
         // Don't do anything
