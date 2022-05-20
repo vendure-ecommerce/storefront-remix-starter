@@ -1,44 +1,27 @@
-import * as React from "react"
-import { Fragment, useEffect, useState } from "react"
-import { Dialog, Transition } from "@headlessui/react"
-import { XIcon } from "@heroicons/react/outline"
-import { CartContents } from "./CartContents"
-import { Link, useFetcher, useLoaderData } from '@remix-run/react';
+import * as React from 'react';
+import { Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
+import { CartContents } from './CartContents';
+import { Link } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
-import { loader } from '~/root';
 import { CartLoaderData } from '~/routes/active-order';
-import { FetcherWithComponents } from '~/types';
 import { CurrencyCode } from '~/generated/graphql';
 
-
 export function CartTray({
-                             activeOrderFetcher,
-                             open,
-                             onClose
-                         }: { activeOrderFetcher: FetcherWithComponents<CartLoaderData>; open: boolean; onClose: (closed: boolean) => void; }) {
-
-    const activeOrder = activeOrderFetcher.data?.activeOrder;
+    open,
+    onClose,
+    activeOrder,
+    adjustOrderLine,
+    removeItem,
+}: {
+    open: boolean;
+    onClose: (closed: boolean) => void;
+    activeOrder: CartLoaderData['activeOrder'];
+    adjustOrderLine?: (lineId: string, quantity: number) => void;
+    removeItem?: (lineId: string) => void;
+}) {
     const currencyCode = activeOrder?.currencyCode || CurrencyCode.Usd;
-
-    const removeItem = (lineId: string) => {
-        activeOrderFetcher.submit({
-            action: 'removeItem',
-            lineId,
-        }, {
-            method: 'post',
-            action: '/active-order'
-        });
-    }
-    const adjustOrderLine = (lineId: string, quantity: number) => {
-        activeOrderFetcher.submit({
-            action: 'adjustItem',
-            lineId,
-            quantity: quantity.toString(),
-        }, {
-            method: 'post',
-            action: '/active-order'
-        });
-    }
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
@@ -56,7 +39,7 @@ export function CartTray({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Dialog.Overlay className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
+                        <Dialog.Overlay className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                     </Transition.Child>
 
                     <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
@@ -80,21 +63,32 @@ export function CartTray({
                                                 <button
                                                     type="button"
                                                     className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                                                    onClick={() => onClose(false)}
+                                                    onClick={() =>
+                                                        onClose(false)
+                                                    }
                                                 >
-                                                    <span className="sr-only">Close panel</span>
-                                                    <XIcon className="h-6 w-6" aria-hidden="true"/>
+                                                    <span className="sr-only">
+                                                        Close panel
+                                                    </span>
+                                                    <XIcon
+                                                        className="h-6 w-6"
+                                                        aria-hidden="true"
+                                                    />
                                                 </button>
                                             </div>
                                         </div>
 
                                         <div className="mt-8">
                                             <CartContents
-                                                orderLines={activeOrder?.lines ?? []}
+                                                orderLines={
+                                                    activeOrder?.lines ?? []
+                                                }
                                                 currencyCode={currencyCode!}
                                                 editable={true}
                                                 removeItem={removeItem}
-                                                adjustOrderLine={adjustOrderLine}
+                                                adjustOrderLine={
+                                                    adjustOrderLine
+                                                }
                                             ></CartContents>
                                         </div>
                                     </div>
@@ -103,31 +97,46 @@ export function CartTray({
                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                             <p>Subtotal</p>
                                             <p>
-                                                {currencyCode &&
-                                                    <Price priceWithTax={activeOrder?.subTotalWithTax ?? 0}
-                                                           currencyCode={currencyCode}/>}
+                                                {currencyCode && (
+                                                    <Price
+                                                        priceWithTax={
+                                                            activeOrder?.subTotalWithTax ??
+                                                            0
+                                                        }
+                                                        currencyCode={
+                                                            currencyCode
+                                                        }
+                                                    />
+                                                )}
                                             </p>
                                         </div>
                                         <p className="mt-0.5 text-sm text-gray-500">
-                                            Shipping and taxes calculated at checkout.
+                                            Shipping and taxes calculated at
+                                            checkout.
                                         </p>
                                         <div className="mt-6">
-                                            <Link to="/checkout"
-                                                  className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                                            <Link
+                                                to="/checkout"
+                                                className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                                             >
                                                 Checkout
                                             </Link>
                                         </div>
                                         <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
                                             <p>
-                                                or{" "}
+                                                or{' '}
                                                 <button
                                                     type="button"
                                                     className="text-indigo-600 font-medium hover:text-indigo-500"
-                                                    onClick={() => onClose(false)}
+                                                    onClick={() =>
+                                                        onClose(false)
+                                                    }
                                                 >
                                                     Continue Shopping
-                                                    <span aria-hidden="true"> &rarr;</span>
+                                                    <span aria-hidden="true">
+                                                        {' '}
+                                                        &rarr;
+                                                    </span>
                                                 </button>
                                             </p>
                                         </div>
@@ -139,5 +148,5 @@ export function CartTray({
                 </div>
             </Dialog>
         </Transition.Root>
-    )
+    );
 }
