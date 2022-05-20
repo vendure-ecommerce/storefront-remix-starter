@@ -145,6 +145,11 @@ export default function ProductSlug() {
                             method="post"
                             action="/api/active-order"
                         >
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="addItemToOrder"
+                            />
                             {1 < product.variants.length ? (
                                 <div className="mt-4">
                                     <label
