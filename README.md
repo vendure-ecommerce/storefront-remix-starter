@@ -4,9 +4,11 @@ A storefront for [Vendure](https://www.vendure.io) and [Remix](https://remix.run
 
 ## To do
 
-* Cart
-* Checkout flow
-* Search facet filters
+* Cart ✅
+* Checkout flow ✅
+* Search facet filters ✅
+* Account creation
+* Login
 * Customer account management
 
 Contributions welcome!
