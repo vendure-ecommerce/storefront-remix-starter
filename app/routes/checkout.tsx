@@ -67,7 +67,7 @@ export default function Checkout() {
                         <CartContents
                             orderLines={activeOrder?.lines ?? []}
                             currencyCode={activeOrder?.currencyCode!}
-                            editable={true}
+                            editable={state === 'shipping'}
                             removeItem={removeItem}
                             adjustOrderLine={adjustOrderLine}
                         ></CartContents>

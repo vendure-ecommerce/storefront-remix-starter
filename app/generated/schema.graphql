@@ -1,14 +1,5 @@
 union ActiveOrderResult = NoActiveOrderError | Order
 
-input AddGiftCardToOrderInput {
-  deliveryDate: DateTime
-  message: String
-  recipientEmailAddress: String
-  senderName: String
-  templateId: ID
-  value: Int!
-}
-
 union AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
 
 type Address implements Node {
@@ -50,18 +41,7 @@ type AlreadyLoggedInError implements ErrorResult {
   message: String!
 }
 
-type AppliedGiftCard {
-  balance: Int!
-  code: String!
-}
-
 union ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order
-
-input ApplyGiftCardToOrderInput {
-  code: String!
-}
-
-union ApplyGiftCardToOrderResult = GiftCardError | Order
 
 type Asset implements Node {
   createdAt: DateTime!
@@ -997,7 +977,6 @@ enum ErrorCode {
   COUPON_CODE_INVALID_ERROR
   COUPON_CODE_LIMIT_ERROR
   EMAIL_ADDRESS_CONFLICT_ERROR
-  GIFT_CARD_ERROR
   IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR
   IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR
   INELIGIBLE_PAYMENT_METHOD_ERROR
@@ -1156,21 +1135,6 @@ type Fulfillment implements Node {
   state: String!
   trackingCode: String
   updatedAt: DateTime!
-}
-
-type GiftCardError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-}
-
-"""The config for the Gift Card to be purchased"""
-type GiftCardInput {
-  deliveryDate: DateTime
-  message: String
-  recipientEmailAddress: String
-  senderName: String
-  templateId: ID
-  value: Int!
 }
 
 enum GlobalFlag {
@@ -1851,8 +1815,6 @@ type MissingPasswordError implements ErrorResult {
 }
 
 type Mutation {
-  addGiftCardToOrder(input: AddGiftCardToOrderInput!): UpdateOrderItemsResult!
-
   """
   Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available.
   """
@@ -1868,7 +1830,6 @@ type Mutation {
 
   """Applies the given coupon code to the active Order"""
   applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
-  applyGiftCardToOrder(code: String!): ApplyGiftCardToOrderResult!
 
   """Authenticates the user using a named authentication strategy"""
   authenticate(input: AuthenticationInput!, rememberMe: Boolean): AuthenticationResult!
@@ -1915,7 +1876,6 @@ type Mutation {
 
   """Removes the given coupon code from the active Order"""
   removeCouponCode(couponCode: String!): Order
-  removeGiftCardFromOrder(code: String!): Order!
 
   """Remove an OrderLine from the Order"""
   removeOrderLine(orderLineId: ID!): RemoveOrderItemsResult!
@@ -2063,7 +2023,6 @@ type Order implements Node {
   customer: Customer
   discounts: [Discount!]!
   fulfillments: [Fulfillment!]
-  giftCardsApplied: [AppliedGiftCard!]!
   history(options: HistoryEntryListOptions): HistoryEntryList!
   id: ID!
   lines: [OrderLine!]!
@@ -2115,7 +2074,6 @@ type Order implements Node {
   The final payable amount. Equal to subTotalWithTax plus shippingWithTax
   """
   totalWithTax: Int!
-  totalWithTaxAfterGiftCard: Int!
   updatedAt: DateTime!
 }
 
@@ -2148,7 +2106,6 @@ input OrderFilterParameter {
   total: NumberOperators
   totalQuantity: NumberOperators
   totalWithTax: NumberOperators
-  totalWithTaxAfterGiftCard: NumberOperators
   updatedAt: DateOperators
 }
 
@@ -2225,7 +2182,6 @@ type OrderLine implements Node {
   discountedUnitPriceWithTax: Int!
   discounts: [Discount!]!
   featuredAsset: Asset
-  giftCardInput: GiftCardInput
   id: ID!
   items: [OrderItem!]!
 
@@ -2334,7 +2290,6 @@ input OrderSortParameter {
   total: SortOrder
   totalQuantity: SortOrder
   totalWithTax: SortOrder
-  totalWithTaxAfterGiftCard: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2533,9 +2488,6 @@ enum Permission {
   """Grants permission to create Facet"""
   CreateFacet
 
-  """Grants permission to create GiftCard"""
-  CreateGiftCard
-
   """Grants permission to create Order"""
   CreateOrder
 
@@ -2597,9 +2549,6 @@ enum Permission {
 
   """Grants permission to delete Facet"""
   DeleteFacet
-
-  """Grants permission to delete GiftCard"""
-  DeleteGiftCard
 
   """Grants permission to delete Order"""
   DeleteOrder
@@ -2669,9 +2618,6 @@ enum Permission {
   """Grants permission to read Facet"""
   ReadFacet
 
-  """Grants permission to read GiftCard"""
-  ReadGiftCard
-
   """Grants permission to read Order"""
   ReadOrder
 
@@ -2736,9 +2682,6 @@ enum Permission {
 
   """Grants permission to update Facet"""
   UpdateFacet
-
-  """Grants permission to update GiftCard"""
-  UpdateGiftCard
 
   """Grants permission to update GlobalSettings"""
   UpdateGlobalSettings
@@ -3043,7 +2986,6 @@ type Query {
 
   """A list of Facets available to the shop"""
   facets(options: FacetListOptions): FacetList!
-  giftCardTemplates: [Asset!]!
 
   """Returns information about the current authenticated User"""
   me: CurrentUser

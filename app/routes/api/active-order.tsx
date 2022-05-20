@@ -16,6 +16,11 @@ import {
 } from '~/generated/graphql';
 import { sessionStorage } from '~/sessions';
 import { shippingFormDataIsValid } from '~/utils/validation';
+import {
+    addPaymentToOrder,
+    getNextOrderStates,
+    transitionOrderToState,
+} from '~/providers/checkout/checkout';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
@@ -137,6 +142,39 @@ export async function action({ request, params }: DataFunctionArgs) {
                 error = result.addItemToOrder;
             }
             break;
+        }
+        case 'addPaymentToOrder': {
+            const paymentMethodCode = body.get('paymentMethodCode');
+            if (typeof paymentMethodCode === 'string') {
+                const { nextOrderStates } = await getNextOrderStates({
+                    request,
+                });
+                if (nextOrderStates.includes('ArrangingPayment')) {
+                    const transitionResult = await transitionOrderToState(
+                        'ArrangingPayment',
+                        { request },
+                    );
+                    if (
+                        transitionResult.transitionOrderToState?.__typename ===
+                        'Order'
+                    ) {
+                        activeOrder = transitionResult.transitionOrderToState;
+                    } else if (transitionResult.transitionOrderToState) {
+                        error = transitionResult.transitionOrderToState;
+                    }
+                }
+                if (!error) {
+                    const result = await addPaymentToOrder(
+                        { method: paymentMethodCode, metadata: {} },
+                        { request },
+                    );
+                    if (result.addPaymentToOrder.__typename === 'Order') {
+                        activeOrder = result.addPaymentToOrder;
+                    } else {
+                        error = result.addPaymentToOrder;
+                    }
+                }
+            }
         }
         default:
         // Don't do anything

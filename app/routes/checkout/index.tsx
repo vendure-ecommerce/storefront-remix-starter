@@ -2,9 +2,9 @@ import * as React from 'react';
 import { FormEvent, useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/solid';
-import { useOutletContext } from 'remix';
+import { useNavigate, useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, Link, useLoaderData } from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import {
     getAvailableCountries,
@@ -37,6 +37,7 @@ export default function CheckoutShipping() {
         useOutletContext<OutletContext>();
     const [customerFormChanged, setCustomerFormChanged] = useState(false);
     const [addressFormChanged, setAddressFormChanged] = useState(false);
+    let navigate = useNavigate();
 
     const { customer, shippingAddress } = activeOrder ?? {};
     const defaultFullName =
@@ -94,6 +95,9 @@ export default function CheckoutShipping() {
             );
         }
     };
+    function navigateToPayment() {
+        navigate('./payment');
+    }
     return (
         <div>
             <div>
@@ -309,8 +313,7 @@ export default function CheckoutShipping() {
                                         id="countryCode"
                                         name="countryCode"
                                         defaultValue={
-                                            shippingAddress?.countryCode ??
-                                            undefined
+                                            shippingAddress?.countryCode ?? 'US'
                                         }
                                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     >
@@ -469,6 +472,7 @@ export default function CheckoutShipping() {
             <button
                 type="button"
                 disabled={!canProceedToPayment}
+                onClick={navigateToPayment}
                 className={classNames(
                     canProceedToPayment
                         ? 'bg-indigo-600 hover:bg-indigo-700'

@@ -7,29 +7,21 @@ import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
-    Link,
     ShouldReloadFunction,
     useCatch,
     useLoaderData,
     useOutletContext,
     useTransition,
 } from '@remix-run/react';
-import {
-    CheckIcon,
-    HeartIcon,
-    MinusSmIcon,
-    PlusSmIcon,
-    PhotographIcon,
-} from '@heroicons/react/solid';
+import { CheckIcon, HeartIcon, PhotographIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/api/active-order';
 import { FetcherWithComponents } from '~/types';
 import { sessionStorage } from '~/sessions';
-import { ErrorResult } from '~/generated/graphql';
+import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
-import { Disclosure } from '@headlessui/react';
 import TopReviews from '~/components/products/TopReviews';
 
 export type ProductLoaderData = {
@@ -75,6 +67,7 @@ export default function ProductSlug() {
         activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
     }>();
     const { activeOrder } = activeOrderFetcher.data ?? {};
+    const addItemToOrderError = getAddItemToOrderError(error);
 
     if (!product) {
         return <div>Product not found!</div>;
@@ -243,9 +236,9 @@ export default function ProductSlug() {
                                     stockLevel={selectedVariant?.stockLevel}
                                 />
                             </div>
-                            {error && (
+                            {addItemToOrderError && (
                                 <div className="mt-4">
-                                    <Alert message={error.message} />
+                                    <Alert message={addItemToOrderError} />
                                 </div>
                             )}
 
@@ -319,4 +312,17 @@ export function CatchBoundary() {
             </div>
         </div>
     );
+}
+
+function getAddItemToOrderError(error?: ErrorResult): string | undefined {
+    if (!error || !error.errorCode) {
+        return undefined;
+    }
+    switch (error.errorCode) {
+        case ErrorCode.OrderModificationError:
+        case ErrorCode.OrderLimitError:
+        case ErrorCode.NegativeQuantityError:
+        case ErrorCode.InsufficientStockError:
+            return error.message;
+    }
 }
