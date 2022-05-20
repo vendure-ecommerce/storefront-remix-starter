@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormEvent, useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
-import { CheckCircleIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/solid';
 import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
 import { Form, useLoaderData } from '@remix-run/react';
@@ -42,6 +42,8 @@ export default function CheckoutShipping() {
     const defaultFullName =
         shippingAddress?.fullName ??
         (customer ? `${customer.firstName} ${customer.lastName}` : ``);
+    const canProceedToPayment =
+        customer && shippingAddress && activeOrder?.shippingLines?.length;
 
     const submitCustomerForm = (event: FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
@@ -463,6 +465,20 @@ export default function CheckoutShipping() {
                     </div>
                 </RadioGroup>
             </div>
+
+            <button
+                type="button"
+                disabled={!canProceedToPayment}
+                className={classNames(
+                    canProceedToPayment
+                        ? 'bg-indigo-600 hover:bg-indigo-700'
+                        : 'bg-gray-400',
+                    'flex w-full items-center justify-center space-x-2 mt-24 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                )}
+            >
+                <LockClosedIcon className="w-5 h-5"></LockClosedIcon>
+                <span>Proceed to payment</span>
+            </button>
         </div>
     );
 }
