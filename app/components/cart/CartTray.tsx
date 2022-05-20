@@ -5,7 +5,7 @@ import { XIcon } from '@heroicons/react/outline';
 import { CartContents } from './CartContents';
 import { Link } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
-import { CartLoaderData } from '~/routes/active-order';
+import { CartLoaderData } from '~/routes/api/active-order';
 import { CurrencyCode } from '~/generated/graphql';
 
 export function CartTray({
@@ -117,28 +117,11 @@ export function CartTray({
                                         <div className="mt-6">
                                             <Link
                                                 to="/checkout"
+                                                onClick={() => onClose(false)}
                                                 className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                                             >
                                                 Checkout
                                             </Link>
-                                        </div>
-                                        <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
-                                            <p>
-                                                or{' '}
-                                                <button
-                                                    type="button"
-                                                    className="text-indigo-600 font-medium hover:text-indigo-500"
-                                                    onClick={() =>
-                                                        onClose(false)
-                                                    }
-                                                >
-                                                    Continue Shopping
-                                                    <span aria-hidden="true">
-                                                        {' '}
-                                                        &rarr;
-                                                    </span>
-                                                </button>
-                                            </p>
                                         </div>
                                     </div>
                                 </div>

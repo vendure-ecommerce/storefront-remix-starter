@@ -1,27 +1,62 @@
-import { useEffect, useState } from 'react';
-import { RadioGroup } from '@headlessui/react';
-import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid';
-import { useFetcher } from '@remix-run/react';
-import { CartLoaderData } from '~/routes/active-order';
-import { CartContents } from '~/components/cart/CartContents';
 import * as React from 'react';
-import { useActiveOrder } from '~/utils/use-active-order';
-import { CheckoutForm } from '~/components/checkout/CheckoutForm';
+import { ChevronRightIcon } from '@heroicons/react/solid';
+import { Outlet, useLocation } from '@remix-run/react';
+import { CartContents } from '~/components/cart/CartContents';
 import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
 import { Price } from '~/components/products/Price';
 
+const steps = [
+    { name: 'Shipping', state: 'shipping' },
+    { name: 'Payment', state: 'payment' },
+    { name: 'Confirmation', state: 'confirmation' },
+];
+
 export default function Checkout() {
-    const { activeOrder, adjustOrderLine, removeItem } =
-        useOutletContext<OutletContext>();
+    const outletContext = useOutletContext<OutletContext>();
+    const { activeOrder, adjustOrderLine, removeItem } = outletContext;
+    const location = useLocation();
+    let state = 'shipping';
+    if (location.pathname === '/checkout/payment') {
+        state = 'payment';
+    } else if (location.pathname === '/checkout/confirmation') {
+        state = 'confirmation';
+    }
 
     return (
         <div className="bg-gray-50">
-            <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="max-w-2xl mx-auto pt-8 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h2 className="sr-only">Checkout</h2>
+                <nav
+                    aria-label="Progress"
+                    className="hidden sm:block pb-8 mb-8 border-b"
+                >
+                    <ol role="list" className="flex space-x-4 justify-center">
+                        {steps.map((step, stepIdx) => (
+                            <li key={step.name} className="flex items-center">
+                                {step.state === state ? (
+                                    <span
+                                        aria-current="page"
+                                        className="text-indigo-600"
+                                    >
+                                        {step.name}
+                                    </span>
+                                ) : (
+                                    <span>{step.name}</span>
+                                )}
 
+                                {stepIdx !== steps.length - 1 ? (
+                                    <ChevronRightIcon
+                                        className="w-5 h-5 text-gray-300 ml-4"
+                                        aria-hidden="true"
+                                    />
+                                ) : null}
+                            </li>
+                        ))}
+                    </ol>
+                </nav>
                 <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-                    <CheckoutForm></CheckoutForm>
+                    <Outlet context={outletContext} />
 
                     {/* Order summary */}
                     <div className="mt-10 lg:mt-0">

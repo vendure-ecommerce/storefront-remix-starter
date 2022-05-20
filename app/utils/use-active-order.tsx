@@ -1,12 +1,12 @@
 import { useFetcher } from '@remix-run/react';
-import { CartLoaderData } from '~/routes/active-order';
+import { CartLoaderData } from '~/routes/api/active-order';
 import { useEffect } from 'react';
 
 export function useActiveOrder() {
     const activeOrderFetcher = useFetcher<CartLoaderData>();
     useEffect(() => {
         if (activeOrderFetcher.type === 'init') {
-            activeOrderFetcher.load('/active-order');
+            activeOrderFetcher.load('/api/active-order');
         }
     }, [activeOrderFetcher]);
 
@@ -19,7 +19,7 @@ export function useActiveOrder() {
             },
             {
                 method: 'post',
-                action: '/active-order',
+                action: '/api/active-order',
             },
         );
     };
@@ -32,7 +32,7 @@ export function useActiveOrder() {
             },
             {
                 method: 'post',
-                action: '/active-order',
+                action: '/api/active-order',
             },
         );
     };

@@ -1,69 +1,103 @@
-import { DataFunctionArgs, json, MetaFunction } from "@remix-run/server-runtime";
-import { useState } from "react";
-import { Price } from "~/components/products/Price";
-import { getProductBySlug } from "~/providers/products/products";
-import { Link, ShouldReloadFunction, useCatch, useLoaderData, useOutletContext, useTransition } from '@remix-run/react';
-import { CheckIcon, HeartIcon, MinusSmIcon, PlusSmIcon, PhotographIcon } from '@heroicons/react/solid';
+import {
+    DataFunctionArgs,
+    json,
+    MetaFunction,
+} from '@remix-run/server-runtime';
+import { useState } from 'react';
+import { Price } from '~/components/products/Price';
+import { getProductBySlug } from '~/providers/products/products';
+import {
+    Link,
+    ShouldReloadFunction,
+    useCatch,
+    useLoaderData,
+    useOutletContext,
+    useTransition,
+} from '@remix-run/react';
+import {
+    CheckIcon,
+    HeartIcon,
+    MinusSmIcon,
+    PlusSmIcon,
+    PhotographIcon,
+} from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
-import { CartLoaderData } from '~/routes/active-order';
+import { CartLoaderData } from '~/routes/api/active-order';
 import { FetcherWithComponents } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
-import { Disclosure } from "@headlessui/react";
+import { Disclosure } from '@headlessui/react';
 import TopReviews from '~/components/products/TopReviews';
 
-export type ProductLoaderData = { product: Awaited<ReturnType<typeof getProductBySlug>>['product'], error?: ErrorResult };
-
-export const meta: MetaFunction = ({data}) => {
-    return {title: data?.product?.name ? `${data.product.name} - ${APP_META_TITLE}` : APP_META_TITLE};
+export type ProductLoaderData = {
+    product: Awaited<ReturnType<typeof getProductBySlug>>['product'];
+    error?: ErrorResult;
 };
 
-export async function loader({params, request}: DataFunctionArgs) {
-    const productRes = await getProductBySlug(params.slug!, {request});
+export const meta: MetaFunction = ({ data }) => {
+    return {
+        title: data?.product?.name
+            ? `${data.product.name} - ${APP_META_TITLE}`
+            : APP_META_TITLE,
+    };
+};
+
+export async function loader({ params, request }: DataFunctionArgs) {
+    const productRes = await getProductBySlug(params.slug!, { request });
     if (!productRes.product) {
-        throw new Response("Not Found", {
+        throw new Response('Not Found', {
             status: 404,
         });
     }
-    const session = await sessionStorage.getSession(request?.headers.get('Cookie'));
+    const session = await sessionStorage.getSession(
+        request?.headers.get('Cookie'),
+    );
     const error = session.get('activeOrderError');
-    return json({product: productRes.product!, error}, {
-        headers: {
-            "Set-Cookie": await sessionStorage.commitSession(session),
-        }
-    });
+    return json(
+        { product: productRes.product!, error },
+        {
+            headers: {
+                'Set-Cookie': await sessionStorage.commitSession(session),
+            },
+        },
+    );
 }
 
 export const unstable_shouldReload: ShouldReloadFunction = () => true;
 
 export default function ProductSlug() {
-    const {product, error} = useLoaderData<ProductLoaderData>();
+    const { product, error } = useLoaderData<ProductLoaderData>();
     const caught = useCatch();
-    const {activeOrderFetcher} = useOutletContext<{ activeOrderFetcher: FetcherWithComponents<CartLoaderData> }>();
-    const {activeOrder} = activeOrderFetcher.data ?? {};
+    const { activeOrderFetcher } = useOutletContext<{
+        activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
+    }>();
+    const { activeOrder } = activeOrderFetcher.data ?? {};
 
     if (!product) {
-        return (<div>Product not found!</div>);
+        return <div>Product not found!</div>;
     }
 
     const [selectedVariantId, setSelectedVariantId] = useState(
-        product.variants[0].id
+        product.variants[0].id,
     );
     const transition = useTransition();
     const selectedVariant = product.variants.find(
-        (v) => v.id === selectedVariantId
+        (v) => v.id === selectedVariantId,
     );
     if (!selectedVariant) {
         setSelectedVariantId(product.variants[0].id);
     }
-    const qtyInCart = activeOrder?.lines.find(l => l.productVariant.id === selectedVariantId)?.quantity ?? 0;
+    const qtyInCart =
+        activeOrder?.lines.find(
+            (l) => l.productVariant.id === selectedVariantId,
+        )?.quantity ?? 0;
 
     const asset = product.assets[0];
     const brandName = product.facetValues.find(
-        (fv) => fv.facet.code === "brand"
+        (fv) => fv.facet.code === 'brand',
     )?.name;
 
     return (
@@ -74,21 +108,25 @@ export default function ProductSlug() {
                 </h2>
                 <Breadcrumbs
                     items={
-                        product.collections[product.collections.length - 1]?.breadcrumbs ?? []
+                        product.collections[product.collections.length - 1]
+                            ?.breadcrumbs ?? []
                     }
                 ></Breadcrumbs>
                 <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
                     {/* Image gallery */}
                     <div className="w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                  <span className="rounded-md overflow-hidden">
-                    <div className="w-full h-full object-center object-cover rounded-lg">
-                      <img
-                          src={product.featuredAsset?.preview + '?w=800'}
-                          alt={product.name}
-                          className="w-full h-full object-center object-cover rounded-lg"
-                      />
-                    </div>
-                  </span>
+                        <span className="rounded-md overflow-hidden">
+                            <div className="w-full h-full object-center object-cover rounded-lg">
+                                <img
+                                    src={
+                                        product.featuredAsset?.preview +
+                                        '?w=800'
+                                    }
+                                    alt={product.name}
+                                    className="w-full h-full object-center object-cover rounded-lg"
+                                />
+                            </div>
+                        </span>
                     </div>
 
                     {/* Product info */}
@@ -98,10 +136,15 @@ export default function ProductSlug() {
 
                             <div
                                 className="text-base text-gray-700"
-                                dangerouslySetInnerHTML={{__html: product.description}}
+                                dangerouslySetInnerHTML={{
+                                    __html: product.description,
+                                }}
                             />
                         </div>
-                        <activeOrderFetcher.Form method="post" action="/active-order">
+                        <activeOrderFetcher.Form
+                            method="post"
+                            action="/api/active-order"
+                        >
                             {1 < product.variants.length ? (
                                 <div className="mt-4">
                                     <label
@@ -115,33 +158,62 @@ export default function ProductSlug() {
                                         id="productVariant"
                                         value={selectedVariantId}
                                         name="variantId"
-                                        onChange={(e) => setSelectedVariantId(e.target.value)}
+                                        onChange={(e) =>
+                                            setSelectedVariantId(e.target.value)
+                                        }
                                     >
-                                        {product.variants.map(variant => (
-                                            <option key={variant.id} value={variant.id}>{variant.name}</option>
+                                        {product.variants.map((variant) => (
+                                            <option
+                                                key={variant.id}
+                                                value={variant.id}
+                                            >
+                                                {variant.name}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
                             ) : (
-                                <input type="hidden" name="variantId" value={selectedVariantId}></input>
+                                <input
+                                    type="hidden"
+                                    name="variantId"
+                                    value={selectedVariantId}
+                                ></input>
                             )}
 
                             <div className="mt-10 flex items-center">
                                 <p className="text-3xl text-gray-900 mr-4">
-                                    <Price priceWithTax={selectedVariant?.priceWithTax}
-                                           currencyCode={selectedVariant?.currencyCode}></Price>
+                                    <Price
+                                        priceWithTax={
+                                            selectedVariant?.priceWithTax
+                                        }
+                                        currencyCode={
+                                            selectedVariant?.currencyCode
+                                        }
+                                    ></Price>
                                 </p>
                                 <div className="flex sm:flex-col1 align-baseline">
                                     <button
                                         type="submit"
-                                        className={`max-w-xs flex-1 ${transition.state !== 'idle' ? 'bg-gray-400' : qtyInCart === 0 ? 'bg-indigo-600' : 'bg-green-600'}
+                                        className={`max-w-xs flex-1 ${
+                                            transition.state !== 'idle'
+                                                ? 'bg-gray-400'
+                                                : qtyInCart === 0
+                                                ? 'bg-indigo-600'
+                                                : 'bg-green-600'
+                                        }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
                                       justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none 
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
                                         disabled={transition.state !== 'idle'}
                                     >
-                                        {qtyInCart ? <span className='flex items-center'><CheckIcon
-                                            className='w-5 h-5 mr-1'/> {qtyInCart} in cart</span> : `Add to cart`}
+                                        {qtyInCart ? (
+                                            <span className="flex items-center">
+                                                <CheckIcon className="w-5 h-5 mr-1" />{' '}
+                                                {qtyInCart} in cart
+                                            </span>
+                                        ) : (
+                                            `Add to cart`
+                                        )}
                                     </button>
 
                                     <button
@@ -152,15 +224,25 @@ export default function ProductSlug() {
                                             className="h-6 w-6 flex-shrink-0"
                                             aria-hidden="true"
                                         />
-                                        <span className="sr-only">Add to favorites</span>
+                                        <span className="sr-only">
+                                            Add to favorites
+                                        </span>
                                     </button>
                                 </div>
                             </div>
                             <div className="mt-2 flex items-center space-x-2">
-                                <span className="text-gray-500">{selectedVariant?.sku}</span>
-                                <StockLevelLabel stockLevel={selectedVariant?.stockLevel}/>
+                                <span className="text-gray-500">
+                                    {selectedVariant?.sku}
+                                </span>
+                                <StockLevelLabel
+                                    stockLevel={selectedVariant?.stockLevel}
+                                />
                             </div>
-                            {error && <div className="mt-4"><Alert message={error.message}/></div>}
+                            {error && (
+                                <div className="mt-4">
+                                    <Alert message={error.message} />
+                                </div>
+                            )}
 
                             <section className="mt-12 pt-12 border-t text-xs">
                                 <h3 className="text-gray-600 font-bold mb-2">
@@ -168,23 +250,27 @@ export default function ProductSlug() {
                                 </h3>
                                 <div className="text-gray-500 space-y-1">
                                     <p>
-                                        Standard shipping: 3 - 5 working days. Express shipping: 1 - 3 working days.
+                                        Standard shipping: 3 - 5 working days.
+                                        Express shipping: 1 - 3 working days.
                                     </p>
                                     <p>
-                                        Shipping costs depend on delivery address and will be calculated during
+                                        Shipping costs depend on delivery
+                                        address and will be calculated during
                                         checkout.
                                     </p>
                                     <p>
-                                        Returns are subject to terms. Please see the <span className="underline">returns page</span> for
-                                        further information.
+                                        Returns are subject to terms. Please see
+                                        the{' '}
+                                        <span className="underline">
+                                            returns page
+                                        </span>{' '}
+                                        for further information.
                                     </p>
                                 </div>
                             </section>
                         </activeOrderFetcher.Form>
                     </div>
                 </div>
-
-
             </div>
             <div className="mt-24">
                 <TopReviews></TopReviews>
@@ -203,10 +289,9 @@ export function CatchBoundary() {
                 {/* Image gallery */}
                 <div className="w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                     <span className="rounded-md overflow-hidden">
-                            <div
-                                className="w-full h-96 bg-slate-200 rounded-lg flex content-center justify-center">
-                                <PhotographIcon className="w-48 text-white"></PhotographIcon>
-                            </div>
+                        <div className="w-full h-96 bg-slate-200 rounded-lg flex content-center justify-center">
+                            <PhotographIcon className="w-48 text-white"></PhotographIcon>
+                        </div>
                     </span>
                 </div>
 
@@ -216,7 +301,6 @@ export function CatchBoundary() {
                         We couldn't find any product at that address!
                     </div>
                     <div className="flex-1 space-y-3 py-1">
-
                         <div className="h-2 bg-slate-200 rounded"></div>
                         <div className="space-y-3">
                             <div className="grid grid-cols-3 gap-4">
@@ -229,5 +313,5 @@ export function CatchBoundary() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
