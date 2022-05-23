@@ -39,7 +39,6 @@ async function sendQuery<Response, Variables = {}>(options: {
     return fetch(DEMO_API_URL, {
         method: 'POST',
         body: JSON.stringify(options),
-        credentials: 'include',
         headers,
     }).then(async (res) => ({
         ...(await res.json()),
