@@ -1686,11 +1686,6 @@ select {
   line-height: 1.75rem;
 }
 
-#app .text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
 #app .font-medium {
   font-weight: 500;
 }
@@ -1709,10 +1704,6 @@ select {
 
 #app .font-bold {
   font-weight: 700;
-}
-
-#app .font-extralight {
-  font-weight: 200;
 }
 
 #app .uppercase {
@@ -1737,10 +1728,6 @@ select {
 
 #app .tracking-wider {
   letter-spacing: 0.05em;
-}
-
-#app .tracking-widest {
-  letter-spacing: 0.1em;
 }
 
 #app .text-red-400 {

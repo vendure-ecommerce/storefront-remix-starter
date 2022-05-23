@@ -130,7 +130,8 @@ export default function App() {
                 />
                 <ScrollRestoration />
                 <Scripts />
-                {process.env.NODE_ENV === 'development' && <LiveReload />}
+                {typeof process !== 'undefined' &&
+                    process.env.NODE_ENV === 'development' && <LiveReload />}
                 <Footer collections={collections}></Footer>
             </body>
         </html>
