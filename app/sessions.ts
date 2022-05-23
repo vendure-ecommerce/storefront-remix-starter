@@ -1,7 +1,6 @@
 import { IS_CF_PAGES } from '~/utils/platform-adapter';
 
 function getCookieSessionStorageFactory() {
-    console.log(`getCookieSessionStorageFactory, IS_CF_PAGES`, IS_CF_PAGES);
     if (IS_CF_PAGES) {
         return require('@remix-run/cloudflare').createCookieSessionStorage;
     } else {

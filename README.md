@@ -1,6 +1,6 @@
 # Vendure Remix Storefront Starter
 
-A storefront for [Vendure](https://www.vendure.io) and [Remix](https://remix.run).
+An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix](https://remix.run).
 
 ## To do
 
@@ -15,15 +15,45 @@ Contributions welcome!
 
 ## Development
 
-1. `npm install`
-2. `npm run dev` - runs locally
-3. `npm run dev:cf` - runs locally with the Cloudflare Pages configuration
+### Vendure Server 
+
+This storefront requires a Vendure server. You can either run a local instance, or use our public demo server.
+
+#### Local
+
+You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://www.vendure.io/docs/getting-started/). Note that since Remix runs on port 3000 by default, you should change the local Vendure server to run on another port:
+
+```ts
+// vendure-config.ts
+export const config: VendureConfig = {
+  apiOptions: {
+    port: 3001,
+  }
+  // ...
+};
+```
+
+#### Public demo
+
+There is a publicly-available demo instance at https://readonlydemo.vendure.io/shop-api
+
+1. Clone this repo
+2. `npm install`
+3. Create a `.env` file in the root dir with the following contents:
+   ```.env
+   VENDURE_API_URL=http://localhost:3001/shop-api
+   # or
+   # VENDURE_API_URL=https://readonlydemo.vendure.io/shop-api
+   NODE_ENV=development
+   ```
+4. `npm run dev` - run the storefront with a local Remix server
+5. `npm run dev:cf` - runs locally with the Cloudflare Pages configuration
 
 ## Deployment
 
 This repo is configured to deploy to either Netlify or Cloudflare Pages.
 
-The [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
+No special setup should be needed, as the [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
 
 ## License
 

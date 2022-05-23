@@ -3,6 +3,10 @@ import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
 const DEMO_API_URL = 'https://readonlydemo.vendure.io/shop-api';
+const API_URL =
+    typeof process !== 'undefined'
+        ? process.env.VENDURE_API_URL ?? DEMO_API_URL
+        : DEMO_API_URL;
 
 export interface QueryOptions {
     request: Request;
@@ -36,7 +40,7 @@ async function sendQuery<Response, Variables = {}>(options: {
         }
     }
 
-    return fetch(DEMO_API_URL, {
+    return fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(options),
         headers,
