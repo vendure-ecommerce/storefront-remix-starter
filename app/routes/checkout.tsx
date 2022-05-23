@@ -73,7 +73,7 @@ export default function Checkout() {
                     {/* Order summary */}
                     {!isConfirmationPage && (
                         <div className="mt-10 lg:mt-0">
-                            <h2 className="text-lg font-medium text-gray-900">
+                            <h2 className="text-lg font-medium text-gray-900 mb-4">
                                 Order summary
                             </h2>
 

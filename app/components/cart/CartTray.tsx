@@ -79,51 +79,61 @@ export function CartTray({
                                         </div>
 
                                         <div className="mt-8">
-                                            <CartContents
-                                                orderLines={
-                                                    activeOrder?.lines ?? []
-                                                }
-                                                currencyCode={currencyCode!}
-                                                editable={true}
-                                                removeItem={removeItem}
-                                                adjustOrderLine={
-                                                    adjustOrderLine
-                                                }
-                                            ></CartContents>
+                                            {activeOrder?.totalQuantity ? (
+                                                <CartContents
+                                                    orderLines={
+                                                        activeOrder?.lines ?? []
+                                                    }
+                                                    currencyCode={currencyCode!}
+                                                    editable={true}
+                                                    removeItem={removeItem}
+                                                    adjustOrderLine={
+                                                        adjustOrderLine
+                                                    }
+                                                ></CartContents>
+                                            ) : (
+                                                <div className="flex items-center justify-center h-48 text-xl text-gray-400">
+                                                    Your cart is empty
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                                        <div className="flex justify-between text-base font-medium text-gray-900">
-                                            <p>Subtotal</p>
-                                            <p>
-                                                {currencyCode && (
-                                                    <Price
-                                                        priceWithTax={
-                                                            activeOrder?.subTotalWithTax ??
-                                                            0
-                                                        }
-                                                        currencyCode={
-                                                            currencyCode
-                                                        }
-                                                    />
-                                                )}
+                                    {activeOrder?.totalQuantity && (
+                                        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                                            <div className="flex justify-between text-base font-medium text-gray-900">
+                                                <p>Subtotal</p>
+                                                <p>
+                                                    {currencyCode && (
+                                                        <Price
+                                                            priceWithTax={
+                                                                activeOrder?.subTotalWithTax ??
+                                                                0
+                                                            }
+                                                            currencyCode={
+                                                                currencyCode
+                                                            }
+                                                        />
+                                                    )}
+                                                </p>
+                                            </div>
+                                            <p className="mt-0.5 text-sm text-gray-500">
+                                                Shipping will be calculated at
+                                                checkout.
                                             </p>
+                                            <div className="mt-6">
+                                                <Link
+                                                    to="/checkout"
+                                                    onClick={() =>
+                                                        onClose(false)
+                                                    }
+                                                    className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                                                >
+                                                    Checkout
+                                                </Link>
+                                            </div>
                                         </div>
-                                        <p className="mt-0.5 text-sm text-gray-500">
-                                            Shipping and taxes calculated at
-                                            checkout.
-                                        </p>
-                                        <div className="mt-6">
-                                            <Link
-                                                to="/checkout"
-                                                onClick={() => onClose(false)}
-                                                className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                                            >
-                                                Checkout
-                                            </Link>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </Transition.Child>

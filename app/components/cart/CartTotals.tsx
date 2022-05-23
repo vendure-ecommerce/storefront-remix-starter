@@ -4,7 +4,7 @@ import { OrderDetailFragment } from '~/generated/graphql';
 
 export function CartTotals({ order }: { order?: OrderDetailFragment | null }) {
     return (
-        <dl className="border-t border-gray-200 py-6 px-4 space-y-6">
+        <dl className="border-t mt-6 border-gray-200 py-6 space-y-6">
             <div className="flex items-center justify-between">
                 <dt className="text-sm">Subtotal</dt>
                 <dd className="text-sm font-medium text-gray-900">

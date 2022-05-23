@@ -53,6 +53,10 @@ export const unstable_shouldReload: ShouldReloadFunction = ({
         // just logged out
         return true;
     }
+    if (submission?.action === '/checkout/payment') {
+        // submitted payment for order
+        return true;
+    }
     return false;
 };
 

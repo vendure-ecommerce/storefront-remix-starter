@@ -3229,7 +3229,7 @@ export type ActiveCustomerQuery = { __typename?: 'Query', activeCustomer?: { __t
 export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null | undefined, fullName?: string | null | undefined, streetLine1: string, streetLine2?: string | null | undefined, city?: string | null | undefined, province?: string | null | undefined, postalCode?: string | null | undefined, phoneNumber?: string | null | undefined, defaultShippingAddress?: boolean | null | undefined }> | null | undefined } | null | undefined };
+export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null | undefined, fullName?: string | null | undefined, streetLine1: string, streetLine2?: string | null | undefined, city?: string | null | undefined, province?: string | null | undefined, postalCode?: string | null | undefined, phoneNumber?: string | null | undefined, defaultShippingAddress?: boolean | null | undefined, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null | undefined } | null | undefined };
 
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
@@ -3596,6 +3596,11 @@ export const ActiveCustomerAddressesDocument = gql`
       city
       province
       postalCode
+      country {
+        id
+        code
+        name
+      }
       phoneNumber
       defaultShippingAddress
     }

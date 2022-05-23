@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/solid';
 import { useNavigate, useOutletContext } from 'remix';
-import { OutletContext } from '~/types';
+import { OutletContext, ShippingFormData } from '~/types';
 import { Form, useLoaderData } from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import {
@@ -17,6 +17,10 @@ import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
+import {
+    SelectedAddress,
+    ShippingAddressSelector,
+} from '~/components/checkout/ShippingAddressSelector';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -47,6 +51,7 @@ export default function CheckoutShipping() {
         useOutletContext<OutletContext>();
     const [customerFormChanged, setCustomerFormChanged] = useState(false);
     const [addressFormChanged, setAddressFormChanged] = useState(false);
+    const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
     let navigate = useNavigate();
 
     const { customer, shippingAddress } = activeOrder ?? {};
@@ -56,7 +61,10 @@ export default function CheckoutShipping() {
         shippingAddress?.fullName ??
         (customer ? `${customer.firstName} ${customer.lastName}` : ``);
     const canProceedToPayment =
-        customer && shippingAddress && activeOrder?.shippingLines?.length;
+        customer &&
+        ((shippingAddress?.streetLine1 && shippingAddress?.postalCode) ||
+            selectedAddressIndex != null) &&
+        activeOrder?.shippingLines?.length;
 
     const submitCustomerForm = (event: FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
@@ -81,18 +89,34 @@ export default function CheckoutShipping() {
     const submitAddressForm = (event: FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
         const isValid = event.currentTarget.checkValidity();
-        if (
-            addressFormChanged &&
-            isValid &&
-            shippingFormDataIsValid(formData)
-        ) {
+        if (addressFormChanged && isValid) {
+            setShippingAddress(formData);
+        }
+    };
+    const submitSelectedAddress = (index: number) => {
+        const selectedAddress = activeCustomer?.addresses?.[index];
+        if (selectedAddress) {
+            setSelectedAddressIndex(index);
+            const formData = new FormData();
+            Object.keys(selectedAddress).forEach((key) =>
+                formData.append(key, (selectedAddress as any)[key]),
+            );
+            formData.append('countryCode', selectedAddress.country.code);
+            formData.append('action', 'setCheckoutShipping');
+            setShippingAddress(formData);
+        }
+    };
+
+    function setShippingAddress(formData: FormData) {
+        if (shippingFormDataIsValid(formData)) {
             activeOrderFetcher.submit(formData, {
                 method: 'post',
                 action: '/api/active-order',
             });
             setAddressFormChanged(false);
         }
-    };
+    }
+
     const submitSelectedShippingMethod = (value?: string) => {
         if (value) {
             activeOrderFetcher.submit(
@@ -225,13 +249,23 @@ export default function CheckoutShipping() {
                         Shipping information
                     </h2>
                 </div>
-                <AddressForm
-                    availableCountries={
-                        activeOrder ? availableCountries : undefined
-                    }
-                    address={shippingAddress}
-                    defaultFullName={defaultFullName}
-                ></AddressForm>
+                {isSignedIn && activeCustomer.addresses?.length ? (
+                    <div>
+                        <ShippingAddressSelector
+                            addresses={activeCustomer.addresses}
+                            selectedAddressIndex={selectedAddressIndex}
+                            onChange={submitSelectedAddress}
+                        />
+                    </div>
+                ) : (
+                    <AddressForm
+                        availableCountries={
+                            activeOrder ? availableCountries : undefined
+                        }
+                        address={shippingAddress}
+                        defaultFullName={defaultFullName}
+                    ></AddressForm>
+                )}
             </Form>
 
             <div className="mt-10 border-t border-gray-200 pt-10">

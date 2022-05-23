@@ -33,6 +33,11 @@ gql`
                 city
                 province
                 postalCode
+                country {
+                    id
+                    code
+                    name
+                }
                 phoneNumber
                 defaultShippingAddress
             }
