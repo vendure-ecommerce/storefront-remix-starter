@@ -7,6 +7,7 @@ import { Link } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { CartLoaderData } from '~/routes/api/active-order';
 import { CurrencyCode } from '~/generated/graphql';
+import { useLocation } from 'remix';
 
 export function CartTray({
     open,
@@ -22,6 +23,8 @@ export function CartTray({
     removeItem?: (lineId: string) => void;
 }) {
     const currencyCode = activeOrder?.currencyCode || CurrencyCode.Usd;
+    const location = useLocation();
+    const editable = !location.pathname.startsWith('/checkout');
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
@@ -85,7 +88,7 @@ export function CartTray({
                                                         activeOrder?.lines ?? []
                                                     }
                                                     currencyCode={currencyCode!}
-                                                    editable={true}
+                                                    editable={editable}
                                                     removeItem={removeItem}
                                                     adjustOrderLine={
                                                         adjustOrderLine
@@ -99,7 +102,7 @@ export function CartTray({
                                         </div>
                                     </div>
 
-                                    {activeOrder?.totalQuantity && (
+                                    {activeOrder?.totalQuantity && editable && (
                                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <p>Subtotal</p>
