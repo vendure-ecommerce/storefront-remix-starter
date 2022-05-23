@@ -3,7 +3,7 @@
  */
 const cloudflarePagesConfig = {
     serverBuildTarget: 'cloudflare-pages',
-    server: './server.js',
+    server: './server-cloudflare-pages.js',
     ignoredRouteFiles: ['**/.*'],
 };
 /**
