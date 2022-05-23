@@ -1,4 +1,4 @@
-import { DataFunctionArgs } from '@remix-run/cloudflare';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { getOrderByCode } from '~/providers/orders/order';
 import { useLoaderData } from '@remix-run/react';
 import { CartContents } from '~/components/cart/CartContents';

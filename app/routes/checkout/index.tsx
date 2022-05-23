@@ -8,7 +8,7 @@ import {
     useOutletContext,
 } from '@remix-run/react';
 import { OutletContext } from '~/types';
-import { DataFunctionArgs } from '@remix-run/cloudflare';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 import {
     getAvailableCountries,
     getEligibleShippingMethods,

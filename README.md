@@ -15,18 +15,15 @@ Contributions welcome!
 
 ## Development
 
-1. Create an .env file in the root:
-   ```
-   ENCRYPTION_KEY=abc
-   VENDURE_API_URL=http://localhost:3001/shop-api
-   ```
-2. npm run dev
+1. `npm install`
+2. `npm run dev` - runs locally
+3. `npm run dev:cf` - runs locally with the Cloudflare Pages configuration
 
 ## Deployment
 
-### Netlify
+This repo is configured to deploy to either Netlify or Cloudflare Pages.
 
-
+The [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
 
 ## License
 

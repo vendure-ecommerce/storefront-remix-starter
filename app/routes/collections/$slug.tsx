@@ -1,4 +1,4 @@
-import { DataFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { DataFunctionArgs, MetaFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
 import { sdk } from '../../graphqlWrapper';
 import { CollectionCard } from '~/components/collections/CollectionCard';

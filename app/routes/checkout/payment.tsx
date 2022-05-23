@@ -1,4 +1,4 @@
-import { DataFunctionArgs } from '@remix-run/cloudflare';
+import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import {
     addPaymentToOrder,
     getEligiblePaymentMethods,
@@ -10,7 +10,6 @@ import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
-import { redirect } from '~/utils/platform-adapter';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(

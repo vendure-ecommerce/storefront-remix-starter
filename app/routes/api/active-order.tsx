@@ -7,7 +7,7 @@ import {
     setOrderShippingAddress,
     setOrderShippingMethod,
 } from '~/providers/orders/order';
-import { DataFunctionArgs } from '@remix-run/cloudflare';
+import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import {
     CreateAddressInput,
     CreateCustomerInput,
@@ -21,7 +21,6 @@ import {
     getNextOrderStates,
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { json } from '~/utils/platform-adapter';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 

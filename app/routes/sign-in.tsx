@@ -1,9 +1,8 @@
 import { Form, useActionData, useSearchParams } from '@remix-run/react';
-import { DataFunctionArgs } from '@remix-run/cloudflare';
+import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { login } from '~/providers/account/account';
 import { ErrorResult } from '~/generated/graphql';
 import { XCircleIcon } from '@heroicons/react/solid';
-import { json, redirect } from '~/utils/platform-adapter';
 
 export async function action({ params, request }: DataFunctionArgs) {
     const body = await request.formData();

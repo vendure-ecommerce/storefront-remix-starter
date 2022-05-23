@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import { EntryContext } from '@remix-run/cloudflare';
+import { EntryContext } from '@remix-run/server-runtime';
 import { RemixServer } from '@remix-run/react';
 
 export default function handleRequest(
