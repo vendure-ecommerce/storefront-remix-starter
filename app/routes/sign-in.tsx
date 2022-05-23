@@ -1,11 +1,12 @@
 import { Form, useActionData } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { login } from '~/providers/account/account';
 import { sessionStorage } from '~/sessions';
 import { getActiveOrder } from '~/providers/orders/order';
 import { useSearchParams } from 'remix';
 import { ErrorResult } from '~/generated/graphql';
 import { XCircleIcon } from '@heroicons/react/solid';
+import { json, redirect } from '~/utils/platform-adapter';
 
 export async function action({ params, request }: DataFunctionArgs) {
     const body = await request.formData();

@@ -1,4 +1,4 @@
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 import {
     addPaymentToOrder,
     getEligiblePaymentMethods,
@@ -11,6 +11,7 @@ import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { redirect } from '~/utils/platform-adapter';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(

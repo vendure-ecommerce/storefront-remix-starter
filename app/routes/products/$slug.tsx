@@ -1,8 +1,4 @@
-import {
-    DataFunctionArgs,
-    json,
-    MetaFunction,
-} from '@remix-run/server-runtime';
+import { DataFunctionArgs, MetaFunction } from '@remix-run/server-runtime';
 import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
@@ -23,6 +19,7 @@ import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
+import { json } from '~/utils/platform-adapter';
 
 export type ProductLoaderData = {
     product: Awaited<ReturnType<typeof getProductBySlug>>['product'];

@@ -10,11 +10,7 @@ import {
 } from '@remix-run/react';
 import styles from './styles/app.css';
 import { Header } from './components/header/Header';
-import {
-    DataFunctionArgs,
-    json,
-    MetaFunction,
-} from '@remix-run/server-runtime';
+import { DataFunctionArgs, MetaFunction } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
@@ -23,6 +19,7 @@ import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
+import { json } from './utils/platform-adapter';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE };
