@@ -3155,6 +3155,20 @@ export type Zone = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+  rememberMe?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename: 'CurrentUser', id: string, identifier: string } | { __typename: 'InvalidCredentialsError', errorCode: ErrorCode, message: string } | { __typename: 'NativeAuthStrategyError', errorCode: ErrorCode, message: string } | { __typename: 'NotVerifiedError', errorCode: ErrorCode, message: string } };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'Success', success: boolean } };
+
 export type ActiveChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3424,6 +3438,28 @@ export const ListedProductFragmentDoc = gql`
   }
 }
     `;
+export const LoginDocument = gql`
+    mutation login($email: String!, $password: String!, $rememberMe: Boolean) {
+  login(username: $email, password: $password, rememberMe: $rememberMe) {
+    __typename
+    ... on CurrentUser {
+      id
+      identifier
+    }
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    `;
+export const LogoutDocument = gql`
+    mutation logout {
+  logout {
+    success
+  }
+}
+    `;
 export const ActiveChannelDocument = gql`
     query activeChannel {
   activeChannel {
@@ -3671,6 +3707,12 @@ export const SearchFacetValuesDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
+    login(variables: LoginMutationVariables, options?: C): Promise<LoginMutation> {
+      return requester<LoginMutation, LoginMutationVariables>(LoginDocument, variables, options);
+    },
+    logout(variables?: LogoutMutationVariables, options?: C): Promise<LogoutMutation> {
+      return requester<LogoutMutation, LogoutMutationVariables>(LogoutDocument, variables, options);
+    },
     activeChannel(variables?: ActiveChannelQueryVariables, options?: C): Promise<ActiveChannelQuery> {
       return requester<ActiveChannelQuery, ActiveChannelQueryVariables>(ActiveChannelDocument, variables, options);
     },

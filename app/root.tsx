@@ -23,6 +23,8 @@ import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
+import { Params } from 'react-router';
+import { Submission } from '@remix-run/react/transition';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE };
@@ -39,7 +41,22 @@ export function links() {
 }
 
 // The root data does not change once loaded.
-export const unstable_shouldReload: ShouldReloadFunction = () => false;
+export const unstable_shouldReload: ShouldReloadFunction = ({
+    url,
+    prevUrl,
+    params,
+    submission,
+}) => {
+    if (prevUrl.pathname === '/sign-in') {
+        // just logged in
+        return true;
+    }
+    if (prevUrl.pathname === '/account' && url.pathname === '/') {
+        // just logged out
+        return true;
+    }
+    return false;
+};
 
 export type RootLoaderData = {
     activeCustomer: Awaited<ReturnType<typeof getActiveCustomer>>;
