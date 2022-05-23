@@ -96,7 +96,7 @@ export default function ProductSlug() {
     return (
         <div>
             <div className="max-w-6xl mx-auto px-4">
-                <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+                <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
                     {product.name}
                 </h2>
                 <Breadcrumbs
@@ -178,7 +178,7 @@ export default function ProductSlug() {
                                 ></input>
                             )}
 
-                            <div className="mt-10 flex items-center">
+                            <div className="mt-10 flex flex-col sm:flex-row sm:items-center">
                                 <p className="text-3xl text-gray-900 mr-4">
                                     <Price
                                         priceWithTax={
@@ -196,11 +196,11 @@ export default function ProductSlug() {
                                             transition.state !== 'idle'
                                                 ? 'bg-gray-400'
                                                 : qtyInCart === 0
-                                                ? 'bg-indigo-600'
-                                                : 'bg-green-600'
+                                                ? 'bg-indigo-600 hover:bg-indigo-700'
+                                                : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
                                         }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
-                                      justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none 
+                                      justify-center text-base font-medium text-white focus:outline-none 
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
                                         disabled={transition.state !== 'idle'}
                                     >
@@ -280,7 +280,7 @@ export default function ProductSlug() {
 export function CatchBoundary() {
     return (
         <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-5xl font-light tracking-tight text-gray-900 my-8">
+            <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
                 Product not found!
             </h2>
             <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
