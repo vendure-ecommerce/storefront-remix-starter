@@ -1,8 +1,14 @@
-const createCookieSessionStorage = process.env.CF_PAGES
-    ? require('@remix-run/cloudflare').createCookieSessionStorage
-    : require('@remix-run/node').createCookieSessionStorage;
+function getCookieSessionStorageFactory() {
+    console.log(
+        `getCookieSessionStorageFactory, process.env.CF_PAGES`,
+        process.env.CF_PAGES,
+    );
+    return process.env.CF_PAGES
+        ? require('@remix-run/cloudflare').createCookieSessionStorage
+        : require('@remix-run/node').createCookieSessionStorage;
+}
 
-export const sessionStorage = createCookieSessionStorage({
+export const sessionStorage = getCookieSessionStorageFactory()({
     cookie: {
         name: 'vendure_remix_session',
         httpOnly: true,
