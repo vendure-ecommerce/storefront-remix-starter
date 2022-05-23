@@ -5,9 +5,8 @@ import {
     getNextOrderStates,
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useOutletContext } from '@remix-run/react';
 import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
-import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';

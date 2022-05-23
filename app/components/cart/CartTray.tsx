@@ -3,11 +3,10 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { CartContents } from './CartContents';
-import { Link } from '@remix-run/react';
+import { Link, useLocation } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { CartLoaderData } from '~/routes/api/active-order';
 import { CurrencyCode } from '~/generated/graphql';
-import { useLocation } from 'remix';
 
 export function CartTray({
     open,

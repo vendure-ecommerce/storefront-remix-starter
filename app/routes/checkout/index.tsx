@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { FormEvent, useState } from 'react';
-import { RadioGroup } from '@headlessui/react';
-import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/solid';
-import { useNavigate, useOutletContext } from 'remix';
-import { OutletContext, ShippingFormData } from '~/types';
-import { Form, useLoaderData } from '@remix-run/react';
+import { LockClosedIcon } from '@heroicons/react/solid';
+import {
+    Form,
+    useLoaderData,
+    useNavigate,
+    useOutletContext,
+} from '@remix-run/react';
+import { OutletContext } from '~/types';
 import { DataFunctionArgs } from '@remix-run/cloudflare';
 import {
     getAvailableCountries,
     getEligibleShippingMethods,
 } from '~/providers/checkout/checkout';
-import { Price } from '~/components/products/Price';
 import { shippingFormDataIsValid } from '~/utils/validation';
 import { sessionStorage } from '~/sessions';
 import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
-import {
-    SelectedAddress,
-    ShippingAddressSelector,
-} from '~/components/checkout/ShippingAddressSelector';
+import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(

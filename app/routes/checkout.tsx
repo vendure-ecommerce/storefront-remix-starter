@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/solid';
-import { Outlet, useLocation } from '@remix-run/react';
+import { Outlet, useLocation, useOutletContext } from '@remix-run/react';
 import { CartContents } from '~/components/cart/CartContents';
-import { useOutletContext } from 'remix';
 import { OutletContext } from '~/types';
-import { Price } from '~/components/products/Price';
 import { classNames } from '~/utils/class-names';
 import { CartTotals } from '~/components/cart/CartTotals';
 
