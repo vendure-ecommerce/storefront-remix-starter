@@ -19,13 +19,13 @@ export function Header({
                 <div className="max-w-6xl mx-2 md:mx-auto flex items-center justify-between">
                     <div>
                         <p className="hidden sm:block">
-                            Exclusive: Get your own FREE storefront starter kit{' '}
+                            Exclusive: Get your own{' '}
                             <a
                                 href="https://github.com/vendure-ecommerce/storefront-remix-starter"
                                 target="_blank"
                                 className="underline"
                             >
-                                here
+                                FREE storefront starter kit
                             </a>
                         </p>
                     </div>
@@ -44,7 +44,9 @@ export function Header({
                 <h1 className="text-white w-10">
                     <Link to="/">
                         <img
-                            src="/cube-logo-line-icon-nostroke-white.png"
+                            src="/cube-logo-small.webp"
+                            width={40}
+                            height={31}
                             alt="Vendure logo"
                         />
                     </Link>
@@ -68,6 +70,7 @@ export function Header({
                     <button
                         className="relative w-9 h-9 bg-white bg-opacity-20 rounded text-white p-1"
                         onClick={onCartIconClick}
+                        aria-label="Open cart tray"
                     >
                         <ShoppingBagIcon></ShoppingBagIcon>
                         {cartQuantity ? (

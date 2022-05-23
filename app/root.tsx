@@ -17,7 +17,7 @@ import {
 } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
-import { APP_META_TITLE } from '~/constants';
+import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
@@ -25,18 +25,15 @@ import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 
 export const meta: MetaFunction = () => {
-    return { title: APP_META_TITLE };
+    return { title: APP_META_TITLE, description: APP_META_DESCRIPTION };
 };
 
 export function links() {
-    return [
-        {
-            rel: 'stylesheet',
-            href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
-        },
-        { rel: 'stylesheet', href: styles },
-    ];
+    return [{ rel: 'stylesheet', href: styles }];
 }
+
+const devMode =
+    typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
 
 // The root data does not change once loaded.
 export const unstable_shouldReload: ShouldReloadFunction = ({
@@ -97,6 +94,7 @@ export default function App() {
         // of the activeOrder as the user may have signed in or out.
         refresh();
     }, [loaderData]);
+
     return (
         <html lang="en" id="app">
             <head>
@@ -133,8 +131,7 @@ export default function App() {
                 />
                 <ScrollRestoration />
                 <Scripts />
-                {typeof process !== 'undefined' &&
-                    process.env.NODE_ENV === 'development' && <LiveReload />}
+                {devMode && <LiveReload />}
                 <Footer collections={collections}></Footer>
             </body>
         </html>
