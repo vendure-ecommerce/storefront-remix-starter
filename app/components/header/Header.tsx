@@ -3,6 +3,8 @@ import { ShoppingBagIcon } from '@heroicons/react/outline';
 import { SearchBar } from '~/components/header/SearchBar';
 import { useRootLoader } from '~/utils/use-root-loader';
 import { UserIcon } from '@heroicons/react/solid';
+import { useScrollingUp } from '~/utils/use-scrolling-up';
+import { classNames } from '~/utils/class-names';
 
 export function Header({
     onCartIconClick,
@@ -13,8 +15,14 @@ export function Header({
 }) {
     const data = useRootLoader();
     const isSignedIn = !!data.activeCustomer.activeCustomer?.id;
+    const isScrollingUp = useScrollingUp();
     return (
-        <header className="bg-gradient-to-r from-zinc-700 to-gray-900 shadow-lg">
+        <header
+            className={classNames(
+                isScrollingUp ? 'sticky top-0 z-10 animate-dropIn' : '',
+                'bg-gradient-to-r from-zinc-700 to-gray-900 shadow-lg transform shadow-xl',
+            )}
+        >
             <div className="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-2 px-2 xl:px-0">
                 <div className="max-w-6xl mx-2 md:mx-auto flex items-center justify-between">
                     <div>
