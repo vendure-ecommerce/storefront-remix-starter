@@ -7,8 +7,8 @@ A storefront for [Vendure](https://www.vendure.io) and [Remix](https://remix.run
 * Cart ✅
 * Checkout flow ✅
 * Search facet filters ✅
+* Login ✅
 * Account creation
-* Login
 * Customer account management
 
 Contributions welcome!
@@ -21,6 +21,12 @@ Contributions welcome!
    VENDURE_API_URL=http://localhost:3001/shop-api
    ```
 2. npm run dev
+
+## Deployment
+
+### Netlify
+
+
 
 ## License
 

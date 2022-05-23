@@ -18,6 +18,8 @@
     "@headlessui/react": "^1.6.1",
     "@heroicons/react": "^1.0.6",
     "@netlify/functions": "^1.0.0",
+    "@remix-run/cloudflare": "^1.5.1",
+    "@remix-run/cloudflare-pages": "^1.5.1",
     "@remix-run/netlify": "^1.5.1",
     "@remix-run/node": "^1.5.1",
     "@remix-run/react": "^1.5.1",
