@@ -7,7 +7,7 @@ import {
     setOrderShippingAddress,
     setOrderShippingMethod,
 } from '~/providers/orders/order';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/cloudflare';
 import {
     CreateAddressInput,
     CreateCustomerInput,

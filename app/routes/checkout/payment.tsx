@@ -1,4 +1,4 @@
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/cloudflare';
 import {
     addPaymentToOrder,
     getEligiblePaymentMethods,

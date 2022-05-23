@@ -5,7 +5,7 @@ function getCookieSessionStorageFactory() {
     );
     return process.env.CF_PAGES
         ? require('@remix-run/cloudflare').createCookieSessionStorage
-        : require('@remix-run/node').createCookieSessionStorage;
+        : require('@remix-run/cloudflare').createCookieSessionStorage;
 }
 
 export const sessionStorage = getCookieSessionStorageFactory()({

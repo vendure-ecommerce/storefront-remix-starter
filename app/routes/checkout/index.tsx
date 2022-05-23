@@ -5,7 +5,7 @@ import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/solid';
 import { useNavigate, useOutletContext } from 'remix';
 import { OutletContext, ShippingFormData } from '~/types';
 import { Form, useLoaderData } from '@remix-run/react';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/cloudflare';
 import {
     getAvailableCountries,
     getEligibleShippingMethods,

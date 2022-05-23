@@ -1,4 +1,4 @@
-import { DataFunctionArgs, MetaFunction } from '@remix-run/server-runtime';
+import { DataFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
