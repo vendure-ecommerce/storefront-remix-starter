@@ -38,8 +38,8 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export async function loader({ params, request }: DataFunctionArgs) {
-    const productRes = await getProductBySlug(params.slug!, { request });
-    if (!productRes.product) {
+    const { product } = await getProductBySlug(params.slug!, { request });
+    if (!product) {
         throw new Response('Not Found', {
             status: 404,
         });
@@ -49,7 +49,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     );
     const error = session.get('activeOrderError');
     return json(
-        { product: productRes.product!, error },
+        { product: product!, error },
         {
             headers: {
                 'Set-Cookie': await sessionStorage.commitSession(session),
