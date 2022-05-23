@@ -5,7 +5,7 @@ import { useRootLoader } from '~/utils/use-root-loader';
 import { getActiveCustomer } from '~/providers/customer/customer';
 
 export async function loader({ request, params }: DataFunctionArgs) {
-    const { activeCustomer } = await getActiveCustomer(request);
+    const { activeCustomer } = await getActiveCustomer({ request });
     if (!activeCustomer) {
         return redirect('/sign-in');
     }

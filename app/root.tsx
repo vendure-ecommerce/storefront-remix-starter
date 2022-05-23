@@ -67,7 +67,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
     );
-    const activeCustomer = await getActiveCustomer(request);
+    const activeCustomer = await getActiveCustomer({ request });
     const loaderData: RootLoaderData = {
         activeCustomer,
         activeChannel: await activeChannel({ request }),

@@ -3226,6 +3226,11 @@ export type ActiveCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ActiveCustomerQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, firstName: string, lastName: string } | null | undefined };
 
+export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null | undefined, fullName?: string | null | undefined, streetLine1: string, streetLine2?: string | null | undefined, city?: string | null | undefined, province?: string | null | undefined, postalCode?: string | null | undefined, phoneNumber?: string | null | undefined, defaultShippingAddress?: boolean | null | undefined }> | null | undefined } | null | undefined };
+
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
@@ -3578,6 +3583,25 @@ export const ActiveCustomerDocument = gql`
   }
 }
     `;
+export const ActiveCustomerAddressesDocument = gql`
+    query activeCustomerAddresses {
+  activeCustomer {
+    id
+    addresses {
+      id
+      company
+      fullName
+      streetLine1
+      streetLine2
+      city
+      province
+      postalCode
+      phoneNumber
+      defaultShippingAddress
+    }
+  }
+}
+    `;
 export const SetCustomerForOrderDocument = gql`
     mutation setCustomerForOrder($input: CreateCustomerInput!) {
   setCustomerForOrder(input: $input) {
@@ -3742,6 +3766,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     activeCustomer(variables?: ActiveCustomerQueryVariables, options?: C): Promise<ActiveCustomerQuery> {
       return requester<ActiveCustomerQuery, ActiveCustomerQueryVariables>(ActiveCustomerDocument, variables, options);
+    },
+    activeCustomerAddresses(variables?: ActiveCustomerAddressesQueryVariables, options?: C): Promise<ActiveCustomerAddressesQuery> {
+      return requester<ActiveCustomerAddressesQuery, ActiveCustomerAddressesQueryVariables>(ActiveCustomerAddressesDocument, variables, options);
     },
     setCustomerForOrder(variables: SetCustomerForOrderMutationVariables, options?: C): Promise<SetCustomerForOrderMutation> {
       return requester<SetCustomerForOrderMutation, SetCustomerForOrderMutationVariables>(SetCustomerForOrderDocument, variables, options);
