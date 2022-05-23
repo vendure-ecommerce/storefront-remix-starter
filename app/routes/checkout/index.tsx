@@ -14,6 +14,8 @@ import { Price } from '~/components/products/Price';
 import { shippingFormDataIsValid } from '~/utils/validation';
 import { sessionStorage } from '~/sessions';
 import { classNames } from '~/utils/class-names';
+import { useRootLoader } from '~/utils/use-root-loader';
+import { getActiveCustomer } from '~/providers/customer/customer';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -23,13 +25,23 @@ export async function loader({ params, request }: DataFunctionArgs) {
     const { eligibleShippingMethods } = await getEligibleShippingMethods({
         request,
     });
+    const { activeCustomer } = await getActiveCustomer(request);
     const error = session.get('activeOrderError');
-    return { availableCountries, eligibleShippingMethods, error };
+    return {
+        availableCountries,
+        eligibleShippingMethods,
+        activeCustomer,
+        error,
+    };
 }
 
 export default function CheckoutShipping() {
-    const { availableCountries, eligibleShippingMethods, error } =
-        useLoaderData<Awaited<ReturnType<typeof loader>>>();
+    const {
+        availableCountries,
+        eligibleShippingMethods,
+        activeCustomer,
+        error,
+    } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
     const { activeOrderFetcher, activeOrder } =
         useOutletContext<OutletContext>();
     const [customerFormChanged, setCustomerFormChanged] = useState(false);
@@ -37,6 +49,7 @@ export default function CheckoutShipping() {
     let navigate = useNavigate();
 
     const { customer, shippingAddress } = activeOrder ?? {};
+    const isSignedIn = !!activeCustomer?.id;
     const defaultFullName =
         shippingAddress?.fullName ??
         (customer ? `${customer.firstName} ${customer.lastName}` : ``);
@@ -92,27 +105,38 @@ export default function CheckoutShipping() {
             );
         }
     };
+
     function navigateToPayment() {
         navigate('./payment');
     }
+
     return (
         <div>
             <div>
+                <h2 className="text-lg font-medium text-gray-900">
+                    Contact information
+                </h2>
+
+                {isSignedIn && (
+                    <div>
+                        <p className="mt-2 text-gray-600">
+                            {customer?.firstName} {customer?.lastName}
+                        </p>
+                        <p>{customer?.emailAddress}</p>
+                    </div>
+                )}
                 <Form
                     method="post"
                     action="/api/active-order"
                     onBlur={submitCustomerForm}
                     onChange={() => setCustomerFormChanged(true)}
+                    hidden={isSignedIn}
                 >
                     <input
                         type="hidden"
                         name="action"
                         value="setOrderCustomer"
                     />
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Contact information
-                    </h2>
-
                     <div className="mt-4">
                         <label
                             htmlFor="emailAddress"

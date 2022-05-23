@@ -10,6 +10,10 @@ export function useActiveOrder() {
         }
     }, [activeOrderFetcher]);
 
+    function refresh() {
+        activeOrderFetcher.load('/api/active-order');
+    }
+
     const { activeOrder } = activeOrderFetcher.data ?? {};
     const removeItem = (lineId: string) => {
         activeOrderFetcher.submit(
@@ -36,5 +40,11 @@ export function useActiveOrder() {
             },
         );
     };
-    return { activeOrderFetcher, activeOrder, removeItem, adjustOrderLine };
+    return {
+        activeOrderFetcher,
+        activeOrder,
+        removeItem,
+        adjustOrderLine,
+        refresh,
+    };
 }

@@ -846,6 +846,10 @@ select {
   margin-top: 0.75rem;
 }
 
+#app .-mt-4 {
+  margin-top: -1rem;
+}
+
 #app .mb-6 {
   margin-bottom: 1.5rem;
 }
@@ -2005,6 +2009,11 @@ select {
 #app .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .hover\:text-gray-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
 #app .hover\:opacity-75:hover {

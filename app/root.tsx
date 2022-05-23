@@ -18,13 +18,11 @@ import {
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_TITLE } from '~/constants';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { Params } from 'react-router';
-import { Submission } from '@remix-run/react/transition';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE };
@@ -64,7 +62,7 @@ export type RootLoaderData = {
     collections: Awaited<ReturnType<typeof getCollections>>;
 };
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request, params, context }: DataFunctionArgs) {
     const collections = await getCollections(request);
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
@@ -80,9 +78,21 @@ export async function loader({ request }: DataFunctionArgs) {
 
 export default function App() {
     const [open, setOpen] = useState(false);
-    const { collections } = useLoaderData<RootLoaderData>();
-    const { activeOrderFetcher, activeOrder, adjustOrderLine, removeItem } =
-        useActiveOrder();
+    const loaderData = useLoaderData<RootLoaderData>();
+    const { collections } = loaderData;
+    const {
+        activeOrderFetcher,
+        activeOrder,
+        adjustOrderLine,
+        removeItem,
+        refresh,
+    } = useActiveOrder();
+
+    useEffect(() => {
+        // When the loader has run, this implies we should refresh the contents
+        // of the activeOrder as the user may have signed in or out.
+        refresh();
+    }, [loaderData]);
     return (
         <html lang="en" id="app">
             <head>
