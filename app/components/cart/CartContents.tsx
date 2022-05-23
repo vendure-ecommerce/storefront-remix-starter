@@ -72,7 +72,7 @@ export function CartContents({
                                                     +e.target.value,
                                                 )
                                             }
-                                            className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                         >
                                             <option value={1}>1</option>
                                             <option value={2}>2</option>
@@ -99,7 +99,7 @@ export function CartContents({
                                             type="submit"
                                             name="removeItem"
                                             value={line.id}
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                            className="font-medium text-primary-600 hover:text-primary-500"
                                             onClick={() =>
                                                 removeItem &&
                                                 removeItem(line.id)

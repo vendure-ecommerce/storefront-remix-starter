@@ -152,7 +152,7 @@ export default function ProductSlug() {
                                         Select option
                                     </label>
                                     <select
-                                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
                                         id="productVariant"
                                         value={selectedVariantId}
                                         name="variantId"
@@ -196,12 +196,12 @@ export default function ProductSlug() {
                                             transition.state !== 'idle'
                                                 ? 'bg-gray-400'
                                                 : qtyInCart === 0
-                                                ? 'bg-indigo-600 hover:bg-indigo-700'
+                                                ? 'bg-primary-600 hover:bg-primary-700'
                                                 : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
                                         }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
                                       justify-center text-base font-medium text-white focus:outline-none 
-                                      focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full`}
+                                      focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full`}
                                         disabled={transition.state !== 'idle'}
                                     >
                                         {qtyInCart ? (

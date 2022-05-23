@@ -45,7 +45,7 @@ export default function Checkout() {
                                 {step.state === state ? (
                                     <span
                                         aria-current="page"
-                                        className="text-indigo-600"
+                                        className="text-primary-600"
                                     >
                                         {step.name}
                                     </span>

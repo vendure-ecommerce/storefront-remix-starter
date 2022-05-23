@@ -14,7 +14,7 @@ export function FiltersButton({
             onClick={onClick}
         >
             {!!filterCount ? (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-200 text-indigo-800">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-200 text-primary-800">
                     {filterCount}
                 </span>
             ) : (

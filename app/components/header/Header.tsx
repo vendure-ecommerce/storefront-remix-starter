@@ -74,7 +74,7 @@ export function Header({
                     >
                         <ShoppingBagIcon></ShoppingBagIcon>
                         {cartQuantity ? (
-                            <div className="absolute rounded-full -top-2 -right-2 bg-blue-600 w-6 h-6">
+                            <div className="absolute rounded-full -top-2 -right-2 bg-primary-600 w-6 h-6">
                                 {cartQuantity}
                             </div>
                         ) : (

@@ -34,7 +34,7 @@ export function ShippingAddressSelector({
                                 checked
                                     ? 'border-transparent'
                                     : 'border-gray-300',
-                                active ? 'ring-2 ring-indigo-500' : '',
+                                active ? 'ring-2 ring-primary-500' : '',
                                 'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none',
                             )
                         }
@@ -67,7 +67,7 @@ export function ShippingAddressSelector({
                                 </span>
                                 {checked ? (
                                     <CheckCircleIcon
-                                        className="h-5 w-5 text-indigo-600"
+                                        className="h-5 w-5 text-primary-600"
                                         aria-hidden="true"
                                     />
                                 ) : null}
@@ -75,7 +75,7 @@ export function ShippingAddressSelector({
                                     className={classNames(
                                         active ? 'border' : 'border-2',
                                         checked
-                                            ? 'border-indigo-500'
+                                            ? 'border-primary-500'
                                             : 'border-transparent',
                                         'absolute -inset-px rounded-lg pointer-events-none',
                                     )}
