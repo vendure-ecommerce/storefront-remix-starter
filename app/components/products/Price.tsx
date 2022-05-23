@@ -1,5 +1,4 @@
-import { memoize } from 'lodash/fp';
-import { CurrencyCode } from '../../generated/graphql';
+import { CurrencyCode } from '~/generated/graphql';
 import { ProductCardProps } from './ProductCard';
 
 export function Price({
@@ -29,10 +28,9 @@ export function Price({
     );
 }
 
-const currencyFormatter = memoize(
-    (currency: CurrencyCode) =>
-        new Intl.NumberFormat('en-US', { style: 'currency', currency }),
-);
 export function formatPrice(value: number, currency: CurrencyCode) {
-    return currencyFormatter(currency).format(value / 100);
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+    }).format(value / 100);
 }
