@@ -55,6 +55,8 @@ This repo is configured to deploy to either Netlify or Cloudflare Pages.
 
 No special setup should be needed, as the [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
 
+Follow the usual procedure for setting up a project in Netlify/CF Pages and point it to your clone of this repo on GitHub/Gitlab.
+
 ## License
 
 MIT

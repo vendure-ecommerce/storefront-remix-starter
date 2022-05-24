@@ -42,11 +42,22 @@ export default function AccountDashboard() {
                 <input type="hidden" name="action" value="logout" />
                 <button
                     type="submit"
-                    className="underline my-8 hover:text-gray-800"
+                    className="underline my-4 text-primary-600 hover:text-primary-800"
                 >
                     Sign out
                 </button>
             </Form>
+            <div className="h-96 border-2 border-dashed border-slate-200 rounded-lg flex items-center justify-center">
+                <div className="text-xl text-gray-500">
+                    Account dashboard not done yet.{' '}
+                    <a
+                        className="text-primary-600"
+                        href="https://github.com/vendure-ecommerce/storefront-remix-starter"
+                    >
+                        Want to help?
+                    </a>
+                </div>
+            </div>
         </div>
     );
 }
