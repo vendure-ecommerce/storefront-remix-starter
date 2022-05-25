@@ -2,6 +2,7 @@ import React from 'react';
 import { useLoaderData } from '@remix-run/react';
 import { getCollections } from '~/providers/collections/collections';
 import { CollectionCard } from '~/components/collections/CollectionCard';
+import { BookOpenIcon } from '@heroicons/react/solid';
 
 export async function loader({ request }: any) {
     const collections = await getCollections(request);
@@ -56,6 +57,17 @@ export default function Index() {
                             href="~/routes/__cart/index"
                             className="text-red-300 hover:text-red-500"
                         >
+                            Remix
+                        </a>
+                    </p>
+                    <p className="mt-4 text-gray-300 space-x-1">
+                        <BookOpenIcon className="w-5 h-5 inline" />
+                        <span>Read more:</span>
+                        <a
+                            className="text-primary-200 hover:text-primary-400"
+                            href="https://www.vendure.io/blog/2022/05/lightning-fast-headless-commerce-with-vendure-and-remix"
+                        >
+                            Lightning Fast Headless Commerce with Vendure and
                             Remix
                         </a>
                     </p>
