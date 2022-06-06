@@ -25,7 +25,7 @@ This storefront requires a Vendure server. You can either run a local instance, 
 
 #### Local
 
-You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://www.vendure.io/docs/getting-started/). Note that since Remix runs on port 3000 by default, you should change the local Vendure server to run on another port, and also make sure you have enabled the `bearer` methof for managing session tokens:
+You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://www.vendure.io/docs/getting-started/). Note that since Remix runs on port 3000 by default, you should change the local Vendure server to run on another port, and also make sure you have enabled the `bearer` method for managing session tokens:
 
 ```ts
 // vendure-config.ts
