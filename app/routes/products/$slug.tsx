@@ -112,7 +112,9 @@ export default function ProductSlug() {
                             <div className="w-full h-full object-center object-cover rounded-lg">
                                 <img
                                     src={
-                                        product.featuredAsset?.preview +
+                                        (selectedVariant?.featuredAsset
+                                            ?.preview ||
+                                            product.featuredAsset?.preview) +
                                         '?w=800'
                                     }
                                     alt={product.name}
@@ -192,15 +194,14 @@ export default function ProductSlug() {
                                 <div className="flex sm:flex-col1 align-baseline">
                                     <button
                                         type="submit"
-                                        className={`max-w-xs flex-1 ${
-                                            transition.state !== 'idle'
+                                        className={`max-w-xs flex-1 ${transition.state !== 'idle'
                                                 ? 'bg-gray-400'
                                                 : qtyInCart === 0
-                                                ? 'bg-primary-600 hover:bg-primary-700'
-                                                : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
-                                        }
+                                                    ? 'bg-primary-600 hover:bg-primary-700'
+                                                    : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
+                                            }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
-                                      justify-center text-base font-medium text-white focus:outline-none 
+                                      justify-center text-base font-medium text-white focus:outline-none
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full`}
                                         disabled={transition.state !== 'idle'}
                                     >
