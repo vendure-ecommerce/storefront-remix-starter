@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:3001/shop-api"
+schema: "${VENDURE_API_URL:http://localhost:3001/shop-api}"
 documents:
   - "app/**/*.{ts,tsx}"
   - "!app/generated/*"
