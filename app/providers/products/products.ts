@@ -3,15 +3,15 @@ import { QueryOptions, sdk } from "../../graphqlWrapper";
 import { SearchQueryVariables } from '~/generated/graphql';
 
 export function search(variables: SearchQueryVariables, options: QueryOptions) {
-    return sdk.search(variables, options);
+  return sdk.search(variables, options);
 }
 
 export function searchFacetValues(variables: SearchQueryVariables, options: QueryOptions) {
-    return sdk.searchFacetValues(variables, options);
+  return sdk.searchFacetValues(variables, options);
 }
 
 export function getProductBySlug(slug: string, options: QueryOptions) {
-    return sdk.product({slug}, options);
+  return sdk.product({ slug }, options);
 }
 
 export const detailedProductFragment = gql`
@@ -54,6 +54,11 @@ export const detailedProductFragment = gql`
       currencyCode
       sku
       stockLevel
+      featuredAsset {
+        id
+        preview
+      }
+
     }
   }
 `;
