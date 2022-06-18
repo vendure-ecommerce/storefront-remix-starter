@@ -3,7 +3,7 @@ import {
     MetaFunction,
     json,
 } from '@remix-run/server-runtime';
-import { useState } from 'react';
+import { useState, useRef, RefObject, useEffect } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
@@ -23,6 +23,7 @@ import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
+import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 
 export type ProductLoaderData = {
     product: Awaited<ReturnType<typeof getProductBySlug>>['product'];
@@ -73,6 +74,9 @@ export default function ProductSlug() {
         return <div>Product not found!</div>;
     }
 
+    const findVariantById = (id: string) =>
+        product.variants.find((v) => v.id === id);
+
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id,
     );
@@ -93,6 +97,10 @@ export default function ProductSlug() {
         (fv) => fv.facet.code === 'brand',
     )?.name;
 
+    const [featuredAsset, setFeaturedAsset] = useState(
+        selectedVariant?.featuredAsset,
+    );
+
     return (
         <div>
             <div className="max-w-6xl mx-auto px-4">
@@ -112,8 +120,7 @@ export default function ProductSlug() {
                             <div className="w-full h-full object-center object-cover rounded-lg">
                                 <img
                                     src={
-                                        (selectedVariant?.featuredAsset
-                                            ?.preview ||
+                                        (featuredAsset?.preview ||
                                             product.featuredAsset?.preview) +
                                         '?w=800'
                                     }
@@ -122,6 +129,31 @@ export default function ProductSlug() {
                                 />
                             </div>
                         </span>
+
+                        {product.assets.length > 1 && (
+                            <ScrollableContainer>
+                                {product.assets.map((asset) => (
+                                    <div
+                                        className={`basis-1/3 md:basis-1/4 flex-shrink-0 select-none touch-pan-x rounded-lg ${featuredAsset?.id == asset.id
+                                                ? 'outline outline-2 outline-primary outline-offset-[-2px]'
+                                                : ''
+                                            }`}
+                                        onClick={() => {
+                                            setFeaturedAsset(asset);
+                                        }}
+                                    >
+                                        <img
+                                            draggable="false"
+                                            className="rounded-lg select-none h-24 w-full object-cover"
+                                            src={
+                                                asset.preview +
+                                                '?preset=full' /* not ideal, but technically prevents loading 2 seperate images */
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </ScrollableContainer>
+                        )}
                     </div>
 
                     {/* Product info */}
@@ -158,9 +190,20 @@ export default function ProductSlug() {
                                         id="productVariant"
                                         value={selectedVariantId}
                                         name="variantId"
-                                        onChange={(e) =>
-                                            setSelectedVariantId(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setSelectedVariantId(
+                                                e.target.value,
+                                            );
+
+                                            const variant = findVariantById(
+                                                e.target.value,
+                                            );
+                                            if (variant) {
+                                                setFeaturedAsset(
+                                                    variant?.featuredAsset,
+                                                );
+                                            }
+                                        }}
                                     >
                                         {product.variants.map((variant) => (
                                             <option
