@@ -49,13 +49,9 @@ export function ScrollableContainer({ children }: { children: ReactNode[] }) {
     };
 
     const wheelHandler = (e: WheelEvent) => {
-        const diff = e.deltaY * 0.5;
+        const diff = e.deltaY || e.deltaX;
 
-        window.requestAnimationFrame(() => {
-            if (spanRef.current) {
-                spanRef.current.scrollLeft += diff;
-            }
-        });
+        spanRef.current!.scrollLeft += diff * 0.5;
         e.preventDefault();
     };
 
