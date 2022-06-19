@@ -81,12 +81,11 @@ export default function ProductSlug() {
         product.variants[0].id,
     );
     const transition = useTransition();
-    const selectedVariant = product.variants.find(
-        (v) => v.id === selectedVariantId,
-    );
+    const selectedVariant = findVariantById(selectedVariantId);
     if (!selectedVariant) {
         setSelectedVariantId(product.variants[0].id);
     }
+
     const qtyInCart =
         activeOrder?.lines.find(
             (l) => l.productVariant.id === selectedVariantId,
@@ -200,7 +199,7 @@ export default function ProductSlug() {
                                             );
                                             if (variant) {
                                                 setFeaturedAsset(
-                                                    variant?.featuredAsset,
+                                                    variant!.featuredAsset,
                                                 );
                                             }
                                         }}
