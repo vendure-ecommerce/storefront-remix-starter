@@ -3,7 +3,7 @@ import {
     MetaFunction,
     json,
 } from '@remix-run/server-runtime';
-import { useState } from 'react';
+import { useState, useRef, RefObject, useEffect } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
@@ -23,6 +23,7 @@ import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
+import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 
 export type ProductLoaderData = {
     product: Awaited<ReturnType<typeof getProductBySlug>>['product'];
@@ -73,16 +74,18 @@ export default function ProductSlug() {
         return <div>Product not found!</div>;
     }
 
+    const findVariantById = (id: string) =>
+        product.variants.find((v) => v.id === id);
+
     const [selectedVariantId, setSelectedVariantId] = useState(
         product.variants[0].id,
     );
     const transition = useTransition();
-    const selectedVariant = product.variants.find(
-        (v) => v.id === selectedVariantId,
-    );
+    const selectedVariant = findVariantById(selectedVariantId);
     if (!selectedVariant) {
         setSelectedVariantId(product.variants[0].id);
     }
+
     const qtyInCart =
         activeOrder?.lines.find(
             (l) => l.productVariant.id === selectedVariantId,
@@ -92,6 +95,10 @@ export default function ProductSlug() {
     const brandName = product.facetValues.find(
         (fv) => fv.facet.code === 'brand',
     )?.name;
+
+    const [featuredAsset, setFeaturedAsset] = useState(
+        selectedVariant?.featuredAsset,
+    );
 
     return (
         <div>
@@ -112,7 +119,8 @@ export default function ProductSlug() {
                             <div className="w-full h-full object-center object-cover rounded-lg">
                                 <img
                                     src={
-                                        product.featuredAsset?.preview +
+                                        (featuredAsset?.preview ||
+                                            product.featuredAsset?.preview) +
                                         '?w=800'
                                     }
                                     alt={product.name}
@@ -120,6 +128,31 @@ export default function ProductSlug() {
                                 />
                             </div>
                         </span>
+
+                        {product.assets.length > 1 && (
+                            <ScrollableContainer>
+                                {product.assets.map((asset) => (
+                                    <div
+                                        className={`basis-1/3 md:basis-1/4 flex-shrink-0 select-none touch-pan-x rounded-lg ${featuredAsset?.id == asset.id
+                                                ? 'outline outline-2 outline-primary outline-offset-[-2px]'
+                                                : ''
+                                            }`}
+                                        onClick={() => {
+                                            setFeaturedAsset(asset);
+                                        }}
+                                    >
+                                        <img
+                                            draggable="false"
+                                            className="rounded-lg select-none h-24 w-full object-cover"
+                                            src={
+                                                asset.preview +
+                                                '?preset=full' /* not ideal, but technically prevents loading 2 seperate images */
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </ScrollableContainer>
+                        )}
                     </div>
 
                     {/* Product info */}
@@ -156,9 +189,20 @@ export default function ProductSlug() {
                                         id="productVariant"
                                         value={selectedVariantId}
                                         name="variantId"
-                                        onChange={(e) =>
-                                            setSelectedVariantId(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setSelectedVariantId(
+                                                e.target.value,
+                                            );
+
+                                            const variant = findVariantById(
+                                                e.target.value,
+                                            );
+                                            if (variant) {
+                                                setFeaturedAsset(
+                                                    variant!.featuredAsset,
+                                                );
+                                            }
+                                        }}
                                     >
                                         {product.variants.map((variant) => (
                                             <option
@@ -192,15 +236,14 @@ export default function ProductSlug() {
                                 <div className="flex sm:flex-col1 align-baseline">
                                     <button
                                         type="submit"
-                                        className={`max-w-xs flex-1 ${
-                                            transition.state !== 'idle'
+                                        className={`max-w-xs flex-1 ${transition.state !== 'idle'
                                                 ? 'bg-gray-400'
                                                 : qtyInCart === 0
-                                                ? 'bg-primary-600 hover:bg-primary-700'
-                                                : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
-                                        }
+                                                    ? 'bg-primary-600 hover:bg-primary-700'
+                                                    : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
+                                            }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
-                                      justify-center text-base font-medium text-white focus:outline-none 
+                                      justify-center text-base font-medium text-white focus:outline-none
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full`}
                                         disabled={transition.state !== 'idle'}
                                     >
