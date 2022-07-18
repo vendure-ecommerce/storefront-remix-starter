@@ -12,7 +12,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
 }
 
 export default function CheckoutConfirmation() {
-    const { order } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+    const { order } = useLoaderData<typeof loader>();
 
     if (!order) {
         return (

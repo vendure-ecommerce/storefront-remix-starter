@@ -1,5 +1,5 @@
 import { Form, useLoaderData } from '@remix-run/react';
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { logout } from '~/providers/account/account';
 import { useRootLoader } from '~/utils/use-root-loader';
 import { getActiveCustomer } from '~/providers/customer/customer';
@@ -9,7 +9,7 @@ export async function loader({ request, params }: DataFunctionArgs) {
     if (!activeCustomer) {
         return redirect('/sign-in');
     }
-    return { activeCustomer };
+    return json({ activeCustomer });
 }
 
 export async function action({ request, params }: DataFunctionArgs) {
@@ -24,11 +24,7 @@ export async function action({ request, params }: DataFunctionArgs) {
 }
 
 export default function AccountDashboard() {
-    const { activeCustomer } = useLoaderData<{
-        activeCustomer: Awaited<
-            ReturnType<typeof getActiveCustomer>
-        >['activeCustomer'];
-    }>();
+    const { activeCustomer } = useLoaderData<typeof loader>();
     const { firstName, lastName } = activeCustomer!;
     return (
         <div className="max-w-6xl xl:mx-auto px-4">

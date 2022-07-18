@@ -3,18 +3,17 @@ import { useLoaderData } from '@remix-run/react';
 import { getCollections } from '~/providers/collections/collections';
 import { CollectionCard } from '~/components/collections/CollectionCard';
 import { BookOpenIcon } from '@heroicons/react/solid';
+import { LoaderArgs } from '@remix-run/server-runtime';
 
-export async function loader({ request }: any) {
+export async function loader({ request }: LoaderArgs) {
     const collections = await getCollections(request);
     return {
         collections,
     };
 }
 
-type LoaderData = Awaited<ReturnType<typeof loader>>;
-
 export default function Index() {
-    const { collections } = useLoaderData<LoaderData>();
+    const { collections } = useLoaderData<typeof loader>();
     const headerImage = collections[0]?.featuredAsset?.preview;
     return (
         <>

@@ -45,7 +45,7 @@ export default function CheckoutShipping() {
         eligibleShippingMethods,
         activeCustomer,
         error,
-    } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+    } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder } =
         useOutletContext<OutletContext>();
     const [customerFormChanged, setCustomerFormChanged] = useState(false);

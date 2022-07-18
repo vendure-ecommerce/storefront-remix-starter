@@ -12,8 +12,6 @@ import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
 import { FiltersButton } from '~/components/FiltersButton';
 import { PhotographIcon } from '@heroicons/react/solid';
 
-export type CollectionWithProducts = Awaited<ReturnType<typeof loader>>;
-
 export const meta: MetaFunction = ({ data }) => {
     return {
         title: data?.collection
@@ -50,7 +48,7 @@ export default function CollectionSlug() {
         result,
         resultWithoutFacetValueFilters,
         facetValueIds,
-    } = useLoaderData<CollectionWithProducts>();
+    } = useLoaderData<typeof loader>();
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const facetValuesTracker = useRef(new FacetFilterTracker());
     facetValuesTracker.current.update(

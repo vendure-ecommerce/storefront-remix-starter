@@ -63,8 +63,7 @@ export async function action({ params, request }: DataFunctionArgs) {
 }
 
 export default function CheckoutPayment() {
-    const { eligiblePaymentMethods, error } =
-        useLoaderData<Awaited<ReturnType<typeof loader>>>();
+    const { eligiblePaymentMethods, error } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder } =
         useOutletContext<OutletContext>();
 

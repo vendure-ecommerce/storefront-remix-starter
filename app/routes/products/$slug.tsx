@@ -7,6 +7,7 @@ import { useState, useRef, RefObject, useEffect } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
+    FetcherWithComponents,
     ShouldReloadFunction,
     useCatch,
     useLoaderData,
@@ -17,18 +18,13 @@ import { CheckIcon, HeartIcon, PhotographIcon } from '@heroicons/react/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/api/active-order';
-import { FetcherWithComponents } from '~/types';
+// import { FetcherWithComponents } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
-
-export type ProductLoaderData = {
-    product: Awaited<ReturnType<typeof getProductBySlug>>['product'];
-    error?: ErrorResult;
-};
 
 export const meta: MetaFunction = ({ data }) => {
     return {
@@ -62,7 +58,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
 export const unstable_shouldReload: ShouldReloadFunction = () => true;
 
 export default function ProductSlug() {
-    const { product, error } = useLoaderData<ProductLoaderData>();
+    const { product, error } = useLoaderData<typeof loader>();
     const caught = useCatch();
     const { activeOrderFetcher } = useOutletContext<{
         activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
@@ -133,10 +129,11 @@ export default function ProductSlug() {
                             <ScrollableContainer>
                                 {product.assets.map((asset) => (
                                     <div
-                                        className={`basis-1/3 md:basis-1/4 flex-shrink-0 select-none touch-pan-x rounded-lg ${featuredAsset?.id == asset.id
+                                        className={`basis-1/3 md:basis-1/4 flex-shrink-0 select-none touch-pan-x rounded-lg ${
+                                            featuredAsset?.id == asset.id
                                                 ? 'outline outline-2 outline-primary outline-offset-[-2px]'
                                                 : ''
-                                            }`}
+                                        }`}
                                         onClick={() => {
                                             setFeaturedAsset(asset);
                                         }}
@@ -236,12 +233,13 @@ export default function ProductSlug() {
                                 <div className="flex sm:flex-col1 align-baseline">
                                     <button
                                         type="submit"
-                                        className={`max-w-xs flex-1 ${transition.state !== 'idle'
+                                        className={`max-w-xs flex-1 ${
+                                            transition.state !== 'idle'
                                                 ? 'bg-gray-400'
                                                 : qtyInCart === 0
-                                                    ? 'bg-primary-600 hover:bg-primary-700'
-                                                    : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
-                                            }
+                                                ? 'bg-primary-600 hover:bg-primary-700'
+                                                : 'bg-green-600 active:bg-green-700 hover:bg-green-700'
+                                        }
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
                                       justify-center text-base font-medium text-white focus:outline-none
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full`}
