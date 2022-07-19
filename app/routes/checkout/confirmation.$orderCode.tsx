@@ -5,10 +5,13 @@ import { CartContents } from '~/components/cart/CartContents';
 import { CartTotals } from '~/components/cart/CartTotals';
 import * as React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
+import { InformationCircleIcon } from '@heroicons/react/solid';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const order = await getOrderByCode(params.orderCode!, { request });
-    return { order: order?.active === false ? order : undefined };
+    return {
+        order,
+    };
 }
 
 export default function CheckoutConfirmation() {
@@ -33,6 +36,26 @@ export default function CheckoutConfirmation() {
                 Your order <span className="font-bold">{order.code}</span> has
                 been received!
             </p>
+            {order.active && (
+                <div className="rounded-md bg-blue-50 p-4 my-8">
+                    <div className="flex">
+                        <div className="flex-shrink-0">
+                            <InformationCircleIcon
+                                className="h-5 w-5 text-blue-400"
+                                aria-hidden="true"
+                            />
+                        </div>
+                        <div className="ml-3 flex-1 md:flex md:justify-between">
+                            <p className="text-sm text-blue-700">
+                                {' '}
+                                Note: your payment is still being processed. You
+                                will receive an email confirmation once the
+                                payment has completed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="mt-12">
                 <div className="mb-6">
                     <CartContents

@@ -1,6 +1,5 @@
-import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { CreateAddressInput, CreateCustomerInput } from '~/generated/graphql';
+import { CreateAddressInput } from '~/generated/graphql';
 
 export type OutletContext = ReturnType<typeof useActiveOrder>;
 

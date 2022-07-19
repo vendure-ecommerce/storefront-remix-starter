@@ -23,6 +23,11 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 
 This storefront requires a Vendure server. You can either run a local instance, or use our public demo server.
 
+#### Code Generation
+
+Whenever the Graphql documents (the constants using the `gql` tag) in the [./app/providers](./app/providers) dir changes,
+you should run `npm run generate` to generate new sdk definitions.
+
 #### Local
 
 You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://www.vendure.io/docs/getting-started/). Note that since Remix runs on port 3000 by default, you should change the local Vendure server to run on another port, and also make sure you have enabled the `bearer` method for managing session tokens:
@@ -42,7 +47,21 @@ export const config: VendureConfig = {
 };
 ```
 
-#### Public demo
+## Stripe integration
+
+This repo has a built-in Stripe payment integration. To enable it, ensure that your Vendure server is set up with 
+the [StripePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/stripe-plugin/).
+
+Ensure your new PaymentMethod uses the word `stripe` somewhere in its code, as that's how this integration will know
+to load the Stripe payment element.
+
+Then add your Stripe publishable key to the env file:
+
+```
+STRIPE_PUBLISHABLE_KEY=pk_test_t38hl...etc
+```
+
+### Public demo
 
 There is a publicly-available demo instance at https://readonlydemo.vendure.io/shop-api
 

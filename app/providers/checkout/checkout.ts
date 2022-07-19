@@ -14,6 +14,10 @@ export function getEligiblePaymentMethods(options: QueryOptions) {
     return sdk.eligiblePaymentMethods({}, options);
 }
 
+export function createStripePaymentIntent(options: QueryOptions) {
+    return sdk.createStripePaymentIntent({}, options);
+}
+
 export function getNextOrderStates(options: QueryOptions) {
     return sdk.nextOrderStates({}, options);
 }
@@ -89,5 +93,11 @@ gql`
                 message
             }
         }
+    }
+`;
+
+gql`
+    mutation createStripePaymentIntent {
+        createStripePaymentIntent
     }
 `;

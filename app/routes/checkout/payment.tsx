@@ -1,6 +1,7 @@
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import {
     addPaymentToOrder,
+    createStripePaymentIntent,
     getEligiblePaymentMethods,
     getNextOrderStates,
     transitionOrderToState,
@@ -10,6 +11,8 @@ import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { StripePayments } from '~/components/checkout/stripe/StripePayments';
+import { DummyPayments } from '~/components/checkout/DummyPayments';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -19,7 +22,24 @@ export async function loader({ params, request }: DataFunctionArgs) {
         request,
     });
     const error = session.get('activeOrderError');
-    return { eligiblePaymentMethods, error };
+    let stripePaymentIntent: string | undefined;
+    let stripePublishableKey: string | undefined;
+    if (
+        eligiblePaymentMethods.find((method) => method.code.includes('stripe'))
+    ) {
+        const stripePaymentIntentResult = await createStripePaymentIntent({
+            request,
+        });
+        stripePaymentIntent =
+            stripePaymentIntentResult.createStripePaymentIntent ?? undefined;
+        stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+    }
+    return {
+        eligiblePaymentMethods,
+        stripePaymentIntent,
+        stripePublishableKey,
+        error,
+    };
 }
 
 export async function action({ params, request }: DataFunctionArgs) {
@@ -63,59 +83,37 @@ export async function action({ params, request }: DataFunctionArgs) {
 }
 
 export default function CheckoutPayment() {
-    const { eligiblePaymentMethods, error } = useLoaderData<typeof loader>();
+    const {
+        eligiblePaymentMethods,
+        stripePaymentIntent,
+        stripePublishableKey,
+        error,
+    } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder } =
         useOutletContext<OutletContext>();
 
     const paymentError = getPaymentError(error);
 
     return (
-        <div className="flex flex-col space-y-24 items-center">
-            {eligiblePaymentMethods.map((paymentMethod) => (
-                <div
-                    key={paymentMethod.id}
-                    className="flex flex-col items-center"
-                >
-                    <p className="text-gray-600 text-sm p-6">
-                        This is a dummy payment for demonstration purposes only
-                    </p>
-                    {paymentError && (
-                        <div className="rounded-md bg-red-50 p-4 mb-8">
-                            <div className="flex">
-                                <div className="flex-shrink-0">
-                                    <XCircleIcon
-                                        className="h-5 w-5 text-red-400"
-                                        aria-hidden="true"
-                                    />
-                                </div>
-                                <div className="ml-3">
-                                    <h3 className="text-sm font-medium text-red-800">
-                                        There was an error processing the
-                                        payment
-                                    </h3>
-                                    <div className="mt-2 text-sm text-red-700">
-                                        {paymentError}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <Form method="post">
-                        <input
-                            type="hidden"
-                            name="paymentMethodCode"
-                            value={paymentMethod.code}
+        <div className="flex flex-col items-center divide-gray-200 divide-y">
+            {eligiblePaymentMethods.map((paymentMethod) =>
+                paymentMethod.code.includes('stripe') && stripePaymentIntent ? (
+                    <div className="py-12" key={paymentMethod.id}>
+                        <StripePayments
+                            orderCode={activeOrder?.code ?? ''}
+                            clientSecret={stripePaymentIntent}
+                            publishableKey={stripePublishableKey}
+                        ></StripePayments>
+                    </div>
+                ) : (
+                    <div className="py-12" key={paymentMethod.id}>
+                        <DummyPayments
+                            paymentMethod={paymentMethod}
+                            paymentError={paymentError}
                         />
-                        <button
-                            type="submit"
-                            className="flex px-6 bg-primary-600 hover:bg-primary-700 items-center justify-center space-x-2 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                        >
-                            <CreditCardIcon className="w-5 h-5"></CreditCardIcon>
-                            <span>Pay with {paymentMethod.name}</span>
-                        </button>
-                    </Form>
-                </div>
-            ))}
+                    </div>
+                ),
+            )}
         </div>
     );
 }

@@ -209,6 +209,13 @@ gql`
                 }
             }
         }
+        payments {
+            id
+            state
+            method
+            amount
+            metadata
+        }
     }
 `;
 

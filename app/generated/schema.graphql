@@ -1836,6 +1836,7 @@ type Mutation {
 
   """Create a new Customer Address"""
   createCustomerAddress(input: CreateAddressInput!): Address!
+  createStripePaymentIntent: String
 
   """Delete an existing Address"""
   deleteCustomerAddress(id: ID!): Success!
@@ -3174,6 +3175,7 @@ type ShippingMethod implements Node {
   description: String!
   fulfillmentHandlerCode: String!
   id: ID!
+  languageCode: LanguageCode!
   name: String!
   translations: [ShippingMethodTranslation!]!
   updatedAt: DateTime!
