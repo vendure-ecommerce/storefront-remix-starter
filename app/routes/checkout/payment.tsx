@@ -24,20 +24,27 @@ export async function loader({ params, request }: DataFunctionArgs) {
     const error = session.get('activeOrderError');
     let stripePaymentIntent: string | undefined;
     let stripePublishableKey: string | undefined;
+    let stripeError: string | undefined;
     if (
         eligiblePaymentMethods.find((method) => method.code.includes('stripe'))
     ) {
-        const stripePaymentIntentResult = await createStripePaymentIntent({
-            request,
-        });
-        stripePaymentIntent =
-            stripePaymentIntentResult.createStripePaymentIntent ?? undefined;
-        stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+        try {
+            const stripePaymentIntentResult = await createStripePaymentIntent({
+                request,
+            });
+            stripePaymentIntent =
+                stripePaymentIntentResult.createStripePaymentIntent ??
+                undefined;
+            stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+        } catch (e: any) {
+            stripeError = e.message;
+        }
     }
     return {
         eligiblePaymentMethods,
         stripePaymentIntent,
         stripePublishableKey,
+        stripeError,
         error,
     };
 }
@@ -87,6 +94,7 @@ export default function CheckoutPayment() {
         eligiblePaymentMethods,
         stripePaymentIntent,
         stripePublishableKey,
+        stripeError,
         error,
     } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder } =
@@ -97,13 +105,22 @@ export default function CheckoutPayment() {
     return (
         <div className="flex flex-col items-center divide-gray-200 divide-y">
             {eligiblePaymentMethods.map((paymentMethod) =>
-                paymentMethod.code.includes('stripe') && stripePaymentIntent ? (
+                paymentMethod.code.includes('stripe') ? (
                     <div className="py-12" key={paymentMethod.id}>
-                        <StripePayments
-                            orderCode={activeOrder?.code ?? ''}
-                            clientSecret={stripePaymentIntent}
-                            publishableKey={stripePublishableKey}
-                        ></StripePayments>
+                        {stripeError ? (
+                            <div>
+                                <p className="text-red-700 font-bold">
+                                    Stripe error:
+                                </p>
+                                <p className="text-sm">{stripeError}</p>
+                            </div>
+                        ) : (
+                            <StripePayments
+                                orderCode={activeOrder?.code ?? ''}
+                                clientSecret={stripePaymentIntent}
+                                publishableKey={stripePublishableKey}
+                            ></StripePayments>
+                        )}
                     </div>
                 ) : (
                     <div className="py-12" key={paymentMethod.id}>

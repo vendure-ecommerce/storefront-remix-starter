@@ -89,7 +89,7 @@ function requester<R, V>(
         }
         if (response.errors) {
             console.log(
-                response.errors[0].extensions.exception.stacktrace.join('\n'),
+                response.errors[0].extensions?.exception.stacktrace.join('\n'),
             );
             throw new Error(response.errors[0].message);
         }
