@@ -3175,7 +3175,6 @@ type ShippingMethod implements Node {
   description: String!
   fulfillmentHandlerCode: String!
   id: ID!
-  languageCode: LanguageCode!
   name: String!
   translations: [ShippingMethodTranslation!]!
   updatedAt: DateTime!
