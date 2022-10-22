@@ -89,9 +89,11 @@ function requester<R, V>(
         }
         if (response.errors) {
             console.log(
-                response.errors[0].extensions?.exception.stacktrace.join('\n'),
+                response.errors[0].extensions?.exception?.stacktrace.join(
+                    '\n',
+                ) ?? response.errors,
             );
-            throw new Error(response.errors[0].message);
+            throw new Error(JSON.stringify(response.errors[0]));
         }
         return { ...response.data, _headers: new Headers(headers) };
     });
