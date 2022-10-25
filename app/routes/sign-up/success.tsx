@@ -6,7 +6,7 @@ export async function action() {
     return redirect('/');
 }
 
-export default function SignInPage() {
+export default function SuccessPage() {
     return (
         <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md border-2 rounded-md border-lime-500">

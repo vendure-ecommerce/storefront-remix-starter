@@ -34,7 +34,7 @@ export async function action({ params, request }: DataFunctionArgs) {
     }
 }
 
-export default function SignInPage() {
+export default function SignUpPage() {
     const [searchParams] = useSearchParams();
     const formErrors = useActionData<RegisterValidationErrors>();
 
