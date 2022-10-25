@@ -1,7 +1,6 @@
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { registerCustomerAccount } from '~/providers/account/account';
-import { ErrorResult } from '~/generated/graphql';
 import { XCircleIcon } from '@heroicons/react/solid';
 import {
     extractRegistrationFormValues,
@@ -9,7 +8,14 @@ import {
     validateRegistrationForm,
 } from '~/utils/registration-helper';
 
+const DEMO_URL = 'https://readonlydemo.vendure.io/shop-api';
+
 export async function action({ params, request }: DataFunctionArgs) {
+    const apiUrl = process.env.VENDURE_API_URL || DEMO_URL;
+    if (apiUrl === DEMO_URL) {
+        return { form: 'Registration can\'t be used with Vendure demo shop! Please connect your own instance.' }
+    }
+
     const body = await request.formData();
     const fieldErrors = validateRegistrationForm(body);
     if (Object.keys(fieldErrors).length !== 0) {
@@ -192,7 +198,7 @@ export default function SignInPage() {
                                     type="submit"
                                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                                 >
-                                    Sign in
+                                    Sign up
                                 </button>
                             </div>
                         </Form>
