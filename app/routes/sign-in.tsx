@@ -13,7 +13,7 @@ export async function action({ params, request }: DataFunctionArgs) {
         const redirectTo = (body.get('redirectTo') || '/account') as string;
         const result = await login(email, password, rememberMe, { request });
         if (result.__typename === 'CurrentUser') {
-            return redirect(redirectTo, { headers: result });
+            return redirect(redirectTo, { headers: result._headers });
         } else {
             return json(result, {
                 status: 401,

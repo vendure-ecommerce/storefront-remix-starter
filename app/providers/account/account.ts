@@ -6,24 +6,28 @@ import {
     RegisterCustomerAccountMutationVariables,
     VerifyCustomerAccountMutation,
 } from '~/generated/graphql';
-import { QueryOptions, sdk } from '~/graphqlWrapper';
+import { QueryOptions, sdk, WithHeaders } from '~/graphqlWrapper';
 
 export const login = async (
     email: string,
     password: string,
     rememberMe: boolean,
     options: QueryOptions,
-): Promise<LoginMutation['login']> => {
-    return sdk
-        .login({ email, password, rememberMe }, options)
-        .then(({ login }) => login);
+): Promise<WithHeaders<LoginMutation['login']>> => {
+    return sdk.login({ email, password, rememberMe }, options).then((res) => ({
+        ...res.login,
+        _headers: res._headers,
+    }));
 };
 
-export const logout = async(
+export const logout = async (
     options: QueryOptions,
-): Promise<LogoutMutation['logout']> => {
-    return sdk.logout({}, options).then(({ logout }) => logout);
-}
+): Promise<WithHeaders<LogoutMutation['logout']>> => {
+    return sdk.logout({}, options).then((res) => ({
+        ...res.logout,
+        _headers: res._headers,
+    }));
+};
 
 export const registerCustomerAccount = async (
     options: QueryOptions,

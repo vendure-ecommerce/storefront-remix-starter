@@ -25,7 +25,8 @@ export const validateRegistrationForm = (
     }
     if (!repeatPassword || typeof repeatPassword !== 'string') {
         errors.repeatPassword = 'Please repeat password!';
-    } else {
+    } 
+    if (repeatPassword !== password) {
         errors.repeatPassword = 'Passwords do not match!';
     }
 
