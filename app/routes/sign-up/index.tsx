@@ -7,12 +7,11 @@ import {
     RegisterValidationErrors,
     validateRegistrationForm,
 } from '~/utils/registration-helper';
-
-const DEMO_URL = 'https://readonlydemo.vendure.io/shop-api';
+import { DEMO_API_URL } from '~/constants';
 
 export async function action({ params, request }: DataFunctionArgs) {
-    const apiUrl = process.env.VENDURE_API_URL || DEMO_URL;
-    if (apiUrl === DEMO_URL) {
+    const apiUrl = process.env.VENDURE_API_URL || DEMO_API_URL;
+    if (apiUrl === DEMO_API_URL) {
         return { form: 'Registration can\'t be used with Vendure demo shop! Please connect your own instance.' }
     }
 

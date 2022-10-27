@@ -32,20 +32,28 @@ export const logout = async (
 export const registerCustomerAccount = async (
     options: QueryOptions,
     variables: RegisterCustomerAccountMutationVariables,
-): Promise<RegisterCustomerAccountMutation['registerCustomerAccount']> => {
-    return sdk
-        .registerCustomerAccount(variables, options)
-        .then(({ registerCustomerAccount }) => registerCustomerAccount);
+): Promise<
+    WithHeaders<RegisterCustomerAccountMutation['registerCustomerAccount']>
+> => {
+    return sdk.registerCustomerAccount(variables, options).then((res) => ({
+        ...res.registerCustomerAccount,
+        _headers: res._headers,
+    }));
 };
 
 export const verifyCustomerAccount = async (
     options: QueryOptions,
     token: string,
     password?: string,
-): Promise<VerifyCustomerAccountMutation['verifyCustomerAccount']> => {
+): Promise<
+    WithHeaders<VerifyCustomerAccountMutation['verifyCustomerAccount']>
+> => {
     return sdk
         .verifyCustomerAccount({ token, password }, options)
-        .then(({ verifyCustomerAccount }) => verifyCustomerAccount);
+        .then((res) => ({
+            ...res.verifyCustomerAccount,
+            _headers: res._headers,
+        }));
 };
 
 gql`
