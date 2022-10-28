@@ -1133,8 +1133,14 @@ type Fulfillment implements Node {
   method: String!
   orderItems: [OrderItem!]!
   state: String!
+  summary: [FulfillmentLineSummary!]!
   trackingCode: String
   updatedAt: DateTime!
+}
+
+type FulfillmentLineSummary {
+  orderLine: OrderLine!
+  quantity: Int!
 }
 
 enum GlobalFlag {
@@ -2183,6 +2189,7 @@ type OrderLine implements Node {
   discountedUnitPriceWithTax: Int!
   discounts: [Discount!]!
   featuredAsset: Asset
+  fulfillments: [Fulfillment!]
   id: ID!
   items: [OrderItem!]!
 
@@ -2433,7 +2440,7 @@ GraphQL resolvers via the {@link Allow} decorator.
 
 ## Understanding Permission.Owner
 
-`Permission.Owner` is a special permission which is used in some of the Vendure resolvers to indicate that that resolver should only
+`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
 be accessible to the "owner" of that resource.
 
 For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
@@ -3161,6 +3168,7 @@ type ShippingLine {
   discountedPrice: Int!
   discountedPriceWithTax: Int!
   discounts: [Discount!]!
+  id: ID!
   price: Int!
   priceWithTax: Int!
   shippingMethod: ShippingMethod!
@@ -3175,6 +3183,7 @@ type ShippingMethod implements Node {
   description: String!
   fulfillmentHandlerCode: String!
   id: ID!
+  languageCode: LanguageCode!
   name: String!
   translations: [ShippingMethodTranslation!]!
   updatedAt: DateTime!

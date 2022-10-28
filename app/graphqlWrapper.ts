@@ -1,8 +1,8 @@
 import { DocumentNode, print } from 'graphql';
+import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
-const DEMO_API_URL = 'https://readonlydemo.vendure.io/shop-api';
 const API_URL =
     typeof process !== 'undefined'
         ? process.env.VENDURE_API_URL ?? DEMO_API_URL
@@ -16,6 +16,8 @@ export interface GraphqlResponse<Response> {
     errors: any[];
     data: Response;
 }
+
+export type WithHeaders<T> = T & { _headers: Headers };
 
 const AUTH_TOKEN_SESSION_KEY = 'authToken';
 

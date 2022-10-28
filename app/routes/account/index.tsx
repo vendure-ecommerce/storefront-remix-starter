@@ -1,7 +1,6 @@
 import { Form, useLoaderData } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { logout } from '~/providers/account/account';
-import { useRootLoader } from '~/utils/use-root-loader';
 import { getActiveCustomer } from '~/providers/customer/customer';
 
 export async function loader({ request, params }: DataFunctionArgs) {

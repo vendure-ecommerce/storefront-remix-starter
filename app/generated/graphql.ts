@@ -1026,8 +1026,15 @@ export type Fulfillment = Node & {
   method: Scalars['String'];
   orderItems: Array<OrderItem>;
   state: Scalars['String'];
+  summary: Array<FulfillmentLineSummary>;
   trackingCode?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
+};
+
+export type FulfillmentLineSummary = {
+  __typename?: 'FulfillmentLineSummary';
+  orderLine: OrderLine;
+  quantity: Scalars['Int'];
 };
 
 export enum GlobalFlag {
@@ -1998,6 +2005,7 @@ export type OrderLine = Node & {
   discountedUnitPriceWithTax: Scalars['Int'];
   discounts: Array<Discount>;
   featuredAsset?: Maybe<Asset>;
+  fulfillments?: Maybe<Array<Fulfillment>>;
   id: Scalars['ID'];
   items: Array<OrderItem>;
   /** The total price of the line excluding tax and discounts. */
@@ -2227,7 +2235,7 @@ export type PaymentMethodQuote = {
  *
  * ## Understanding Permission.Owner
  *
- * `Permission.Owner` is a special permission which is used in some of the Vendure resolvers to indicate that that resolver should only
+ * `Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
  * be accessible to the "owner" of that resource.
  *
  * For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
@@ -2893,6 +2901,7 @@ export type ShippingLine = {
   discountedPrice: Scalars['Int'];
   discountedPriceWithTax: Scalars['Int'];
   discounts: Array<Discount>;
+  id: Scalars['ID'];
   price: Scalars['Int'];
   priceWithTax: Scalars['Int'];
   shippingMethod: ShippingMethod;
@@ -2908,6 +2917,7 @@ export type ShippingMethod = Node & {
   description: Scalars['String'];
   fulfillmentHandlerCode: Scalars['String'];
   id: Scalars['ID'];
+  languageCode: LanguageCode;
   name: Scalars['String'];
   translations: Array<ShippingMethodTranslation>;
   updatedAt: Scalars['DateTime'];
@@ -3167,6 +3177,21 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'Success', success: boolean } };
+
+export type RegisterCustomerAccountMutationVariables = Exact<{
+  input: RegisterCustomerInput;
+}>;
+
+
+export type RegisterCustomerAccountMutation = { __typename?: 'Mutation', registerCustomerAccount: { __typename: 'MissingPasswordError', errorCode: ErrorCode, message: string } | { __typename: 'NativeAuthStrategyError', errorCode: ErrorCode, message: string } | { __typename: 'PasswordValidationError', errorCode: ErrorCode, message: string } | { __typename: 'Success', success: boolean } };
+
+export type VerifyCustomerAccountMutationVariables = Exact<{
+  token: Scalars['String'];
+  password?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type VerifyCustomerAccountMutation = { __typename?: 'Mutation', verifyCustomerAccount: { __typename: 'CurrentUser', id: string, identifier: string } | { __typename: 'MissingPasswordError', errorCode: ErrorCode, message: string } | { __typename: 'NativeAuthStrategyError', errorCode: ErrorCode, message: string } | { __typename: 'PasswordAlreadySetError', errorCode: ErrorCode, message: string } | { __typename: 'PasswordValidationError', errorCode: ErrorCode, message: string } | { __typename: 'VerificationTokenExpiredError', errorCode: ErrorCode, message: string } | { __typename: 'VerificationTokenInvalidError', errorCode: ErrorCode, message: string } };
 
 export type ActiveChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3480,6 +3505,35 @@ export const LogoutDocument = gql`
   }
 }
     `;
+export const RegisterCustomerAccountDocument = gql`
+    mutation registerCustomerAccount($input: RegisterCustomerInput!) {
+  registerCustomerAccount(input: $input) {
+    __typename
+    ... on Success {
+      success
+    }
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    `;
+export const VerifyCustomerAccountDocument = gql`
+    mutation verifyCustomerAccount($token: String!, $password: String) {
+  verifyCustomerAccount(token: $token, password: $password) {
+    __typename
+    ... on CurrentUser {
+      id
+      identifier
+    }
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    `;
 export const ActiveChannelDocument = gql`
     query activeChannel {
   activeChannel {
@@ -3761,6 +3815,12 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     logout(variables?: LogoutMutationVariables, options?: C): Promise<LogoutMutation> {
       return requester<LogoutMutation, LogoutMutationVariables>(LogoutDocument, variables, options);
+    },
+    registerCustomerAccount(variables: RegisterCustomerAccountMutationVariables, options?: C): Promise<RegisterCustomerAccountMutation> {
+      return requester<RegisterCustomerAccountMutation, RegisterCustomerAccountMutationVariables>(RegisterCustomerAccountDocument, variables, options);
+    },
+    verifyCustomerAccount(variables: VerifyCustomerAccountMutationVariables, options?: C): Promise<VerifyCustomerAccountMutation> {
+      return requester<VerifyCustomerAccountMutation, VerifyCustomerAccountMutationVariables>(VerifyCustomerAccountDocument, variables, options);
     },
     activeChannel(variables?: ActiveChannelQueryVariables, options?: C): Promise<ActiveChannelQuery> {
       return requester<ActiveChannelQuery, ActiveChannelQueryVariables>(ActiveChannelDocument, variables, options);
