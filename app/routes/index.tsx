@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useCallback, useRef } from "react";
+import type { Engine, Container as ParticlesContainer } from "tsparticles-engine";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import { useLoaderData } from '@remix-run/react';
 import { getCollections } from '~/providers/collections/collections';
 import { CollectionCard } from '~/components/collections/CollectionCard';
-import { BookOpenIcon } from '@heroicons/react/solid';
 import { LoaderArgs } from '@remix-run/server-runtime';
+import { ShoppingCartIcon } from '@heroicons/react/outline';
 
 export async function loader({ request }: LoaderArgs) {
     const collections = await getCollections(request);
@@ -13,6 +16,14 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function Index() {
+    const particlesInit = useCallback(async (engine: Engine) => {
+        await loadFull(engine);
+    }, []);
+    
+    const particlesLoaded = useCallback(async (container: ParticlesContainer | undefined) => {
+        await console.log(container);
+    }, []);
+
     const { collections } = useLoaderData<typeof loader>();
     const headerImage = collections[0]?.featuredAsset?.preview;
     return (
@@ -21,53 +32,86 @@ export default function Index() {
                 {/* Decorative image and overlay */}
                 <div
                     aria-hidden="true"
-                    className="absolute inset-0 overflow-hidden"
+                    className="absolute shadow-xl inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900"
                 >
-                    {headerImage && (
-                        <img
-                            className="absolute inset-0 w-full"
-                            src={headerImage + '?w=800'}
-                            alt="header"
-                        />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-400 to-black mix-blend-darken" />
+                    <Particles
+                        className="h-full"
+                        loaded={particlesLoaded}
+                        init={particlesInit}
+                        options={{
+                            fullScreen: {
+                                enable: false
+                            },
+                            particles: {
+                                number: {
+                                    value: 100,
+                                    density: {
+                                        enable: true,
+                                        value_area: 1500
+                                    }
+                                },
+                                line_linked: {
+                                    enable: true,
+                                    opacity: 0.08
+                                },
+                                move: {
+                                    direction: "bottom",
+                                    speed: 0.05
+                                },
+                                size: {
+                                    value: 1.7
+                                },
+                                opacity: {
+                                    anim: {
+                                        enable: true,
+                                        speed: 1,
+                                        opacity_min: 0.1
+                                    }
+                                }
+                            },
+                            interactivity: {
+                                events: {
+                                    onclick: {
+                                        enable: true,
+                                        mode: "push"
+                                    },
+                                    onhover: {
+                                        enable: true,
+                                        mode: "bubble"
+                                    }
+                                },
+                                modes: {
+                                    push: {
+                                        particles_nb: 1
+                                    },
+                                    bubble: {
+                                        size: 6,
+                                        distance: 40
+                                    }
+                                }
+                            },
+                            detectRetina: true,
+                            fpsLimit: 120,
+                        }}
+                    />
                 </div>
-                <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gray-900 opacity-50"
-                />
                 <div className="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
                     <div className="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
-                        <h1 className="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-yellow-600 via-red-500 to-blue-600">
-                            Vendure Remix Starter
+                        <h1 className="font-bold text-6xl text-white bg-clip-text tracking-normal lg:text-6xl">
+                            VHDPlus Shop
                         </h1>
                     </div>
 
                     <p className="mt-4 text-2xl text-white">
-                        A headless commerce storefront starter kit built with{' '}
-                        <a
-                            href="https://www.vendure.io"
-                            className="text-blue-300 hover:text-blue-500"
-                        >
-                            Vendure
-                        </a>{' '}
-                        &{' '}
-                        <a
-                            href="~/routes/__cart/index"
-                            className="text-red-300 hover:text-red-500"
-                        >
-                            Remix
-                        </a>
+                        The fitting hardware for VHDPlus IDE
                     </p>
                     <p className="mt-4 text-gray-300 space-x-1">
-                        <BookOpenIcon className="w-5 h-5 inline" />
-                        <span>Read more:</span>
+                        <ShoppingCartIcon className="w-5 h-5 inline" />
                         <a
                             className="text-primary-200 hover:text-primary-400"
                             href="https://www.vendure.io/blog/2022/05/lightning-fast-headless-commerce-with-vendure-and-remix"
                         >
-                            Lightning Fast Headless Commerce with Vendure and
-                            Remix
+                            Shop now
                         </a>
                     </p>
                 </div>

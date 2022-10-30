@@ -27,14 +27,15 @@ export function Header({
                 <div className="max-w-6xl mx-2 md:mx-auto flex items-center justify-between">
                     <div>
                         <p className="hidden sm:block">
-                            Exclusive: Get your own{' '}
+                            LIMITED OFFER: 10% discount on all {' '}
                             <a
                                 href="https://github.com/vendure-ecommerce/storefront-remix-starter"
                                 target="_blank"
                                 className="underline"
                             >
-                                FREE storefront starter kit
+                                MAX1000
                             </a>
+                            {' '} Boards
                         </p>
                     </div>
                     <div>
@@ -52,10 +53,10 @@ export function Header({
                 <h1 className="text-white w-10">
                     <Link to="/">
                         <img
-                            src="/cube-logo-small.webp"
+                            src="/vhdp.svg"
                             width={40}
                             height={31}
-                            alt="Vendure logo"
+                            alt="VHDPlus logo"
                         />
                     </Link>
                 </h1>
