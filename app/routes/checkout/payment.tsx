@@ -1,7 +1,6 @@
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import {
     addPaymentToOrder,
-    createStripePaymentIntent,
     generateBraintreeClientToken,
     getEligiblePaymentMethods,
     getNextOrderStates,
@@ -24,25 +23,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
         request,
     });
     const error = session.get('activeOrderError');
-    let stripePaymentIntent: string | undefined;
-    let stripePublishableKey: string | undefined;
-    let stripeError: string | undefined;
-    if (
-        eligiblePaymentMethods.find((method) => method.code.includes('stripe'))
-    ) {
-        try {
-            const stripePaymentIntentResult = await createStripePaymentIntent({
-                request,
-            });
-            stripePaymentIntent =
-                stripePaymentIntentResult.createStripePaymentIntent ??
-                undefined;
-            stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-        } catch (e: any) {
-            stripeError = e.message;
-        }
-    }
-
+    
     let brainTreeKey: string | undefined;
     let brainTreeToken: string | undefined;
     let brainTreeError: string | undefined;
@@ -62,11 +43,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
 
     return {
         eligiblePaymentMethods,
-        stripePaymentIntent,
-        stripePublishableKey,
-        stripeError,
         brainTreeKey,
-        brainTreeToken,
         brainTreeError,
         error,
     };
@@ -117,11 +94,7 @@ export async function action({ params, request }: DataFunctionArgs) {
 export default function CheckoutPayment() {
     const {
         eligiblePaymentMethods,
-        stripePaymentIntent,
-        stripePublishableKey,
-        stripeError,
         brainTreeKey,
-        brainTreeToken,
         brainTreeError,
         error,
     } = useLoaderData<typeof loader>();
@@ -150,25 +123,7 @@ export default function CheckoutPayment() {
                                 <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} show={true} authorization={brainTreeKey} onPaymentCompleted={() => alert("test")} />
                             )}
                         </div>
-                    ) :
-                        paymentMethod.code.includes('stripe') ? (
-                            <div className="py-12" key={paymentMethod.id}>
-                                {stripeError ? (
-                                    <div>
-                                        <p className="text-red-700 font-bold">
-                                            Stripe error:
-                                        </p>
-                                        <p className="text-sm">{stripeError}</p>
-                                    </div>
-                                ) : (
-                                    <StripePayments
-                                        orderCode={activeOrder?.code ?? ''}
-                                        clientSecret={stripePaymentIntent}
-                                        publishableKey={stripePublishableKey}
-                                    ></StripePayments>
-                                )}
-                            </div>
-                        ) : (
+                    ) : (
                             <div className="py-12" key={paymentMethod.id}>
                                 <DummyPayments
                                     paymentMethod={paymentMethod}

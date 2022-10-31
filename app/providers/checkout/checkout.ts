@@ -14,10 +14,6 @@ export function getEligiblePaymentMethods(options: QueryOptions) {
     return sdk.eligiblePaymentMethods({}, options);
 }
 
-export function createStripePaymentIntent(options: QueryOptions) {
-    return sdk.createStripePaymentIntent({}, options);
-}
-
 export function generateBraintreeClientToken(options: QueryOptions) {
     return sdk.generateBraintreeClientToken({}, options);
 }

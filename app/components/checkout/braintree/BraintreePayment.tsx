@@ -6,14 +6,7 @@ import { classNames } from '~/utils/class-names';
 import { useSubmit, useTransition } from "@remix-run/react";
 import { Form, useActionData } from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
-import {
-    addPaymentToOrder,
-    createStripePaymentIntent,
-    generateBraintreeClientToken,
-    getEligiblePaymentMethods,
-    getNextOrderStates,
-    transitionOrderToState,
-} from '~/providers/checkout/checkout';
+import { addPaymentToOrder } from '~/providers/checkout/checkout';
 import { DownloadIcon } from '@heroicons/react/solid';
 
 export function BraintreeDropIn(props: { show: boolean, authorization: string, fullAmount: number, onPaymentCompleted: Function }) {
