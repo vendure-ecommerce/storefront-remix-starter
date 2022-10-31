@@ -1,13 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import dropin, { Dropin } from "braintree-web-drop-in"
-import { sdk } from '~/graphqlWrapper';
-import { Order } from '~/generated/graphql';
 import { classNames } from '~/utils/class-names';
 import { useSubmit, useTransition } from "@remix-run/react";
-import { Form, useActionData } from '@remix-run/react';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { addPaymentToOrder } from '~/providers/checkout/checkout';
-import { DownloadIcon } from '@heroicons/react/solid';
 
 export function BraintreeDropIn(props: { show: boolean, authorization: string, fullAmount: number, onPaymentCompleted: Function }) {
     const { show, authorization, fullAmount, onPaymentCompleted } = props;
