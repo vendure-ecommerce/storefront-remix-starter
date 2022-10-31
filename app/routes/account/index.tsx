@@ -26,7 +26,7 @@ export default function AccountDashboard() {
     const { activeCustomer } = useLoaderData<typeof loader>();
     const { firstName, lastName } = activeCustomer!;
     return (
-        <div className="max-w-6xl xl:mx-auto px-4">
+        <div className="max-w-7xl xl:mx-auto px-4">
             <h2 className="text-3xl sm:text-5xl font-light text-gray-900 my-8">
                 My Account
             </h2>

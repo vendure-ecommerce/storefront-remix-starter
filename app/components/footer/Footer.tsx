@@ -1,11 +1,12 @@
 import { RootLoaderData } from '~/root';
 import { Link } from '@remix-run/react';
+import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 const navigation = {
     support: [
         { name: 'Help', href: '#' },
         { name: 'Track order', href: '#' },
-        { name: 'Shipping', href: '#' },
+        { name: 'Shipping', href: 'https://vhdplus.com/blog/' },
         { name: 'Returns', href: '#' },
     ],
     company: [
@@ -66,7 +67,8 @@ export default function Footer({
                                                 href={item.href}
                                                 className="text-base text-gray-500 hover:text-gray-600"
                                             >
-                                                {item.name}
+                                                <p className='inline-block'>{item.name}</p>
+                                                {item.href.startsWith("http") ? (<ExternalLinkIcon className='h-4 inline-block ml-1 mb-1' />) : ""}
                                             </a>
                                         </li>
                                     ))}
@@ -85,7 +87,8 @@ export default function Footer({
                                                 href={item.href}
                                                 className="text-base text-gray-500 hover:text-gray-600"
                                             >
-                                                {item.name}
+                                                <p className='inline-block'>{item.name}</p>
+                                                {item.href.startsWith("http") ? (<ExternalLinkIcon className='h-4 inline-block ml-1 mb-1' />) : ""}
                                             </a>
                                         </li>
                                     ))}
@@ -129,7 +132,7 @@ export default function Footer({
                         className="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700"
                         href="https://protop-solutions.com"
                     >
-                        <img src='https://protop-solutions.com/img/Protop-Logo.png' height={24} width={24}/>
+                        <img src='https://protop-solutions.com/img/Protop-Logo.png' height={24} width={24} />
                         <span>
                             Copyright © 2022 Protop Solutions UG
                         </span>
