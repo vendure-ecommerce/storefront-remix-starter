@@ -655,6 +655,10 @@ select {
   pointer-events: none;
 }
 
+#app .visible {
+  visibility: visible;
+}
+
 #app .fixed {
   position: fixed;
 }
@@ -908,6 +912,18 @@ select {
   margin-bottom: 1.25rem;
 }
 
+#app .mr-3 {
+  margin-right: 0.75rem;
+}
+
+#app .mr-2 {
+  margin-right: 0.5rem;
+}
+
+#app .ml-3 {
+  margin-left: 0.75rem;
+}
+
 #app .box-content {
   box-sizing: content-box;
 }
@@ -1016,6 +1032,130 @@ select {
   height: 100%;
 }
 
+#app .h-5 {
+  height: 1.25rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-5 {
+  height: 1.25rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-5 {
+  height: 1.25rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-5 {
+  height: 1.25rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-8 {
+  height: 2rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-8 {
+  height: 2rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-8 {
+  height: 2rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-8 {
+  height: 2rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
+#app .h-full {
+  height: 100%;
+}
+
+#app .h-4 {
+  height: 1rem;
+}
+
 #app .w-5 {
   width: 1.25rem;
 }
@@ -1062,6 +1202,130 @@ select {
 
 #app .w-full {
   width: 100%;
+}
+
+#app .w-5 {
+  width: 1.25rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-5 {
+  width: 1.25rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-5 {
+  width: 1.25rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-5 {
+  width: 1.25rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-8 {
+  width: 2rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-8 {
+  width: 2rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-8 {
+  width: 2rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-8 {
+  width: 2rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
+}
+
+#app .w-full {
+  width: 100%;
+}
+
+#app .w-4 {
+  width: 1rem;
 }
 
 #app .min-w-0 {
@@ -1155,6 +1419,188 @@ select {
           animation: dropIn 0.2s ease-out;
 }
 
+@-webkit-keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
 #app .cursor-pointer {
   cursor: pointer;
 }
@@ -1216,6 +1662,10 @@ select {
 
 #app .items-center {
   align-items: center;
+}
+
+#app .justify-start {
+  justify-content: flex-start;
 }
 
 #app .justify-center {
@@ -1327,6 +1777,18 @@ select {
 #app .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-divide-opacity));
+}
+
+#app .self-end {
+  align-self: flex-end;
+}
+
+#app .self-center {
+  align-self: center;
+}
+
+#app .justify-self-end {
+  justify-self: end;
 }
 
 #app .overflow-hidden {
@@ -1587,6 +2049,14 @@ select {
           background-clip: text;
 }
 
+#app .fill-blue-600 {
+  fill: #2563eb;
+}
+
+#app .fill-white {
+  fill: #fff;
+}
+
 #app .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -1756,6 +2226,166 @@ select {
   padding-bottom: 3rem;
 }
 
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#app .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 #app .pt-8 {
   padding-top: 2rem;
 }
@@ -1806,6 +2436,14 @@ select {
 
 #app .pt-12 {
   padding-top: 3rem;
+}
+
+#app .pr-5 {
+  padding-right: 1.25rem;
+}
+
+#app .pr-2 {
+  padding-right: 0.5rem;
 }
 
 #app .text-left {
@@ -1875,6 +2513,11 @@ select {
   line-height: 1.25rem;
 }
 
+#app .text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 #app .font-medium {
   font-weight: 500;
 }
@@ -1901,6 +2544,10 @@ select {
 
 #app .font-bold {
   font-weight: 700;
+}
+
+#app .font-medium {
+  font-weight: 500;
 }
 
 #app .uppercase {
@@ -2045,6 +2692,126 @@ select {
 #app .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-gray-100 {
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
+}
+
+#app .text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#app .text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
 }
 
 #app .underline {
@@ -2336,6 +3103,68 @@ select {
 #app .active\:bg-green-700:active {
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  #app .dark\:text-gray-600 {
+    --tw-text-opacity: 1;
+    color: rgb(75 85 99 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-600 {
+    --tw-text-opacity: 1;
+    color: rgb(75 85 99 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-900 {
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-300 {
+    --tw-text-opacity: 1;
+    color: rgb(209 213 219 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-500 {
+    --tw-text-opacity: 1;
+    color: rgb(107 114 128 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-500 {
+    --tw-text-opacity: 1;
+    color: rgb(107 114 128 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+
+  #app .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
 }
 
 @media (min-width: 640px) {

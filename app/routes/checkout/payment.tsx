@@ -97,7 +97,7 @@ export async function action({ params, request }: DataFunctionArgs) {
         }
 
         const result = await addPaymentToOrder(
-            { method: paymentMethodCode, metadata: {paymentNonce} },
+            { method: paymentMethodCode, metadata: {nonce: paymentNonce} },
             { request },
         );
 
