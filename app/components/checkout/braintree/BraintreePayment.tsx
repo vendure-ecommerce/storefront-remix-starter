@@ -21,25 +21,30 @@ export function BraintreeDropIn(props: { show: boolean, authorization: string, f
 
     const [braintreeInstance, setBraintreeInstance] = useState<Dropin>();
     const [enablePaymentButton, setEnablePaymentButton] = useState<boolean>();
-    const [processing, setProcessing] = useState<boolean>(true);
+    const [processing, setProcessing] = useState<boolean>(false);
 
     const submit = useSubmit();
 
     const submitPayment = async () => {
         setProcessing(true);
         if (braintreeInstance) {
-            const result = await braintreeInstance.requestPaymentMethod();
+            try{
+                const result = await braintreeInstance.requestPaymentMethod();
 
-            const formData = new FormData();
-            formData.set("paymentMethodCode", "braintree");
-            formData.set("paymentNonce", result.nonce);
-
-            let request: Request;
-            request = new Request("");
-
-            await addPaymentToOrder({ method: "braintree", metadata: result }, { request });
-
-            submit(formData, { method: "post" });
+                const formData = new FormData();
+                formData.set("paymentMethodCode", "braintree");
+                formData.set("paymentNonce", result.nonce);
+    
+                let request: Request;
+                request = new Request("");
+    
+                await addPaymentToOrder({ method: "braintree", metadata: result }, { request });
+    
+                submit(formData, { method: "post" });
+            }catch(e){
+                alert(e);
+                setProcessing(false);
+            } 
         }
     };
 
@@ -61,8 +66,9 @@ export function BraintreeDropIn(props: { show: boolean, authorization: string, f
                     instance.on("paymentMethodRequestable", (payload) => {
                         setEnablePaymentButton(true);
                     });
-
-                    setProcessing(false);
+                    instance.on("noPaymentMethodRequestable", () => {
+                        setEnablePaymentButton(false);
+                    });
                 }
             });
 
@@ -93,11 +99,15 @@ export function BraintreeDropIn(props: { show: boolean, authorization: string, f
                 value={"braintree"}
             />
             <button onClick={submitPayment}
-                className={"braintreePayButton w-full bg-primary-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-primary-500"}
-                disabled={!braintreeInstance || !enablePaymentButton}>
+                className={classNames(
+                    enablePaymentButton && !processing
+                        ? 'bg-primary-600 hover:bg-primary-700'
+                        : 'bg-gray-400',
+                    'flex w-full items-center justify-center space-x-2 mt-24 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+                )}disabled={!braintreeInstance || !enablePaymentButton}>
 
                 {
-                    "Pay"
+                    processing ? "Processing..." : !braintreeInstance ? "Loading options..." : "Pay"
                 }
                 {processing ? (<svg aria-hidden="true" className="ml-3 w-4 h-4 text-indigo-100 animate-spin dark:text-gray-100 fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
