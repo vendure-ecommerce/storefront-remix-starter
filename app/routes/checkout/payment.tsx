@@ -44,17 +44,16 @@ export async function loader({ params, request }: DataFunctionArgs) {
     }
 
     let brainTreeKey: string | undefined;
-    let brainTreeToken: string | undefined;
     let brainTreeError: string | undefined;
     if (
         eligiblePaymentMethods.find((method) => method.code.includes('braintree'))
     ) {
         try {
-            brainTreeKey = process.env.BRAINTREE_TOKENIZATION_KEY;
-            //const stripePaymentIntentResult = await generateBraintreeClientToken({
-            //    request,
+            //const generateBrainTreeTokenResult = await generateBraintreeClientToken({
+            //    request, 
             //});
-            //brainTreeToken = stripePaymentIntentResult.generateBraintreeClientToken ?? undefined;
+            //brainTreeKey = generateBrainTreeTokenResult.generateBraintreeClientToken ?? process.env.BRAINTREE_TOKENIZATION_KEY;
+            brainTreeKey = process.env.BRAINTREE_TOKENIZATION_KEY;
         } catch (e: any) {
             brainTreeError = e.message;
         }
