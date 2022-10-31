@@ -18,6 +18,10 @@ export function generateBraintreeClientToken(options: QueryOptions) {
     return sdk.generateBraintreeClientToken({}, options);
 }
 
+export function createStripePaymentIntent(options: QueryOptions) {
+    return sdk.createStripePaymentIntent({}, options);
+}
+
 export function getNextOrderStates(options: QueryOptions) {
     return sdk.nextOrderStates({}, options);
 }
@@ -73,12 +77,6 @@ gql`
 `;
 
 gql`
-    query generateBraintreeClientToken {
-        generateBraintreeClientToken
-    }
-`;
-
-gql`
     mutation addPaymentToOrder($input: PaymentInput!) {
         addPaymentToOrder(input: $input) {
             ...OrderDetail
@@ -101,3 +99,16 @@ gql`
         }
     }
 `;
+
+gql`
+    mutation createStripePaymentIntent {
+        createStripePaymentIntent
+    }
+`;
+
+gql`
+    query generateBraintreeClientToken {
+        generateBraintreeClientToken
+    }
+`;
+
