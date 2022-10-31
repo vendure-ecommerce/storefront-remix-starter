@@ -19,7 +19,7 @@ export default function Index() {
     const particlesInit = useCallback(async (engine: Engine) => {
         await loadFull(engine);
     }, []);
-    
+
     const particlesLoaded = useCallback(async (container: ParticlesContainer | undefined) => {
         //await console.log(container);
     }, []);
@@ -56,7 +56,15 @@ export default function Index() {
                                 },
                                 move: {
                                     direction: "bottom",
-                                    speed: 0.05
+                                    enable: true,
+                                    outModes: {
+                                        default: "out"
+                                    },
+                                    size: true,
+                                    speed: {
+                                        min: 0.1,
+                                        max: 0.3
+                                    }
                                 },
                                 size: {
                                     value: 1.7
@@ -101,7 +109,7 @@ export default function Index() {
                             <div className="flex items-center gap-x-3">
                                 <p>VHDPlus Shop</p>
                                 <ShoppingCartIcon className="h-14 hidden md:block" />
-                            </div>   
+                            </div>
                         </h1>
                     </div>
 
