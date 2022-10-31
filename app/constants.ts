@@ -1,4 +1,4 @@
-export const APP_META_TITLE = 'Vendure Remix Storefront';
+export const APP_META_TITLE = 'VHDPlus Shop';
 export const APP_META_DESCRIPTION =
-    'A headless commerce storefront starter kit built with Remix & Vendure';
+    'High quality hardware and software developed in Germany';
 export const DEMO_API_URL = 'https://readonlydemo.vendure.io/shop-api';

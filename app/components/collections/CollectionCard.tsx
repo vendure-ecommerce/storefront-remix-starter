@@ -11,8 +11,8 @@ export function CollectionCard({ collection }: { collection: CollectionsQuery['c
       className="max-w-[300px] relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto"
     >
       <span aria-hidden="true" className="">
-        <div className="w-full h-full object-center object-cover">
-            <img src={collection.featuredAsset?.preview + "?w=300&h=300"} />
+        <div className="w-full h-full object-center object-contain">
+            <img src={collection.featuredAsset?.preview} />
         </div>
       </span>
       <span

@@ -13,9 +13,9 @@ export function ProductCard({
   return (
     <Link className="flex flex-col" prefetch='intent' to={`/products/${slug}`}>
       <img
-        className="rounded-xl flex-grow object-cover aspect-[7/8]"
+        className="rounded-xl flex-grow object-contain aspect-[7/8]"
         alt=""
-        src={productAsset?.preview + '?w=300&h=400'}
+        src={productAsset?.preview}
       />
       <div className="h-2" />
       <div className="text-sm text-gray-700">

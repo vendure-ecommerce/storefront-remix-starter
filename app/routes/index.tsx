@@ -32,7 +32,7 @@ export default function Index() {
                 {/* Decorative image and overlay */}
                 <div
                     aria-hidden="true"
-                    className="absolute shadow-xl inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900"
+                    className="absolute shadow-xl inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-700 to-cyan-900"
                 >
                     <Particles
                         className="h-full"
@@ -95,24 +95,18 @@ export default function Index() {
                         }}
                     />
                 </div>
-                <div className="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
-                    <div className="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
+                <div className="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-60 lg:px-0">
+                    <div className="relative rounded-lg p-0">
                         <h1 className="font-bold text-6xl text-white bg-clip-text tracking-normal lg:text-6xl">
-                            VHDPlus Shop
+                            <div className="flex items-center gap-x-3">
+                                <p>VHDPlus Shop</p>
+                                <ShoppingCartIcon className="h-14 hidden md:block" />
+                            </div>   
                         </h1>
                     </div>
 
                     <p className="mt-4 text-2xl text-white">
-                        The fitting hardware for VHDPlus IDE
-                    </p>
-                    <p className="mt-4 text-gray-300 space-x-1">
-                        <ShoppingCartIcon className="w-5 h-5 inline" />
-                        <a
-                            className="text-primary-200 hover:text-primary-400"
-                            href="https://www.vendure.io/blog/2022/05/lightning-fast-headless-commerce-with-vendure-and-remix"
-                        >
-                            Shop now
-                        </a>
+                        High quality hardware and software developed with ❤️ in Germany
                     </p>
                 </div>
             </div>
@@ -132,8 +126,8 @@ export default function Index() {
 
                 <div className="mt-4 flow-root">
                     <div className="-my-2">
-                        <div className="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
-                            <div className="grid justify-items-center grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
+                        <div className="box-content py-2 px-0 relative overflow-x-auto xl:overflow-visible">
+                            <div className="grid justify-items-left grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-0 sm:px-0 lg:px-0 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-0">
                                 {collections.map((collection) => (
                                     <CollectionCard
                                         key={collection.id}
