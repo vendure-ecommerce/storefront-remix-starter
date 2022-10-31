@@ -21,7 +21,7 @@ export default function Index() {
     }, []);
     
     const particlesLoaded = useCallback(async (container: ParticlesContainer | undefined) => {
-        await console.log(container);
+        //await console.log(container);
     }, []);
 
     const { collections } = useLoaderData<typeof loader>();
