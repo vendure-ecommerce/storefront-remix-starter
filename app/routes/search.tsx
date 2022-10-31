@@ -19,7 +19,7 @@ export default function Search() {
         facetValueIds,
     );
     return (
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
                     {term ? `Results for "${term}"` : 'All results'}

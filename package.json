@@ -30,13 +30,14 @@
     "@stripe/react-stripe-js": "^1.9.0",
     "@stripe/stripe-js": "^1.32.0",
     "@tailwindcss/forms": "^0.5.1",
+    "braintree-web-drop-in": "^1.33.4",
     "cross-env": "^7.0.3",
     "graphql": "^16.4.0",
     "graphql-tag": "^2.12.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "remix": "^1.6.5",
     "react-tsparticles": "^2.3.3",
+    "remix": "^1.6.5",
     "tsparticles": "^2.3.3"
   },
   "devDependencies": {
