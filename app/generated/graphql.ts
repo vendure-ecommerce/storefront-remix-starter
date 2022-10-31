@@ -2566,7 +2566,7 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ProductVariantCustomFields>;
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars['ID'];
@@ -2585,6 +2585,12 @@ export type ProductVariant = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ProductVariantCustomFields = {
+  __typename?: 'ProductVariantCustomFields';
+  weight?: Maybe<Scalars['Float']>;
+  weightUoM?: Maybe<Scalars['String']>;
+};
+
 export type ProductVariantFilterParameter = {
   createdAt?: InputMaybe<DateOperators>;
   currencyCode?: InputMaybe<StringOperators>;
@@ -2597,6 +2603,8 @@ export type ProductVariantFilterParameter = {
   sku?: InputMaybe<StringOperators>;
   stockLevel?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
+  weight?: InputMaybe<NumberOperators>;
+  weightUoM?: InputMaybe<StringOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2628,6 +2636,8 @@ export type ProductVariantSortParameter = {
   sku?: InputMaybe<SortOrder>;
   stockLevel?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  weight?: InputMaybe<SortOrder>;
+  weightUoM?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
@@ -2687,6 +2697,7 @@ export type Query = {
   facet?: Maybe<Facet>;
   /** A list of Facets available to the shop */
   facets: FacetList;
+  generateBraintreeClientToken: Scalars['String'];
   /** Returns information about the current authenticated User */
   me?: Maybe<CurrentUser>;
   /** Returns the possible next states that the activeOrder can transition to */
@@ -2730,6 +2741,12 @@ export type QueryFacetArgs = {
 
 export type QueryFacetsArgs = {
   options?: InputMaybe<FacetListOptions>;
+};
+
+
+export type QueryGenerateBraintreeClientTokenArgs = {
+  includeCustomerId?: InputMaybe<Scalars['Boolean']>;
+  orderId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -2836,6 +2853,7 @@ export type SearchInput = {
   facetValueIds?: InputMaybe<Array<Scalars['ID']>>;
   facetValueOperator?: InputMaybe<LogicalOperator>;
   groupByProduct?: InputMaybe<Scalars['Boolean']>;
+  inStock?: InputMaybe<Scalars['Boolean']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort?: InputMaybe<SearchResultSortParameter>;
   take?: InputMaybe<Scalars['Int']>;
@@ -2863,6 +2881,7 @@ export type SearchResult = {
   description: Scalars['String'];
   facetIds: Array<Scalars['ID']>;
   facetValueIds: Array<Scalars['ID']>;
+  inStock: Scalars['Boolean'];
   price: SearchResultPrice;
   priceWithTax: SearchResultPrice;
   productAsset?: Maybe<SearchResultAsset>;
