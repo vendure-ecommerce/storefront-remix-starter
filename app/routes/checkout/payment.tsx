@@ -49,11 +49,10 @@ export async function loader({ params, request }: DataFunctionArgs) {
         eligiblePaymentMethods.find((method) => method.code.includes('braintree'))
     ) {
         try {
-            //const generateBrainTreeTokenResult = await generateBraintreeClientToken({
-            //    request, 
-            //});
-            //brainTreeKey = generateBrainTreeTokenResult.generateBraintreeClientToken ?? process.env.BRAINTREE_TOKENIZATION_KEY;
-            brainTreeKey = process.env.BRAINTREE_TOKENIZATION_KEY;
+            const generateBrainTreeTokenResult = await generateBraintreeClientToken({
+                request, 
+            });
+            brainTreeKey = generateBrainTreeTokenResult.generateBraintreeClientToken ?? "";
         } catch (e: any) {
             brainTreeError = e.message;
         }
