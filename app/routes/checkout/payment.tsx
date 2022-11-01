@@ -1,6 +1,7 @@
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import {
     addPaymentToOrder,
+    generateBraintreeClientToken,
     createStripePaymentIntent,
     getEligiblePaymentMethods,
     getNextOrderStates,
@@ -10,9 +11,10 @@ import { Form, useLoaderData, useOutletContext } from '@remix-run/react';
 import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
-import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
 import { StripePayments } from '~/components/checkout/stripe/StripePayments';
 import { DummyPayments } from '~/components/checkout/DummyPayments';
+import { BraintreeDropIn } from '~/components/checkout/braintree/BraintreePayments';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -40,11 +42,28 @@ export async function loader({ params, request }: DataFunctionArgs) {
             stripeError = e.message;
         }
     }
+
+    let brainTreeKey: string | undefined;
+    let brainTreeError: string | undefined;
+    if (
+        eligiblePaymentMethods.find((method) => method.code.includes('braintree'))
+    ) {
+        try {
+            const generateBrainTreeTokenResult = await generateBraintreeClientToken({
+                request, 
+            });
+            brainTreeKey = generateBrainTreeTokenResult.generateBraintreeClientToken ?? "";
+        } catch (e: any) {
+            brainTreeError = e.message;
+        }
+    }
     return {
         eligiblePaymentMethods,
         stripePaymentIntent,
         stripePublishableKey,
         stripeError,
+        brainTreeKey,
+        brainTreeError,
         error,
     };
 }
@@ -52,6 +71,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
 export async function action({ params, request }: DataFunctionArgs) {
     const body = await request.formData();
     const paymentMethodCode = body.get('paymentMethodCode');
+    const paymentNonce = body.get('paymentNonce');
     if (typeof paymentMethodCode === 'string') {
         const { nextOrderStates } = await getNextOrderStates({
             request,
@@ -73,7 +93,7 @@ export async function action({ params, request }: DataFunctionArgs) {
         }
 
         const result = await addPaymentToOrder(
-            { method: paymentMethodCode, metadata: {} },
+            { method: paymentMethodCode, metadata: { nonce: paymentNonce } },
             { request },
         );
         if (result.addPaymentToOrder.__typename === 'Order') {
@@ -95,6 +115,8 @@ export default function CheckoutPayment() {
         stripePaymentIntent,
         stripePublishableKey,
         stripeError,
+        brainTreeKey,
+        brainTreeError,
         error,
     } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder } =
@@ -105,6 +127,20 @@ export default function CheckoutPayment() {
     return (
         <div className="flex flex-col items-center divide-gray-200 divide-y">
             {eligiblePaymentMethods.map((paymentMethod) =>
+            paymentMethod.code.includes('braintree') ? (
+                <div className="py-3 w-full" key={paymentMethod.id}>
+                    {brainTreeError ? (
+                        <div>
+                            <p className="text-red-700 font-bold">
+                                Braintree error:
+                            </p>
+                            <p className="text-sm">{brainTreeError}</p>
+                        </div>
+                    ) : (
+                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey} />
+                    )}
+                </div>
+            ) :
                 paymentMethod.code.includes('stripe') ? (
                     <div className="py-12" key={paymentMethod.id}>
                         {stripeError ? (

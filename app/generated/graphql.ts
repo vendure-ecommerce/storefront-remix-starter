@@ -2687,6 +2687,7 @@ export type Query = {
   facet?: Maybe<Facet>;
   /** A list of Facets available to the shop */
   facets: FacetList;
+  generateBraintreeClientToken?: Maybe<Scalars['String']>;
   /** Returns information about the current authenticated User */
   me?: Maybe<CurrentUser>;
   /** Returns the possible next states that the activeOrder can transition to */
@@ -3237,6 +3238,11 @@ export type CreateStripePaymentIntentMutationVariables = Exact<{ [key: string]: 
 
 export type CreateStripePaymentIntentMutation = { __typename?: 'Mutation', createStripePaymentIntent?: string | null };
 
+export type GenerateBraintreeClientTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateBraintreeClientTokenQuery = { __typename?: 'Query', generateBraintreeClientToken?: string | null };
+
 export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3607,6 +3613,11 @@ export const CreateStripePaymentIntentDocument = gql`
   createStripePaymentIntent
 }
     `;
+export const GenerateBraintreeClientTokenDocument = gql`
+    query generateBraintreeClientToken {
+  generateBraintreeClientToken
+}
+    `;
 export const CollectionsDocument = gql`
     query collections {
   collections {
@@ -3845,6 +3856,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     createStripePaymentIntent(variables?: CreateStripePaymentIntentMutationVariables, options?: C): Promise<CreateStripePaymentIntentMutation> {
       return requester<CreateStripePaymentIntentMutation, CreateStripePaymentIntentMutationVariables>(CreateStripePaymentIntentDocument, variables, options);
+    },
+    generateBraintreeClientToken(variables?: GenerateBraintreeClientTokenQueryVariables, options?: C): Promise<GenerateBraintreeClientTokenQuery> {
+      return requester<GenerateBraintreeClientTokenQuery, GenerateBraintreeClientTokenQueryVariables>(GenerateBraintreeClientTokenDocument, variables, options);
     },
     collections(variables?: CollectionsQueryVariables, options?: C): Promise<CollectionsQuery> {
       return requester<CollectionsQuery, CollectionsQueryVariables>(CollectionsDocument, variables, options);
