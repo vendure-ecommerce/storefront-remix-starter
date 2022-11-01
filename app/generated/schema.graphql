@@ -2857,7 +2857,7 @@ type ProductVariant implements Node {
   assets: [Asset!]!
   createdAt: DateTime!
   currencyCode: CurrencyCode!
-  customFields: ProductVariantCustomFields
+  customFields: JSON
   facetValues: [FacetValue!]!
   featuredAsset: Asset
   id: ID!
@@ -2876,11 +2876,6 @@ type ProductVariant implements Node {
   updatedAt: DateTime!
 }
 
-type ProductVariantCustomFields {
-  weight: Float
-  weightUoM: String
-}
-
 input ProductVariantFilterParameter {
   createdAt: DateOperators
   currencyCode: StringOperators
@@ -2893,8 +2888,6 @@ input ProductVariantFilterParameter {
   sku: StringOperators
   stockLevel: StringOperators
   updatedAt: DateOperators
-  weight: NumberOperators
-  weightUoM: StringOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -2931,8 +2924,6 @@ input ProductVariantSortParameter {
   sku: SortOrder
   stockLevel: SortOrder
   updatedAt: SortOrder
-  weight: SortOrder
-  weightUoM: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -3003,7 +2994,7 @@ type Query {
 
   """A list of Facets available to the shop"""
   facets(options: FacetListOptions): FacetList!
-  generateBraintreeClientToken(includeCustomerId: Boolean, orderId: ID): String!
+  generateBraintreeClientToken: String
 
   """Returns information about the current authenticated User"""
   me: CurrentUser
@@ -3113,7 +3104,6 @@ input SearchInput {
   facetValueIds: [ID!]
   facetValueOperator: LogicalOperator
   groupByProduct: Boolean
-  inStock: Boolean
   skip: Int
   sort: SearchResultSortParameter
   take: Int
@@ -3138,7 +3128,6 @@ type SearchResult {
   description: String!
   facetIds: [ID!]!
   facetValueIds: [ID!]!
-  inStock: Boolean!
   price: SearchResultPrice!
   priceWithTax: SearchResultPrice!
   productAsset: SearchResultAsset
