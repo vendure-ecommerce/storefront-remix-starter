@@ -7,3 +7,5 @@ node_modules
 /.idea
 /functions
 /.netlify
+
+.DS_Store
