@@ -12,7 +12,7 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 * Checkout flow ✅
 * Search facet filters ✅
 * Login ✅
-* Account creation
+* Account creation ✅
 * Customer account management
 
 **Contributions welcome!**
@@ -59,7 +59,11 @@ export const config: VendureConfig = {
 };
 ```
 
-## Stripe integration
+## Payment Gateways
+
+Currently, both Stripe and Braintree are supported out of the box, but only one of them can be used at the same time
+
+### Stripe integration
 
 This repo has a built-in Stripe payment integration. To enable it, ensure that your Vendure server is set up with 
 the [StripePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/stripe-plugin/).
@@ -72,8 +76,14 @@ Then add your Stripe publishable key to the env file:
 ```
 STRIPE_PUBLISHABLE_KEY=pk_test_t38hl...etc
 ```
+### Braintree integration
 
-### Public demo
+This repo has built-in Braintree integration. To enable it, ensure that your Vendure server is set up with 
+the [BraintreePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/braintree-plugin/). 
+
+Currently, `storeCustomersInBraintree` has to be set to `true` in plugin options.
+
+## Public demo
 
 There is a publicly-available demo instance at https://readonlydemo.vendure.io/shop-api
 
