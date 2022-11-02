@@ -42,6 +42,11 @@ async function sendQuery<Response, Variables = {}>(options: {
         if (token) {
             headers.append('Authorization', `Bearer ${token}`);
         }
+
+        const channel = session.get("channel");
+        if(channel && channel == "eu"){
+            headers.append("vendure-token", channel)
+        }
     }
 
     return fetch(API_URL, {
