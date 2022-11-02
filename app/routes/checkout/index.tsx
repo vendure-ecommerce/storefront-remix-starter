@@ -31,7 +31,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     });
     const { activeCustomer } = await getActiveCustomerAddresses({ request });
     const error = session.get('activeOrderError');
-    return {
+    return { 
         availableCountries,
         eligibleShippingMethods,
         activeCustomer,

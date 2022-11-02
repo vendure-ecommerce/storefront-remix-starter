@@ -11,6 +11,7 @@ import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import {
     CreateAddressInput,
     CreateCustomerInput,
+    ErrorCode,
     ErrorResult,
     OrderDetailFragment,
 } from '~/generated/graphql';
@@ -34,7 +35,7 @@ export async function action({ request, params }: DataFunctionArgs) {
     const body = await request.formData();
     const formAction = body.get('action');
     let activeOrder: OrderDetailFragment | undefined = undefined;
-    let error: ErrorResult | undefined;
+    let error : ErrorResult = {errorCode: ErrorCode.NoActiveOrderError, message: ""};
     switch (formAction) {
         case 'setCheckoutShipping':
             if (shippingFormDataIsValid(body)) {
@@ -149,15 +150,13 @@ export async function action({ request, params }: DataFunctionArgs) {
         // Don't do anything
     }
     let headers: ResponseInit['headers'] = {};
-    if (error) {
-        const session = await sessionStorage.getSession(
-            request?.headers.get('Cookie'),
-        );
-        session.flash('activeOrderError', error);
-        headers = {
-            'Set-Cookie': await sessionStorage.commitSession(session),
-        };
-    }
+    const session = await sessionStorage.getSession(
+        request?.headers.get('Cookie'),
+    );
+    session.flash('activeOrderError', error);
+    headers = {
+        'Set-Cookie': await sessionStorage.commitSession(session),
+    };
     return json(
         { activeOrder: activeOrder || (await getActiveOrder({ request })) },
         {
