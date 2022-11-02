@@ -5,6 +5,7 @@ import { useRootLoader } from '~/utils/use-root-loader';
 import { UserIcon } from '@heroicons/react/solid';
 import { useScrollingUp } from '~/utils/use-scrolling-up';
 import { classNames } from '~/utils/class-names';
+import { ChannelSwitcher } from '../ChannelSwitch';
 
 export function Header({
     onCartIconClick,
@@ -38,7 +39,8 @@ export function Header({
                             {' '} Boards
                         </p>
                     </div>
-                    <div>
+                    <div className="flex items-center space-x-4">
+                        <ChannelSwitcher/>
                         <Link
                             to={isSignedIn ? '/account' : '/sign-in'}
                             className="flex space-x-1"
@@ -82,7 +84,7 @@ export function Header({
                         <ExternalLinkIcon className='h-4 inline-block ml-1 mb-1' />
                     </a>
                 </div>
-                <div className="flex-1 md:pr-4 md:pl-3">
+                <div className="flex-1 md:pr-3 md:pl-3">
                     <SearchBar></SearchBar>
                 </div>
                 <div className="">

@@ -51,6 +51,9 @@ export const detailedProductFragment = gql`
       id
       name
       priceWithTax
+      taxRateApplied {
+        value
+      }
       currencyCode
       sku
       stockLevel

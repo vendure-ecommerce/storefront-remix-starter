@@ -271,7 +271,12 @@ export default function ProductSlug() {
                             </div>
                             <div className="mt-2 flex items-center space-x-2">
                                 <span className="text-gray-500">
-                                    {selectedVariant?.sku}
+                                    Incl. {selectedVariant?.taxRateApplied.value}% VAT
+                                </span>
+                            </div>
+                            <div className="mt-2 flex items-center space-x-2">
+                                <span className="text-gray-500">
+                                    SKU: {selectedVariant?.sku}
                                 </span>
                                 <StockLevelLabel
                                     stockLevel={selectedVariant?.stockLevel}

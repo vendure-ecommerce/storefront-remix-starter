@@ -1,3 +1,4 @@
+import { useSearchParams } from '@remix-run/react';
 import { DocumentNode, print } from 'graphql';
 import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
@@ -29,6 +30,7 @@ async function sendQuery<Response, Variables = {}>(options: {
 }): Promise<GraphqlResponse<Response> & { headers: Headers }> {
     const headers = new Headers(options.headers);
     const req = options.request;
+
     headers.append('Content-Type', 'application/json');
     const session = await sessionStorage.getSession(
         options.request?.headers.get('Cookie'),

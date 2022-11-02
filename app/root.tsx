@@ -74,12 +74,14 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
         activeChannel: await activeChannel({ request }),
         collections: topLevelCollections,
     };
+
     return json(loaderData, { headers: activeCustomer._headers });
 }
 
 export default function App() {
     const [open, setOpen] = useState(false);
     const loaderData = useLoaderData<RootLoaderData>();
+
     const { collections } = loaderData;
     const {
         activeOrderFetcher,
