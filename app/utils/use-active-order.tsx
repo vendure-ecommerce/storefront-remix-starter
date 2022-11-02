@@ -40,11 +40,26 @@ export function useActiveOrder() {
             },
         );
     };
+
+    const switchChannel = (channel: string) => {
+        activeOrderFetcher.submit(
+            {
+                action: 'switchChannel',
+                channel,
+            },
+            {
+                method: 'post',
+                action: '/api/active-order',
+            },
+        );
+    };
+
     return {
         activeOrderFetcher,
         activeOrder,
         removeItem,
         adjustOrderLine,
+        switchChannel,
         refresh,
     };
 }

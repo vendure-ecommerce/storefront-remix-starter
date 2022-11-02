@@ -89,11 +89,12 @@ export default function App() {
         adjustOrderLine,
         removeItem,
         refresh,
+        switchChannel,
     } = useActiveOrder();
 
     useEffect(() => {
         // When the loader has run, this implies we should refresh the contents
-        // of the activeOrder as the user may have signed in or out.
+        // of the activeOrder as the user may have signed in or out. 
         refresh();
     }, [loaderData]);
 
@@ -110,7 +111,7 @@ export default function App() {
                 <Links />
             </head>
             <body>
-                <Header
+                <Header switchChannel={switchChannel}
                     onCartIconClick={() => setOpen(!open)}
                     cartQuantity={activeOrder?.totalQuantity ?? 0}
                 />

@@ -35,7 +35,16 @@ export async function action({ request, params }: DataFunctionArgs) {
     const body = await request.formData();
     const formAction = body.get('action');
     let activeOrder: OrderDetailFragment | undefined = undefined;
-    let error : ErrorResult = {errorCode: ErrorCode.NoActiveOrderError, message: ""};
+    let error: ErrorResult = {
+        errorCode: ErrorCode.NoActiveOrderError,
+        message: '',
+    };
+
+    let headers: ResponseInit['headers'] = {};
+    const session = await sessionStorage.getSession(
+        request?.headers.get('Cookie'),
+    );
+
     switch (formAction) {
         case 'setCheckoutShipping':
             if (shippingFormDataIsValid(body)) {
@@ -146,17 +155,47 @@ export async function action({ request, params }: DataFunctionArgs) {
         }
         case 'addPaymentToOrder': {
         }
+        case 'switchChannel': {
+            const channel = body.get('channel');
+
+            session.flash('channel', channel);
+
+            const ac = await getActiveOrder({request});
+
+            //Remove all order lines and add them again
+            if(ac){
+                for(let i = 0; i < ac.lines.length; i++){
+                    const result = await removeOrderLine(ac.lines[i].id, {
+                        request,
+                    });
+                    if(result.removeOrderLine.__typename === "Order"){
+                        activeOrder = result.removeOrderLine;
+                    }
+                    else break;
+                }
+                for(let i = 0; i < ac.lines.length; i++){
+                    const result = await addItemToOrder(ac.lines[i].productVariant.id, ac.lines[i].quantity, {
+                        request,
+                    });
+                    if(result.addItemToOrder.__typename === "Order"){
+                        activeOrder = result.addItemToOrder;
+                    }
+                    else break;
+                }
+            }
+            break;
+        }
         default:
         // Don't do anything
     }
-    let headers: ResponseInit['headers'] = {};
-    const session = await sessionStorage.getSession(
-        request?.headers.get('Cookie'),
-    );
+
     session.flash('activeOrderError', error);
     headers = {
         'Set-Cookie': await sessionStorage.commitSession(session),
     };
+
+    console.log("HUREN" + activeOrder?.lines.length);
+
     return json(
         { activeOrder: activeOrder || (await getActiveOrder({ request })) },
         {

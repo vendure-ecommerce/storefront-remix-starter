@@ -10,13 +10,16 @@ import { ChannelSwitcher } from '../ChannelSwitch';
 export function Header({
     onCartIconClick,
     cartQuantity,
+    switchChannel,
 }: {
     onCartIconClick: () => void;
     cartQuantity: number;
+    switchChannel: (channel: string) => void;
 }) {
     const data = useRootLoader();
     const isSignedIn = !!data.activeCustomer.activeCustomer?.id;
     const isScrollingUp = useScrollingUp();
+
     return (
         <header
             className={classNames(
@@ -40,7 +43,7 @@ export function Header({
                         </p>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <ChannelSwitcher/>
+                        <ChannelSwitcher switchChannel={switchChannel}/>
                         <Link
                             to={isSignedIn ? '/account' : '/sign-in'}
                             className="flex space-x-1"
