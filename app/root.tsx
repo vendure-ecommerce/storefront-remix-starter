@@ -23,6 +23,7 @@ import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
+import { setApiUrl } from '~/graphqlWrapper';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE, description: APP_META_DESCRIPTION };
@@ -64,6 +65,10 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
+    if (typeof context.VENDURE_API_URL === 'string') {
+        // Set the API URL for Cloudflare Pages
+        setApiUrl(context.VENDURE_API_URL);
+    }
     const collections = await getCollections(request);
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
