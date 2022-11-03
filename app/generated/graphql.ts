@@ -3215,7 +3215,7 @@ export type VerifyCustomerAccountMutation = { __typename?: 'Mutation', verifyCus
 export type ActiveChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveChannelQuery = { __typename?: 'Query', activeChannel: { __typename?: 'Channel', id: string, currencyCode: CurrencyCode } };
+export type ActiveChannelQuery = { __typename?: 'Query', activeChannel: { __typename?: 'Channel', id: string, code: string, token: string, currencyCode: CurrencyCode } };
 
 export type EligibleShippingMethodsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3565,6 +3565,8 @@ export const ActiveChannelDocument = gql`
     query activeChannel {
   activeChannel {
     id
+    code
+    token
     currencyCode
   }
 }

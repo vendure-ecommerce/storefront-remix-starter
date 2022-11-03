@@ -4,21 +4,22 @@ import { RootLoaderData } from '~/root';
 import { useActiveOrder } from '~/utils/use-active-order';
 
 export function ChannelSwitcher({
+    activeChannelToken,
     switchChannel,
 }: {
+    activeChannelToken: string;
     switchChannel: (channel: string) => void;
 }) {
-    const { activeChannel } = useLoaderData<RootLoaderData>();
-
     return (
         <div className="flex items-center">
+            {activeChannelToken}
             <select
                 name="channel"
-                defaultValue={activeChannel.id == '1' ? '' : 'eu'}
+                value={activeChannelToken}
                 onChange={(x) => switchChannel(x.target.value)}
                 className="max-w-full rounded-md border border-gray-300 py-1 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             >
-                <option value={''}>Global $</option>
+                <option value={'default'}>Global $</option>
                 <option value={'eu'}>European Union €</option>
             </select>
         </div>

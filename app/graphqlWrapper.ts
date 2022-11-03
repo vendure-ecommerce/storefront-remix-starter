@@ -43,8 +43,6 @@ async function sendQuery<Response, Variables = {}>(options: {
             headers.append('Authorization', `Bearer ${token}`);
         }
 
-        console.log("WTFFFFF"+ req?.headers.has("vendure-token"));
-
         //use channel token from override
         if(req?.headers.has("vendure-token")){
             headers.append("vendure-token", req.headers.get("vendure-token")!);

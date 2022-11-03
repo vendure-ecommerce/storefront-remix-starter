@@ -9,6 +9,8 @@ gql`
   query activeChannel {
     activeChannel {
       id
+      code
+      token
       currencyCode
     }
   }

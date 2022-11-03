@@ -2,7 +2,7 @@ import { useFetcher } from '@remix-run/react';
 import { CartLoaderData } from '~/routes/api/active-order';
 import { useEffect } from 'react';
 
-export function useActiveOrder() {
+export function useActiveOrder(setChannel : React.Dispatch<React.SetStateAction<string>>) {
     const activeOrderFetcher = useFetcher<CartLoaderData>();
     useEffect(() => {
         if (activeOrderFetcher.type === 'init') {
@@ -52,6 +52,7 @@ export function useActiveOrder() {
                 action: '/api/active-order',
             },
         );
+        setChannel(channel);
     };
 
     return {

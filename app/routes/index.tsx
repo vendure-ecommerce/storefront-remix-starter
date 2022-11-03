@@ -9,7 +9,9 @@ import { LoaderArgs } from '@remix-run/server-runtime';
 import { ShoppingCartIcon } from '@heroicons/react/outline';
 
 export async function loader({ request }: LoaderArgs) {
-    const collections = await getCollections(request);
+    request.headers.set("vendure-token", ""); //Load collections from default channel
+    const collections = await getCollections(request); 
+    request.headers.delete("vendure-token");
     return {
         collections,
     };

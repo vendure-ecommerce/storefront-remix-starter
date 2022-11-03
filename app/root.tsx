@@ -64,7 +64,9 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
-    const collections = await getCollections(request);
+    request.headers.set("vendure-token", ""); //Load collections from default channel
+    const collections = await getCollections(request); 
+    request.headers.delete("vendure-token");
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
     );
@@ -81,6 +83,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
 export default function App() {
     const [open, setOpen] = useState(false);
     const loaderData = useLoaderData<RootLoaderData>();
+    const [activeChannelToken, setActiveChannelToken] = useState(loaderData.activeChannel.token);
 
     const { collections } = loaderData;
     const {
@@ -90,7 +93,7 @@ export default function App() {
         removeItem,
         refresh,
         switchChannel,
-    } = useActiveOrder();
+    } = useActiveOrder(setActiveChannelToken);
 
     useEffect(() => {
         // When the loader has run, this implies we should refresh the contents
@@ -111,7 +114,7 @@ export default function App() {
                 <Links />
             </head>
             <body>
-                <Header switchChannel={switchChannel}
+                <Header switchChannel={switchChannel} activeChannelToken={activeChannelToken}
                     onCartIconClick={() => setOpen(!open)}
                     cartQuantity={activeOrder?.totalQuantity ?? 0}
                 />
@@ -122,6 +125,7 @@ export default function App() {
                             activeOrder,
                             adjustOrderLine,
                             removeItem,
+                            switchChannel
                         }}
                     />
                 </main>

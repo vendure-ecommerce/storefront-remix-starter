@@ -12,12 +12,12 @@ export function AddressForm({
 }) {
     return (
         <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-            <div>
+            <div className="sm:col-span-2">
                 <label
                     htmlFor="fullName"
                     className="block text-sm font-medium text-gray-700"
                 >
-                    First name
+                    Full name
                 </label>
                 <div className="mt-1">
                     <input

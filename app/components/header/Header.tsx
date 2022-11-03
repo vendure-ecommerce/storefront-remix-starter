@@ -6,15 +6,18 @@ import { UserIcon } from '@heroicons/react/solid';
 import { useScrollingUp } from '~/utils/use-scrolling-up';
 import { classNames } from '~/utils/class-names';
 import { ChannelSwitcher } from '../ChannelSwitch';
+import { Channel } from '~/generated/graphql';
 
 export function Header({
     onCartIconClick,
     cartQuantity,
     switchChannel,
+    activeChannelToken,
 }: {
     onCartIconClick: () => void;
     cartQuantity: number;
     switchChannel: (channel: string) => void;
+    activeChannelToken: string;
 }) {
     const data = useRootLoader();
     const isSignedIn = !!data.activeCustomer.activeCustomer?.id;
@@ -43,7 +46,7 @@ export function Header({
                         </p>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <ChannelSwitcher switchChannel={switchChannel}/>
+                        <ChannelSwitcher switchChannel={switchChannel} activeChannelToken={activeChannelToken}/>
                         <Link
                             to={isSignedIn ? '/account' : '/sign-in'}
                             className="flex space-x-1"

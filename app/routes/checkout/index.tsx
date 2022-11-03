@@ -20,6 +20,8 @@ import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
 import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
+import { RootLoaderData } from '~/root';
+import { activeChannel } from '~/providers/channel/channel';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -31,10 +33,12 @@ export async function loader({ params, request }: DataFunctionArgs) {
     });
     const { activeCustomer } = await getActiveCustomerAddresses({ request });
     const error = session.get('activeOrderError');
+    const currentChannel = await activeChannel({ request });
     return { 
         availableCountries,
         eligibleShippingMethods,
         activeCustomer,
+        currentChannel,
         error,
     };
 }
@@ -44,9 +48,10 @@ export default function CheckoutShipping() {
         availableCountries,
         eligibleShippingMethods,
         activeCustomer,
+        currentChannel,
         error,
     } = useLoaderData<typeof loader>();
-    const { activeOrderFetcher, activeOrder } =
+    const { activeOrderFetcher, activeOrder, switchChannel } =
         useOutletContext<OutletContext>();
     const [customerFormChanged, setCustomerFormChanged] = useState(false);
     const [addressFormChanged, setAddressFormChanged] = useState(false);
@@ -88,7 +93,7 @@ export default function CheckoutShipping() {
     const submitAddressForm = (event: FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
         const isValid = event.currentTarget.checkValidity();
-        if (addressFormChanged && isValid) {
+        if (isValid) {
             setShippingAddress(formData);
         }
     };
@@ -112,6 +117,13 @@ export default function CheckoutShipping() {
                 method: 'post',
                 action: '/api/active-order',
             });
+
+            const country = formData.get("countryCode");
+            if(country == "DE" && currentChannel?.currencyCode != "EUR"){
+                switchChannel("eu");
+            }else if(country == "US" && currentChannel?.currencyCode != "USD"){
+                switchChannel("default");
+            }
             setAddressFormChanged(false);
         }
     }
@@ -245,7 +257,7 @@ export default function CheckoutShipping() {
                 />
                 <div className="mt-10 border-t border-gray-200 pt-10">
                     <h2 className="text-lg font-medium text-gray-900">
-                        Shipping information
+                        Billing information
                     </h2>
                 </div>
                 {isSignedIn && activeCustomer.addresses?.length ? (
