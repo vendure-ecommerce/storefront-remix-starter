@@ -8,5 +8,8 @@ const handleRequest = createPagesFunctionHandler({
 });
 
 export function onRequest(context) {
-    return handleRequest(context);
+    return handleRequest(context).then((res) => {
+        res.headers.set('x-cf-context-env', JSON.stringify(context.env));
+        return res;
+    });
 }

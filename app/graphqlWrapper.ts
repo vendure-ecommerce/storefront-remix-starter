@@ -102,6 +102,7 @@ function requester<R, V>(
                 );
             }
         }
+        headers['x-vendure-api-url'] = API_URL;
         if (response.errors) {
             console.log(
                 response.errors[0].extensions?.exception?.stacktrace.join(
