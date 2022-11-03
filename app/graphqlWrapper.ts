@@ -3,10 +3,15 @@ import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
+// If using Cloudflare Pages, "environment variables" are known as "bindings"
+// and if defined are made available as global variables.
+// See https://developers.cloudflare.com/workers/platform/environment-variables/#environmental-variables-with-module-workers
+declare const VENDURE_API_URL: string | undefined;
+
 const API_URL =
     typeof process !== 'undefined'
         ? process.env.VENDURE_API_URL ?? DEMO_API_URL
-        : DEMO_API_URL;
+        : VENDURE_API_URL ?? DEMO_API_URL;
 
 export interface QueryOptions {
     request: Request;
