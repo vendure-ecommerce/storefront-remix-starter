@@ -12,7 +12,6 @@ export function ChannelSwitcher({
 }) {
     return (
         <div className="flex items-center">
-            {activeChannelToken}
             <select
                 name="channel"
                 value={activeChannelToken}
