@@ -9,7 +9,12 @@ const handleRequest = createPagesFunctionHandler({
 
 export function onRequest(context) {
     return handleRequest(context).then((res) => {
-        res.headers.set('x-cf-context-env', JSON.stringify(context.env));
+        // This is here to debug whether our Cloudflare Pages env var is being picked up.
+        // Can be safely removed.
+        res.headers.set(
+            'x-cf-env-vendure-api-url',
+            JSON.stringify(context.env.VENDURE_API_URL),
+        );
         return res;
     });
 }
