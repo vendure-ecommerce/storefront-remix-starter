@@ -3,15 +3,10 @@ import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
-// If using Cloudflare Pages, "environment variables" are known as "bindings"
-// and if defined are made available as global variables.
-// See https://developers.cloudflare.com/workers/platform/environment-variables/#environmental-variables-with-module-workers
-declare const VENDURE_API_URL: string | undefined;
-
-const API_URL =
+let API_URL =
     typeof process !== 'undefined'
         ? process.env.VENDURE_API_URL ?? DEMO_API_URL
-        : VENDURE_API_URL ?? DEMO_API_URL;
+        : DEMO_API_URL;
 
 export interface QueryOptions {
     request: Request;
@@ -25,6 +20,19 @@ export interface GraphqlResponse<Response> {
 export type WithHeaders<T> = T & { _headers: Headers };
 
 const AUTH_TOKEN_SESSION_KEY = 'authToken';
+
+/**
+ * This function is used when running in Cloudflare Pages in order to set the API URL
+ * based on an environment variable. Env vars work differently in CF Pages and are not available
+ * on the `process` object (which does not exist). Instead, it needs to be accessed from the loader
+ * context, and if defined we use it here to set the API_URL var which will be used by the
+ * GraphQL calls.
+ *
+ * See https://developers.cloudflare.com/workers/platform/environment-variables/#environmental-variables-with-module-workers
+ */
+export function setApiUrl(apiUrl: string) {
+    API_URL = apiUrl;
+}
 
 async function sendQuery<Response, Variables = {}>(options: {
     query: string;
