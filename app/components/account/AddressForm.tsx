@@ -15,13 +15,13 @@ export function AddressForm({
             <div className="sm:col-span-2">
                 <label
                     htmlFor="fullName"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 required"
                 >
                     Full name
                 </label>
                 <div className="mt-1">
                     <input
-                        type="text"
+                        type="text" required
                         id="fullName"
                         name="fullName"
                         defaultValue={defaultFullName}
@@ -52,13 +52,13 @@ export function AddressForm({
             <div className="sm:col-span-2">
                 <label
                     htmlFor="streetLine1"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 required"
                 >
                     Address
                 </label>
                 <div className="mt-1">
                     <input
-                        type="text"
+                        type="text" required
                         name="streetLine1"
                         id="streetLine1"
                         defaultValue={address?.streetLine1 ?? ''}
@@ -89,13 +89,13 @@ export function AddressForm({
             <div>
                 <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 required"
                 >
                     City
                 </label>
                 <div className="mt-1">
                     <input
-                        type="text"
+                        type="text" required
                         name="city"
                         id="city"
                         autoComplete="address-level2"
@@ -108,7 +108,7 @@ export function AddressForm({
             <div>
                 <label
                     htmlFor="countryCode"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 required"
                 >
                     Country
                 </label>
@@ -152,13 +152,13 @@ export function AddressForm({
             <div>
                 <label
                     htmlFor="postalCode"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 required"
                 >
                     Postal code
                 </label>
                 <div className="mt-1">
                     <input
-                        type="text"
+                        type="text" required
                         name="postalCode"
                         id="postalCode"
                         defaultValue={address?.postalCode ?? ''}

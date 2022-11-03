@@ -177,12 +177,12 @@ export default function CheckoutShipping() {
                         <div className="mt-4">
                             <label
                                 htmlFor="emailAddress"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 required"
                             >
                                 Email address
                             </label>
                             <div className="mt-1">
-                                <input
+                                <input required
                                     type="email"
                                     id="emailAddress"
                                     name="emailAddress"
@@ -205,7 +205,7 @@ export default function CheckoutShipping() {
                             <div>
                                 <label
                                     htmlFor="firstName"
-                                    className="block text-sm font-medium text-gray-700"
+                                    className="block text-sm font-medium text-gray-700 required"
                                 >
                                     First name
                                 </label>
@@ -224,7 +224,7 @@ export default function CheckoutShipping() {
                             <div>
                                 <label
                                     htmlFor="lastName"
-                                    className="block text-sm font-medium text-gray-700"
+                                    className="block text-sm font-medium text-gray-700 required"
                                 >
                                     Last name
                                 </label>
@@ -279,6 +279,8 @@ export default function CheckoutShipping() {
                 )}
             </Form>
 
+            
+
             <div className="mt-10 border-t border-gray-200 pt-10">
                 <ShippingMethodSelector
                     eligibleShippingMethods={eligibleShippingMethods}
@@ -298,7 +300,7 @@ export default function CheckoutShipping() {
                     canProceedToPayment
                         ? 'bg-primary-600 hover:bg-primary-700'
                         : 'bg-gray-400',
-                    'flex w-full items-center justify-center space-x-2 mt-24 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+                    'flex w-full items-center justify-center space-x-2 mt-12 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
                 )}
             >
                 <LockClosedIcon className="w-5 h-5"></LockClosedIcon>

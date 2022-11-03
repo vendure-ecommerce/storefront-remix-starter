@@ -9,6 +9,7 @@ import {
     useLoaderData,
 } from '@remix-run/react';
 import styles from './styles/app.css';
+import customStyles from './styles/custom.css';
 import { Header } from './components/header/Header';
 import {
     DataFunctionArgs,
@@ -29,7 +30,7 @@ export const meta: MetaFunction = () => {
 };
 
 export function links() {
-    return [{ rel: 'stylesheet', href: styles }];
+    return [{ rel: 'stylesheet', href: styles }, { rel: 'stylesheet', href: customStyles }];
 }
 
 const devMode =
@@ -64,9 +65,7 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
-    request.headers.set("vendure-token", ""); //Load collections from default channel
     const collections = await getCollections(request); 
-    request.headers.delete("vendure-token");
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
     );
