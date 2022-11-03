@@ -25,6 +25,7 @@ import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
+import { VatInfo } from '~/components/VatInfo';
 
 export const meta: MetaFunction = ({ data }) => {
     return {
@@ -158,7 +159,7 @@ export default function ProductSlug() {
                             <h3 className="sr-only">Description</h3>
 
                             <div
-                                className="text-base text-gray-700"
+                                className="text-base text-gray-700 product_description"
                                 dangerouslySetInnerHTML={{
                                     __html: product.description,
                                 }}
@@ -270,9 +271,7 @@ export default function ProductSlug() {
                                 </div>
                             </div>
                             <div className="mt-2 flex items-center space-x-2">
-                                <span className="text-gray-500">
-                                    Incl. {selectedVariant?.taxRateApplied.value}% VAT
-                                </span>
+                                <VatInfo percentage={selectedVariant?.taxRateApplied.value ?? 0}/>
                             </div>
                             <div className="mt-2 flex items-center space-x-2">
                                 <span className="text-gray-500">

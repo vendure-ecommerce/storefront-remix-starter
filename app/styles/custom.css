@@ -1,4 +1,39 @@
 .required:after {
     content:" *";
-    color: red;
+    color: rgb(213, 0, 0);
+}
+
+.product_description table{
+    width: 100%;
+    border-width: 1px;
+    table-layout: fixed;
+}
+
+.product_description th, .product_description td{
+    border-width: 1px;
+    padding: 5px;
+}
+
+.product_description ul{
+    list-style:inherit;
+    list-style-position: inside;
+}
+
+.product_description ul li ul{
+    padding-left: 1.5em;
+}
+
+.product_description li p{
+    display: inline;
+}
+
+.product_description a{
+    display: inline-block;
+    margin: 5px 0;
+    color: rgb(2 132 199);;
+    font-weight: bold;
+}
+
+.product_description a:hover{
+    color: rgb(0, 82, 123);
 }

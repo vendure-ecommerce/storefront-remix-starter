@@ -1,6 +1,7 @@
 import { Price } from '~/components/products/Price';
 import * as React from 'react';
 import { OrderDetailFragment } from '~/generated/graphql';
+import { VatInfo } from '../VatInfo';
 
 export function CartTotals({ order }: { order?: OrderDetailFragment | null }) {
     return (

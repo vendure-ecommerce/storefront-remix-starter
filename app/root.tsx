@@ -24,6 +24,7 @@ import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
+import { sessionStorage } from './sessions';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE, description: APP_META_DESCRIPTION };
@@ -62,6 +63,7 @@ export type RootLoaderData = {
     activeCustomer: Awaited<ReturnType<typeof getActiveCustomer>>;
     activeChannel: Awaited<ReturnType<typeof activeChannel>>;
     collections: Awaited<ReturnType<typeof getCollections>>;
+    sessionChannelChanged: boolean;
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
@@ -70,8 +72,15 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
         (collection) => collection.parent?.name === '__root_collection__',
     );
     const activeCustomer = await getActiveCustomer({ request });
+
+    const session = await sessionStorage.getSession(
+        request.headers.get('Cookie'),
+    );
+    const sessionChannel = session.get("channel");
+
     const loaderData: RootLoaderData = {
         activeCustomer,
+        sessionChannelChanged: sessionChannel != null,
         activeChannel: await activeChannel({ request }),
         collections: topLevelCollections,
     };
@@ -99,6 +108,22 @@ export default function App() {
         // of the activeOrder as the user may have signed in or out. 
         refresh();
     }, [loaderData]);
+
+    //Set used channel automatically
+    useEffect(() => {
+        if(!loaderData.sessionChannelChanged){
+            fetch('https://ipapi.co/json/')
+            .then( res => res.json<{country: string, in_eu: boolean}>())
+            .then(response => {
+             if(response.in_eu){
+                switchChannel("eu");
+             }
+           })
+           .catch((data) => {
+             console.error('Request failed:', data);
+           });
+        }       
+     },[])
 
     return (
         <html lang="en" id="app">
