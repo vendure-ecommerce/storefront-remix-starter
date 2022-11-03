@@ -65,7 +65,8 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
-    if (context.VENDURE_API_URL) {
+    if (typeof context.VENDURE_API_URL === 'string') {
+        // Set the API URL for Cloudflare Pages
         setApiUrl(context.VENDURE_API_URL);
     }
     const collections = await getCollections(request);
