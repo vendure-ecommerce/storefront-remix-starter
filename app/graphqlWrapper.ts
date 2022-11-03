@@ -43,10 +43,18 @@ async function sendQuery<Response, Variables = {}>(options: {
             headers.append('Authorization', `Bearer ${token}`);
         }
 
-        const channel = session.get("channel");
-        if(channel && channel == "eu"){
-            headers.append("vendure-token", channel)
+        console.log("WTFFFFF"+ req?.headers.has("vendure-token"));
+
+        //use channel token from override
+        if(req?.headers.has("vendure-token")){
+            headers.append("vendure-token", req.headers.get("vendure-token")!);
         }
+        else{
+            const channel = session.get("channel");
+            if(channel){
+                headers.append("vendure-token", channel)
+            }
+        }   
     }
 
     return fetch(API_URL, {

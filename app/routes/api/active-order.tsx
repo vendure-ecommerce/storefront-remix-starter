@@ -160,29 +160,28 @@ export async function action({ request, params }: DataFunctionArgs) {
 
             session.flash('channel', channel);
 
-            const ac = await getActiveOrder({request});
+            const order = await getActiveOrder({ request });
 
-            //Remove all order lines and add them again
-            if(ac){
-                for(let i = 0; i < ac.lines.length; i++){
-                    const result = await removeOrderLine(ac.lines[i].id, {
-                        request,
-                    });
-                    if(result.removeOrderLine.__typename === "Order"){
-                        activeOrder = result.removeOrderLine;
-                    }
-                    else break;
-                }
-                for(let i = 0; i < ac.lines.length; i++){
-                    const result = await addItemToOrder(ac.lines[i].productVariant.id, ac.lines[i].quantity, {
-                        request,
-                    });
-                    if(result.addItemToOrder.__typename === "Order"){
-                        activeOrder = result.addItemToOrder;
-                    }
-                    else break;
+            //Cancel order
+            const result = await transitionOrderToState('Cancelled', { request });
+            activeOrder = result.transitionOrderToState?.__typename === "Order" ? result.transitionOrderToState : activeOrder;
+
+            request.headers.set('vendure-token', channel?.toString() ?? '');
+
+            if (order) {
+                //Add all items again
+                for (let i = 0; i < order!.lines.length; i++) {
+                    const addResult = await addItemToOrder(
+                        order!.lines[i].productVariant.id,
+                        order!.lines[i].quantity,
+                        { request },
+                    );
+                    activeOrder = addResult.addItemToOrder?.__typename === "Order" ? addResult.addItemToOrder : activeOrder;
                 }
             }
+
+            request.headers.delete('vendure-token');
+
             break;
         }
         default:
@@ -193,8 +192,6 @@ export async function action({ request, params }: DataFunctionArgs) {
     headers = {
         'Set-Cookie': await sessionStorage.commitSession(session),
     };
-
-    console.log("HUREN" + activeOrder?.lines.length);
 
     return json(
         { activeOrder: activeOrder || (await getActiveOrder({ request })) },
