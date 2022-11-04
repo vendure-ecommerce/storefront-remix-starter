@@ -31,7 +31,10 @@ export const meta: MetaFunction = () => {
 };
 
 export function links() {
-    return [{ rel: 'stylesheet', href: styles }, { rel: 'stylesheet', href: customStyles }];
+    return [
+        { rel: 'stylesheet', href: styles },
+        { rel: 'stylesheet', href: customStyles },
+    ];
 }
 
 const devMode =
@@ -67,7 +70,7 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
-    const collections = await getCollections(request); 
+    const collections = await getCollections(request);
     const topLevelCollections = collections.filter(
         (collection) => collection.parent?.name === '__root_collection__',
     );
@@ -76,7 +79,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
         request.headers.get('Cookie'),
     );
-    const sessionChannel = session.get("channel");
+    const sessionChannel = session.get('channel');
 
     const loaderData: RootLoaderData = {
         activeCustomer,
@@ -91,7 +94,9 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
 export default function App() {
     const [open, setOpen] = useState(false);
     const loaderData = useLoaderData<RootLoaderData>();
-    const [activeChannelToken, setActiveChannelToken] = useState(loaderData.activeChannel.token);
+    const [activeChannelToken, setActiveChannelToken] = useState(
+        loaderData.activeChannel.token,
+    );
 
     const { collections } = loaderData;
     const {
@@ -105,25 +110,25 @@ export default function App() {
 
     useEffect(() => {
         // When the loader has run, this implies we should refresh the contents
-        // of the activeOrder as the user may have signed in or out. 
+        // of the activeOrder as the user may have signed in or out.
         refresh();
     }, [loaderData]);
 
     //Set used channel automatically
     useEffect(() => {
-        if(!loaderData.sessionChannelChanged){
+        if (!loaderData.sessionChannelChanged) {
             fetch('https://ipapi.co/json/')
-            .then( res => res.json<{country: string, in_eu: boolean}>())
-            .then(response => {
-             if(response.in_eu){
-                switchChannel("eu");
-             }
-           })
-           .catch((data) => {
-             console.error('Request failed:', data);
-           });
-        }       
-     },[])
+                .then((res) => res.json<{ country: string; in_eu: boolean }>())
+                .then((response) => {
+                    if (response.in_eu) {
+                        switchChannel('eu');
+                    }
+                })
+                .catch((data) => {
+                    console.error('Request failed:', data);
+                });
+        }
+    }, []);
 
     return (
         <html lang="en" id="app">
@@ -138,7 +143,9 @@ export default function App() {
                 <Links />
             </head>
             <body>
-                <Header switchChannel={switchChannel} activeChannelToken={activeChannelToken}
+                <Header
+                    switchChannel={switchChannel}
+                    activeChannelToken={activeChannelToken}
                     onCartIconClick={() => setOpen(!open)}
                     cartQuantity={activeOrder?.totalQuantity ?? 0}
                 />
@@ -149,7 +156,7 @@ export default function App() {
                             activeOrder,
                             adjustOrderLine,
                             removeItem,
-                            switchChannel
+                            switchChannel,
                         }}
                     />
                 </main>
