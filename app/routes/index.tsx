@@ -108,13 +108,12 @@ export default function Index() {
                         <h1 className="font-bold text-6xl text-white bg-clip-text tracking-normal lg:text-6xl">
                             <div className="flex items-center gap-x-3">
                                 <p>VHDPlus Shop</p>
-                                <ShoppingCartIcon className="h-14 hidden md:block" />
                             </div>
                         </h1>
                     </div>
 
                     <p className="mt-4 text-2xl text-white">
-                        High quality hardware and software developed with ❤️ in Germany
+                        High quality hardware and software developed in Germany
                     </p>
                 </div>
             </div>
