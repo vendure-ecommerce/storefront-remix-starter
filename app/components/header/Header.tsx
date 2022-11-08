@@ -32,26 +32,25 @@ export function Header({
         >
             <div className="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-2 px-2 xl:px-0">
                 <div className="max-w-7xl mx-2 md:mx-auto flex items-center justify-between">
-                    <div>
-                        <p className="hidden sm:block">
-                            LIMITED OFFER: 10% discount on all {' '}
+                    <div className="hidden sm:block">
+                        <p>
+                            <span>Yes, we ship <span className="font-bold">WORLDWIDE!</span> </span>
                             <a
-                                href="https://github.com/vendure-ecommerce/storefront-remix-starter"
-                                target="_blank"
+                                href="/taxes-shipping"
                                 className="underline"
                             >
-                                MAX1000
+                                Taxes and Shipping
                             </a>
-                            {' '} Boards
+                            {' '}
                         </p>
                     </div>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 justify-between grow sm:grow-0">
                         <ChannelSwitcher switchChannel={switchChannel} activeChannelToken={activeChannelToken}/>
                         <Link
                             to={isSignedIn ? '/account' : '/sign-in'}
                             className="flex space-x-1"
                         >
-                            <UserIcon className="w-4 h-4"></UserIcon>
+                            <UserIcon className="w-4"></UserIcon>
                             <span>{isSignedIn ? 'My Account' : 'Sign In'}</span>
                         </Link>
                     </div>
