@@ -4,6 +4,7 @@ import {
     getActiveOrder,
     removeOrderLine,
     setCustomerForOrder,
+    setOrderBillingAddress,
     setOrderShippingAddress,
     setOrderShippingMethod,
 } from '~/providers/orders/order';
@@ -22,6 +23,7 @@ import {
     getNextOrderStates,
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
+import { getActiveCustomer } from '~/providers/customer/customer';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
@@ -35,10 +37,7 @@ export async function action({ request, params }: DataFunctionArgs) {
     const body = await request.formData();
     const formAction = body.get('action');
     let activeOrder: OrderDetailFragment | undefined = undefined;
-    let error: ErrorResult = {
-        errorCode: ErrorCode.NoActiveOrderError,
-        message: '',
-    };
+    let error: ErrorResult | undefined;
 
     let headers: ResponseInit['headers'] = {};
     const session = await sessionStorage.getSession(
@@ -48,50 +47,76 @@ export async function action({ request, params }: DataFunctionArgs) {
     switch (formAction) {
         case 'setCheckoutShipping':
             if (shippingFormDataIsValid(body)) {
-                const shippingFormData = Object.fromEntries<any>(
+
+                const formData = Object.fromEntries<any>(
                     body.entries(),
-                ) as CreateAddressInput;
-                const result = await setOrderShippingAddress(
+                );
+
+                const activeCustomerResult = await getActiveCustomer({request});
+
+                const setCustomerForOrderResult = await setCustomerForOrder(
                     {
-                        city: shippingFormData.city,
-                        company: shippingFormData.company,
-                        countryCode: shippingFormData.countryCode,
-                        customFields: shippingFormData.customFields,
-                        fullName: shippingFormData.fullName,
-                        phoneNumber: shippingFormData.phoneNumber,
-                        postalCode: shippingFormData.postalCode,
-                        province: shippingFormData.province,
-                        streetLine1: shippingFormData.streetLine1,
-                        streetLine2: shippingFormData.streetLine2,
+                        emailAddress: formData.emailAddress,
+                        firstName: formData.billing_firstName,
+                        lastName: formData.billing_lastName,
                     },
                     { request },
                 );
-                if (result.setOrderShippingAddress.__typename === 'Order') {
-                    activeOrder = result.setOrderShippingAddress;
+                if (setCustomerForOrderResult.setCustomerForOrder.__typename === 'Order') {
+                    activeOrder = setCustomerForOrderResult.setCustomerForOrder;
                 } else {
-                    error = result.setOrderShippingAddress;
+                    error = setCustomerForOrderResult.setCustomerForOrder;
+                    break;
+                }  
+                let billingAddr = {
+                    city: formData.billing_city,
+                    company: formData.billing_company,
+                    countryCode: formData.billing_countryCode,
+                    customFields: formData.billing_customFields,
+                    fullName: formData.billing_firstName + " " + formData.billing_lastName,
+                    phoneNumber: formData.billing_phoneNumber,
+                    postalCode: formData.billing_postalCode,
+                    province: formData.billing_province,
+                    streetLine1: formData.billing_streetLine1,
+                    streetLine2: formData.billing_streetLine2,
+                };
+
+                const resultSetBilling = await setOrderBillingAddress(billingAddr, { request } );
+
+                if (resultSetBilling.setOrderBillingAddress.__typename === 'Order') {
+                    activeOrder = resultSetBilling.setOrderBillingAddress;
+                } else {
+                    error = resultSetBilling.setOrderBillingAddress;
+                    break;
                 }
+
+                const resultSetShipping = await setOrderShippingAddress(
+                    formData.useDifferentShippingAdress ?
+                    {
+                        city: formData.shipping_city,
+                        company: formData.shipping_company,
+                        countryCode: formData.shipping_countryCode,
+                        customFields:
+                        formData.shipping_customFields,
+                        fullName: formData.shipping_firstName + " " + formData.shipping_lastName,
+                        phoneNumber: formData.shipping_phoneNumber,
+                        postalCode: formData.shipping_postalCode,
+                        province: formData.shipping_province,
+                        streetLine1: formData.shipping_streetLine1,
+                        streetLine2: formData.shipping_streetLine2,
+                    } : billingAddr,
+                    { request },
+                );
+
+                if (resultSetShipping.setOrderShippingAddress.__typename === 'Order') {
+                    activeOrder = resultSetShipping.setOrderShippingAddress;
+                } else {
+                    error = resultSetShipping.setOrderShippingAddress;
+                    break;
+                }
+                
             }
             break;
-        case 'setOrderCustomer': {
-            const customerData = Object.fromEntries<any>(
-                body.entries(),
-            ) as CreateCustomerInput;
-            const result = await setCustomerForOrder(
-                {
-                    emailAddress: customerData.emailAddress,
-                    firstName: customerData.firstName,
-                    lastName: customerData.lastName,
-                },
-                { request },
-            );
-            if (result.setCustomerForOrder.__typename === 'Order') {
-                activeOrder = result.setCustomerForOrder;
-            } else {
-                error = result.setCustomerForOrder;
-            }
-            break;
-        }
         case 'setShippingMethod': {
             const shippingMethodId = body.get('shippingMethodId');
             if (typeof shippingMethodId === 'string') {
@@ -163,8 +188,13 @@ export async function action({ request, params }: DataFunctionArgs) {
             const order = await getActiveOrder({ request });
 
             //Cancel order
-            const result = await transitionOrderToState('Cancelled', { request });
-            activeOrder = result.transitionOrderToState?.__typename === "Order" ? result.transitionOrderToState : activeOrder;
+            const result = await transitionOrderToState('Cancelled', {
+                request,
+            });
+            activeOrder =
+                result.transitionOrderToState?.__typename === 'Order'
+                    ? result.transitionOrderToState
+                    : activeOrder;
 
             request.headers.set('vendure-token', channel?.toString() ?? '');
 
@@ -176,7 +206,10 @@ export async function action({ request, params }: DataFunctionArgs) {
                         order!.lines[i].quantity,
                         { request },
                     );
-                    activeOrder = addResult.addItemToOrder?.__typename === "Order" ? addResult.addItemToOrder : activeOrder;
+                    activeOrder =
+                        addResult.addItemToOrder?.__typename === 'Order'
+                            ? addResult.addItemToOrder
+                            : activeOrder;
                 }
             }
 

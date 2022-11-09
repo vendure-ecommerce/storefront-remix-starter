@@ -1128,7 +1128,7 @@ type FloatCustomFieldConfig implements CustomField {
 
 type Fulfillment implements Node {
   createdAt: DateTime!
-  customFields: JSON
+  customFields: FulfillmentCustomFields
   id: ID!
   method: String!
   orderItems: [OrderItem!]!
@@ -1136,6 +1136,10 @@ type Fulfillment implements Node {
   summary: [FulfillmentLineSummary!]!
   trackingCode: String
   updatedAt: DateTime!
+}
+
+type FulfillmentCustomFields {
+  labelUrl: String
 }
 
 type FulfillmentLineSummary {
@@ -2026,7 +2030,7 @@ type Order implements Node {
   couponCodes: [String!]!
   createdAt: DateTime!
   currencyCode: CurrencyCode!
-  customFields: JSON
+  customFields: OrderCustomFields
   customer: Customer
   discounts: [Discount!]!
   fulfillments: [Fulfillment!]
@@ -2098,12 +2102,17 @@ type OrderAddress {
   streetLine2: String
 }
 
+type OrderCustomFields {
+  lexofficeInvoiceCode: String
+}
+
 input OrderFilterParameter {
   active: BooleanOperators
   code: StringOperators
   createdAt: DateOperators
   currencyCode: StringOperators
   id: IDOperators
+  lexofficeInvoiceCode: StringOperators
   orderPlacedAt: DateOperators
   shipping: NumberOperators
   shippingWithTax: NumberOperators
@@ -2289,6 +2298,7 @@ input OrderSortParameter {
   code: SortOrder
   createdAt: SortOrder
   id: SortOrder
+  lexofficeInvoiceCode: SortOrder
   orderPlacedAt: SortOrder
   shipping: SortOrder
   shippingWithTax: SortOrder
@@ -2877,6 +2887,7 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
+  hsCode: String
   weight: Float
   weightUoM: String
 }
@@ -2884,6 +2895,7 @@ type ProductVariantCustomFields {
 input ProductVariantFilterParameter {
   createdAt: DateOperators
   currencyCode: StringOperators
+  hsCode: StringOperators
   id: IDOperators
   languageCode: StringOperators
   name: StringOperators
@@ -2923,6 +2935,7 @@ input ProductVariantListOptions {
 
 input ProductVariantSortParameter {
   createdAt: SortOrder
+  hsCode: SortOrder
   id: SortOrder
   name: SortOrder
   price: SortOrder
@@ -3381,8 +3394,12 @@ input UpdateCustomerInput {
 
 union UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | PasswordValidationError | Success
 
+input UpdateOrderCustomFieldsInput {
+  lexofficeInvoiceCode: String
+}
+
 input UpdateOrderInput {
-  customFields: JSON
+  customFields: UpdateOrderCustomFieldsInput
 }
 
 union UpdateOrderItemsResult = InsufficientStockError | NegativeQuantityError | Order | OrderLimitError | OrderModificationError

@@ -47,6 +47,13 @@ export function setCustomerForOrder(
     return sdk.setCustomerForOrder({ input }, options);
 }
 
+export function setOrderBillingAddress(
+    input: CreateAddressInput,
+    options: QueryOptions,
+) {
+    return sdk.setOrderBillingAddress({ input }, options);
+}
+
 export function setOrderShippingAddress(
     input: CreateAddressInput,
     options: QueryOptions,
@@ -64,6 +71,18 @@ export function setOrderShippingMethod(
 gql`
     mutation setCustomerForOrder($input: CreateCustomerInput!) {
         setCustomerForOrder(input: $input) {
+            ...OrderDetail
+            ... on ErrorResult {
+                errorCode
+                message
+            }
+        }
+    }
+`;
+
+gql`
+    mutation setOrderBillingAddress($input: CreateAddressInput!) {
+        setOrderBillingAddress(input: $input) {
             ...OrderDetail
             ... on ErrorResult {
                 errorCode
@@ -181,7 +200,16 @@ gql`
             province
             postalCode
             countryCode
-            phoneNumber
+        }
+        billingAddress {
+            fullName
+            streetLine1
+            streetLine2
+            company
+            city
+            province
+            postalCode
+            countryCode
         }
         shippingLines {
             shippingMethod {

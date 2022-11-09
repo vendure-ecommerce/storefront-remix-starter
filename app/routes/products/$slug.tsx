@@ -23,7 +23,6 @@ import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
-import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 import { VatInfo } from '~/components/VatInfo';
 
@@ -293,14 +292,14 @@ export default function ProductSlug() {
                                 </h3>
                                 <div className="text-gray-500 space-y-1">
                                     <p>
-                                        Standard shipping: 3 - 5 working days.
-                                        Express shipping: 1 - 3 working days.
-                                    </p>
-                                    <p>
                                         Shipping costs depend on delivery
                                         address and will be calculated during
-                                        checkout.
+                                        checkout.<br/> <a className='underline' href='/taxes-shipping'>Estimate on shipping costs and delievery times</a> 
                                     </p>
+                                    {selectedVariant?.taxRateApplied.value == 0 ? (<p> Local taxes and customs duties usually apply and are
+                    added once your shipment reaches its destination. Please see
+                    your local authorities for more information.</p>
+                                    ) : ""}
                                     <p>
                                         Returns are subject to terms. Please see
                                         the{' '}
@@ -314,9 +313,6 @@ export default function ProductSlug() {
                         </activeOrderFetcher.Form>
                     </div>
                 </div>
-            </div>
-            <div className="mt-24">
-                <TopReviews></TopReviews>
             </div>
         </div>
     );

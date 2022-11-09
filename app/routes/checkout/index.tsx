@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FormEvent, useState } from 'react';
-import { LockClosedIcon } from '@heroicons/react/solid';
+import { FormEvent, useEffect, useState } from 'react';
+import { LockClosedIcon, XCircleIcon } from '@heroicons/react/solid';
 import {
     Form,
     useLoaderData,
@@ -19,8 +19,6 @@ import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
-import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
-import { RootLoaderData } from '~/root';
 import { activeChannel } from '~/providers/channel/channel';
 
 export async function loader({ params, request }: DataFunctionArgs) {
@@ -34,7 +32,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     const { activeCustomer } = await getActiveCustomerAddresses({ request });
     const error = session.get('activeOrderError');
     const currentChannel = await activeChannel({ request });
-    return { 
+    return {
         availableCountries,
         eligibleShippingMethods,
         activeCustomer,
@@ -53,80 +51,51 @@ export default function CheckoutShipping() {
     } = useLoaderData<typeof loader>();
     const { activeOrderFetcher, activeOrder, switchChannel } =
         useOutletContext<OutletContext>();
-    const [customerFormChanged, setCustomerFormChanged] = useState(false);
-    const [addressFormChanged, setAddressFormChanged] = useState(false);
-    const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+    const [useDifferentShippingAdress, setUseDifferentShippingAdress] =
+        useState(false);
     let navigate = useNavigate();
 
-    const { customer, shippingAddress } = activeOrder ?? {};
+    const { customer, shippingAddress, billingAddress } = activeOrder ?? {};
     const isSignedIn = !!activeCustomer?.id;
     const addresses = activeCustomer?.addresses ?? [];
     const defaultFullName =
-        shippingAddress?.fullName ??
+        billingAddress?.fullName ??
         (customer ? `${customer.firstName} ${customer.lastName}` : ``);
+
     const canProceedToPayment =
-        customer &&
-        ((shippingAddress?.streetLine1 && shippingAddress?.postalCode) ||
-            selectedAddressIndex != null) &&
+        !error &&
+        billingAddress?.streetLine1 &&
+        billingAddress?.postalCode &&
+        (!useDifferentShippingAdress ||
+            (shippingAddress?.streetLine1 && shippingAddress.postalCode)) &&
         activeOrder?.shippingLines?.length;
 
-    const submitCustomerForm = (event: FormEvent<HTMLFormElement>) => {
-        const formData = new FormData(event.currentTarget);
-        const { emailAddress, firstName, lastName } = Object.fromEntries<any>(
-            formData.entries(),
-        );
-        const isValid = event.currentTarget.checkValidity();
-        if (
-            customerFormChanged &&
-            isValid &&
-            emailAddress &&
-            firstName &&
-            lastName
-        ) {
-            activeOrderFetcher.submit(formData, {
-                method: 'post',
-                action: '/api/active-order',
-            });
-            setCustomerFormChanged(false);
-        }
-    };
+    useEffect(() => {
+        if (error) console.log(error);
+    });
+
     const submitAddressForm = (event: FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
         const isValid = event.currentTarget.checkValidity();
         if (isValid) {
-            setShippingAddress(formData);
-        }
-    };
-    const submitSelectedAddress = (index: number) => {
-        const selectedAddress = activeCustomer?.addresses?.[index];
-        if (selectedAddress) {
-            setSelectedAddressIndex(index);
-            const formData = new FormData();
-            Object.keys(selectedAddress).forEach((key) =>
-                formData.append(key, (selectedAddress as any)[key]),
-            );
-            formData.append('countryCode', selectedAddress.country.code);
-            formData.append('action', 'setCheckoutShipping');
-            setShippingAddress(formData);
-        }
-    };
+            if (shippingFormDataIsValid(formData)) {
+                activeOrderFetcher.submit(formData, {
+                    method: 'post',
+                    action: '/api/active-order',
+                });
 
-    function setShippingAddress(formData: FormData) {
-        if (shippingFormDataIsValid(formData)) {
-            activeOrderFetcher.submit(formData, {
-                method: 'post',
-                action: '/api/active-order',
-            });
-
-            const country = formData.get("countryCode");
-            if(country == "DE" && currentChannel?.currencyCode != "EUR"){
-                switchChannel("eu");
-            }else if(country == "US" && currentChannel?.currencyCode != "USD"){
-                switchChannel("default");
+                const country = formData.get('billing_countryCode');
+                if (country == 'DE' && currentChannel?.currencyCode != 'EUR') {
+                    switchChannel('eu');
+                } else if (
+                    country == 'US' &&
+                    currentChannel?.currencyCode != 'USD'
+                ) {
+                    switchChannel('row');
+                }
             }
-            setAddressFormChanged(false);
         }
-    }
+    };
 
     const submitSelectedShippingMethod = (value?: string) => {
         if (value) {
@@ -149,139 +118,121 @@ export default function CheckoutShipping() {
 
     return (
         <div>
-            <div>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Contact information
-                </h2>
-
-                {isSignedIn ? (
-                    <div>
-                        <p className="mt-2 text-gray-600">
-                            {customer?.firstName} {customer?.lastName}
-                        </p>
-                        <p>{customer?.emailAddress}</p>
-                    </div>
-                ) : (
-                    <Form
-                        method="post"
-                        action="/api/active-order"
-                        onBlur={submitCustomerForm}
-                        onChange={() => setCustomerFormChanged(true)}
-                        hidden={isSignedIn}
-                    >
-                        <input
-                            type="hidden"
-                            name="action"
-                            value="setOrderCustomer"
-                        />
-                        <div className="mt-4">
-                            <label
-                                htmlFor="emailAddress"
-                                className="block text-sm font-medium text-gray-700 required"
-                            >
-                                Email address
-                            </label>
-                            <div className="mt-1">
-                                <input required
-                                    type="email"
-                                    id="emailAddress"
-                                    name="emailAddress"
-                                    autoComplete="email"
-                                    defaultValue={customer?.emailAddress}
-                                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                />
-                            </div>
-                            {error?.errorCode ===
-                                'EMAIL_ADDRESS_CONFLICT_ERROR' && (
-                                <p
-                                    className="mt-2 text-sm text-red-600"
-                                    id="email-error"
-                                >
-                                    {error.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                            <div>
-                                <label
-                                    htmlFor="firstName"
-                                    className="block text-sm font-medium text-gray-700 required"
-                                >
-                                    First name
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        type="text"
-                                        id="firstName"
-                                        name="firstName"
-                                        autoComplete="given-name"
-                                        defaultValue={customer?.firstName}
-                                        className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="lastName"
-                                    className="block text-sm font-medium text-gray-700 required"
-                                >
-                                    Last name
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        type="text"
-                                        id="lastName"
-                                        name="lastName"
-                                        autoComplete="family-name"
-                                        defaultValue={customer?.lastName}
-                                        className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </Form>
-                )}
-            </div>
-
             <Form
                 method="post"
                 action="/api/active-order"
                 onBlur={submitAddressForm}
-                onChange={() => setAddressFormChanged(true)}
             >
                 <input
                     type="hidden"
                     name="action"
                     value="setCheckoutShipping"
                 />
-                <div className="mt-10 border-t border-gray-200 pt-10">
+                <div>
                     <h2 className="text-lg font-medium text-gray-900">
                         Billing information
                     </h2>
                 </div>
-                {isSignedIn && activeCustomer.addresses?.length ? (
-                    <div>
-                        <ShippingAddressSelector
-                            addresses={activeCustomer.addresses}
-                            selectedAddressIndex={selectedAddressIndex}
-                            onChange={submitSelectedAddress}
+
+                <div className="sm:col-span-2 mt-4">
+                    <label
+                        htmlFor="emailAddress"
+                        className={
+                            'block text-sm font-medium text-gray-700 required'
+                        }
+                    >
+                        Email-Address
+                    </label>
+                    <div className="mt-1">
+                        <input
+                            type="email"
+                            required
+                            name="emailAddress"
+                            id="emailAddress"
+                            defaultValue={customer?.emailAddress ?? ''}
+                            className={classNames(
+                                'block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm',
+                                error?.errorCode ==
+                                    'EMAIL_ADDRESS_CONFLICT_ERROR'
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            )}
                         />
                     </div>
-                ) : (
-                    <AddressForm
-                        availableCountries={
-                            activeOrder ? availableCountries : undefined
+                </div>
+
+                <AddressForm
+                    defaultFirstName={customer?.firstName}
+                    defaultLastName={customer?.lastName}
+                    prefix="billing_"
+                    availableCountries={
+                        activeOrder ? availableCountries : undefined
+                    }
+                    address={billingAddress}
+                ></AddressForm>
+
+                <div className="sm:col-span-2 flex space-x-2 flex-row my-5 items-center">
+                    <input
+                        type="checkbox"
+                        onChange={(x) =>
+                            setUseDifferentShippingAdress(
+                                !useDifferentShippingAdress,
+                            )
                         }
-                        address={shippingAddress}
-                        defaultFullName={defaultFullName}
-                    ></AddressForm>
+                        checked={useDifferentShippingAdress}
+                        name="useDifferentShippingAdress"
+                        className="checked:bg-blue-500 rounded border-gray-300"
+                    />
+                    <label
+                        htmlFor="useDifferentShippingAdress"
+                        className="block text-md font-medium text-gray-700"
+                    >
+                        Ship to a different address?
+                    </label>
+                </div>
+
+                {useDifferentShippingAdress ? (
+                    <div>
+                        <h2 className="text-lg font-medium text-gray-900">
+                            Shipping information
+                        </h2>
+                        <AddressForm
+                            prefix="shipping_"
+                            availableCountries={
+                                activeOrder ? availableCountries : undefined
+                            }
+                            address={shippingAddress}
+                        ></AddressForm>
+                    </div>
+                ) : (
+                    ''
                 )}
             </Form>
 
-            
-
-            <div className="mt-10 border-t border-gray-200 pt-10">
+            <div className="border-t border-gray-200">
+                {error ? (
+                    <div className="my-5 rounded-md bg-red-50 p-4">
+                        <div className="flex">
+                                        <div className="flex-shrink-0">
+                                            <XCircleIcon
+                                                className="h-5 w-5 text-red-400"
+                                                aria-hidden="true"
+                                            />
+                                        </div>
+                                        <div className="ml-3">
+                                            <h3 className="text-sm font-medium text-red-800">
+                                                {error.message}
+                                            </h3>
+                                            <p className="text-sm text-red-700 mt-2">
+                                                {error.errorCode}
+                                            </p>
+                                        </div>
+                                    </div>
+                    </div>
+                ) : (
+                    ''
+                )}
+                <div className='mt-5'>
                 <ShippingMethodSelector
                     eligibleShippingMethods={eligibleShippingMethods}
                     currencyCode={activeOrder?.currencyCode}
@@ -290,6 +241,7 @@ export default function CheckoutShipping() {
                     }
                     onChange={submitSelectedShippingMethod}
                 />
+                </div>
             </div>
 
             <button
@@ -300,7 +252,7 @@ export default function CheckoutShipping() {
                     canProceedToPayment
                         ? 'bg-primary-600 hover:bg-primary-700'
                         : 'bg-gray-400',
-                    'flex w-full items-center justify-center space-x-2 mt-12 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+                    'flex w-full items-center justify-center space-x-2 mt-10 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
                 )}
             >
                 <LockClosedIcon className="w-5 h-5"></LockClosedIcon>
