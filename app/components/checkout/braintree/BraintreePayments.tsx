@@ -54,7 +54,7 @@ export function BraintreeDropIn(props: {
                         container: '#braintree-drop-in-div',
                         paypal: {
                             flow: 'checkout',
-                            amount: fullAmount,
+                            amount: fullAmount / 100,
                             currency: currencyCode.toString(),
                         },
                     },
