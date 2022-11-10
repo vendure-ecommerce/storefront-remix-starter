@@ -9,8 +9,6 @@ import {
 } from '~/utils/registration-helper';
 
 export async function action({ params, request }: DataFunctionArgs) {
-    const apiUrl = process.env.VENDURE_API_URL;
-
     const body = await request.formData();
     const fieldErrors = validateRegistrationForm(body);
     if (Object.keys(fieldErrors).length !== 0) {

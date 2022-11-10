@@ -3,7 +3,7 @@ import { DocumentNode, print } from 'graphql';
 import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
-const API_URL = process.env.VENDURE_API_URL!;
+const API_URL = "https://vhdplus-shop-server-y33zah2pyq-ey.a.run.app/shop-api";
 
 export interface QueryOptions {
     request: Request;
