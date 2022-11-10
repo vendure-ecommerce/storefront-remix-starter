@@ -1,13 +1,9 @@
 import { useSearchParams } from '@remix-run/react';
 import { DocumentNode, print } from 'graphql';
-import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
 import { sessionStorage } from './sessions';
 
-const API_URL =
-    typeof process !== 'undefined'
-        ? process.env.VENDURE_API_URL ?? DEMO_API_URL
-        : DEMO_API_URL;
+const API_URL = process.env.VENDURE_API_URL!;
 
 export interface QueryOptions {
     request: Request;
