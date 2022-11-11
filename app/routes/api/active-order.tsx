@@ -220,12 +220,10 @@ export async function action({ request, params }: DataFunctionArgs) {
         default:
         // Don't do anything
     }
-
     session.flash('activeOrderError', error);
     headers = {
         'Set-Cookie': await sessionStorage.commitSession(session),
     };
-
     return json(
         { activeOrder: activeOrder || (await getActiveOrder({ request })) },
         {
