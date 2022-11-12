@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 COPY . .
 RUN npm ci
 RUN npm run build
+ENV NODE_ENV=production
 
 # PhantomJS fix https://github.com/bazelbuild/rules_closure/issues/351
 ENV OPENSSL_CONF=/dev/null

@@ -57,19 +57,18 @@ async function sendQuery<Response, Variables = {}>(options: {
         }
 
         //use channel token from override
-        if(req?.headers.has("vendure-token")){
-            headers.append("vendure-token", req.headers.get("vendure-token")!);
-        }
-        else{
-            const channel = session.get("channel");
-            if(channel){
-                headers.append("vendure-token", channel)
+        if (req?.headers.has('vendure-token')) {
+            headers.append('vendure-token', req.headers.get('vendure-token')!);
+        } else {
+            const channel = session.get('channel');
+            if (channel) {
+                headers.append('vendure-token', channel);
             }
-        }   
+        }
     }
 
     //Force to use Global token if noone is selected
-    if(!headers.has("vendure-token")) headers.set("vendure-token", "row");
+    if (!headers.has('vendure-token')) headers.set('vendure-token', 'row');
 
     return fetch(API_URL, {
         method: 'POST',

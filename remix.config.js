@@ -26,9 +26,19 @@ const devConfig = {
     ignoredRouteFiles: ['.*'],
 };
 
+/** @type {import('@remix-run/dev').AppConfig} */
+const dockerConfig = {
+    appDirectory: "app",
+    assetsBuildDirectory: "public/build",
+    ignoredRouteFiles: ["**/.*"],
+    publicPath: "/build/",
+    serverBuildPath: "build/index.js",
+    serverBuildTarget: "node-cjs",
+  };
+
 module.exports =
     process.env.NODE_ENV === 'development'
         ? devConfig
         : process.env.CF_PAGES
         ? cloudflarePagesConfig
-        : netlifyConfig;
+        : dockerConfig;
