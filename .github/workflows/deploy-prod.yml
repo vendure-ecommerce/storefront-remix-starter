@@ -38,4 +38,6 @@ jobs:
         with:
           project_id: vhdplus-shop
       - run: 'echo "$SECRET_VARS" > .env'
+        env:
+          SECRET_VARS: ${{secrets.ENV_PROD}}
       - run: ./deploy.sh vhdplus-shop-storefront 1G
