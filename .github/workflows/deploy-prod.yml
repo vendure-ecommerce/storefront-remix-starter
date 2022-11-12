@@ -1,0 +1,41 @@
+name: Deploy VHDPlus Storefront
+
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v3
+      - uses: google-github-actions/auth@v0
+        with:
+          project_id: vhdplus-shop
+          credentials_json: ${{ secrets.VHDPLUS_SHOP_GCLOUD_KEY }}
+      - uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          project_id: vhdplus-shop
+      - name: Build Docker container
+        run: ./build-docker.sh
+
+  deploy:
+    name: Deploying
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v3
+      - uses: google-github-actions/auth@v0
+        with:
+          project_id: vhdplus-shop
+          credentials_json: ${{ secrets.VHDPLUS_SHOP_GCLOUD_KEY }}
+      - uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          project_id: vhdplus-shop
+      - run: 'echo "$SECRET_VARS" > .env'
+      - run: ./deploy.sh vhdplus-shop-storefront 1G
