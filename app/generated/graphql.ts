@@ -78,6 +78,7 @@ export type Asset = Node & {
   name: Scalars['String'];
   preview: Scalars['String'];
   source: Scalars['String'];
+  thumbnail: Scalars['String'];
   type: AssetType;
   updatedAt: Scalars['DateTime'];
   width: Scalars['Int'];

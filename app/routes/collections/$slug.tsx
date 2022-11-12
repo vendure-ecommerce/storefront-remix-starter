@@ -27,7 +27,8 @@ export async function loader({ params, request, context }: DataFunctionArgs) {
             request,
             context,
         });
-    const collection = (await sdk.collection({ slug: params.slug })).collection;
+
+    const collection = (await sdk.collection({ slug: params.slug }, {request})).collection;
     if (!collection?.id || !collection?.name) {
         throw new Response('Not Found', {
             status: 404,

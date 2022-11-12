@@ -54,6 +54,7 @@ type Asset implements Node {
   name: String!
   preview: String!
   source: String!
+  thumbnail: String!
   type: AssetType!
   updatedAt: DateTime!
   width: Int!
