@@ -12,11 +12,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: google-github-actions/auth@v0
         with:
-          project_id: vhdplus-shop
+          project_id: vhdplus
           credentials_json: ${{ secrets.VHDPLUS_SHOP_GCLOUD_KEY }}
       - uses: 'google-github-actions/setup-gcloud@v0'
         with:
-          project_id: vhdplus-shop
+          project_id: vhdplus
       - name: Build Docker container
         run: ./build-docker.sh
 
@@ -32,11 +32,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: google-github-actions/auth@v0
         with:
-          project_id: vhdplus-shop
+          project_id: vhdplus
           credentials_json: ${{ secrets.VHDPLUS_SHOP_GCLOUD_KEY }}
       - uses: 'google-github-actions/setup-gcloud@v0'
         with:
-          project_id: vhdplus-shop
+          project_id: vhdplus
       - run: 'echo "$SECRET_VARS" > .env'
         env:
           SECRET_VARS: ${{secrets.ENV_PROD}}
