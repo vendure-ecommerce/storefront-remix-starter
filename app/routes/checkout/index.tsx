@@ -76,7 +76,7 @@ export default function CheckoutShipping() {
             ),
         );
 
-    const [canProceedToShipping, setCanProceedToShipping] = useState( !error && isSignedIn &&
+    const [formValid, setFormValid] = useState( isSignedIn &&
         (billingAddress?.streetLine1 || defaultCustomerBillingAddress?.streetLine1) &&
         (billingAddress?.postalCode || defaultCustomerBillingAddress?.postalCode) &&
         (!useDifferentShippingAddress ||
@@ -104,10 +104,10 @@ export default function CheckoutShipping() {
                     switchChannel('row');
                 }
 
-                setCanProceedToShipping(true);
+                setFormValid(true);
             }
         } else {
-            setCanProceedToShipping(false);
+            setFormValid(false);
         }
     };
 
@@ -211,9 +211,32 @@ export default function CheckoutShipping() {
                 )}
             </Form>
 
+            {error ? (
+                    <div className="my-5 rounded-md bg-red-50 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <XCircleIcon
+                                    className="h-5 w-5 text-red-400"
+                                    aria-hidden="true"
+                                />
+                            </div>
+                            <div className="ml-3">
+                                <h3 className="text-sm font-medium text-red-800">
+                                    {error.message}
+                                </h3>
+                                <p className="text-sm text-red-700 mt-2">
+                                    {error.errorCode}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    ''
+                )}
+
             <button
                 type="button"
-                disabled={!canProceedToShipping}
+                disabled={!formValid || error}
                 onClick={navigateToShipping}
                 className="flex w-full items-center justify-center space-x-2 mt-10 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 bg-primary-500 disabled:bg-gray-400"
             >

@@ -59,8 +59,18 @@ export default function CheckoutPayment() {
 
     return (
         <div className="flex flex-col divide-gray-200 divide-y">
-            <div>
-                {error ? (
+            <div className="mt-5">
+                    <ShippingMethodSelector
+                        eligibleShippingMethods={eligibleShippingMethods}
+                        currencyCode={activeOrder?.currencyCode}
+                        shippingMethodId={
+                            activeOrder?.shippingLines[0]?.shippingMethod.id
+                        }
+                        onChange={submitSelectedShippingMethod}
+                    />
+                </div>
+
+            {error ? (
                     <div className="my-5 rounded-md bg-red-50 p-4">
                         <div className="flex">
                             <div className="flex-shrink-0">
@@ -82,17 +92,7 @@ export default function CheckoutPayment() {
                 ) : (
                     ''
                 )}
-                <div className="mt-5">
-                    <ShippingMethodSelector
-                        eligibleShippingMethods={eligibleShippingMethods}
-                        currencyCode={activeOrder?.currencyCode}
-                        shippingMethodId={
-                            activeOrder?.shippingLines[0]?.shippingMethod.id
-                        }
-                        onChange={submitSelectedShippingMethod}
-                    />
-                </div>
-            </div>
+
             <button
                 type="button"
                 disabled={!canProceedToPayment}

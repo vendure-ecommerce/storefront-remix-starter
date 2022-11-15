@@ -67,6 +67,9 @@ async function sendQuery<Response, Variables = {}>(options: {
         }
     }
 
+    //Force to use Global token if noone is selected
+    if (!headers.has('vendure-token')) headers.set('vendure-token', 'row');
+
     return fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(options),
