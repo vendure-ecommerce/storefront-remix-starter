@@ -12,7 +12,7 @@ export function ChannelSwitcher({
     const [active, setActive] = useState<boolean>();
 
     useEffect(() => {
-        setActive(location.pathname.toLowerCase().startsWith("/checkout/"));
+        setActive(location.pathname.toLowerCase().startsWith("/checkout"));
     }, [location]);
 
     return (

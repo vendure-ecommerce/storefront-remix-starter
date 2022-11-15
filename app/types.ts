@@ -1,5 +1,7 @@
+import { FetcherWithComponents } from "@remix-run/react";
+
 export type OutletContext = {
-    activeOrderFetcher: any;
+    activeOrderFetcher: FetcherWithComponents<any>;
     activeOrder: any;
     adjustOrderLine: any;
     removeItem: any;
