@@ -7,6 +7,7 @@ import { classNames } from '~/utils/class-names';
 import { CartTotals } from '~/components/cart/CartTotals';
 
 const steps = [
+    { name: 'Address', state: 'address' },
     { name: 'Shipping', state: 'shipping' },
     { name: 'Payment', state: 'payment' },
     { name: 'Confirmation', state: 'confirmation' },
@@ -16,16 +17,19 @@ export default function Checkout() {
     const outletContext = useOutletContext<OutletContext>();
     const { activeOrder, adjustOrderLine, removeItem } = outletContext;
     const location = useLocation();
-    let state = 'shipping';
-    if (location.pathname === '/checkout/payment') {
+    let state = 'address';
+    if (location.pathname === '/checkout/shipping') {
+        state = 'shipping';
+    } else if (location.pathname.startsWith('/checkout/payment')) {
         state = 'payment';
-    } else if (location.pathname.startsWith('/checkout/confirmation')) {
+    }
+    else if (location.pathname.startsWith('/checkout/confirmation')) {
         state = 'confirmation';
     }
     let isConfirmationPage = state === 'confirmation';
 
     return (
-        <div className="bg-gray-50">
+        <div>
             <div
                 className={classNames(
                     isConfirmationPage

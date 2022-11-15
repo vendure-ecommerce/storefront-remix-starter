@@ -141,7 +141,7 @@ export default function CheckoutPayment() {
                             <p className="text-sm">{brainTreeError}</p>
                         </div>
                     ) : (
-                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey} />
+                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey ?? ""} />
                     )}
                 </div>
             ) :
@@ -157,8 +157,8 @@ export default function CheckoutPayment() {
                         ) : (
                             <StripePayments
                                 orderCode={activeOrder?.code ?? ''}
-                                clientSecret={stripePaymentIntent}
-                                publishableKey={stripePublishableKey}
+                                clientSecret={stripePaymentIntent ?? ""}
+                                publishableKey={stripePublishableKey ?? ""}
                             ></StripePayments>
                         )}
                     </div>

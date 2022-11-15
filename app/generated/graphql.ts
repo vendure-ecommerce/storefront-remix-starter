@@ -3297,12 +3297,19 @@ export type CollectionQuery = { __typename?: 'Query', collection?: { __typename?
 export type ActiveCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveCustomerQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, firstName: string, lastName: string } | null };
+export type ActiveCustomerQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, firstName: string, lastName: string, user?: { __typename?: 'User', verified: boolean } | null } | null };
+
+export type UpdateCustomerMutationVariables = Exact<{
+  input: UpdateCustomerInput;
+}>;
+
+
+export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', lastName: string, firstName: string } };
 
 export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, phoneNumber?: string | null, defaultShippingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
+export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, defaultShippingAddress?: boolean | null, defaultBillingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
 
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
@@ -3724,6 +3731,19 @@ export const ActiveCustomerDocument = gql`
     id
     firstName
     lastName
+    user {
+      verified
+    }
+  }
+}
+    `;
+export const UpdateCustomerDocument = gql`
+    mutation updateCustomer($input: UpdateCustomerInput!) {
+  updateCustomer(input: $input) {
+    ... on Customer {
+      lastName
+      firstName
+    }
   }
 }
     `;
@@ -3745,8 +3765,8 @@ export const ActiveCustomerAddressesDocument = gql`
         code
         name
       }
-      phoneNumber
       defaultShippingAddress
+      defaultBillingAddress
     }
   }
 }
@@ -3938,6 +3958,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     activeCustomer(variables?: ActiveCustomerQueryVariables, options?: C): Promise<ActiveCustomerQuery> {
       return requester<ActiveCustomerQuery, ActiveCustomerQueryVariables>(ActiveCustomerDocument, variables, options);
+    },
+    updateCustomer(variables: UpdateCustomerMutationVariables, options?: C): Promise<UpdateCustomerMutation> {
+      return requester<UpdateCustomerMutation, UpdateCustomerMutationVariables>(UpdateCustomerDocument, variables, options);
     },
     activeCustomerAddresses(variables?: ActiveCustomerAddressesQueryVariables, options?: C): Promise<ActiveCustomerAddressesQuery> {
       return requester<ActiveCustomerAddressesQuery, ActiveCustomerAddressesQueryVariables>(ActiveCustomerAddressesDocument, variables, options);

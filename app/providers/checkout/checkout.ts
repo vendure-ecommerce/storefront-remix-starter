@@ -3,7 +3,9 @@ import { QueryOptions, sdk } from '../../graphqlWrapper';
 import { PaymentInput } from '~/generated/graphql';
 
 export function getAvailableCountries(options: QueryOptions) {
-    return sdk.availableCountries({}, options);
+    return sdk.availableCountries({}, options)
+    .then((result) => result.availableCountries)
+    .then(result => result.sort((x,y) => x.name.localeCompare(y.name)));
 }
 
 export function getEligibleShippingMethods(options: QueryOptions) {

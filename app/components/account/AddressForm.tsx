@@ -5,12 +5,14 @@ export function AddressForm({
     defaultFirstName,
     defaultLastName,
     address,
+    customerAddress,
     prefix,
     availableCountries,
 }: {
     defaultFirstName?: string;
     defaultLastName?: string;
     address?: OrderAddress | null;
+    customerAddress?: any | null;
     prefix: string;
     availableCountries?: AvailableCountriesQuery['availableCountries'];
 }) {
@@ -66,7 +68,7 @@ export function AddressForm({
                         type="text"
                         name={prefix+"company"}
                         id={prefix+"company"}
-                        defaultValue={address?.company ?? ''}
+                        defaultValue={address?.company ?? customerAddress?.company ?? ''}
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
                 </div>
@@ -84,7 +86,7 @@ export function AddressForm({
                         type="text" required
                         name={prefix+"streetLine1"}
                         id={prefix+"streetLine1"}
-                        defaultValue={address?.streetLine1 ?? ''}
+                        defaultValue={address?.streetLine1 ?? customerAddress?.streetLine1 ?? ''}
                         autoComplete="street-address"
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
@@ -103,7 +105,7 @@ export function AddressForm({
                         type="text"
                         name={prefix+"streetLine2"}
                         id={prefix+"streetLine2"}
-                        defaultValue={address?.streetLine2 ?? ''}
+                        defaultValue={address?.streetLine2 ?? customerAddress?.streetLine2 ?? ''}
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
                 </div>
@@ -122,7 +124,7 @@ export function AddressForm({
                         name={prefix+"city"}
                         id={prefix+"city"}
                         autoComplete="address-level2"
-                        defaultValue={address?.city ?? ''}
+                        defaultValue={address?.city ?? customerAddress?.city ?? ''}
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
                 </div>
@@ -140,7 +142,7 @@ export function AddressForm({
                         <select
                             id={prefix+"countryCode"}
                             name={prefix+"countryCode"}
-                            defaultValue={address?.countryCode ?? 'US'}
+                            defaultValue={address?.countryCode ?? customerAddress?.country?.code ?? "DE"}
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                         >
                             {availableCountries.map((item) => (
@@ -165,7 +167,7 @@ export function AddressForm({
                         type="text"
                         name={prefix+"province"}
                         id={prefix+"province"}
-                        defaultValue={address?.province ?? ''}
+                        defaultValue={address?.province ?? customerAddress?.province ?? ''}
                         autoComplete="address-level1"
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
@@ -184,7 +186,7 @@ export function AddressForm({
                         type="text" required
                         name={prefix+"postalCode"}
                         id={prefix+"postalCode"}
-                        defaultValue={address?.postalCode ?? ''}
+                        defaultValue={address?.postalCode ?? customerAddress?.postalCode ?? ''}
                         autoComplete="postal-code"
                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />

@@ -26,6 +26,7 @@ import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 import { sessionStorage } from './sessions';
 import { setApiUrl } from '~/graphqlWrapper';
+import { getAvailableCountries } from './providers/checkout/checkout';
 
 export const meta: MetaFunction = () => {
     return { title: APP_META_TITLE, description: APP_META_DESCRIPTION };
@@ -67,6 +68,7 @@ export type RootLoaderData = {
     activeCustomer: Awaited<ReturnType<typeof getActiveCustomer>>;
     activeChannel: Awaited<ReturnType<typeof activeChannel>>;
     collections: Awaited<ReturnType<typeof getCollections>>;
+    countries: Awaited<ReturnType<typeof getAvailableCountries>>;
     sessionChannelChanged: boolean;
 };
 
@@ -86,11 +88,14 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     );
     const sessionChannel = session.get('channel');
 
+    const availableCountries = await getAvailableCountries({ request });
+
     const loaderData: RootLoaderData = {
         activeCustomer,
         sessionChannelChanged: sessionChannel != null,
         activeChannel: await activeChannel({ request }),
         collections: topLevelCollections,
+        countries: availableCountries,
     };
 
     return json(loaderData, { headers: activeCustomer._headers });

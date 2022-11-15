@@ -23,7 +23,7 @@ import {
     getNextOrderStates,
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { getActiveCustomer } from '~/providers/customer/customer';
+import { getActiveCustomer, updateCustomer } from '~/providers/customer/customer';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
@@ -54,20 +54,27 @@ export async function action({ request, params }: DataFunctionArgs) {
 
                 const activeCustomerResult = await getActiveCustomer({request});
 
-                const setCustomerForOrderResult = await setCustomerForOrder(
-                    {
-                        emailAddress: formData.emailAddress,
-                        firstName: formData.billing_firstName,
-                        lastName: formData.billing_lastName,
-                    },
-                    { request },
-                );
-                if (setCustomerForOrderResult.setCustomerForOrder.__typename === 'Order') {
-                    activeOrder = setCustomerForOrderResult.setCustomerForOrder;
-                } else {
-                    error = setCustomerForOrderResult.setCustomerForOrder;
-                    break;
-                }  
+                if(!activeCustomerResult.activeCustomer?.user?.verified){
+                    //Guest
+                    const setCustomerForOrderResult = await setCustomerForOrder(
+                        {
+                            emailAddress: formData.emailAddress,
+                            firstName: formData.billing_firstName,
+                            lastName: formData.billing_lastName,
+                        },
+                        { request },
+                    );
+                    if (setCustomerForOrderResult.setCustomerForOrder.__typename === 'Order') {
+                        activeOrder = setCustomerForOrderResult.setCustomerForOrder;
+                    } else {
+                        error = setCustomerForOrderResult.setCustomerForOrder;
+                        break;
+                    }  
+                }else{
+                    //Signed in
+                    await updateCustomer({firstName: formData.billing_firstName, lastName: formData.billing_lastName}, {request})
+                }
+                
                 let billingAddr = {
                     city: formData.billing_city,
                     company: formData.billing_company,
@@ -91,7 +98,7 @@ export async function action({ request, params }: DataFunctionArgs) {
                 }
 
                 const resultSetShipping = await setOrderShippingAddress(
-                    formData.useDifferentShippingAdress ?
+                    formData.useDifferentShippingAddress ?
                     {
                         city: formData.shipping_city,
                         company: formData.shipping_company,
