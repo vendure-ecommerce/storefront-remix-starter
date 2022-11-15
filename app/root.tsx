@@ -116,7 +116,7 @@ export default function App() {
         removeItem,
         refresh,
         switchChannel,
-    } = useActiveOrder(setActiveChannelToken);
+    } = useActiveOrder();
 
     useEffect(() => {
         // When the loader has run, this implies we should refresh the contents
@@ -167,6 +167,7 @@ export default function App() {
                             adjustOrderLine,
                             removeItem,
                             switchChannel,
+                            setActiveChannelToken
                         }}
                     />
                 </main>

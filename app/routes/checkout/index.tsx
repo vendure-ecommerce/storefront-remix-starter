@@ -19,6 +19,7 @@ import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { activeChannel } from '~/providers/channel/channel';
+import { EU_COUNTRIES } from '~/constants';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const session = await sessionStorage.getSession(
@@ -40,10 +41,12 @@ export async function loader({ params, request }: DataFunctionArgs) {
 export default function CheckoutShipping() {
     const { availableCountries, activeCustomer, currentChannel, error } =
         useLoaderData<typeof loader>();
-    const { activeOrderFetcher, activeOrder, switchChannel } =
+    const { activeOrderFetcher, activeOrder, setActiveChannelToken } =
         useOutletContext<OutletContext>();
     let navigate = useNavigate();
 
+    setActiveChannelToken(currentChannel.token);
+    
     const { customer, shippingAddress, billingAddress } = activeOrder ?? {};
     const isSignedIn = !!activeCustomer?.id;
     const addresses = activeCustomer?.addresses ?? [];
@@ -76,12 +79,12 @@ export default function CheckoutShipping() {
             ),
         );
 
-    const [formValid, setFormValid] = useState( isSignedIn &&
+    const formValid = (isSignedIn || (customer?.emailAddress && customer.firstName &&customer.lastName)) &&
         (billingAddress?.streetLine1 || defaultCustomerBillingAddress?.streetLine1) &&
         (billingAddress?.postalCode || defaultCustomerBillingAddress?.postalCode) &&
         (!useDifferentShippingAddress ||
             ((shippingAddress?.streetLine1 || defaultCustomerShippingAddress?.streetLine1) && 
-                (shippingAddress?.postalCode || defaultCustomerShippingAddress?.postalCode))));
+                (shippingAddress?.postalCode || defaultCustomerShippingAddress?.postalCode)));
 
     useEffect(() => {
         if (error) console.log(error);
@@ -92,22 +95,14 @@ export default function CheckoutShipping() {
         const isValid = event.currentTarget.checkValidity();
         if (isValid) {
             if (shippingFormDataIsValid(formData)) {
+                
+                formData.append("channel", currentChannel.token);
+
                 activeOrderFetcher.submit(formData, {
                     method: 'post',
                     action: '/api/active-order',
                 });
-
-                const country = formData.get('billing_countryCode');
-                if (country == 'DE' && currentChannel?.token == 'row') {
-                    switchChannel('eu');
-                } else if (country == 'US' && currentChannel?.token == 'eu') {
-                    switchChannel('row');
-                }
-
-                setFormValid(true);
             }
-        } else {
-            setFormValid(false);
         }
     };
 
@@ -236,7 +231,7 @@ export default function CheckoutShipping() {
 
             <button
                 type="button"
-                disabled={!formValid || error}
+                disabled={!formValid}
                 onClick={navigateToShipping}
                 className="flex w-full items-center justify-center space-x-2 mt-10 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 bg-primary-500 disabled:bg-gray-400"
             >

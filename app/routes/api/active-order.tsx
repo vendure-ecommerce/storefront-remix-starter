@@ -23,7 +23,11 @@ import {
     getNextOrderStates,
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { getActiveCustomer, updateCustomer } from '~/providers/customer/customer';
+import {
+    getActiveCustomer,
+    updateCustomer,
+} from '~/providers/customer/customer';
+import { EU_COUNTRIES } from '~/constants';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
@@ -33,6 +37,112 @@ export async function loader({ request }: DataFunctionArgs) {
     };
 }
 
+async function switchChannel(
+    session: any,
+    request: Request,
+    activeOrder: any,
+    channel: string,
+) {
+    session.flash('channel', channel);
+
+    const order = await getActiveOrder({ request });
+
+    //Cancel order
+    const result = await transitionOrderToState('Cancelled', {
+        request,
+    });
+    activeOrder =
+        result.transitionOrderToState?.__typename === 'Order'
+            ? result.transitionOrderToState
+            : activeOrder;
+
+    request.headers.set('vendure-token', channel);
+
+    if (order) {
+        //Add all items again
+        for (let i = 0; i < order!.lines.length; i++) {
+            const addResult = await addItemToOrder(
+                order!.lines[i].productVariant.id,
+                order!.lines[i].quantity,
+                { request },
+            );
+            activeOrder =
+                addResult.addItemToOrder?.__typename === 'Order'
+                    ? addResult.addItemToOrder
+                    : activeOrder;
+        }
+
+        //Reset address
+        if (activeOrder.customer) {
+            const resetCustomerResult = await setCustomerForOrder(
+                {
+                    emailAddress: activeOrder.customer.emailAddress,
+                    firstName: activeOrder.customer.firstName,
+                    lastName: activeOrder.customer.lastName,
+                },
+                { request },
+            );
+
+            if (
+                resetCustomerResult.setCustomerForOrder.__typename ===
+                'Order'
+            ) {
+                activeOrder = resetCustomerResult.setCustomerForOrder;
+            }
+        }
+
+        if (order.billingAddress && order.billingAddress?.countryCode) {
+            const resetBilling = await setOrderBillingAddress(
+                {
+                    city: order.billingAddress.city,
+                    company: order.billingAddress.company,
+                    countryCode: order.billingAddress?.countryCode ?? '',
+                    fullName: order.billingAddress.fullName,
+                    postalCode: order.billingAddress.postalCode,
+                    province: order.billingAddress.province,
+                    streetLine1: order.billingAddress.streetLine1 ?? '',
+                    streetLine2: order.billingAddress.streetLine2,
+                },
+                { request },
+            );
+
+            if (
+                resetBilling.setOrderBillingAddress.__typename ===
+                'Order'
+            ) {
+                activeOrder = resetBilling.setOrderBillingAddress;
+            }
+        }
+
+        if (order.shippingAddress && order.shippingAddress?.countryCode) {
+            const resetShippingAdress = await setOrderShippingAddress(
+                {
+                    city: order.shippingAddress.city,
+                    company: order.shippingAddress.company,
+                    countryCode:
+                    order.shippingAddress.countryCode ?? '',
+                    fullName: order.shippingAddress.fullName,
+                    postalCode: order.shippingAddress.postalCode,
+                    province: order.shippingAddress.province,
+                    streetLine1:
+                    order.shippingAddress.streetLine1 ?? '',
+                    streetLine2: order.shippingAddress.streetLine2,
+                },
+                { request },
+            );
+
+            if (
+                resetShippingAdress.setOrderShippingAddress
+                    .__typename === 'Order'
+            ) {
+                activeOrder =
+                    resetShippingAdress.setOrderShippingAddress;
+            }
+        }
+    }
+
+    return activeOrder;
+}
 export async function action({ request, params }: DataFunctionArgs) {
     const body = await request.formData();
     const formAction = body.get('action');
@@ -47,14 +157,21 @@ export async function action({ request, params }: DataFunctionArgs) {
     switch (formAction) {
         case 'setCheckoutShipping':
             if (shippingFormDataIsValid(body)) {
+                const formData = Object.fromEntries<any>(body.entries());
 
-                const formData = Object.fromEntries<any>(
-                    body.entries(),
-                );
+                const isEu = EU_COUNTRIES.indexOf(formData.billing_countryCode) > -1;
 
-                const activeCustomerResult = await getActiveCustomer({request});
+                if (isEu && formData.channel == 'row') {
+                    activeOrder = await switchChannel(session, request, activeOrder, "eu");
+                } else if (!isEu && formData.channel == 'eu') {
+                    activeOrder = await switchChannel(session, request, activeOrder, "row");
+                }
 
-                if(!activeCustomerResult.activeCustomer?.user?.verified){
+                const activeCustomerResult = await getActiveCustomer({
+                    request,
+                });
+
+                if (!activeCustomerResult.activeCustomer?.user?.verified) {
                     //Guest
                     const setCustomerForOrderResult = await setCustomerForOrder(
                         {
@@ -64,23 +181,36 @@ export async function action({ request, params }: DataFunctionArgs) {
                         },
                         { request },
                     );
-                    if (setCustomerForOrderResult.setCustomerForOrder.__typename === 'Order') {
-                        activeOrder = setCustomerForOrderResult.setCustomerForOrder;
+                    if (
+                        setCustomerForOrderResult.setCustomerForOrder
+                            .__typename === 'Order'
+                    ) {
+                        activeOrder =
+                            setCustomerForOrderResult.setCustomerForOrder;
                     } else {
                         error = setCustomerForOrderResult.setCustomerForOrder;
                         break;
-                    }  
-                }else{
+                    }
+                } else {
                     //Signed in
-                    await updateCustomer({firstName: formData.billing_firstName, lastName: formData.billing_lastName}, {request})
+                    await updateCustomer(
+                        {
+                            firstName: formData.billing_firstName,
+                            lastName: formData.billing_lastName,
+                        },
+                        { request },
+                    );
                 }
-                
+
                 let billingAddr = {
                     city: formData.billing_city,
                     company: formData.billing_company,
                     countryCode: formData.billing_countryCode,
                     customFields: formData.billing_customFields,
-                    fullName: formData.billing_firstName + " " + formData.billing_lastName,
+                    fullName:
+                        formData.billing_firstName +
+                        ' ' +
+                        formData.billing_lastName,
                     phoneNumber: formData.billing_phoneNumber,
                     postalCode: formData.billing_postalCode,
                     province: formData.billing_province,
@@ -88,9 +218,15 @@ export async function action({ request, params }: DataFunctionArgs) {
                     streetLine2: formData.billing_streetLine2,
                 };
 
-                const resultSetBilling = await setOrderBillingAddress(billingAddr, { request } );
+                const resultSetBilling = await setOrderBillingAddress(
+                    billingAddr,
+                    { request },
+                );
 
-                if (resultSetBilling.setOrderBillingAddress.__typename === 'Order') {
+                if (
+                    resultSetBilling.setOrderBillingAddress.__typename ===
+                    'Order'
+                ) {
                     activeOrder = resultSetBilling.setOrderBillingAddress;
                 } else {
                     error = resultSetBilling.setOrderBillingAddress;
@@ -98,30 +234,35 @@ export async function action({ request, params }: DataFunctionArgs) {
                 }
 
                 const resultSetShipping = await setOrderShippingAddress(
-                    formData.useDifferentShippingAddress ?
-                    {
-                        city: formData.shipping_city,
-                        company: formData.shipping_company,
-                        countryCode: formData.shipping_countryCode,
-                        customFields:
-                        formData.shipping_customFields,
-                        fullName: formData.shipping_firstName + " " + formData.shipping_lastName,
-                        phoneNumber: formData.shipping_phoneNumber,
-                        postalCode: formData.shipping_postalCode,
-                        province: formData.shipping_province,
-                        streetLine1: formData.shipping_streetLine1,
-                        streetLine2: formData.shipping_streetLine2,
-                    } : billingAddr,
+                    formData.useDifferentShippingAddress
+                        ? {
+                              city: formData.shipping_city,
+                              company: formData.shipping_company,
+                              countryCode: formData.shipping_countryCode,
+                              customFields: formData.shipping_customFields,
+                              fullName:
+                                  formData.shipping_firstName +
+                                  ' ' +
+                                  formData.shipping_lastName,
+                              phoneNumber: formData.shipping_phoneNumber,
+                              postalCode: formData.shipping_postalCode,
+                              province: formData.shipping_province,
+                              streetLine1: formData.shipping_streetLine1,
+                              streetLine2: formData.shipping_streetLine2,
+                          }
+                        : billingAddr,
                     { request },
                 );
 
-                if (resultSetShipping.setOrderShippingAddress.__typename === 'Order') {
+                if (
+                    resultSetShipping.setOrderShippingAddress.__typename ===
+                    'Order'
+                ) {
                     activeOrder = resultSetShipping.setOrderShippingAddress;
                 } else {
                     error = resultSetShipping.setOrderShippingAddress;
                     break;
                 }
-                
             }
             break;
         case 'setShippingMethod': {
@@ -190,43 +331,15 @@ export async function action({ request, params }: DataFunctionArgs) {
         case 'switchChannel': {
             const channel = body.get('channel');
 
-            session.flash('channel', channel);
-
-            const order = await getActiveOrder({ request });
-
-            //Cancel order
-            const result = await transitionOrderToState('Cancelled', {
-                request,
-            });
-            activeOrder =
-                result.transitionOrderToState?.__typename === 'Order'
-                    ? result.transitionOrderToState
-                    : activeOrder;
-
-            request.headers.set('vendure-token', channel?.toString() ?? '');
-
-            if (order) {
-                //Add all items again
-                for (let i = 0; i < order!.lines.length; i++) {
-                    const addResult = await addItemToOrder(
-                        order!.lines[i].productVariant.id,
-                        order!.lines[i].quantity,
-                        { request },
-                    );
-                    activeOrder =
-                        addResult.addItemToOrder?.__typename === 'Order'
-                            ? addResult.addItemToOrder
-                            : activeOrder;
-                }
-            }
-
-            request.headers.delete('vendure-token');
+            activeOrder = await  switchChannel(session, request, activeOrder, channel?.toString() ?? "row");
 
             break;
         }
         default:
         // Don't do anything
     }
+    request.headers.delete('vendure-token');
+
     session.flash('activeOrderError', error);
     headers = {
         'Set-Cookie': await sessionStorage.commitSession(session),

@@ -214,11 +214,11 @@ export function AddressForm({
                             defaultValue={
                                 address?.countryCode ??
                                 customerAddress?.country?.code ??
-                                ""
+                                undefined
                             }
+                            onChange={x => x.currentTarget.blur()}
                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                         >
-                            <option value="">Select</option>
                             {availableCountries.map((item) => (
                                 <option key={item.id} value={item.code}>
                                     {item.name}
