@@ -1,8 +1,7 @@
-import React from 'react';
 import { useLoaderData } from '@remix-run/react';
 import { getCollections } from '~/providers/collections/collections';
 import { CollectionCard } from '~/components/collections/CollectionCard';
-import { BookOpenIcon } from '@heroicons/react/solid';
+import { BookOpenIcon } from '@heroicons/react/24/solid';
 import { LoaderArgs } from '@remix-run/server-runtime';
 
 export async function loader({ request }: LoaderArgs) {

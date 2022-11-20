@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { CartContents } from './CartContents';
 import { Link, useLocation } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
@@ -72,7 +71,7 @@ export function CartTray({
                                                     <span className="sr-only">
                                                         Close panel
                                                     </span>
-                                                    <XIcon
+                                                    <XMarkIcon
                                                         className="h-6 w-6"
                                                         aria-hidden="true"
                                                     />

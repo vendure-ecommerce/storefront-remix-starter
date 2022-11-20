@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { SyntheticEvent, useState } from 'react';
 import { Form } from '@remix-run/react';
 

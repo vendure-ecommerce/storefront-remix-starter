@@ -2,7 +2,7 @@ import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { login } from '~/providers/account/account';
 import { ErrorResult } from '~/generated/graphql';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 
 export async function action({ params, request }: DataFunctionArgs) {
     const body = await request.formData();

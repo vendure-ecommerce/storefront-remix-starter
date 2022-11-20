@@ -1,7 +1,7 @@
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { registerCustomerAccount } from '~/providers/account/account';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import {
     extractRegistrationFormValues,
     RegisterValidationErrors,
@@ -12,7 +12,9 @@ import { DEMO_API_URL } from '~/constants';
 export async function action({ params, request }: DataFunctionArgs) {
     const apiUrl = process.env.VENDURE_API_URL || DEMO_API_URL;
     if (apiUrl === DEMO_API_URL) {
-        return { form: 'Registration can\'t be used with Vendure demo shop! Please connect your own instance.' }
+        return {
+            form: "Registration can't be used with Vendure demo shop! Please connect your own instance.",
+        };
     }
 
     const body = await request.formData();
@@ -89,7 +91,9 @@ export default function SignUpPage() {
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                     />
                                     {formErrors?.email && (
-                                        <div className='text-xs text-red-700'>{formErrors.email}</div>
+                                        <div className="text-xs text-red-700">
+                                            {formErrors.email}
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -146,7 +150,9 @@ export default function SignUpPage() {
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                     />
                                     {formErrors?.password && (
-                                        <div className='text-xs text-red-700'>{formErrors.password}</div>
+                                        <div className="text-xs text-red-700">
+                                            {formErrors.password}
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -166,7 +172,9 @@ export default function SignUpPage() {
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                     />
                                     {formErrors?.repeatPassword && (
-                                        <div className='text-xs text-red-700'>{formErrors.repeatPassword}</div>
+                                        <div className="text-xs text-red-700">
+                                            {formErrors.repeatPassword}
+                                        </div>
                                     )}
                                 </div>
                             </div>

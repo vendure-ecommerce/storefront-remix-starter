@@ -10,7 +10,7 @@ import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
 import { FiltersButton } from '~/components/FiltersButton';
-import { PhotographIcon } from '@heroicons/react/solid';
+import { PhotoIcon } from '@heroicons/react/24/solid';
 
 export const meta: MetaFunction = ({ data }) => {
     return {

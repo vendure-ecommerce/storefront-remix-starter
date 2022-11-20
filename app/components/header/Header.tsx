@@ -1,8 +1,8 @@
 import { Link, useLoaderData } from '@remix-run/react';
-import { ShoppingBagIcon } from '@heroicons/react/outline';
+import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { SearchBar } from '~/components/header/SearchBar';
 import { useRootLoader } from '~/utils/use-root-loader';
-import { UserIcon } from '@heroicons/react/solid';
+import { UserIcon } from '@heroicons/react/24/solid';
 import { useScrollingUp } from '~/utils/use-scrolling-up';
 import { classNames } from '~/utils/class-names';
 

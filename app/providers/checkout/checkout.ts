@@ -111,4 +111,3 @@ gql`
         generateBraintreeClientToken
     }
 `;
-

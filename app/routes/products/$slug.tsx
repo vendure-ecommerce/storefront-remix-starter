@@ -14,7 +14,7 @@ import {
     useOutletContext,
     useTransition,
 } from '@remix-run/react';
-import { CheckIcon, HeartIcon, PhotographIcon } from '@heroicons/react/solid';
+import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/api/active-order';
@@ -329,7 +329,7 @@ export function CatchBoundary() {
                 <div className="w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                     <span className="rounded-md overflow-hidden">
                         <div className="w-full h-96 bg-slate-200 rounded-lg flex content-center justify-center">
-                            <PhotographIcon className="w-48 text-white"></PhotographIcon>
+                            <PhotoIcon className="w-48 text-white"></PhotoIcon>
                         </div>
                     </span>
                 </div>

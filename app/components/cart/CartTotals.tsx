@@ -1,5 +1,4 @@
 import { Price } from '~/components/products/Price';
-import * as React from 'react';
 import { OrderDetailFragment } from '~/generated/graphql';
 
 export function CartTotals({ order }: { order?: OrderDetailFragment | null }) {

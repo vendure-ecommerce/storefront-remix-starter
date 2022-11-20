@@ -35,7 +35,10 @@ export async function action({ request, params }: DataFunctionArgs) {
     const body = await request.formData();
     const formAction = body.get('action');
     let activeOrder: OrderDetailFragment | undefined = undefined;
-    let error : ErrorResult = {errorCode: ErrorCode.NoActiveOrderError, message: ""};
+    let error: ErrorResult = {
+        errorCode: ErrorCode.NoActiveOrderError,
+        message: '',
+    };
     switch (formAction) {
         case 'setCheckoutShipping':
             if (shippingFormDataIsValid(body)) {

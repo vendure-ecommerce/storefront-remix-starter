@@ -8,7 +8,7 @@ import {
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
 import { Form, useLoaderData, useOutletContext } from '@remix-run/react';
-import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
+import { CreditCardIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
@@ -46,13 +46,17 @@ export async function loader({ params, request }: DataFunctionArgs) {
     let brainTreeKey: string | undefined;
     let brainTreeError: string | undefined;
     if (
-        eligiblePaymentMethods.find((method) => method.code.includes('braintree'))
+        eligiblePaymentMethods.find((method) =>
+            method.code.includes('braintree'),
+        )
     ) {
         try {
-            const generateBrainTreeTokenResult = await generateBraintreeClientToken({
-                request, 
-            });
-            brainTreeKey = generateBrainTreeTokenResult.generateBraintreeClientToken ?? "";
+            const generateBrainTreeTokenResult =
+                await generateBraintreeClientToken({
+                    request,
+                });
+            brainTreeKey =
+                generateBrainTreeTokenResult.generateBraintreeClientToken ?? '';
         } catch (e: any) {
             brainTreeError = e.message;
         }
@@ -127,21 +131,28 @@ export default function CheckoutPayment() {
     return (
         <div className="flex flex-col items-center divide-gray-200 divide-y">
             {eligiblePaymentMethods.map((paymentMethod) =>
-            paymentMethod.code.includes('braintree') ? (
-                <div className="py-3 w-full" key={paymentMethod.id}>
-                    {brainTreeError ? (
-                        <div>
-                            <p className="text-red-700 font-bold">
-                                Braintree error:
-                            </p>
-                            <p className="text-sm">{brainTreeError}</p>
-                        </div>
-                    ) : (
-                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey} />
-                    )}
-                </div>
-            ) :
-                paymentMethod.code.includes('stripe') ? (
+                paymentMethod.code.includes('braintree') ? (
+                    <div className="py-3 w-full" key={paymentMethod.id}>
+                        {brainTreeError ? (
+                            <div>
+                                <p className="text-red-700 font-bold">
+                                    Braintree error:
+                                </p>
+                                <p className="text-sm">{brainTreeError}</p>
+                            </div>
+                        ) : (
+                            <BraintreeDropIn
+                                fullAmount={activeOrder?.totalWithTax ?? 0}
+                                currencyCode={
+                                    activeOrder?.currencyCode ??
+                                    ('USD' as CurrencyCode)
+                                }
+                                show={true}
+                                authorization={brainTreeKey!}
+                            />
+                        )}
+                    </div>
+                ) : paymentMethod.code.includes('stripe') ? (
                     <div className="py-12" key={paymentMethod.id}>
                         {stripeError ? (
                             <div>
@@ -153,8 +164,8 @@ export default function CheckoutPayment() {
                         ) : (
                             <StripePayments
                                 orderCode={activeOrder?.code ?? ''}
-                                clientSecret={stripePaymentIntent}
-                                publishableKey={stripePublishableKey}
+                                clientSecret={stripePaymentIntent!}
+                                publishableKey={stripePublishableKey!}
                             ></StripePayments>
                         )}
                     </div>

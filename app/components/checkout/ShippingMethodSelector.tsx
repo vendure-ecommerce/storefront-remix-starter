@@ -1,8 +1,7 @@
 import { RadioGroup } from '@headlessui/react';
 import { classNames } from '~/utils/class-names';
 import { Price } from '~/components/products/Price';
-import { CheckCircleIcon } from '@heroicons/react/solid';
-import * as React from 'react';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import {
     CurrencyCode,
     EligibleShippingMethodsQuery,

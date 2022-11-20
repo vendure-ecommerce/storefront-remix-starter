@@ -1,4 +1,4 @@
-import { FilterIcon } from '@heroicons/react/solid';
+import { FunnelIcon } from '@heroicons/react/24/solid';
 
 export function FiltersButton({
     filterCount,
@@ -21,7 +21,7 @@ export function FiltersButton({
                 ''
             )}
             <span>Filters</span>
-            <FilterIcon className="w-5 h-5" aria-hidden="true" />
+            <FunnelIcon className="w-5 h-5" aria-hidden="true" />
         </button>
     );
 }

@@ -4,7 +4,7 @@ import {
     PaymentElement,
 } from '@stripe/react-stripe-js';
 import { FormEvent } from 'react';
-import { CreditCardIcon } from '@heroicons/react/solid';
+import { CreditCardIcon } from '@heroicons/react/24/solid';
 
 export const CheckoutForm = ({ orderCode }: { orderCode: string }) => {
     const stripe = useStripe();

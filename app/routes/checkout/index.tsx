@@ -1,6 +1,5 @@
-import * as React from 'react';
 import { FormEvent, useState } from 'react';
-import { LockClosedIcon } from '@heroicons/react/solid';
+import { LockClosedIcon } from '@heroicons/react/24/solid';
 import {
     Form,
     useLoaderData,

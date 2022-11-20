@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Form, Link, useFetcher, useOutletContext } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { ActiveOrderQuery, CurrencyCode } from '~/generated/graphql';

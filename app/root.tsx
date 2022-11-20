@@ -136,8 +136,9 @@ export default function App() {
                 />
                 <ScrollRestoration />
                 <Scripts />
-                {devMode && <LiveReload />}
                 <Footer collections={collections}></Footer>
+
+                {devMode && <LiveReload />}
             </body>
         </html>
     );

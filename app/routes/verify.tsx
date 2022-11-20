@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { verifyCustomerAccount } from '~/providers/account/account';
 
 type LoaderReturnType = {
@@ -45,7 +45,7 @@ export async function action({ request }: DataFunctionArgs) {
     Object.keys(headerData).forEach((key) => {
         headers.set(key, headerData[key]);
     });
-   
+
     return redirect(redirectTarget, { headers });
 }
 
