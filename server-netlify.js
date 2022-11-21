@@ -1,5 +1,5 @@
-import { createRequestHandler } from "@remix-run/netlify";
-import * as build from "@remix-run/dev/server-build";
+import { createRequestHandler } from '@remix-run/netlify';
+import * as build from '@remix-run/dev/server-build';
 
 /*
  * Returns a context object with at most 3 keys:
@@ -17,11 +17,11 @@ function getLoadContext(event, context) {
     netlifyGraphToken = event.authlifyToken;
   }
 
-  let authHeader = event.headers["authorization"];
-  let graphSignatureHeader = event.headers["x-netlify-graph-signature"];
+  let authHeader = event.headers['authorization'];
+  let graphSignatureHeader = event.headers['x-netlify-graph-signature'];
 
   if (authHeader != null && /Bearer /gi.test(authHeader)) {
-    rawAuthorizationString = authHeader.split(" ")[1];
+    rawAuthorizationString = authHeader.split(' ')[1];
   }
 
   let loadContext = {
