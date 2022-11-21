@@ -3,137 +3,137 @@ import { QueryOptions, sdk } from '../../graphqlWrapper';
 import { SearchQueryVariables } from '~/generated/graphql';
 
 export function search(variables: SearchQueryVariables, options: QueryOptions) {
-    return sdk.search(variables, options);
+  return sdk.search(variables, options);
 }
 
 export function searchFacetValues(
-    variables: SearchQueryVariables,
-    options: QueryOptions,
+  variables: SearchQueryVariables,
+  options: QueryOptions,
 ) {
-    return sdk.searchFacetValues(variables, options);
+  return sdk.searchFacetValues(variables, options);
 }
 
 export function getProductBySlug(slug: string, options: QueryOptions) {
-    return sdk.product({ slug }, options);
+  return sdk.product({ slug }, options);
 }
 
 export const detailedProductFragment = gql`
-    fragment DetailedProduct on Product {
+  fragment DetailedProduct on Product {
+    id
+    name
+    description
+    collections {
+      id
+      slug
+      name
+      breadcrumbs {
         id
         name
-        description
-        collections {
-            id
-            slug
-            name
-            breadcrumbs {
-                id
-                name
-                slug
-            }
-        }
-        facetValues {
-            facet {
-                id
-                code
-                name
-            }
-            id
-            code
-            name
-        }
-        featuredAsset {
-            id
-            preview
-        }
-        assets {
-            id
-            preview
-        }
-        variants {
-            id
-            name
-            priceWithTax
-            currencyCode
-            sku
-            stockLevel
-            featuredAsset {
-                id
-                preview
-            }
-        }
+        slug
+      }
     }
+    facetValues {
+      facet {
+        id
+        code
+        name
+      }
+      id
+      code
+      name
+    }
+    featuredAsset {
+      id
+      preview
+    }
+    assets {
+      id
+      preview
+    }
+    variants {
+      id
+      name
+      priceWithTax
+      currencyCode
+      sku
+      stockLevel
+      featuredAsset {
+        id
+        preview
+      }
+    }
+  }
 `;
 
 gql`
-    query product($slug: String, $id: ID) {
-        product(slug: $slug, id: $id) {
-            ...DetailedProduct
-        }
+  query product($slug: String, $id: ID) {
+    product(slug: $slug, id: $id) {
+      ...DetailedProduct
     }
+  }
 `;
 
 export const listedProductFragment = gql`
-    fragment ListedProduct on SearchResult {
-        productId
-        productName
-        slug
-        productAsset {
+  fragment ListedProduct on SearchResult {
+    productId
+    productName
+    slug
+    productAsset {
+      id
+      preview
+    }
+    currencyCode
+    priceWithTax {
+      ... on PriceRange {
+        min
+        max
+      }
+      ... on SinglePrice {
+        value
+      }
+    }
+  }
+`;
+
+gql`
+  query search($input: SearchInput!) {
+    search(input: $input) {
+      totalItems
+      items {
+        ...ListedProduct
+      }
+      facetValues {
+        count
+        facetValue {
+          id
+          name
+          facet {
             id
-            preview
+            name
+          }
         }
-        currencyCode
-        priceWithTax {
-            ... on PriceRange {
-                min
-                max
-            }
-            ... on SinglePrice {
-                value
-            }
-        }
+      }
     }
+  }
+  ${listedProductFragment}
 `;
 
 gql`
-    query search($input: SearchInput!) {
-        search(input: $input) {
-            totalItems
-            items {
-                ...ListedProduct
-            }
-            facetValues {
-                count
-                facetValue {
-                    id
-                    name
-                    facet {
-                        id
-                        name
-                    }
-                }
-            }
+  query searchFacetValues($input: SearchInput!) {
+    search(input: $input) {
+      totalItems
+      facetValues {
+        count
+        facetValue {
+          id
+          name
+          facet {
+            id
+            name
+          }
         }
+      }
     }
-    ${listedProductFragment}
-`;
-
-gql`
-    query searchFacetValues($input: SearchInput!) {
-        search(input: $input) {
-            totalItems
-            facetValues {
-                count
-                facetValue {
-                    id
-                    name
-                    facet {
-                        id
-                        name
-                    }
-                }
-            }
-        }
-    }
-    ${listedProductFragment}
+  }
+  ${listedProductFragment}
 `;

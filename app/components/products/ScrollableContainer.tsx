@@ -1,78 +1,78 @@
 import React, { ReactNode, useRef, RefObject, useEffect } from 'react';
 
 export function ScrollableContainer({ children }: { children: ReactNode[] }) {
-    const spanRef: RefObject<HTMLSpanElement> | undefined = useRef(null);
+  const spanRef: RefObject<HTMLSpanElement> | undefined = useRef(null);
 
-    // kindly inspired from https://htmldom.dev/drag-to-scroll/
-    let pos = {
-        top: 0,
-        left: 0,
-        x: 0,
-        y: 0,
+  // kindly inspired from https://htmldom.dev/drag-to-scroll/
+  let pos = {
+    top: 0,
+    left: 0,
+    x: 0,
+    y: 0,
+  };
+
+  const mouseDownHandler = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const span = spanRef.current!;
+
+    pos = {
+      left: span.scrollLeft,
+      top: span.scrollTop,
+      x: e.clientX,
+      y: e.clientY,
     };
 
-    const mouseDownHandler = (e: React.MouseEvent<HTMLSpanElement>) => {
-        const span = spanRef.current!;
+    span.style.cursor = 'grabbing';
+    span.style.userSelect = 'none';
 
-        pos = {
-            left: span.scrollLeft,
-            top: span.scrollTop,
-            x: e.clientX,
-            y: e.clientY,
-        };
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  };
 
-        span.style.cursor = 'grabbing';
-        span.style.userSelect = 'none';
+  const mouseMoveHandler = (e: MouseEvent) => {
+    const span = spanRef.current!;
 
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
-    };
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
 
-    const mouseMoveHandler = (e: MouseEvent) => {
-        const span = spanRef.current!;
+    span.scrollTop = pos.top - dy;
+    span.scrollLeft = pos.left - dx;
+  };
 
-        const dx = e.clientX - pos.x;
-        const dy = e.clientY - pos.y;
+  const mouseUpHandler = () => {
+    const span = spanRef.current!;
 
-        span.scrollTop = pos.top - dy;
-        span.scrollLeft = pos.left - dx;
-    };
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
 
-    const mouseUpHandler = () => {
-        const span = spanRef.current!;
+    span.style.cursor = 'grab';
+    span.style.removeProperty('user-select');
+  };
 
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
+  const wheelHandler = (e: WheelEvent) => {
+    const diff = e.deltaY || e.deltaX;
 
-        span.style.cursor = 'grab';
-        span.style.removeProperty('user-select');
-    };
+    spanRef.current!.scrollLeft += diff * 0.5;
+    e.preventDefault();
+  };
 
-    const wheelHandler = (e: WheelEvent) => {
-        const diff = e.deltaY || e.deltaX;
-
-        spanRef.current!.scrollLeft += diff * 0.5;
-        e.preventDefault();
-    };
-
-    useEffect(() => {
-        spanRef.current!.addEventListener('wheel', wheelHandler, {
-            passive: false,
-        });
+  useEffect(() => {
+    spanRef.current!.addEventListener('wheel', wheelHandler, {
+      passive: false,
     });
+  });
 
-    return (
-        <span
-            className="py-2 mt-2 flex flex-row flex-nowrap space-x-4 md:overflow-x-hidden overflow-x-auto cursor-grab touch-pan-x"
-            ref={spanRef}
-            onMouseDown={mouseDownHandler}
-            onClickCapture={(e) => {
-                if (e.clientX != pos.x || e.clientY != pos.y) {
-                    e.stopPropagation();
-                }
-            }}
-        >
-            {children}
-        </span>
-    );
+  return (
+    <span
+      className="py-2 mt-2 flex flex-row flex-nowrap space-x-4 md:overflow-x-hidden overflow-x-auto cursor-grab touch-pan-x"
+      ref={spanRef}
+      onMouseDown={mouseDownHandler}
+      onClickCapture={(e) => {
+        if (e.clientX != pos.x || e.clientY != pos.y) {
+          e.stopPropagation();
+        }
+      }}
+    >
+      {children}
+    </span>
+  );
 }
