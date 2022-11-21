@@ -1,5 +1,5 @@
 import { AvailableCountriesQuery, OrderAddress } from '~/generated/graphql';
-// test
+
 export function AddressForm({
   address,
   defaultFullName,
