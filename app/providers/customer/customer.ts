@@ -3,44 +3,44 @@ import { QueryOptions, sdk } from '~/graphqlWrapper';
 import { listedProductFragment } from '../products/products';
 
 export function getActiveCustomer(options: QueryOptions) {
-  return sdk.activeCustomer(undefined, options);
+    return sdk.activeCustomer(undefined, options);
 }
 
 export function getActiveCustomerAddresses(options: QueryOptions) {
-  return sdk.activeCustomerAddresses(undefined, options);
+    return sdk.activeCustomerAddresses(undefined, options);
 }
 
 gql`
-  query activeCustomer {
-    activeCustomer {
-      id
-      firstName
-      lastName
+    query activeCustomer {
+        activeCustomer {
+            id
+            firstName
+            lastName
+        }
     }
-  }
 `;
 
 gql`
-  query activeCustomerAddresses {
-    activeCustomer {
-      id
-      addresses {
-        id
-        company
-        fullName
-        streetLine1
-        streetLine2
-        city
-        province
-        postalCode
-        country {
-          id
-          code
-          name
+    query activeCustomerAddresses {
+        activeCustomer {
+            id
+            addresses {
+                id
+                company
+                fullName
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    id
+                    code
+                    name
+                }
+                phoneNumber
+                defaultShippingAddress
+            }
         }
-        phoneNumber
-        defaultShippingAddress
-      }
     }
-  }
 `;

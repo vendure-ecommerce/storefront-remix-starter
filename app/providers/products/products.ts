@@ -1,15 +1,12 @@
-import gql from 'graphql-tag';
-import { QueryOptions, sdk } from '../../graphqlWrapper';
+import gql from "graphql-tag";
+import { QueryOptions, sdk } from "../../graphqlWrapper";
 import { SearchQueryVariables } from '~/generated/graphql';
 
 export function search(variables: SearchQueryVariables, options: QueryOptions) {
   return sdk.search(variables, options);
 }
 
-export function searchFacetValues(
-  variables: SearchQueryVariables,
-  options: QueryOptions,
-) {
+export function searchFacetValues(variables: SearchQueryVariables, options: QueryOptions) {
   return sdk.searchFacetValues(variables, options);
 }
 
@@ -61,6 +58,7 @@ export const detailedProductFragment = gql`
         id
         preview
       }
+
     }
   }
 `;
@@ -96,8 +94,12 @@ export const listedProductFragment = gql`
 `;
 
 gql`
-  query search($input: SearchInput!) {
-    search(input: $input) {
+  query search(
+    $input: SearchInput!
+  ) {
+    search(
+      input: $input
+    ) {
       totalItems
       items {
         ...ListedProduct
@@ -119,8 +121,12 @@ gql`
 `;
 
 gql`
-  query searchFacetValues($input: SearchInput!) {
-    search(input: $input) {
+  query searchFacetValues(
+    $input: SearchInput!
+  ) {
+    search(
+      input: $input
+    ) {
       totalItems
       facetValues {
         count
