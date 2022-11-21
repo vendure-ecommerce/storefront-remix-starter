@@ -8,7 +8,7 @@ import {
     transitionOrderToState,
 } from '~/providers/checkout/checkout';
 import { Form, useLoaderData, useOutletContext } from '@remix-run/react';
-import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
+import { CreditCardIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { OutletContext } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
@@ -137,7 +137,7 @@ export default function CheckoutPayment() {
                             <p className="text-sm">{brainTreeError}</p>
                         </div>
                     ) : (
-                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey} />
+                        <BraintreeDropIn fullAmount={activeOrder?.totalWithTax ?? 0} currencyCode={activeOrder?.currencyCode ?? 'USD' as CurrencyCode} show={true} authorization={brainTreeKey!} />
                     )}
                 </div>
             ) :
@@ -153,8 +153,8 @@ export default function CheckoutPayment() {
                         ) : (
                             <StripePayments
                                 orderCode={activeOrder?.code ?? ''}
-                                clientSecret={stripePaymentIntent}
-                                publishableKey={stripePublishableKey}
+                                clientSecret={stripePaymentIntent!}
+                                publishableKey={stripePublishableKey!}
                             ></StripePayments>
                         )}
                     </div>

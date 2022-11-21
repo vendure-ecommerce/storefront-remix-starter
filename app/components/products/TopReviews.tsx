@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { StarIcon } from '@heroicons/react/solid';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { classNames } from '~/utils/class-names';
 
 interface Review {

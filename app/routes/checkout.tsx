@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { ChevronRightIcon } from '@heroicons/react/solid';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Outlet, useLocation, useOutletContext } from '@remix-run/react';
 import { CartContents } from '~/components/cart/CartContents';
 import { OutletContext } from '~/types';

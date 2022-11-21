@@ -3,9 +3,8 @@ import { getOrderByCode } from '~/providers/orders/order';
 import { useLoaderData } from '@remix-run/react';
 import { CartContents } from '~/components/cart/CartContents';
 import { CartTotals } from '~/components/cart/CartTotals';
-import * as React from 'react';
-import { CheckCircleIcon } from '@heroicons/react/outline';
-import { InformationCircleIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
 
 export async function loader({ params, request }: DataFunctionArgs) {
     const order = await getOrderByCode(params.orderCode!, { request });

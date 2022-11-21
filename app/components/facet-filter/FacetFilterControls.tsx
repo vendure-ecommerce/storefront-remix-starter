@@ -1,7 +1,7 @@
 import { Fragment, SyntheticEvent } from 'react';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
-import { MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/solid';
 import { Form, useSearchParams, useSubmit } from '@remix-run/react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 
@@ -68,7 +68,7 @@ export default function FacetFilterControls({
                                         <span className="sr-only">
                                             Close menu
                                         </span>
-                                        <XIcon
+                                        <XMarkIcon
                                             className="h-6 w-6"
                                             aria-hidden="true"
                                         />
@@ -97,12 +97,12 @@ export default function FacetFilterControls({
                                                                 </span>
                                                                 <span className="ml-6 flex items-center">
                                                                     {open ? (
-                                                                        <MinusSmIcon
+                                                                        <MinusSmallIcon
                                                                             className="h-5 w-5"
                                                                             aria-hidden="true"
                                                                         />
                                                                     ) : (
-                                                                        <PlusSmIcon
+                                                                        <PlusSmallIcon
                                                                             className="h-5 w-5"
                                                                             aria-hidden="true"
                                                                         />
@@ -183,12 +183,12 @@ export default function FacetFilterControls({
                                         </span>
                                         <span className="ml-6 flex items-center">
                                             {open ? (
-                                                <MinusSmIcon
+                                                <MinusSmallIcon
                                                     className="h-5 w-5"
                                                     aria-hidden="true"
                                                 />
                                             ) : (
-                                                <PlusSmIcon
+                                                <PlusSmallIcon
                                                     className="h-5 w-5"
                                                     aria-hidden="true"
                                                 />

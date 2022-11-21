@@ -1,4 +1,4 @@
-import { XCircleIcon } from '@heroicons/react/solid'
+import { XCircleIcon } from '@heroicons/react/24/solid'
 
 export default function Alert({ message }: { message: string }) {
   return (

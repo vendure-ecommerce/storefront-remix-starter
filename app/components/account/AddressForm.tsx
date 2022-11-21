@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { AvailableCountriesQuery, OrderAddress } from '~/generated/graphql';
 
 export function AddressForm({

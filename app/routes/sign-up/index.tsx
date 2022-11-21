@@ -1,7 +1,7 @@
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { registerCustomerAccount } from '~/providers/account/account';
-import { XCircleIcon } from '@heroicons/react/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import {
     extractRegistrationFormValues,
     RegisterValidationErrors,

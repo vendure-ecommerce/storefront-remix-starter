@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Form } from '@remix-run/react';
 import { redirect } from '@remix-run/server-runtime';
 

@@ -1,4 +1,4 @@
-import { CreditCardIcon, XCircleIcon } from '@heroicons/react/solid';
+import { CreditCardIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { Form } from '@remix-run/react';
 import { EligiblePaymentMethodsQuery } from '~/generated/graphql';
 
