@@ -7,7 +7,7 @@ import {
   useOutletContext,
 } from '@remix-run/react';
 import { OutletContext } from '~/types';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import {
   getAvailableCountries,
   getEligibleShippingMethods,
@@ -19,11 +19,24 @@ import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
 import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
+import { getActiveOrder } from '~/providers/orders/order';
 
-export async function loader({ params, request }: DataFunctionArgs) {
+export async function loader({ request }: DataFunctionArgs) {
   const session = await sessionStorage.getSession(
     request?.headers.get('Cookie'),
   );
+
+  const activeOrder = await getActiveOrder({ request });
+  
+  //check if there is an active order if not redirect to homepage
+  if (
+    !session ||
+    !activeOrder ||
+    !activeOrder.active ||
+    activeOrder.lines.length === 0
+  ) {
+    return redirect('/');
+  }
   const { availableCountries } = await getAvailableCountries({ request });
   const { eligibleShippingMethods } = await getEligibleShippingMethods({
     request,
@@ -57,7 +70,8 @@ export default function CheckoutShipping() {
     customer &&
     ((shippingAddress?.streetLine1 && shippingAddress?.postalCode) ||
       selectedAddressIndex != null) &&
-    activeOrder?.shippingLines?.length;
+    activeOrder?.shippingLines?.length &&
+    activeOrder?.lines?.length;
 
   const submitCustomerForm = (event: FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
