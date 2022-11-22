@@ -15,11 +15,24 @@ import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
 import { StripePayments } from '~/components/checkout/stripe/StripePayments';
 import { DummyPayments } from '~/components/checkout/DummyPayments';
 import { BraintreeDropIn } from '~/components/checkout/braintree/BraintreePayments';
+import { getActiveOrder } from '~/providers/orders/order';
 
 export async function loader({ params, request }: DataFunctionArgs) {
   const session = await sessionStorage.getSession(
     request?.headers.get('Cookie'),
   );
+  const activeOrder = await getActiveOrder({ request });
+
+  //check if there is an active order if not redirect to homepage
+  if (
+    !session ||
+    !activeOrder ||
+    !activeOrder.active ||
+    activeOrder.lines.length === 0
+  ) {
+    return redirect('/');
+  }
+
   const { eligiblePaymentMethods } = await getEligiblePaymentMethods({
     request,
   });
