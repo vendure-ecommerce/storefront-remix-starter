@@ -1,9 +1,12 @@
 import gql from 'graphql-tag';
 import { QueryOptions, sdk } from '~/graphqlWrapper';
-import { listedProductFragment } from '../products/products';
 
 export function getActiveCustomer(options: QueryOptions) {
   return sdk.activeCustomer(undefined, options);
+}
+
+export function getActiveCustomerDetails(options: QueryOptions) {
+  return sdk.activeCustomerDetails(undefined, options);
 }
 
 export function getActiveCustomerAddresses(options: QueryOptions) {
@@ -16,6 +19,19 @@ gql`
       id
       firstName
       lastName
+    }
+  }
+`;
+
+gql`
+  query activeCustomerDetails {
+    activeCustomer {
+      id
+      title
+      firstName
+      lastName
+      phoneNumber
+      emailAddress
     }
   }
 `;

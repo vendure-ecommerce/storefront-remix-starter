@@ -13,3 +13,10 @@ export function shippingFormDataIsValid(
     shippingFormData.postalCode
   );
 }
+
+export function replaceEmptyString(input: string | undefined | null) {
+  if (!input || input.trim().length == 0) {
+    return '-';
+  }
+  return input;
+}

@@ -4,6 +4,7 @@ import {
   LogoutMutation,
   RegisterCustomerAccountMutation,
   RegisterCustomerAccountMutationVariables,
+  UpdateCustomerInput,
   VerifyCustomerAccountMutation,
 } from '~/generated/graphql';
 import { QueryOptions, sdk, WithHeaders } from '~/graphqlWrapper';
@@ -56,6 +57,32 @@ export const verifyCustomerAccount = async (
     }));
 };
 
+export async function updateCustomer(
+  input: UpdateCustomerInput,
+  options: QueryOptions,
+) {
+  return sdk.updateCustomer({ input }, options);
+}
+
+export async function requestUpdateCustomerEmailAddress(
+  password: string,
+  newEmailAddress: string,
+  options: QueryOptions,
+) {
+  return sdk
+    .requestUpdateCustomerEmailAddress({ password, newEmailAddress }, options)
+    .then((res) => res.requestUpdateCustomerEmailAddress);
+}
+
+export async function updateCustomerEmailAddress(
+  token: string,
+  options: QueryOptions,
+) {
+  return sdk
+    .updateCustomerEmailAddress({ token }, options)
+    .then((res) => res.updateCustomerEmailAddress);
+}
+
 gql`
   mutation login($email: String!, $password: String!, $rememberMe: Boolean) {
     login(username: $email, password: $password, rememberMe: $rememberMe) {
@@ -103,6 +130,44 @@ gql`
         id
         identifier
       }
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation updateCustomer($input: UpdateCustomerInput!) {
+    updateCustomer(input: $input) {
+      __typename
+    }
+  }
+`;
+
+gql`
+  mutation requestUpdateCustomerEmailAddress(
+    $password: String!
+    $newEmailAddress: String!
+  ) {
+    requestUpdateCustomerEmailAddress(
+      password: $password
+      newEmailAddress: $newEmailAddress
+    ) {
+      __typename
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation updateCustomerEmailAddress($token: String!) {
+    updateCustomerEmailAddress(token: $token) {
+      __typename
       ... on ErrorResult {
         errorCode
         message
