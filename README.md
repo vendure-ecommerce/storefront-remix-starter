@@ -8,12 +8,12 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 
 ## To do
 
-* Cart ✅
-* Checkout flow ✅
-* Search facet filters ✅
-* Login ✅
-* Account creation ✅
-* Customer account management
+- Cart ✅
+- Checkout flow ✅
+- Search facet filters ✅
+- Login ✅
+- Account creation ✅
+- Customer account management
 
 **Contributions welcome!**
 
@@ -31,7 +31,7 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 4. `npm run dev` - run the storefront with a local Remix server
 5. `npm run dev:cf` - runs locally with the Cloudflare Pages configuration
 
-### Vendure Server 
+### Vendure Server
 
 This storefront requires a Vendure server. You can either run a local instance, or use our public demo server.
 
@@ -67,7 +67,7 @@ Currently, both Stripe and Braintree are supported out of the box, but only one 
 
 ### Stripe integration
 
-This repo has a built-in Stripe payment integration. To enable it, ensure that your Vendure server is set up with 
+This repo has a built-in Stripe payment integration. To enable it, ensure that your Vendure server is set up with
 the [StripePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/stripe-plugin/).
 
 Ensure your new PaymentMethod uses the word `stripe` somewhere in its code, as that's how this integration will know
@@ -78,10 +78,13 @@ Then add your Stripe publishable key to the env file:
 ```
 STRIPE_PUBLISHABLE_KEY=pk_test_t38hl...etc
 ```
+
+**Important note**: There's a race condition between Stripe redirecting a customer to the confirmation page and the webhook receiving the confirmation in the Vendure backend. As this condition is not very distinguishable from other potential issues, it is currently addressed by implementing a very simple retry system of 5 retries every 2.5s You can tweak these settings in the [CheckoutConfirmation route](./app/routes/checkout/confirmation.%24orderCode.tsx).
+
 ### Braintree integration
 
-This repo has built-in Braintree integration. To enable it, ensure that your Vendure server is set up with 
-the [BraintreePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/braintree-plugin/). 
+This repo has built-in Braintree integration. To enable it, ensure that your Vendure server is set up with
+the [BraintreePlugin](https://www.vendure.io/docs/typescript-api/payments-plugin/braintree-plugin/).
 
 Currently, `storeCustomersInBraintree` has to be set to `true` in plugin options.
 
