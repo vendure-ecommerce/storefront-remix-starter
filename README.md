@@ -8,12 +8,18 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 
 ## To do
 
-- Cart ✅
-- Checkout flow ✅
-- Search facet filters ✅
-- Login ✅
-- Account creation ✅
-- Customer account management
+Most Vendure features are already part of this starter. Notable missing Vendure features:
+- Account order history
+- Default billing/shipping addresses
+- Separate billing address in checkout
+- Promotions
+- Localization
+- Multi channel support
+
+General things missing:
+- Global input validation
+- Sitemap generation
+- Metadata
 
 **Contributions welcome!**
 
