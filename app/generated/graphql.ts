@@ -3233,6 +3233,35 @@ export type UpdateCustomerEmailAddressMutationVariables = Exact<{
 
 export type UpdateCustomerEmailAddressMutation = { __typename?: 'Mutation', updateCustomerEmailAddress: { __typename: 'IdentifierChangeTokenExpiredError', errorCode: ErrorCode, message: string } | { __typename: 'IdentifierChangeTokenInvalidError', errorCode: ErrorCode, message: string } | { __typename: 'NativeAuthStrategyError', errorCode: ErrorCode, message: string } | { __typename: 'Success' } };
 
+export type UpdateCustomerAddressMutationVariables = Exact<{
+  input: UpdateAddressInput;
+}>;
+
+
+export type UpdateCustomerAddressMutation = { __typename?: 'Mutation', updateCustomerAddress: { __typename: 'Address' } };
+
+export type CreateCustomerAddressMutationVariables = Exact<{
+  input: CreateAddressInput;
+}>;
+
+
+export type CreateCustomerAddressMutation = { __typename?: 'Mutation', createCustomerAddress: { __typename: 'Address' } };
+
+export type DeleteCustomerAddressMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteCustomerAddressMutation = { __typename?: 'Mutation', deleteCustomerAddress: { __typename?: 'Success', success: boolean } };
+
+export type UpdateCustomerPasswordMutationVariables = Exact<{
+  currentPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type UpdateCustomerPasswordMutation = { __typename?: 'Mutation', updateCustomerPassword: { __typename: 'InvalidCredentialsError', errorCode: ErrorCode, message: string } | { __typename: 'NativeAuthStrategyError', errorCode: ErrorCode, message: string } | { __typename: 'PasswordValidationError', errorCode: ErrorCode, message: string } | { __typename: 'Success', success: boolean } };
+
 export type ActiveChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3616,6 +3645,44 @@ export const UpdateCustomerEmailAddressDocument = gql`
   }
 }
     `;
+export const UpdateCustomerAddressDocument = gql`
+    mutation updateCustomerAddress($input: UpdateAddressInput!) {
+  updateCustomerAddress(input: $input) {
+    __typename
+  }
+}
+    `;
+export const CreateCustomerAddressDocument = gql`
+    mutation createCustomerAddress($input: CreateAddressInput!) {
+  createCustomerAddress(input: $input) {
+    __typename
+  }
+}
+    `;
+export const DeleteCustomerAddressDocument = gql`
+    mutation deleteCustomerAddress($id: ID!) {
+  deleteCustomerAddress(id: $id) {
+    success
+  }
+}
+    `;
+export const UpdateCustomerPasswordDocument = gql`
+    mutation updateCustomerPassword($currentPassword: String!, $newPassword: String!) {
+  updateCustomerPassword(
+    currentPassword: $currentPassword
+    newPassword: $newPassword
+  ) {
+    __typename
+    ... on Success {
+      success
+    }
+    ... on ErrorResult {
+      errorCode
+      message
+    }
+  }
+}
+    `;
 export const ActiveChannelDocument = gql`
     query activeChannel {
   activeChannel {
@@ -3929,6 +3996,18 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     updateCustomerEmailAddress(variables: UpdateCustomerEmailAddressMutationVariables, options?: C): Promise<UpdateCustomerEmailAddressMutation> {
       return requester<UpdateCustomerEmailAddressMutation, UpdateCustomerEmailAddressMutationVariables>(UpdateCustomerEmailAddressDocument, variables, options) as Promise<UpdateCustomerEmailAddressMutation>;
+    },
+    updateCustomerAddress(variables: UpdateCustomerAddressMutationVariables, options?: C): Promise<UpdateCustomerAddressMutation> {
+      return requester<UpdateCustomerAddressMutation, UpdateCustomerAddressMutationVariables>(UpdateCustomerAddressDocument, variables, options) as Promise<UpdateCustomerAddressMutation>;
+    },
+    createCustomerAddress(variables: CreateCustomerAddressMutationVariables, options?: C): Promise<CreateCustomerAddressMutation> {
+      return requester<CreateCustomerAddressMutation, CreateCustomerAddressMutationVariables>(CreateCustomerAddressDocument, variables, options) as Promise<CreateCustomerAddressMutation>;
+    },
+    deleteCustomerAddress(variables: DeleteCustomerAddressMutationVariables, options?: C): Promise<DeleteCustomerAddressMutation> {
+      return requester<DeleteCustomerAddressMutation, DeleteCustomerAddressMutationVariables>(DeleteCustomerAddressDocument, variables, options) as Promise<DeleteCustomerAddressMutation>;
+    },
+    updateCustomerPassword(variables: UpdateCustomerPasswordMutationVariables, options?: C): Promise<UpdateCustomerPasswordMutation> {
+      return requester<UpdateCustomerPasswordMutation, UpdateCustomerPasswordMutationVariables>(UpdateCustomerPasswordDocument, variables, options) as Promise<UpdateCustomerPasswordMutation>;
     },
     activeChannel(variables?: ActiveChannelQueryVariables, options?: C): Promise<ActiveChannelQuery> {
       return requester<ActiveChannelQuery, ActiveChannelQueryVariables>(ActiveChannelDocument, variables, options) as Promise<ActiveChannelQuery>;

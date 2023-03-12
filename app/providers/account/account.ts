@@ -1,9 +1,11 @@
 import gql from 'graphql-tag';
 import {
+  CreateAddressInput,
   LoginMutation,
   LogoutMutation,
   RegisterCustomerAccountMutation,
   RegisterCustomerAccountMutationVariables,
+  UpdateAddressInput,
   UpdateCustomerInput,
   VerifyCustomerAccountMutation,
 } from '~/generated/graphql';
@@ -81,6 +83,39 @@ export async function updateCustomerEmailAddress(
   return sdk
     .updateCustomerEmailAddress({ token }, options)
     .then((res) => res.updateCustomerEmailAddress);
+}
+
+export async function updateCustomerAddress(
+  input: UpdateAddressInput,
+  options: QueryOptions,
+) {
+  return sdk
+    .updateCustomerAddress({ input }, options)
+    .then((res) => res.updateCustomerAddress);
+}
+
+export async function createCustomerAddress(
+  input: CreateAddressInput,
+  options: QueryOptions,
+) {
+  return sdk
+    .createCustomerAddress({ input }, options)
+    .then((res) => res.createCustomerAddress);
+}
+
+export async function deleteCustomerAddress(id: string, options: QueryOptions) {
+  return sdk
+    .deleteCustomerAddress({ id }, options)
+    .then((res) => res.deleteCustomerAddress);
+}
+
+export async function updateCustomerPassword(
+  input: { currentPassword: string; newPassword: string },
+  options: QueryOptions,
+) {
+  return sdk
+    .updateCustomerPassword(input, options)
+    .then((res) => res.updateCustomerPassword);
 }
 
 gql`
@@ -168,6 +203,51 @@ gql`
   mutation updateCustomerEmailAddress($token: String!) {
     updateCustomerEmailAddress(token: $token) {
       __typename
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation updateCustomerAddress($input: UpdateAddressInput!) {
+    updateCustomerAddress(input: $input) {
+      __typename
+    }
+  }
+`;
+
+gql`
+  mutation createCustomerAddress($input: CreateAddressInput!) {
+    createCustomerAddress(input: $input) {
+      __typename
+    }
+  }
+`;
+
+gql`
+  mutation deleteCustomerAddress($id: ID!) {
+    deleteCustomerAddress(id: $id) {
+      success
+    }
+  }
+`;
+
+gql`
+  mutation updateCustomerPassword(
+    $currentPassword: String!
+    $newPassword: String!
+  ) {
+    updateCustomerPassword(
+      currentPassword: $currentPassword
+      newPassword: $newPassword
+    ) {
+      __typename
+      ... on Success {
+        success
+      }
       ... on ErrorResult {
         errorCode
         message
