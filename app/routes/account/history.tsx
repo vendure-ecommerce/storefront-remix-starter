@@ -1,22 +1,31 @@
+import { useLoaderData } from "@remix-run/react";
+import { DataFunctionArgs, json, redirect } from "@remix-run/server-runtime";
 import OrderHistoryItem from "~/components/account/OrderHistoryItem";
-import { Order } from "~/generated/graphql";
+import { getActiveCustomerOrderList } from "~/providers/customer/customer";
+
+
+
+export async function loader({ request }: DataFunctionArgs) {
+    const res = await getActiveCustomerOrderList({ request });
+    if (!res.activeCustomer) {
+        return redirect('/sign-in');
+    }
+    return json({ orderList: res.activeCustomer.orders });
+}
+
 
 export default function AccountHistory() {
+    const { orderList } = useLoaderData<typeof loader>();
 
-    const orders/*: Order[]*/ = [
-        { code: "example01", lines: [ { code: "xyz" }, ] },
-        { code: "example02", lines: [ { code: "abc" }, { code: "def" }, ] },
-    ];
-    
     return (
         <div className="pt-10">
 
-        {orders.length === 0 && (
+        {orderList.items.length === 0 && (
         <div className="pt-16 text-3xl text-center italic text-gray-300 select-none flex justify-center items-center">
             Your future orders will appear here
         </div>
         )}
-        {orders?.map(item => (
+        {orderList.items?.map(item => (
             <OrderHistoryItem key={item.code} order={item} isInitiallyExpanded={true} />
         ))}
             

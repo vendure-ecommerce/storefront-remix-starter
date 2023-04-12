@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { QueryOptions, sdk } from '~/graphqlWrapper';
+// import { OrderListOptions, CustomerOrdersArgs } from '~/generated/graphql';
 
 export function getActiveCustomer(options: QueryOptions) {
   return sdk.activeCustomer(undefined, options);
@@ -11,6 +12,10 @@ export function getActiveCustomerDetails(options: QueryOptions) {
 
 export function getActiveCustomerAddresses(options: QueryOptions) {
   return sdk.activeCustomerAddresses(undefined, options);
+}
+
+export function getActiveCustomerOrderList(options: QueryOptions) {
+  return sdk.activeCustomerOrderList(undefined, options);
 }
 
 gql`
@@ -56,6 +61,29 @@ gql`
         }
         phoneNumber
         defaultShippingAddress
+      }
+    }
+  }
+`;
+
+gql`
+  query activeCustomerOrderList {
+    activeCustomer {
+      orders {
+        totalItems
+        items {
+          code
+          state
+          orderPlacedAt
+          currencyCode
+          totalWithTax
+          lines {
+            discountedLinePriceWithTax
+            productVariant {
+              name
+            }
+          }
+        }
       }
     }
   }

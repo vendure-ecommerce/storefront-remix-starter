@@ -1289,6 +1289,10 @@ select {
   align-items: flex-start;
 }
 
+#app .items-end {
+  align-items: flex-end;
+}
+
 #app .items-center {
   align-items: center;
 }
@@ -2757,6 +2761,10 @@ select {
     flex-direction: row;
   }
 
+  #app .md\:items-center {
+    align-items: center;
+  }
+
   #app .md\:justify-between {
     justify-content: space-between;
   }
@@ -2767,6 +2775,10 @@ select {
 
   #app .md\:gap-8 {
     gap: 2rem;
+  }
+
+  #app .md\:gap-10 {
+    gap: 2.5rem;
   }
 
   #app .md\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
@@ -2889,6 +2901,10 @@ select {
 
   #app .lg\:gap-6 {
     gap: 1.5rem;
+  }
+
+  #app .lg\:gap-16 {
+    gap: 4rem;
   }
 
   #app .lg\:gap-x-12 {
