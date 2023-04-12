@@ -12,7 +12,6 @@ import {
   useCatch,
   useLoaderData,
   useOutletContext,
-  useTransition,
 } from '@remix-run/react';
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
@@ -76,7 +75,6 @@ export default function ProductSlug() {
   const [selectedVariantId, setSelectedVariantId] = useState(
     product.variants[0].id,
   );
-  const transition = useTransition();
   const selectedVariant = findVariantById(selectedVariantId);
   if (!selectedVariant) {
     setSelectedVariantId(product.variants[0].id);
@@ -212,7 +210,7 @@ export default function ProductSlug() {
                   <button
                     type="submit"
                     className={`max-w-xs flex-1 ${
-                      transition.state !== 'idle'
+                      activeOrderFetcher.state !== 'idle'
                         ? 'bg-gray-400'
                         : qtyInCart === 0
                         ? 'bg-primary-600 hover:bg-primary-700'
@@ -221,7 +219,7 @@ export default function ProductSlug() {
                                      transition-colors border border-transparent rounded-md py-3 px-8 flex items-center
                                       justify-center text-base font-medium text-white focus:outline-none
                                       focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full`}
-                    disabled={transition.state !== 'idle'}
+                    disabled={activeOrderFetcher.state !== 'idle'}
                   >
                     {qtyInCart ? (
                       <span className="flex items-center">
