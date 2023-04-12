@@ -51,7 +51,7 @@ export default function OrderHistoryItem({
             {/* Status + Actions */}
             <div className="gap-4 lg:gap-6 flex flex-col items-end md:flex-row md:items-center self-start">
                 {/* TODO: Make dedicated component for status -  */}
-                <span className="text-xs" title={order?.state}>Status<sup>?</sup></span>
+                <span className="text-xs underline" title={order?.state}>Status<sup>?</sup></span>
                 <Button className="bg-white text-sm" onClick={() => setIsExpanded(!isExpanded)}>
                     {isExpanded ? 'Less details' : 'More details'}
                 </Button>
