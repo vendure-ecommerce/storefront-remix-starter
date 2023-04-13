@@ -1277,6 +1277,10 @@ select {
   flex-direction: column;
 }
 
+#app .flex-wrap {
+  flex-wrap: wrap;
+}
+
 #app .flex-nowrap {
   flex-wrap: nowrap;
 }

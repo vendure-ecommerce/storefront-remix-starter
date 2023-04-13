@@ -48,7 +48,6 @@ export function OrderStateBadge({ state }: { state?: string }) {
         default:
         case "Draft":
         case "AddingItems":
-        case "ArrangingPayment":
             colorClasses = "bg-gray-100 text-gray-800";
             break;
         case "PaymentAuthorized":
@@ -62,6 +61,7 @@ export function OrderStateBadge({ state }: { state?: string }) {
         case "PartiallyShipped":
         case "PartiallyDelivered":
         case "Modifying":
+        case "ArrangingPayment":
         case "ArrangingAdditionalPayment":
             colorClasses = "bg-yellow-100 text-yellow-800";
             break;
