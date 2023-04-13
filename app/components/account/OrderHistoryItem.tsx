@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "~/components/Button";
 import { Price } from '~/components/products/Price';
 import { ActiveCustomerOrderListQuery } from "~/generated/graphql";
-
+import { OrderStateBadge } from "~/components/account/OrderStateBadge";
 
 type OrderHistoryItemProps = {
     order?: NonNullable<ActiveCustomerOrderListQuery['activeCustomer']>['orders']['items'][number]
@@ -50,12 +50,10 @@ export default function OrderHistoryItem({
 
             {/* Status + Actions */}
             <div className="gap-4 lg:gap-6 flex flex-col items-end md:flex-row md:items-center self-start">
-                {/* TODO: Make dedicated component for status -  */}
-                <span className="text-xs underline" title={order?.state}>Status<sup>?</sup></span>
+                <OrderStateBadge state={order?.state}/>
                 <Button className="bg-white text-sm" onClick={() => setIsExpanded(!isExpanded)}>
                     {isExpanded ? 'Less details' : 'More details'}
                 </Button>
-                <Button className="bg-white text-sm" disabled title="Not implemented">Invoice</Button>
             </div>
         </div>
 
