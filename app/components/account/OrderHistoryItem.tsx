@@ -77,7 +77,7 @@ export default function OrderHistoryItem({
                                 <span className="flex flex-1 flex-col gap-0">
                                     <span className="text-gray-500 text-xs uppercase tracking-wide">SKU # {line.productVariant.sku}</span>
                                     <span className="text-black text-sm font-semibold mb-2 line-clamp-3 md:line-clamp-2 max-w-md" title={line.productVariant.name}>
-                                        {line.productVariant.name} Lorem ipsum dolor imet malo long name name i need more characters pls think about longer names is this enough?
+                                        {line.productVariant.name}
                                     </span>
                                     <span className="text-gray-500 text-sm">
                                         {line.quantity} item/s<span className="mx-3">-</span><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price>
