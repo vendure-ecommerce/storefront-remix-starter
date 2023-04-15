@@ -772,6 +772,10 @@ select {
   z-index: 75;
 }
 
+#app .col-span-full {
+  grid-column: 1 / -1;
+}
+
 #app .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -811,6 +815,11 @@ select {
 #app .my-10 {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
+}
+
+#app .mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
 }
 
 #app .-my-6 {
@@ -886,6 +895,10 @@ select {
   margin-top: 2rem;
 }
 
+#app .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 #app .mr-2 {
   margin-right: 0.5rem;
 }
@@ -950,10 +963,6 @@ select {
   margin-right: 1rem;
 }
 
-#app .mb-2 {
-  margin-bottom: 0.5rem;
-}
-
 #app .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -1016,6 +1025,10 @@ select {
 
 #app .h-24 {
   height: 6rem;
+}
+
+#app .\!h-full {
+  height: 100% !important;
 }
 
 #app .h-7 {
@@ -1130,12 +1143,16 @@ select {
   max-width: 48rem;
 }
 
-#app .max-w-full {
-  max-width: 100%;
-}
-
 #app .max-w-md {
   max-width: 28rem;
+}
+
+#app .max-w-sm {
+  max-width: 24rem;
+}
+
+#app .max-w-full {
+  max-width: 100%;
 }
 
 #app .max-w-\[300px\] {
@@ -1181,6 +1198,11 @@ select {
 
 #app .translate-x-0 {
   --tw-translate-x: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+#app .rotate-90 {
+  --tw-rotate: 90deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -1277,10 +1299,6 @@ select {
   flex-direction: column;
 }
 
-#app .flex-wrap {
-  flex-wrap: wrap;
-}
-
 #app .flex-nowrap {
   flex-wrap: nowrap;
 }
@@ -1299,6 +1317,10 @@ select {
 
 #app .items-center {
   align-items: center;
+}
+
+#app .items-stretch {
+  align-items: stretch;
 }
 
 #app .justify-start {
@@ -1329,12 +1351,20 @@ select {
   gap: 0.5rem;
 }
 
+#app .gap-4 {
+  gap: 1rem;
+}
+
 #app .gap-8 {
   gap: 2rem;
 }
 
-#app .gap-4 {
-  gap: 1rem;
+#app .gap-0 {
+  gap: 0px;
+}
+
+#app .gap-1 {
+  gap: 0.25rem;
 }
 
 #app .gap-3 {
@@ -1442,6 +1472,10 @@ select {
 
 #app .self-start {
   align-self: flex-start;
+}
+
+#app .self-center {
+  align-self: center;
 }
 
 #app .overflow-auto {
@@ -1790,6 +1824,10 @@ select {
   padding: 1.25rem;
 }
 
+#app .\!p-1 {
+  padding: 0.25rem !important;
+}
+
 #app .p-6 {
   padding: 1.5rem;
 }
@@ -1966,6 +2004,10 @@ select {
 
 #app .text-center {
   text-align: center;
+}
+
+#app .text-end {
+  text-align: end;
 }
 
 #app .align-baseline {
@@ -2360,6 +2402,12 @@ select {
   transition-duration: 150ms;
 }
 
+#app .transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 #app .transition-opacity {
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -2370,6 +2418,10 @@ select {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+#app .duration-100 {
+  transition-duration: 100ms;
 }
 
 #app .duration-300 {
@@ -2394,6 +2446,13 @@ select {
 
 #app .ease-in {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+#app .line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 #app .first\:mt-0:first-child {
@@ -2831,12 +2890,20 @@ select {
     margin-top: 3rem;
   }
 
+  #app .md\:block {
+    display: block;
+  }
+
   #app .md\:flex {
     display: flex;
   }
 
   #app .md\:grid {
     display: grid;
+  }
+
+  #app .md\:\!h-auto {
+    height: auto !important;
   }
 
   #app .md\:basis-1\/4 {
@@ -2873,8 +2940,22 @@ select {
     margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
+  #app .md\:self-end {
+    align-self: flex-end;
+  }
+
   #app .md\:overflow-x-hidden {
     overflow-x: hidden;
+  }
+
+  #app .md\:\!py-2 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  #app .md\:\!px-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 
   #app .md\:pr-8 {
@@ -2889,6 +2970,13 @@ select {
   #app .md\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+  #app .md\:line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 }
 
@@ -2977,6 +3065,10 @@ select {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  #app .lg\:flex-row {
+    flex-direction: row;
+  }
+
   #app .lg\:flex-col {
     flex-direction: column;
   }
@@ -3011,6 +3103,10 @@ select {
     padding: 1.5rem;
   }
 
+  #app .lg\:p-3 {
+    padding: 0.75rem;
+  }
+
   #app .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
@@ -3019,6 +3115,16 @@ select {
   #app .lg\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  #app .lg\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  #app .lg\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   #app .lg\:py-16 {
