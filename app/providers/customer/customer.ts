@@ -77,10 +77,20 @@ gql`
           orderPlacedAt
           currencyCode
           totalWithTax
+          shippingWithTax
           lines {
+            quantity
             discountedLinePriceWithTax
+            featuredAsset {
+              name
+              source
+              preview
+            }
             productVariant {
               name
+              sku
+              currencyCode
+              priceWithTax
             }
           }
         }
