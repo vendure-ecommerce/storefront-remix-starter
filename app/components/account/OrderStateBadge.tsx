@@ -71,7 +71,7 @@ export function OrderStateBadge({ state }: { state?: string }) {
     }
 
     return (
-        <span className={`text-xs font-medium mr-2 px-2.5 py-0.5 rounded uppercase whitespace-nowrap ${colorClasses}`}>{label}</span>
+        <span className={`text-xs font-medium px-2.5 py-0.5 rounded uppercase whitespace-nowrap ${colorClasses}`}>{label}</span>
     );
 
 }
