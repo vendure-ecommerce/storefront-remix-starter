@@ -126,22 +126,26 @@ export default function OrderHistoryItem({
                         <div className="p-2 lg:p-3 grid grid-cols-2 gap-1 text-sm max-w-sm self-center md:self-end">
                             <h6 className="font-medium col-span-full">Order summary</h6>
                             <span>Item(s) Subtotal:</span>
-                            <span className="text-end">€TODO</span>
+                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.subTotalWithTax}></Price></span>
 
                             <span>Shipping & handling:</span>
-                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.shippingWithTax}></Price></span>
+                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.shippingLines.reduce((acc, s) => acc + s.priceWithTax, 0)}></Price></span>
 
                             <span>Total before tax:</span>
-                            <span className="text-end">€TODO</span>
+                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.taxSummary.reduce((acc, t) => acc + t.taxBase, 0)}></Price></span>
 
                             <span>Estimated tax:</span>
-                            <span className="text-end">€TODO</span>
+                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.taxSummary.reduce((acc, t) => acc + t.taxTotal, 0)}></Price></span>
 
                             <span>Total:</span>
-                            <span className="text-end">€TODO</span>
+                            {order?.totalWithTax && order.discounts ? (
+                                <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order.totalWithTax - order?.discounts.reduce((acc, curr) => acc + curr.amountWithTax, 0)}></Price></span>
+                            ) : (
+                                <span className="text-end">--</span>
+                            )}
 
                             <span>Applied coupons:</span>
-                            <span className="text-end">-€TODO</span>
+                            <span className="text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.discounts.reduce((acc, curr) => acc + curr.amountWithTax, 0)}></Price></span>
 
                             <span className="font-medium">Grand total:</span>
                             <span className="font-medium text-end"><Price currencyCode={order?.currencyCode} priceWithTax={order?.totalWithTax}></Price></span>

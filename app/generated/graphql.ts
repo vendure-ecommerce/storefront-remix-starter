@@ -3342,7 +3342,7 @@ export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustome
 export type ActiveCustomerOrderListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, totalWithTax: number, shippingWithTax: number, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number } }> }> } } | null };
+export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number } }> }> } } | null };
 
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
@@ -3862,8 +3862,21 @@ export const ActiveCustomerOrderListDocument = gql`
         state
         orderPlacedAt
         currencyCode
+        subTotal
+        subTotalWithTax
+        total
         totalWithTax
         shippingWithTax
+        shippingLines {
+          priceWithTax
+        }
+        taxSummary {
+          taxBase
+          taxTotal
+        }
+        discounts {
+          amountWithTax
+        }
         lines {
           quantity
           discountedLinePriceWithTax
