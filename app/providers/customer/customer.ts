@@ -81,6 +81,10 @@ gql`
           lines {
             quantity
             discountedLinePriceWithTax
+            fulfillments {
+              updatedAt
+              state
+            }
             featuredAsset {
               name
               source

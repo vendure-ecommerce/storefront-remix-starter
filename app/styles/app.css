@@ -1478,6 +1478,10 @@ select {
   align-self: center;
 }
 
+#app .self-stretch {
+  align-self: stretch;
+}
+
 #app .overflow-auto {
   overflow: auto;
 }

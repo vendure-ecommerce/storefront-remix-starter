@@ -58,7 +58,7 @@ export default function OrderHistoryItem({
                 </div>
 
                 {/* Status + Actions */}
-                <div className="gap-4 lg:gap-6 flex flex-col items-end md:flex-row md:items-center self-start">
+                <div className="gap-4 lg:gap-6 flex flex-col items-end self-stretch justify-between md:flex-row md:items-center self-start">
                     <OrderStateBadge state={order?.state} />
                     <Button className="bg-white text-sm" onClick={() => setIsExpanded(!isExpanded)}>
                         <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${isExpanded && 'rotate-90'}`} />
@@ -75,12 +75,22 @@ export default function OrderHistoryItem({
                             <div className="inline-flex justify-center items-center justify gap-4">
                                 <img src={line.featuredAsset?.source} className="w-24 h-24 object-cover rounded-md" />
                                 <span className="flex flex-1 flex-col gap-0">
-                                    <span className="text-gray-500 text-xs uppercase tracking-wide">SKU # {line.productVariant.sku}</span>
-                                    <span className="text-black text-sm font-semibold mb-2 line-clamp-3 md:line-clamp-2 max-w-md" title={line.productVariant.name}>
+                                    {/* Product name */}
+                                    <span className="text-black text-sm font-semibold line-clamp-3 md:line-clamp-2 max-w-md" title={line.productVariant.name}>
                                         {line.productVariant.name}
                                     </span>
-                                    <span className="text-gray-500 text-sm">
-                                        {line.quantity} item/s<span className="mx-3">-</span><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price>
+                                    {/* Price and quantity */}
+                                    <span className="text-gray-500 text-sm mt-1">
+                                        <Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price><span className="mx-3">-</span>{line.quantity} item{line.quantity > 1 ? 's' : ''}
+                                    </span>
+                                    {/* Shipment status */}
+                                    <span className="text-gray-500 text-xs mt-2 tracking-wide">
+                                        {line.fulfillments && line.fulfillments.length === 0 && ('Not shipped yet')}
+                                        {line.fulfillments?.map((f, i) => (
+                                            <span key={i} className="block" title={(new Date(f.updatedAt)).toLocaleString()}>
+                                                {f.state}: {new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(f.updatedAt))}
+                                            </span>
+                                        ))}
                                     </span>
                                 </span>
                             </div>
@@ -100,7 +110,6 @@ export default function OrderHistoryItem({
                     <div className="p-2 lg:py-3 lg:px-6 flex justify-end gap-2 lg:gap-6">
                         <Button disabled title="Not implemented">
                             <span className="text-xs">Get product support</span>
-                            {/* <ArrowTopRightOnSquareIcon className="w-4 h-4" /> */}
                         </Button>
                         <Button disabled title="Not implemented">
                             <span className="text-xs">View invoice</span>
