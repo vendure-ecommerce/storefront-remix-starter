@@ -3339,7 +3339,9 @@ export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never
 
 export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, phoneNumber?: string | null, defaultShippingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
 
-export type ActiveCustomerOrderListQueryVariables = Exact<{ [key: string]: never; }>;
+export type ActiveCustomerOrderListQueryVariables = Exact<{
+  orderListOptions?: InputMaybe<OrderListOptions>;
+}>;
 
 
 export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number } }> }> } } | null };
@@ -3853,9 +3855,9 @@ export const ActiveCustomerAddressesDocument = gql`
 }
     `;
 export const ActiveCustomerOrderListDocument = gql`
-    query activeCustomerOrderList {
+    query activeCustomerOrderList($orderListOptions: OrderListOptions) {
   activeCustomer {
-    orders {
+    orders(options: $orderListOptions) {
       totalItems
       items {
         code

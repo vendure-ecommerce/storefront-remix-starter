@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { QueryOptions, sdk } from '~/graphqlWrapper';
-// import { OrderListOptions, CustomerOrdersArgs } from '~/generated/graphql';
+import { OrderListOptions, CustomerOrdersArgs } from '~/generated/graphql';
 
 export function getActiveCustomer(options: QueryOptions) {
   return sdk.activeCustomer(undefined, options);
@@ -14,8 +14,8 @@ export function getActiveCustomerAddresses(options: QueryOptions) {
   return sdk.activeCustomerAddresses(undefined, options);
 }
 
-export function getActiveCustomerOrderList(options: QueryOptions) {
-  return sdk.activeCustomerOrderList(undefined, options);
+export function getActiveCustomerOrderList(orderListOptions: OrderListOptions, options: QueryOptions) {
+  return sdk.activeCustomerOrderList({orderListOptions}, options);
 }
 
 gql`
@@ -67,9 +67,9 @@ gql`
 `;
 
 gql`
-  query activeCustomerOrderList {
+  query activeCustomerOrderList($orderListOptions: OrderListOptions) {
     activeCustomer {
-      orders {
+      orders(options: $orderListOptions) {
         totalItems
         items {
           code
