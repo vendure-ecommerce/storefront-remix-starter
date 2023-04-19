@@ -143,7 +143,7 @@ export default function AccountHistory() {
                             type="submit"
                             value={appliedPaginationPage - 1}
                             disabled={appliedPaginationPage <= 1 || transition.state !== "idle"}
-                            className="text-sm rounded-r-none border-r-0"
+                            className="!text-sm rounded-r-none border-r-0"
                         >
                             Prev.
                         </Button>
@@ -152,7 +152,7 @@ export default function AccountHistory() {
                             type="submit"
                             value={appliedPaginationPage + 1}
                             disabled={appliedPaginationPage * appliedPaginationLimit >= orderList.totalItems || transition.state !== "idle"}
-                            className="text-sm rounded-l-none"
+                            className="!text-sm rounded-l-none"
                         >
                             Next
                         </Button>
