@@ -760,14 +760,6 @@ select {
   left: 0px;
 }
 
-#app .top-1\/2 {
-  top: 50%;
-}
-
-#app .left-1\/2 {
-  left: 50%;
-}
-
 #app .z-20 {
   z-index: 20;
 }
@@ -822,11 +814,6 @@ select {
 #app .-my-2 {
   margin-top: -0.5rem;
   margin-bottom: -0.5rem;
-}
-
-#app .mx-3 {
-  margin-left: 0.75rem;
-  margin-right: 0.75rem;
 }
 
 #app .-my-6 {
@@ -1062,10 +1049,6 @@ select {
   height: 0.5rem;
 }
 
-#app .h-12 {
-  height: 3rem;
-}
-
 #app .h-8 {
   height: 2rem;
 }
@@ -1110,6 +1093,11 @@ select {
   width: 6rem;
 }
 
+#app .w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 #app .w-screen {
   width: 100vw;
 }
@@ -1120,10 +1108,6 @@ select {
 
 #app .w-9 {
   width: 2.25rem;
-}
-
-#app .w-12 {
-  width: 3rem;
 }
 
 #app .w-8 {
@@ -1213,16 +1197,6 @@ select {
 
 #app .translate-x-0 {
   --tw-translate-x: 0px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-#app .-translate-x-1\/2 {
-  --tw-translate-x: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-#app .-translate-y-1\/2 {
-  --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 

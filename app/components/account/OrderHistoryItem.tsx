@@ -24,6 +24,7 @@ export default function OrderHistoryItem({
 
     const [isExpanded, setIsExpanded] = useState<boolean>(isInitiallyExpanded);
     const [areDetailsExpanded, setAreDetailsExpanded] = useState<boolean>(areDetailsInitiallyExpanded);
+    const [isLineCalcExpanded, setIsLineCalcExpanded] = useState<boolean>(false);
 
     return (
         <div className={`border rounded-lg ${className}`}>
@@ -93,9 +94,15 @@ export default function OrderHistoryItem({
                                         {line.productVariant.name}
                                     </Link>
                                     {/* Price and quantity */}
-                                    <span className="text-gray-500 text-sm mt-1">
-                                        <Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price><span className="mx-3">-</span>{line.quantity} item{line.quantity > 1 ? 's' : ''}
-                                    </span>
+                                    <button className="inline-flex gap-2 items-center w-fit text-gray-500 text-sm mt-1" onClick={() => setIsLineCalcExpanded(!isLineCalcExpanded)}>
+                                        {isLineCalcExpanded && (<>
+                                        <span title="Quantity">{line.quantity}</span>
+                                        <span className="text-gray-300 select-none">×</span>
+                                        <span title="Price per unit"><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedUnitPriceWithTax}></Price></span>
+                                        <span className="text-gray-300 select-none">Ξ</span>
+                                        </>)}
+                                        <span title="Subtotal"><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price></span>
+                                    </button>
                                     {/* Shipment status */}
                                     <span className="text-gray-500 text-xs mt-2 tracking-wide">
                                         {line.fulfillments && line.fulfillments.length === 0 && ('Not shipped yet')}

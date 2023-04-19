@@ -94,6 +94,7 @@ gql`
           lines {
             quantity
             discountedLinePriceWithTax
+            discountedUnitPriceWithTax
             fulfillments {
               updatedAt
               state
