@@ -1526,6 +1526,16 @@ select {
   border-radius: 0.75rem;
 }
 
+#app .rounded-r-none {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+#app .rounded-l-none {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
 #app .rounded-t-lg {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
@@ -1541,6 +1551,10 @@ select {
 
 #app .border-b {
   border-bottom-width: 1px;
+}
+
+#app .border-r-0 {
+  border-right-width: 0px;
 }
 
 #app .border-t {
@@ -2539,6 +2553,10 @@ select {
 
 #app .hover\:opacity-75:hover {
   opacity: 0.75;
+}
+
+#app .focus\:z-10:focus {
+  z-index: 10;
 }
 
 #app .focus\:border-primary-500:focus {
