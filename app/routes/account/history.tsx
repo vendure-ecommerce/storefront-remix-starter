@@ -92,19 +92,15 @@ export default function AccountHistory() {
 
     return (
         <div className="pt-10 relative">
-            {transition.state !== "idle" && (
-                <div className="absolute top-0 left-0 w-full h-full z-100 bg-white bg-opacity-75">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <ArrowPathIcon className="animate-spin h-12 w-12 text-gray-500" />
-                    </div>
-                </div>
-            )}
+            {/* Loading-Overlay */}
+            {transition.state !== "idle" && (<div className="absolute top-0 left-0 w-full h-full z-100 bg-white bg-opacity-75"></div>)}
 
             {orderList.items.length === 0 && (
                 <div className="py-16 text-3xl text-center italic text-gray-300 select-none flex justify-center items-center">
                     {orderList.totalItems === 0 ? 'Your future orders will appear here' : 'No more orders, end reached'}
                 </div>
             )}
+            {/* The actual orders */}
             {orderList.items?.map(item => (
                 // TODO: CHECK THIS ERROR OUT
                 <OrderHistoryItem key={item.code} order={item} isInitiallyExpanded={true} className="mb-10" />
