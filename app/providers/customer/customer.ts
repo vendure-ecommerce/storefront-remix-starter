@@ -108,6 +108,9 @@ gql`
               sku
               currencyCode
               priceWithTax
+              product {
+                slug
+              }
             }
           }
         }

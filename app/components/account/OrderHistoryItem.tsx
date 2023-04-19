@@ -4,7 +4,8 @@ import { Price } from '~/components/products/Price';
 import { ActiveCustomerOrderListQuery } from "~/generated/graphql";
 import { OrderStateBadge } from "~/components/account/OrderStateBadge";
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { ArrowTopRightOnSquareIcon, EllipsisHorizontalCircleIcon, EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { Link } from "@remix-run/react";
 
 type OrderHistoryItemProps = {
     order?: NonNullable<ActiveCustomerOrderListQuery['activeCustomer']>['orders']['items'][number]
@@ -78,15 +79,19 @@ export default function OrderHistoryItem({
             {isExpanded && (
                 <div className="flex flex-col">
                     {order?.lines.map((line, key) => (
-                        <div key={key} className="p-4 lg:p-6 border-b flex flex-row gap-8 justify-between">
+                        <div key={key} className="p-4 lg:p-6 border-b flex flex-row gap-8 justify-between group">
                             {/* Product */}
                             <div className="inline-flex justify-center items-center justify gap-4">
-                                <img src={line.featuredAsset?.source} className="w-24 h-24 object-cover rounded-md" />
+                                <Link to={`/products/${line.productVariant.product.slug}`} className="hover:opacity-50 transition-opacity"><img src={line.featuredAsset?.source} className="w-24 h-24 object-cover rounded-md" /></Link>
                                 <span className="flex flex-1 flex-col gap-0">
                                     {/* Product name */}
-                                    <span className="text-black text-sm font-semibold line-clamp-3 md:line-clamp-2 max-w-md" title={line.productVariant.name}>
+                                    <Link
+                                        to={`/products/${line.productVariant.product.slug}`}
+                                        className="text-black text-sm font-semibold line-clamp-3 md:line-clamp-2 max-w-md hover:text-black/50"
+                                        title={line.productVariant.name}
+                                    >
                                         {line.productVariant.name}
-                                    </span>
+                                    </Link>
                                     {/* Price and quantity */}
                                     <span className="text-gray-500 text-sm mt-1">
                                         <Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price><span className="mx-3">-</span>{line.quantity} item{line.quantity > 1 ? 's' : ''}
@@ -102,27 +107,18 @@ export default function OrderHistoryItem({
                                     </span>
                                 </span>
                             </div>
-                            {/* Per product actions */}
-                            <div className="inline-flex flex-col lg:flex-row justify-center items-stretch md:items-center gap-4 lg:gap-6">
-                                {/* <Button disabled title="Not implemented"><span className="text-sm">Write a review</span></Button> */}
-                                {/* <Button disabled title="Not implemented"><span className="text-sm">Return or replace</span></Button> */}
-                                <Button disabled title="Not implemented" className="!p-1 md:!py-2 md:!px-4 !h-full md:!h-auto">
-                                    <span className="text-xs hidden md:block">Actions</span>
-                                    <EllipsisVerticalIcon className="w-5 h-5" />
-                                </Button>
-                            </div>
                         </div>
                     ))}
 
                     {/* Per order actions */}
                     <div className="p-2 lg:py-3 lg:px-6 flex justify-end gap-2 lg:gap-6">
-                        <Button disabled title="Not implemented">
+                        {/* <Button disabled title="Not implemented">
                             <span className="text-xs">Get product support</span>
-                        </Button>
-                        <Button disabled title="Not implemented">
+                        </Button> */}
+                        {/* <Button disabled title="Not implemented">
                             <span className="text-xs">View invoice</span>
                             <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                        </Button>
+                        </Button> */}
                         <Button onClick={() => setAreDetailsExpanded(!areDetailsExpanded)}>
                             <span className="text-xs">Detailed overview</span>
                             <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${areDetailsExpanded && 'rotate-90'}`} />
