@@ -88,7 +88,7 @@ export default function AccountHistory() {
     const submit = useSubmit();
     const transition = useTransition();
     const showingOrdersFrom = (appliedPaginationPage - 1) * appliedPaginationLimit + 1;
-    const showingOrdersTo = showingOrdersFrom + appliedPaginationLimit - 1;
+    const showingOrdersTo = showingOrdersFrom + orderList.items.length - 1;
 
     return (
         <div className="pt-10 relative">
