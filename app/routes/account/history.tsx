@@ -11,9 +11,10 @@ import { OrderListOptions, SortOrder } from "~/generated/graphql";
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 
 
-const paginationLimitMinimumDefault = 1;
-const allowedPaginationLimits = new Set<number>([paginationLimitMinimumDefault, 2, 3]);
+const paginationLimitMinimumDefault = 10;
+const allowedPaginationLimits = new Set<number>([paginationLimitMinimumDefault, 20, 30]);
 const paginationLimitDerivedMax = Math.max(...Array.from(allowedPaginationLimits));
+
 const orderPaginationLimitSchema = z
     .number({
         required_error: "Limit is required",
