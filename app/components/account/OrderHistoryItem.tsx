@@ -10,6 +10,7 @@ type OrderHistoryItemProps = {
     order?: NonNullable<ActiveCustomerOrderListQuery['activeCustomer']>['orders']['items'][number]
     isInitiallyExpanded?: boolean
     areDetailsInitiallyExpanded?: boolean
+    className?: string
 };
 
 
@@ -17,13 +18,14 @@ export default function OrderHistoryItem({
     order,
     isInitiallyExpanded = false,
     areDetailsInitiallyExpanded = false,
+    className,
 }: OrderHistoryItemProps) {
 
     const [isExpanded, setIsExpanded] = useState<boolean>(isInitiallyExpanded);
     const [areDetailsExpanded, setAreDetailsExpanded] = useState<boolean>(areDetailsInitiallyExpanded);
 
     return (
-        <div className="my-10 first:mt-0 last:mb-0 border rounded-lg">
+        <div className={`border rounded-lg ${className}`}>
 
             {/* Upper Summary */}
             <div className="p-4 lg:p-6
@@ -61,11 +63,10 @@ export default function OrderHistoryItem({
                 <div className="gap-4 lg:gap-6 flex flex-col items-end self-stretch justify-between md:flex-row md:items-center self-start">
                     <OrderStateBadge state={order?.state} />
                     <div className="flex" role="group">
-                        <Button  title="Actions for this order (Not implemented)" className="bg-white text-sm rounded-r-none border-r-0">
+                        <Button title="Actions for this order (Not implemented)" className="bg-white text-sm rounded-r-none border-r-0">
                             <span className="text-xs hidden">Actions</span>
                             <EllipsisVerticalIcon className="w-5 h-5" />
                         </Button>
-
                         <Button className="bg-white text-sm rounded-l-none" onClick={() => setIsExpanded(!isExpanded)} title="Expand this order">
                             <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${isExpanded && 'rotate-90'}`} />
                         </Button>
