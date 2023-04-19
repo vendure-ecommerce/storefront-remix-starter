@@ -60,9 +60,16 @@ export default function OrderHistoryItem({
                 {/* Status + Actions */}
                 <div className="gap-4 lg:gap-6 flex flex-col items-end self-stretch justify-between md:flex-row md:items-center self-start">
                     <OrderStateBadge state={order?.state} />
-                    <Button className="bg-white text-sm" onClick={() => setIsExpanded(!isExpanded)}>
-                        <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${isExpanded && 'rotate-90'}`} />
-                    </Button>
+                    <div className="flex" role="group">
+                        <Button  title="Actions for this order (Not implemented)" className="bg-white text-sm rounded-r-none border-r-0">
+                            <span className="text-xs hidden">Actions</span>
+                            <EllipsisVerticalIcon className="w-5 h-5" />
+                        </Button>
+
+                        <Button className="bg-white text-sm rounded-l-none" onClick={() => setIsExpanded(!isExpanded)} title="Expand this order">
+                            <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${isExpanded && 'rotate-90'}`} />
+                        </Button>
+                    </div>
                 </div>
             </div>
 
