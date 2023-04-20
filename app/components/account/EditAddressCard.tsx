@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { CreditCardIcon, PencilIcon, TrashIcon, TruckIcon } from '@heroicons/react/24/outline';
 import { Link } from '@remix-run/react';
 import clsx from 'clsx';
 import { Address } from '~/generated/graphql';
@@ -18,7 +18,7 @@ export default function EditAddressCard({
     <>
       <div
         className={clsx(
-          'border border-gray-200 p-5 min-h-[220px] h-full w-full flex flex-col justify-between transition-colors',
+          'border border-gray-200 p-5 min-h-[220px] h-full w-full flex flex-col justify-between gap-8 transition-colors',
           {
             'border-gray-900': isActive,
           },
@@ -49,33 +49,44 @@ export default function EditAddressCard({
           </div>
           {/* Default Shipping/Billing Section */}
           {(address.defaultShippingAddress || address.defaultBillingAddress) && (
-          <div className='text-end text-gray-500 uppercase tracking-wider'>
-            <span className="block text-sm font-medium">Default</span>
-            <span className="block text-xs mt-1">
-              {address.defaultShippingAddress && "Shipping"}
-              {address.defaultShippingAddress && address.defaultBillingAddress && <><br/>&amp;&nbsp;</>}
-              {address.defaultBillingAddress && "Billing"}</span>
-          </div>
+            <div className='text-end text-gray-500 uppercase tracking-wider'>
+              <span className="block text-sm font-medium">Default</span>
+              <span className="block text-xs mt-1">
+                {address.defaultShippingAddress && "Shipping"}
+                {address.defaultShippingAddress && address.defaultBillingAddress && <><br />&amp;&nbsp;</>}
+                {address.defaultBillingAddress && "Billing"}</span>
+            </div>
           )}
         </div>
-        <div className="flex items-center gap-x-4">
-          <Link
-            role="button"
-            preventScrollReset
-            className="text-small-regular text-gray-700 flex items-center gap-x-2"
-            to={`/account/addresses/${address.id}`}
-          >
-            <PencilIcon className="w-4 h-4"></PencilIcon>
-            Edit
-          </Link>
-          <button
-            type="button"
-            className="text-small-regular text-gray-700 flex items-center gap-x-2"
-            onClick={() => onClickRemove && onClickRemove()}
-          >
-            <TrashIcon className="w-4 h-4"></TrashIcon>
-            Remove
-          </button>
+        {/* CRUD Actions */}
+        <div className="flex flex-col md:flex-row items-start gap-4">
+          <div className='flex items-center gap-4'>
+            <Link
+              role="button"
+              preventScrollReset
+              className="text-gray-700 flex items-center gap-x-2"
+              to={`/account/addresses/${address.id}`}
+            >
+              <PencilIcon className="w-4 h-4"></PencilIcon>
+              Edit
+            </Link>
+            <button
+              type="button"
+              className="text-gray-700 flex items-center gap-x-2"
+              onClick={() => onClickRemove && onClickRemove()}
+            >
+              <TrashIcon className="w-4 h-4"></TrashIcon>
+              Remove
+            </button>
+          </div>
+          {(!address.defaultShippingAddress || !address.defaultBillingAddress) && (
+            <div>
+              <span className='text-gray-500 flex gap-4'>
+                {!address.defaultShippingAddress && <button className='text-gray-700 flex items-center gap-2' title="Set as default shipping" onClick={() => alert("TODO")}><TruckIcon className="w-4 h-4"></TruckIcon>Shipping</button>}
+                {!address.defaultBillingAddress && <button className='text-gray-700 flex items-center gap-2' title="Set as default billing" onClick={() => alert("TODO")}><CreditCardIcon className="w-4 h-4"></CreditCardIcon>Billing</button>}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </>
