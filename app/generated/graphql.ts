@@ -3337,7 +3337,7 @@ export type ActiveCustomerDetailsQuery = { __typename?: 'Query', activeCustomer?
 export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, phoneNumber?: string | null, defaultShippingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
+export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, phoneNumber?: string | null, defaultShippingAddress?: boolean | null, defaultBillingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
 
 export type ActiveCustomerOrderListQueryVariables = Exact<{
   orderListOptions?: InputMaybe<OrderListOptions>;
@@ -3850,6 +3850,7 @@ export const ActiveCustomerAddressesDocument = gql`
       }
       phoneNumber
       defaultShippingAddress
+      defaultBillingAddress
     }
   }
 }
