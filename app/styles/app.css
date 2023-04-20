@@ -1221,6 +1221,16 @@ select {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#app .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 @keyframes dropIn {
   0% {
     transform: translateY(-100px);
@@ -1233,16 +1243,6 @@ select {
 
 #app .animate-dropIn {
   animation: dropIn 0.2s ease-out;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-#app .animate-spin {
-  animation: spin 1s linear infinite;
 }
 
 #app .cursor-pointer {
@@ -2636,6 +2636,11 @@ select {
 #app .disabled\:bg-gray-200:disabled {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+#app .disabled\:bg-gray-300:disabled {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 #app .disabled\:text-gray-400:disabled {
