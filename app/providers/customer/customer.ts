@@ -120,3 +120,57 @@ gql`
     }
   }
 `;
+
+gql`
+  query activeCustomerOrderList($orderListOptions: OrderListOptions) {
+    activeCustomer {
+      orders(options: $orderListOptions) {
+        totalItems
+        items {
+          code
+          state
+          orderPlacedAt
+          currencyCode
+          subTotal
+          subTotalWithTax
+          total
+          totalWithTax
+          shippingWithTax
+          shippingLines {
+            priceWithTax
+          }
+          taxSummary {
+            taxBase
+            taxTotal
+          }
+          discounts {
+            amountWithTax
+          }
+          lines {
+            quantity
+            discountedLinePriceWithTax
+            discountedUnitPriceWithTax
+            fulfillments {
+              updatedAt
+              state
+            }
+            featuredAsset {
+              name
+              source
+              preview
+            }
+            productVariant {
+              name
+              sku
+              currencyCode
+              priceWithTax
+              product {
+                slug
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

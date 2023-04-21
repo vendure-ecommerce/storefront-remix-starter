@@ -125,8 +125,6 @@ export default function AccountHistory() {
                             required
                             noPlaceholder
                             defaultValue={appliedPaginationLimit}
-                        // disabled={transition.state !== "idle"}
-                        // ==> Disabling this fields leads to an error showing up... 
                         >
                             {Array.from(allowedPaginationLimits).map(x => (
                                 <option key={x} value={x}>{x} per Page</option>

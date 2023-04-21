@@ -3346,6 +3346,13 @@ export type ActiveCustomerOrderListQueryVariables = Exact<{
 
 export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, discountedUnitPriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
 
+export type ActiveCustomerOrderListQueryVariables = Exact<{
+  orderListOptions?: InputMaybe<OrderListOptions>;
+}>;
+
+
+export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, discountedUnitPriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
+
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
@@ -3851,6 +3858,59 @@ export const ActiveCustomerAddressesDocument = gql`
       phoneNumber
       defaultShippingAddress
       defaultBillingAddress
+    }
+  }
+}
+    `;
+export const ActiveCustomerOrderListDocument = gql`
+    query activeCustomerOrderList($orderListOptions: OrderListOptions) {
+  activeCustomer {
+    orders(options: $orderListOptions) {
+      totalItems
+      items {
+        code
+        state
+        orderPlacedAt
+        currencyCode
+        subTotal
+        subTotalWithTax
+        total
+        totalWithTax
+        shippingWithTax
+        shippingLines {
+          priceWithTax
+        }
+        taxSummary {
+          taxBase
+          taxTotal
+        }
+        discounts {
+          amountWithTax
+        }
+        lines {
+          quantity
+          discountedLinePriceWithTax
+          discountedUnitPriceWithTax
+          fulfillments {
+            updatedAt
+            state
+          }
+          featuredAsset {
+            name
+            source
+            preview
+          }
+          productVariant {
+            name
+            sku
+            currencyCode
+            priceWithTax
+            product {
+              slug
+            }
+          }
+        }
+      }
     }
   }
 }
