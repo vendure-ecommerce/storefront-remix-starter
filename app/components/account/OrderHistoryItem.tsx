@@ -119,13 +119,6 @@ export default function OrderHistoryItem({
 
                     {/* Per order actions */}
                     <div className="p-2 lg:py-3 lg:px-6 flex justify-end gap-2 lg:gap-6">
-                        {/* <Button disabled title="Not implemented">
-                            <span className="text-xs">Get product support</span>
-                        </Button> */}
-                        {/* <Button disabled title="Not implemented">
-                            <span className="text-xs">View invoice</span>
-                            <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                        </Button> */}
                         <Button onClick={() => setAreDetailsExpanded(!areDetailsExpanded)}>
                             <span className="text-xs">Detailed overview</span>
                             <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${areDetailsExpanded && 'rotate-90'}`} />
