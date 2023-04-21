@@ -24,7 +24,7 @@ const FormElement: React.FC<PropsWithChildren<FormElementProps>> = ({
           {required && <span className="text-rose-500">*</span>}
         </label>
       )}
-      <div className="mt-1">{children}</div>
+      <div className={label && "mt-1"}>{children}</div>
       {error && (
         <div className="pt-1 text-rose-500 text-sm">
           <span>{error}</span>

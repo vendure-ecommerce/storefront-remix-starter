@@ -3339,6 +3339,13 @@ export type ActiveCustomerAddressesQueryVariables = Exact<{ [key: string]: never
 
 export type ActiveCustomerAddressesQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', id: string, addresses?: Array<{ __typename?: 'Address', id: string, company?: string | null, fullName?: string | null, streetLine1: string, streetLine2?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, phoneNumber?: string | null, defaultShippingAddress?: boolean | null, country: { __typename?: 'Country', id: string, code: string, name: string } }> | null } | null };
 
+export type ActiveCustomerOrderListQueryVariables = Exact<{
+  orderListOptions?: InputMaybe<OrderListOptions>;
+}>;
+
+
+export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, discountedUnitPriceWithTax: number, fulfillments?: Array<{ __typename?: 'Fulfillment', updatedAt: any, state: string }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
+
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
@@ -3847,6 +3854,59 @@ export const ActiveCustomerAddressesDocument = gql`
   }
 }
     `;
+export const ActiveCustomerOrderListDocument = gql`
+    query activeCustomerOrderList($orderListOptions: OrderListOptions) {
+  activeCustomer {
+    orders(options: $orderListOptions) {
+      totalItems
+      items {
+        code
+        state
+        orderPlacedAt
+        currencyCode
+        subTotal
+        subTotalWithTax
+        total
+        totalWithTax
+        shippingWithTax
+        shippingLines {
+          priceWithTax
+        }
+        taxSummary {
+          taxBase
+          taxTotal
+        }
+        discounts {
+          amountWithTax
+        }
+        lines {
+          quantity
+          discountedLinePriceWithTax
+          discountedUnitPriceWithTax
+          fulfillments {
+            updatedAt
+            state
+          }
+          featuredAsset {
+            name
+            source
+            preview
+          }
+          productVariant {
+            name
+            sku
+            currencyCode
+            priceWithTax
+            product {
+              slug
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export const SetCustomerForOrderDocument = gql`
     mutation setCustomerForOrder($input: CreateCustomerInput!) {
   setCustomerForOrder(input: $input) {
@@ -4050,6 +4110,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     activeCustomerAddresses(variables?: ActiveCustomerAddressesQueryVariables, options?: C): Promise<ActiveCustomerAddressesQuery> {
       return requester<ActiveCustomerAddressesQuery, ActiveCustomerAddressesQueryVariables>(ActiveCustomerAddressesDocument, variables, options) as Promise<ActiveCustomerAddressesQuery>;
+    },
+    activeCustomerOrderList(variables?: ActiveCustomerOrderListQueryVariables, options?: C): Promise<ActiveCustomerOrderListQuery> {
+      return requester<ActiveCustomerOrderListQuery, ActiveCustomerOrderListQueryVariables>(ActiveCustomerOrderListDocument, variables, options) as Promise<ActiveCustomerOrderListQuery>;
     },
     setCustomerForOrder(variables: SetCustomerForOrderMutationVariables, options?: C): Promise<SetCustomerForOrderMutation> {
       return requester<SetCustomerForOrderMutation, SetCustomerForOrderMutationVariables>(SetCustomerForOrderDocument, variables, options) as Promise<SetCustomerForOrderMutation>;

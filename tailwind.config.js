@@ -5,7 +5,10 @@ module.exports = {
   // theme: {
   //   extend: {},
   // },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+  ],
   mode: 'jit',
   content: ['./app/**/*.{ts,tsx}'],
   important: '#app',
