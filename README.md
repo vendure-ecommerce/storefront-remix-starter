@@ -9,7 +9,6 @@ An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix
 ## To do
 
 Most Vendure features are already part of this starter. Notable missing Vendure features:
-- Account order history (see https://github.com/vendure-ecommerce/storefront-remix-starter/pull/37)
 - Default billing/shipping addresses
 - Separate billing address in checkout
 - Promotions
