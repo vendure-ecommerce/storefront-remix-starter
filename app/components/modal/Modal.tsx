@@ -73,7 +73,7 @@ const Title: React.FC<PropsWithChildren> = ({ children }) => {
     <Dialog.Title className="flex items-center justify-between">
       <div className="text-large-semi">{children}</div>
       <div>
-        <button onClick={close}>
+        <button onClick={close} type="button">
           {/* <X size={20} /> */}
           <XMarkIcon className="w-6 h-6"></XMarkIcon>
         </button>
