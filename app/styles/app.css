@@ -585,6 +585,10 @@ select {
   outline: 1px auto -webkit-focus-ring-color;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -811,6 +815,11 @@ select {
   margin-bottom: -0.5rem;
 }
 
+#app .my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 #app .-my-6 {
   margin-top: -1.5rem;
   margin-bottom: -1.5rem;
@@ -829,11 +838,6 @@ select {
 #app .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-}
-
-#app .my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 #app .mt-2 {

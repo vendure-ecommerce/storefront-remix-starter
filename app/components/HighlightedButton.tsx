@@ -21,7 +21,7 @@ export function HighlightedButton(
       )}
     >
       {props.children}
-      {isSubmitting && <ArrowPathIcon className='w-4 h-4'></ArrowPathIcon>}
+      {isSubmitting && <ArrowPathIcon className='w-4 h-4 animate-spin'></ArrowPathIcon>}
     </button>
   );
 }

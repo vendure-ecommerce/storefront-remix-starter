@@ -61,6 +61,7 @@ gql`
         }
         phoneNumber
         defaultShippingAddress
+        defaultBillingAddress
       }
     }
   }
