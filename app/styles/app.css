@@ -796,19 +796,14 @@ select {
   margin: auto;
 }
 
-#app .mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#app .my-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
 #app .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+#app .mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #app .-my-2 {
@@ -841,6 +836,18 @@ select {
   margin-bottom: 1rem;
 }
 
+#app .mt-2 {
+  margin-top: 0.5rem;
+}
+
+#app .mt-4 {
+  margin-top: 1rem;
+}
+
+#app .mt-6 {
+  margin-top: 1.5rem;
+}
+
 #app .ml-3 {
   margin-left: 0.75rem;
 }
@@ -849,20 +856,12 @@ select {
   margin-left: 0.5rem;
 }
 
-#app .mt-2 {
-  margin-top: 0.5rem;
-}
-
 #app .ml-4 {
   margin-left: 1rem;
 }
 
 #app .mt-1 {
   margin-top: 0.25rem;
-}
-
-#app .mt-6 {
-  margin-top: 1.5rem;
 }
 
 #app .-mt-4 {
@@ -879,10 +878,6 @@ select {
 
 #app .mb-4 {
   margin-bottom: 1rem;
-}
-
-#app .mt-4 {
-  margin-top: 1rem;
 }
 
 #app .mt-8 {
@@ -1126,6 +1121,10 @@ select {
   min-width: 0px;
 }
 
+#app .max-w-full {
+  max-width: 100%;
+}
+
 #app .max-w-lg {
   max-width: 32rem;
 }
@@ -1148,10 +1147,6 @@ select {
 
 #app .max-w-sm {
   max-width: 24rem;
-}
-
-#app .max-w-full {
-  max-width: 100%;
 }
 
 #app .max-w-\[300px\] {
@@ -1501,6 +1496,10 @@ select {
   white-space: nowrap;
 }
 
+#app .break-words {
+  overflow-wrap: break-word;
+}
+
 #app .rounded-md {
   border-radius: 0.375rem;
 }
@@ -1834,14 +1833,19 @@ select {
   padding: 2.5rem;
 }
 
-#app .py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
 #app .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+#app .py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+#app .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 #app .px-2\.5 {
@@ -1862,11 +1866,6 @@ select {
 #app .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
-}
-
-#app .py-16 {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
 }
 
 #app .py-32 {
@@ -2013,9 +2012,9 @@ select {
   line-height: 1.25rem;
 }
 
-#app .text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
+#app .text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 #app .text-base {
@@ -2023,9 +2022,9 @@ select {
   line-height: 1.5rem;
 }
 
-#app .text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+#app .text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 #app .text-3xl {
@@ -2058,24 +2057,24 @@ select {
   line-height: 1.25rem !important;
 }
 
-#app .font-medium {
-  font-weight: 500;
-}
-
 #app .font-semibold {
   font-weight: 600;
 }
 
-#app .font-extrabold {
-  font-weight: 800;
+#app .font-bold {
+  font-weight: 700;
+}
+
+#app .font-medium {
+  font-weight: 500;
 }
 
 #app .font-light {
   font-weight: 300;
 }
 
-#app .font-bold {
-  font-weight: 700;
+#app .font-extrabold {
+  font-weight: 800;
 }
 
 #app .uppercase {
@@ -2106,6 +2105,21 @@ select {
   letter-spacing: 0.05em;
 }
 
+#app .text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+#app .text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+#app .text-primary-600 {
+  --tw-text-opacity: 1;
+  color: rgb(2 132 199 / var(--tw-text-opacity));
+}
+
 #app .text-red-400 {
   --tw-text-opacity: 1;
   color: rgb(248 113 113 / var(--tw-text-opacity));
@@ -2124,11 +2138,6 @@ select {
 #app .text-gray-300 {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
-}
-
-#app .text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 #app .text-black {
@@ -2156,11 +2165,6 @@ select {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-#app .text-gray-900 {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
-}
-
 #app .text-green-400 {
   --tw-text-opacity: 1;
   color: rgb(74 222 128 / var(--tw-text-opacity));
@@ -2174,11 +2178,6 @@ select {
 #app .text-green-700 {
   --tw-text-opacity: 1;
   color: rgb(21 128 61 / var(--tw-text-opacity));
-}
-
-#app .text-primary-600 {
-  --tw-text-opacity: 1;
-  color: rgb(2 132 199 / var(--tw-text-opacity));
 }
 
 #app .text-gray-700 {
@@ -2460,6 +2459,11 @@ select {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+#app .hover\:text-primary-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(14 165 233 / var(--tw-text-opacity));
+}
+
 #app .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -2473,11 +2477,6 @@ select {
 #app .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-#app .hover\:text-primary-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(14 165 233 / var(--tw-text-opacity));
 }
 
 #app .hover\:text-primary-800:hover {
@@ -2747,14 +2746,14 @@ select {
     border-radius: 0.5rem;
   }
 
-  #app .sm\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
   #app .sm\:py-32 {
     padding-top: 8rem;
     padding-bottom: 8rem;
+  }
+
+  #app .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   #app .sm\:py-64 {
@@ -2786,14 +2785,14 @@ select {
     padding-top: 8rem;
   }
 
-  #app .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
   #app .sm\:text-5xl {
     font-size: 3rem;
     line-height: 1;
+  }
+
+  #app .sm\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   #app .sm\:duration-300 {
