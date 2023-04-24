@@ -2,6 +2,12 @@
 /* @tailwind components; */
 @tailwind utilities;
 
+@layer base {
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
 @layer utilities {
   .flex-center {
     display: flex;
