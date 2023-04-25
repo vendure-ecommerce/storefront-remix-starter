@@ -1,4 +1,6 @@
 import {
+  isRouteErrorResponse,
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -7,6 +9,7 @@ import {
   ScrollRestoration,
   ShouldReloadFunction,
   useLoaderData,
+  useRouteError,
 } from '@remix-run/react';
 import styles from './styles/app.css';
 import { Header } from './components/header/Header';
@@ -139,4 +142,76 @@ export default function App() {
       </body>
     </html>
   );
+}
+
+
+
+type DefaultSparseErrorPageProps = {
+  tagline: string
+  headline: string
+  description: string
+};
+/**
+ * You should replace this in your actual storefront to provide a better user experience.
+ * You probably want to still show your footer and navigation. You will also need fallbacks
+ * for your data dependant components in case your shop instance / CMS isnt responding.
+ * See: https://remix.run/docs/en/main/route/error-boundary
+ */
+function DefaultSparseErrorPage({ tagline, headline, description }: DefaultSparseErrorPageProps) {
+  return (
+    <html lang="en" id="app">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" type="image/png"></link>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <main className="flex flex-col items-center px-4 py-16 sm:py-32 text-center">
+          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{tagline}</span>
+          <h1 className="mt-2 font-bold text-gray-900 tracking-tight text-4xl sm:text-5xl">{headline}</h1>
+          <p className="mt-4 text-base text-gray-500 max-w-full break-words">{description}</p>
+          <div className="mt-6">
+            <Link
+              to="/"
+              className="text-base font-medium text-primary-600 hover:text-primary-500 inline-flex gap-2"
+            >
+              Go back home
+            </Link>
+          </div>
+        </main>
+        <ScrollRestoration />
+        <Scripts />
+        {devMode && <LiveReload />}
+      </body>
+    </html>
+  );
+}
+
+/**
+ * As mentioned in the jsdoc for `DefaultSparseErrorPage` you should replace this to suit your needs.
+ */
+export function ErrorBoundary() {
+  let tagline = "Oopsy daisy";
+  let headline = "Unexpected error";
+  let description = "We couldn't handle your request. Please try again later.";
+  
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    tagline = `${error.status} error`;
+    headline = error.statusText;
+    description = error.data;
+  }
+
+  return <DefaultSparseErrorPage tagline={tagline} headline={headline} description={description} />;
+}
+
+/**
+ * In Remix v2 there will only be a `ErrorBoundary`
+ * As mentioned in the jsdoc for `DefaultSparseErrorPage` you should replace this to suit your needs.
+ * Relevant for the future: https://remix.run/docs/en/main/route/error-boundary-v2
+ */
+export function CatchBoundary() {
+  return ErrorBoundary();
 }
