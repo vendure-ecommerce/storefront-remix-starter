@@ -1,6 +1,9 @@
 overwrite: true
 schema:
-  - "${VENDURE_API_URL:https://readonlydemo.vendure.io/shop-api}"
+  # - "${VENDURE_API_URL:https://readonlydemo.vendure.io/shop-api}"
+  # Once the Demo switches to v2 we can get the types from there - see above
+  # For now use the local v2 server
+  - http://localhost:3001/shop-api
   # This is the additional schema extension that would be present it
   # the Stripe playment plugin is enabled on the Vendure server. Added
   # manually here to allow codegen to work regardless.
