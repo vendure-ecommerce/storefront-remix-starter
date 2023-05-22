@@ -92,13 +92,19 @@ gql`
           discounts {
             amountWithTax
           }
+          fulfillments {
+            trackingCode
+          }
           lines {
             quantity
             discountedLinePriceWithTax
             discountedUnitPriceWithTax
-            fulfillments {
-              updatedAt
-              state
+            fulfillmentLines {
+              quantity
+              fulfillment {
+                state
+                updatedAt
+              }
             }
             featuredAsset {
               name

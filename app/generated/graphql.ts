@@ -3467,7 +3467,7 @@ export type ActiveCustomerOrderListQueryVariables = Exact<{
 }>;
 
 
-export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: any, subTotalWithTax: any, total: any, totalWithTax: any, shippingWithTax: any, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: any }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: any, taxTotal: any }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: any }>, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: any, discountedUnitPriceWithTax: any, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: any, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
+export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: any, subTotalWithTax: any, total: any, totalWithTax: any, shippingWithTax: any, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: any }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: any, taxTotal: any }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: any }>, fulfillments?: Array<{ __typename?: 'Fulfillment', trackingCode?: string | null }> | null, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: any, discountedUnitPriceWithTax: any, fulfillmentLines?: Array<{ __typename?: 'FulfillmentLine', quantity: number, fulfillment: { __typename?: 'Fulfillment', state: string, updatedAt: any } }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: any, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
 
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
@@ -4003,10 +4003,20 @@ export const ActiveCustomerOrderListDocument = gql`
         discounts {
           amountWithTax
         }
+        fulfillments {
+          trackingCode
+        }
         lines {
           quantity
           discountedLinePriceWithTax
           discountedUnitPriceWithTax
+          fulfillmentLines {
+            quantity
+            fulfillment {
+              state
+              updatedAt
+            }
+          }
           featuredAsset {
             name
             source

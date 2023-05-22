@@ -792,6 +792,10 @@ button:disabled {
   grid-column: span 1 / span 1;
 }
 
+#app .col-start-2 {
+  grid-column-start: 2;
+}
+
 #app .-m-2 {
   margin: -0.5rem;
 }
@@ -2436,6 +2440,10 @@ button:disabled {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+
+#app .first\:mt-2:first-child {
+  margin-top: 0.5rem;
 }
 
 #app .hover\:border-gray-300:hover {
