@@ -265,7 +265,7 @@ export default function CheckoutShipping() {
         <ShippingMethodSelector
           eligibleShippingMethods={eligibleShippingMethods}
           currencyCode={activeOrder?.currencyCode}
-          shippingMethodId={activeOrder?.shippingLines[0]?.shippingMethod.id}
+          shippingMethodId={activeOrder?.shippingLines[0]?.shippingMethod.id ?? ""}
           onChange={submitSelectedShippingMethod}
         />
       </div>
