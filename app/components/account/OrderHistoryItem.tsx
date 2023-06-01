@@ -96,19 +96,23 @@ export default function OrderHistoryItem({
                                     {/* Price and quantity */}
                                     <button className="inline-flex gap-2 items-center w-fit text-gray-500 text-sm mt-1" onClick={() => setIsLineCalcExpanded(!isLineCalcExpanded)}>
                                         {isLineCalcExpanded && (<>
-                                        <span title="Quantity">{line.quantity}</span>
-                                        <span className="text-gray-300 select-none">×</span>
-                                        <span title="Price per unit"><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedUnitPriceWithTax}></Price></span>
-                                        <span className="text-gray-300 select-none">Ξ</span>
+                                            <span title="Quantity">{line.quantity}</span>
+                                            <span className="text-gray-300 select-none">×</span>
+                                            <span title="Price per unit"><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedUnitPriceWithTax}></Price></span>
+                                            <span className="text-gray-300 select-none">Ξ</span>
                                         </>)}
                                         <span title="Subtotal"><Price currencyCode={line.productVariant.currencyCode} priceWithTax={line.discountedLinePriceWithTax}></Price></span>
                                     </button>
                                     {/* Shipment status */}
                                     <span className="text-gray-500 text-xs mt-2 tracking-wide">
-                                        {line.fulfillments && line.fulfillments.length === 0 && ('Not shipped yet')}
-                                        {line.fulfillments?.map((f, i) => (
-                                            <span key={i} className="block" title={(new Date(f.updatedAt)).toLocaleString()}>
-                                                {f.state}: {new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(f.updatedAt))}
+                                        {line.fulfillmentLines?.reduce((acc, fLine) => acc + fLine.quantity, 0) === 0 ?
+                                            'Not shipped yet'
+                                            :
+                                            `${line.fulfillmentLines?.reduce((acc, fLine) => acc + fLine.quantity, 0)} of ${line.quantity} items fulfilled`
+                                        }
+                                        {line.fulfillmentLines?.filter(fLine => fLine.quantity > 0).map((fLine, key) => (
+                                            <span key={key} className="block first:mt-2" title={(new Date(fLine.fulfillment.updatedAt)).toLocaleString()}>
+                                                {fLine.fulfillment.state}: {new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(fLine.fulfillment.updatedAt))}
                                             </span>
                                         ))}
                                     </span>
@@ -118,8 +122,18 @@ export default function OrderHistoryItem({
                     ))}
 
                     {/* Per order actions */}
-                    <div className="p-2 lg:py-3 lg:px-6 flex justify-end gap-2 lg:gap-6">
-                        <Button onClick={() => setAreDetailsExpanded(!areDetailsExpanded)}>
+                    <div className="p-2 lg:py-3 lg:px-6 gap-2 lg:gap-6 grid grid-cols-2 sm:flex justify-end items-center">
+                        {order?.fulfillments?.map((f, i) => (
+                            <Button
+                                key={i}
+                                onClickCapture={() => alert(`Here you'd need to Link your delivery service. Tracking code for this package is "${f.trackingCode}"`)}
+                                className="text-xs"
+                            >
+                                {/* Only show package number if there are more than one: Looks cleaner */}
+                                Track package {order.fulfillments?.length == 1 ? "" : `#${i + 1}`}
+                            </Button>
+                        ))}
+                        <Button onClick={() => setAreDetailsExpanded(!areDetailsExpanded)} className="col-start-2">
                             <span className="text-xs">Detailed overview</span>
                             <ChevronRightIcon className={`w-5 h-5 transition-transform duration-100 ${areDetailsExpanded && 'rotate-90'}`} />
                         </Button>
