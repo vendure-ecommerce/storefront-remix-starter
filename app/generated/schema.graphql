@@ -109,6 +109,8 @@ input BooleanOperators {
 }
 
 type Channel implements Node {
+  availableCurrencyCodes: [CurrencyCode!]!
+  availableLanguageCodes: [LanguageCode!]
   code: String!
   createdAt: DateTime!
   currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
@@ -118,9 +120,15 @@ type Channel implements Node {
   defaultShippingZone: Zone
   defaultTaxZone: Zone
   id: ID!
+
+  """Not yet used - will be implemented in a future release."""
+  outOfStockThreshold: Int
   pricesIncludeTax: Boolean!
   seller: Seller
   token: String!
+
+  """Not yet used - will be implemented in a future release."""
+  trackInventory: Boolean
   updatedAt: DateTime!
 }
 
@@ -137,6 +145,7 @@ type Collection implements Node {
   languageCode: LanguageCode
   name: String!
   parent: Collection
+  parentId: ID!
   position: Int!
   productVariants(options: ProductVariantListOptions): ProductVariantList!
   slug: String!
@@ -156,6 +165,7 @@ input CollectionFilterParameter {
   id: IDOperators
   languageCode: StringOperators
   name: StringOperators
+  parentId: IDOperators
   position: NumberOperators
   slug: StringOperators
   updatedAt: DateOperators
@@ -199,6 +209,7 @@ input CollectionSortParameter {
   description: SortOrder
   id: SortOrder
   name: SortOrder
+  parentId: SortOrder
   position: SortOrder
   slug: SortOrder
   updatedAt: SortOrder
@@ -2089,7 +2100,7 @@ type Order implements Node {
 
   """
   The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-  discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+  discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
   To get a total of all OrderLines which does not account for prorated discounts, use the
   sum of `OrderLine.discountedLinePrice` values.
   """
@@ -2152,48 +2163,6 @@ input OrderFilterParameter {
   totalWithTax: NumberOperators
   type: StringOperators
   updatedAt: DateOperators
-}
-
-type OrderItem implements Node {
-  adjustments: [Adjustment!]!
-  cancelled: Boolean!
-  createdAt: DateTime!
-
-  """
-  The price of a single unit including discounts, excluding tax.
-  
-  If Order-level discounts have been applied, this will not be the
-  actual taxable unit price (see `proratedUnitPrice`), but is generally the
-  correct price to display to customers to avoid confusion
-  about the internal handling of distributed Order-level discounts.
-  """
-  discountedUnitPrice: Money!
-
-  """The price of a single unit including discounts and tax"""
-  discountedUnitPriceWithTax: Money!
-  fulfillment: Fulfillment
-  id: ID!
-
-  """
-  The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-  Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-  and refund calculations.
-  """
-  proratedUnitPrice: Money!
-
-  """The proratedUnitPrice including tax"""
-  proratedUnitPriceWithTax: Money!
-  refundId: ID
-  taxLines: [TaxLine!]!
-  taxRate: Float!
-
-  """The price of a single unit, excluding tax and discounts"""
-  unitPrice: Money!
-
-  """The price of a single unit, including tax but excluding discounts"""
-  unitPriceWithTax: Money!
-  unitTax: Money!
-  updatedAt: DateTime!
 }
 
 """Returned when the maximum order size limit has been reached."""
@@ -2358,7 +2327,7 @@ type OrderTaxSummary {
   """A description of this tax"""
   description: String!
 
-  """The total net price or OrderItems to which this taxRate applies"""
+  """The total net price of OrderLines to which this taxRate applies"""
   taxBase: Money!
 
   """The taxRate as a percentage"""
@@ -2575,6 +2544,9 @@ enum Permission {
   """Grants permission to create ShippingMethod"""
   CreateShippingMethod
 
+  """Grants permission to create StockLocation"""
+  CreateStockLocation
+
   """Grants permission to create System"""
   CreateSystem
 
@@ -2639,6 +2611,9 @@ enum Permission {
 
   """Grants permission to delete ShippingMethod"""
   DeleteShippingMethod
+
+  """Grants permission to delete StockLocation"""
+  DeleteStockLocation
 
   """Grants permission to delete System"""
   DeleteSystem
@@ -2711,6 +2686,9 @@ enum Permission {
   """Grants permission to read ShippingMethod"""
   ReadShippingMethod
 
+  """Grants permission to read StockLocation"""
+  ReadStockLocation
+
   """Grants permission to read System"""
   ReadSystem
 
@@ -2781,6 +2759,9 @@ enum Permission {
 
   """Grants permission to update ShippingMethod"""
   UpdateShippingMethod
+
+  """Grants permission to update StockLocation"""
+  UpdateStockLocation
 
   """Grants permission to update System"""
   UpdateSystem
@@ -3231,7 +3212,6 @@ input SearchInput {
   collectionSlug: String
   facetValueFilters: [FacetValueFilterInput!]
   groupByProduct: Boolean
-  inStock: Boolean
   skip: Int
   sort: SearchResultSortParameter
   take: Int
@@ -3243,10 +3223,21 @@ type SearchReindexResponse {
 }
 
 type SearchResponse {
+  cacheIdentifier: SearchResponseCacheIdentifier
   collections: [CollectionResult!]!
   facetValues: [FacetValueResult!]!
   items: [SearchResult!]!
   totalItems: Int!
+}
+
+"""
+This type is here to allow us to easily purge the Stellate cache
+of any search results where the collectionSlug is used. We cannot rely on
+simply purging the SearchResult type, because in the case of an empty 'items'
+array, Stellate cannot know that that particular query now needs to be purged.
+"""
+type SearchResponseCacheIdentifier {
+  collectionSlug: String
 }
 
 type SearchResult {
@@ -3256,7 +3247,6 @@ type SearchResult {
   description: String!
   facetIds: [ID!]!
   facetValueIds: [ID!]!
-  inStock: Boolean!
   price: SearchResultPrice!
   priceWithTax: SearchResultPrice!
   productAsset: SearchResultAsset
