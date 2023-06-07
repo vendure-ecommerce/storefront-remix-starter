@@ -85,7 +85,7 @@ gql`
   }
 `;
 gql`
-  mutation setOrderShippingMethod($shippingMethodId: ID!) {
+  mutation setOrderShippingMethod($shippingMethodId: [ID!]!) {
     setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
       ...OrderDetail
       ... on ErrorResult {

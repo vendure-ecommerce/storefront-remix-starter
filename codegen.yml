@@ -12,6 +12,9 @@ schema:
 documents:
   - "app/**/*.{ts,tsx}"
   - "!app/generated/*"
+config:
+  scalars:
+    Money: number
 generates:
   app/generated/graphql.ts:
     plugins:
