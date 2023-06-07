@@ -2,8 +2,7 @@
 
 An e-commerce storefront for [Vendure](https://www.vendure.io) built with [Remix](https://remix.run).
 
-👉 [remix-storefront.vendure.io](https://remix-storefront.vendure.io/)  
-👉 Vendure v2 Support available in the [vendure-v2 branch](https://github.com/vendure-ecommerce/storefront-remix-starter/tree/vendure-v2)
+👉 [remix-storefront.vendure.io](https://remix-storefront.vendure.io/)
 
 ![Screenshot](https://www.vendure.io/blog/2022/05/lightning-fast-headless-commerce-with-vendure-and-remix/lighthouse-score.webp)
 
@@ -40,7 +39,8 @@ General things missing:
 
 ### Vendure Server
 
-This storefront requires a Vendure server. You can either run a local instance, or use our public demo server.
+This storefront requires a Vendure V2 server. You can either run a local instance, or use our public demo server.  
+If you're looking for V1 support, [75eb880](https://github.com/vendure-ecommerce/storefront-remix-starter/tree/75eb880052d7f76b2026fc917cf545996012e3ac) is the last supported commit.
 
 #### Code Generation
 
