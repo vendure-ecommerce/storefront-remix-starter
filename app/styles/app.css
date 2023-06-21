@@ -1016,12 +1016,12 @@ button:disabled {
   height: 1rem;
 }
 
-#app .h-full {
-  height: 100%;
-}
-
 #app .h-6 {
   height: 1.5rem;
+}
+
+#app .h-full {
+  height: 100%;
 }
 
 #app .h-24 {
@@ -1551,12 +1551,12 @@ button:disabled {
   border-width: 2px;
 }
 
-#app .border-b {
-  border-bottom-width: 1px;
-}
-
 #app .border-r-0 {
   border-right-width: 0px;
+}
+
+#app .border-b {
+  border-bottom-width: 1px;
 }
 
 #app .border-t {
@@ -2035,6 +2035,11 @@ button:disabled {
   line-height: 1rem;
 }
 
+#app .\!text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
 #app .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -2058,11 +2063,6 @@ button:disabled {
 #app .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-
-#app .\!text-sm {
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
 }
 
 #app .font-semibold {
@@ -2668,6 +2668,10 @@ button:disabled {
     grid-column: span 2 / span 2;
   }
 
+  #app .sm\:col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+
   #app .sm\:mx-auto {
     margin-left: auto;
     margin-right: auto;
@@ -2758,6 +2762,10 @@ button:disabled {
     border-radius: 0.5rem;
   }
 
+  #app .sm\:p-4 {
+    padding: 1rem;
+  }
+
   #app .sm\:py-32 {
     padding-top: 8rem;
     padding-bottom: 8rem;
@@ -2805,6 +2813,21 @@ button:disabled {
   #app .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  #app .sm\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  #app .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  #app .sm\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   #app .sm\:duration-300 {
@@ -2999,12 +3022,12 @@ button:disabled {
     align-items: flex-start;
   }
 
-  #app .lg\:gap-16 {
-    gap: 4rem;
-  }
-
   #app .lg\:gap-6 {
     gap: 1.5rem;
+  }
+
+  #app .lg\:gap-16 {
+    gap: 4rem;
   }
 
   #app .lg\:gap-x-12 {

@@ -1,8 +1,8 @@
-import { Fragment, SyntheticEvent } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/solid';
-import { Form, useSearchParams, useSubmit } from '@remix-run/react';
+import { useSearchParams } from '@remix-run/react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 
 export default function FacetFilterControls({
@@ -14,13 +14,8 @@ export default function FacetFilterControls({
   mobileFiltersOpen: boolean;
   setMobileFiltersOpen: (value: boolean) => void;
 }) {
-  const submit = useSubmit();
   const [searchParams] = useSearchParams();
   const q = searchParams.getAll('q');
-
-  function handleChange(event: SyntheticEvent<HTMLFormElement>) {
-    submit(event.currentTarget, { replace: false });
-  }
 
   return (
     <>
@@ -65,11 +60,7 @@ export default function FacetFilterControls({
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <Form
-                  className="mt-4 border-t border-gray-200"
-                  method="get"
-                  onChange={handleChange}
-                >
+                <div className="mt-4 border-t border-gray-200">
                   <input type="hidden" name="q" value={q} />
                   {facetFilterTracker.facetsWithValues.map((facet) => (
                     <Disclosure
@@ -109,11 +100,17 @@ export default function FacetFilterControls({
                                 >
                                   <input
                                     id={`filter-mobile-${facet.id}-${optionIdx}`}
-                                    name={`fvid`}
                                     defaultValue={value.id}
                                     type="checkbox"
                                     checked={value.selected}
-                                    onChange={() => {}}
+                                    onChange={(ev) => {
+                                      // FIXME: ugly workaround because the dialog is in a portal not within the intended form
+                                      (
+                                        document.getElementById(
+                                          `filter-${facet.id}-${optionIdx}`,
+                                        ) as HTMLInputElement
+                                      ).checked = ev.target.checked;
+                                    }}
                                     className="h-4 w-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500"
                                   />
                                   <label
@@ -130,14 +127,14 @@ export default function FacetFilterControls({
                       )}
                     </Disclosure>
                   ))}
-                </Form>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition.Root>
 
-      <Form method="get" className="hidden lg:block" onChange={handleChange}>
+      <div className="hidden lg:block">
         <input type="hidden" name="q" value={q} />
         {facetFilterTracker.facetsWithValues.map((facet) => (
           <Disclosure
@@ -192,7 +189,7 @@ export default function FacetFilterControls({
             )}
           </Disclosure>
         ))}
-      </Form>
+      </div>
     </>
   );
 }
