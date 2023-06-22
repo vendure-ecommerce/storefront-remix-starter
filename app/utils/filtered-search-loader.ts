@@ -41,9 +41,7 @@ export function filteredSearchLoaderFromPagination(
           input: {
             groupByProduct: true,
             term,
-            facetValueFilters: facetValueIds.map((valueId) => ({
-              and: valueId,
-            })),
+            facetValueFilters: [{ or: facetValueIds }],
             collectionSlug: params.slug,
             take: zodResult.data.limit,
             skip: (zodResult.data.page - 1) * zodResult.data.limit,
