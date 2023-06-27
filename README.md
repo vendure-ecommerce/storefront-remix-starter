@@ -101,9 +101,9 @@ There is a publicly-available demo instance at https://readonlydemo.vendure.io/s
 
 ## Deployment
 
-This repo is configured to deploy to either Netlify or Cloudflare Pages.
+This repo is configured to deploy to either Netlify or Cloudflare Pages or to build locally with specialised build targets (`build(:nf/:cf)`).
 
-No special setup should be needed, as the [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
+No special setup should be needed, as the [remix.config.js](./remix.config.js) file contains a check for the `process.env.CF_PAGES` / `process.env.NETLIFY` environment variable to determine whether to use the Cloudflare Pages or Netlify server configuration.
 
 Follow the usual procedure for setting up a project in Netlify/CF Pages and point it to your clone of this repo on GitHub/Gitlab.
 
