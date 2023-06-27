@@ -26,9 +26,25 @@ const devConfig = {
   ignoredRouteFiles: ['.*'],
 };
 
-module.exports =
-  process.env.NODE_ENV === 'development'
-    ? devConfig
-    : process.env.CF_PAGES
-    ? cloudflarePagesConfig
-    : netlifyConfig;
+/**
+ * @type {import('@remix-run/dev/config').AppConfig}
+ */
+const buildConfig = {
+  appDirectory: 'app',
+  assetsBuildDirectory: 'public/build',
+  publicPath: '/build/',
+  serverBuildDirectory: 'build',
+  ignoredRouteFiles: ['.*'],
+};
+
+function selectConfig() {
+  if (!['development', 'production'].includes(process.env.NODE_ENV))
+    throw `Unknown NODE_ENV: ${process.env.NODE_ENV}`;
+  if (process.env.NODE_ENV === 'development') return devConfig;
+  if (!process.env.CF_PAGES && !process.env.NETLIFY) return buildConfig;
+  if (process.env.CF_PAGES) return cloudflarePagesConfig;
+  if (process.env.NETLIFY) return netlifyConfig;
+  throw `Cannot select config`;
+}
+
+module.exports = selectConfig();

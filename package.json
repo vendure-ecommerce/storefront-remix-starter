@@ -5,6 +5,7 @@
   "license": "",
   "scripts": {
     "build:cf": "cross-env CF_PAGES=1 remix build",
+    "build:nf": "cross-env NETLIFY=1 remix build",
     "build": "tailwindcss -m -i ./tailwind.css -o app/styles/app.css && remix build",
     "dev:wrangler": "wrangler pages dev ./public",
     "dev:css": "tailwindcss -w -i ./tailwind.css -o app/styles/app.css",
