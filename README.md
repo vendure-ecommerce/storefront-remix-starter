@@ -26,7 +26,7 @@ General things missing:
 ## Development
 
 1. Clone this repo
-2. `npm install`
+2. `yarn install`
 3. Create a `.env` file in the root dir with the following contents:
    ```.env
    VENDURE_API_URL=http://localhost:3001/shop-api
@@ -34,8 +34,8 @@ General things missing:
    # VENDURE_API_URL=https://readonlydemo.vendure.io/shop-api
    NODE_ENV=development
    ```
-4. `npm run dev` - run the storefront with a local Remix server
-5. `npm run dev:cf` - runs locally with the Cloudflare Pages configuration
+4. `yarn dev` - run the storefront with a local Remix server
+5. `yarn dev:cf` - runs locally with the Cloudflare Pages configuration
 
 ### Vendure Server
 
@@ -45,7 +45,7 @@ If you're looking for V1 support, [75eb880](https://github.com/vendure-ecommerce
 #### Code Generation
 
 Whenever the Graphql documents (the constants using the `gql` tag) in the [./app/providers](./app/providers) dir changes,
-you should run `npm run generate` to generate new sdk definitions.
+you should run `yarn generate` to generate new sdk definitions.
 
 For a more detailed guide on how to work with code generation, check the wiki about [querying custom fields](https://github.com/vendure-ecommerce/storefront-remix-starter/wiki/Querying-custom-fields).
 

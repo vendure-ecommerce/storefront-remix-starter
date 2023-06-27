@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "remix-app-template",
+  "name": "storefront-remix-starter",
   "description": "",
   "license": "",
   "scripts": {
@@ -9,8 +9,8 @@
     "build": "tailwindcss -m -i ./tailwind.css -o app/styles/app.css && remix build",
     "dev:wrangler": "wrangler pages dev ./public",
     "dev:css": "tailwindcss -w -i ./tailwind.css -o app/styles/app.css",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
-    "dev:cf": "npm run build:cf && concurrently \"npm run dev:css\" \"remix watch\" \"npm run dev:wrangler\"",
+    "dev": "concurrently \"yarn run dev:css\" \"remix dev\"",
+    "dev:cf": "yarn run build:cf && concurrently \"yarn run dev:css\" \"remix watch\" \"yarn run dev:wrangler\"",
     "start:cf": "cross-env NODE_ENV=production yarn run dev:wrangler",
     "start": "remix-serve build",
     "generate": "graphql-codegen --config codegen.yml",
@@ -60,6 +60,7 @@
     "postcss": "^8.4.19",
     "prettier": "^2.6.2",
     "tailwindcss": "^3.2.4",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.3",
     "wrangler": "^2.4.2"
   },
