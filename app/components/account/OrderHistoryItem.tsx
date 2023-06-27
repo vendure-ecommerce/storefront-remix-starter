@@ -27,7 +27,7 @@ export default function OrderHistoryItem({
     const [isLineCalcExpanded, setIsLineCalcExpanded] = useState<boolean>(false);
 
     return (
-        <div className={`border rounded-lg ${className}`}>
+        <div className={`border rounded-lg overflow-hidden ${className}`}>
 
             {/* Upper Summary */}
             <div className="p-4 lg:p-6
