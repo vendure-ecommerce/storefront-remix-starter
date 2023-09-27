@@ -72,7 +72,8 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     // Set the API URL for Cloudflare Pages
     setApiUrl(context.VENDURE_API_URL);
   }
-  const collections = await getCollections(request);
+
+  const collections = await getCollections(request, { take: 20 });
   const topLevelCollections = collections.filter(
     (collection) => collection.parent?.name === '__root_collection__',
   );
@@ -144,12 +145,10 @@ export default function App() {
   );
 }
 
-
-
 type DefaultSparseErrorPageProps = {
-  tagline: string
-  headline: string
-  description: string
+  tagline: string;
+  headline: string;
+  description: string;
 };
 /**
  * You should replace this in your actual storefront to provide a better user experience.
@@ -157,7 +156,11 @@ type DefaultSparseErrorPageProps = {
  * for your data dependant components in case your shop instance / CMS isnt responding.
  * See: https://remix.run/docs/en/main/route/error-boundary
  */
-function DefaultSparseErrorPage({ tagline, headline, description }: DefaultSparseErrorPageProps) {
+function DefaultSparseErrorPage({
+  tagline,
+  headline,
+  description,
+}: DefaultSparseErrorPageProps) {
   return (
     <html lang="en" id="app">
       <head>
@@ -169,9 +172,15 @@ function DefaultSparseErrorPage({ tagline, headline, description }: DefaultSpars
       </head>
       <body>
         <main className="flex flex-col items-center px-4 py-16 sm:py-32 text-center">
-          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{tagline}</span>
-          <h1 className="mt-2 font-bold text-gray-900 tracking-tight text-4xl sm:text-5xl">{headline}</h1>
-          <p className="mt-4 text-base text-gray-500 max-w-full break-words">{description}</p>
+          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            {tagline}
+          </span>
+          <h1 className="mt-2 font-bold text-gray-900 tracking-tight text-4xl sm:text-5xl">
+            {headline}
+          </h1>
+          <p className="mt-4 text-base text-gray-500 max-w-full break-words">
+            {description}
+          </p>
           <div className="mt-6">
             <Link
               to="/"
@@ -193,10 +202,10 @@ function DefaultSparseErrorPage({ tagline, headline, description }: DefaultSpars
  * As mentioned in the jsdoc for `DefaultSparseErrorPage` you should replace this to suit your needs.
  */
 export function ErrorBoundary() {
-  let tagline = "Oopsy daisy";
-  let headline = "Unexpected error";
+  let tagline = 'Oopsy daisy';
+  let headline = 'Unexpected error';
   let description = "We couldn't handle your request. Please try again later.";
-  
+
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     tagline = `${error.status} error`;
@@ -204,7 +213,13 @@ export function ErrorBoundary() {
     description = error.data;
   }
 
-  return <DefaultSparseErrorPage tagline={tagline} headline={headline} description={description} />;
+  return (
+    <DefaultSparseErrorPage
+      tagline={tagline}
+      headline={headline}
+      description={description}
+    />
+  );
 }
 
 /**

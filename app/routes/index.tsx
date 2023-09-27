@@ -5,7 +5,7 @@ import { BookOpenIcon } from '@heroicons/react/24/solid';
 import { LoaderArgs } from '@remix-run/server-runtime';
 
 export async function loader({ request }: LoaderArgs) {
-  const collections = await getCollections(request);
+  const collections = await getCollections(request, { take: 20 });
   return {
     collections,
   };

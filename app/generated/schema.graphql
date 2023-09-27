@@ -193,6 +193,7 @@ input CollectionListOptions {
 
   """Takes n results, for use in pagination"""
   take: Int
+  topLevelOnly: Boolean
 }
 
 """
