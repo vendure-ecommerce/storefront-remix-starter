@@ -1,14 +1,14 @@
 import {
   DataFunctionArgs,
-  MetaFunction,
   json,
+  MetaFunction,
 } from '@remix-run/server-runtime';
-import { useState, useRef, RefObject, useEffect } from 'react';
+import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
   FetcherWithComponents,
-  ShouldReloadFunction,
+  ShouldRevalidateFunction,
   useCatch,
   useLoaderData,
   useOutletContext,
@@ -17,7 +17,6 @@ import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/api/active-order';
-// import { FetcherWithComponents } from '~/types';
 import { sessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
@@ -54,7 +53,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
   );
 }
 
-export const unstable_shouldReload: ShouldReloadFunction = () => true;
+export const shoudRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
   const { product, error } = useLoaderData<typeof loader>();

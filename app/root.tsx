@@ -7,7 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  ShouldReloadFunction,
+  ShouldRevalidateFunction,
   useLoaderData,
   useRouteError,
 } from '@remix-run/react';
@@ -15,8 +15,8 @@ import styles from './styles/app.css';
 import { Header } from './components/header/Header';
 import {
   DataFunctionArgs,
-  MetaFunction,
   json,
+  MetaFunction,
 } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
@@ -40,21 +40,20 @@ const devMode =
   typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
 
 // The root data does not change once loaded.
-export const unstable_shouldReload: ShouldReloadFunction = ({
-  url,
-  prevUrl,
-  params,
-  submission,
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  nextUrl,
+  currentUrl,
+  formAction,
 }) => {
-  if (prevUrl.pathname === '/sign-in') {
+  if (currentUrl.pathname === '/sign-in') {
     // just logged in
     return true;
   }
-  if (prevUrl.pathname === '/account' && url.pathname === '/') {
+  if (currentUrl.pathname === '/account' && nextUrl.pathname === '/') {
     // just logged out
     return true;
   }
-  if (submission?.action === '/checkout/payment') {
+  if (formAction === '/checkout/payment') {
     // submitted payment for order
     return true;
   }
@@ -150,6 +149,7 @@ type DefaultSparseErrorPageProps = {
   headline: string;
   description: string;
 };
+
 /**
  * You should replace this in your actual storefront to provide a better user experience.
  * You probably want to still show your footer and navigation. You will also need fallbacks
