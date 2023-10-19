@@ -7,13 +7,13 @@ import {
   useOutletContext,
 } from '@remix-run/react';
 import { OutletContext } from '~/types';
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import {
   getAvailableCountries,
   getEligibleShippingMethods,
 } from '~/providers/checkout/checkout';
 import { shippingFormDataIsValid } from '~/utils/validation';
-import { sessionStorage } from '~/sessions';
+import { getSessionStorage } from '~/sessions';
 import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { AddressForm } from '~/components/account/AddressForm';
@@ -22,12 +22,12 @@ import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSe
 import { getActiveOrder } from '~/providers/orders/order';
 
 export async function loader({ request }: DataFunctionArgs) {
-  const session = await sessionStorage.getSession(
+  const session = await getSessionStorage().getSession(
     request?.headers.get('Cookie'),
   );
 
   const activeOrder = await getActiveOrder({ request });
-  
+
   //check if there is an active order if not redirect to homepage
   if (
     !session ||
@@ -43,12 +43,12 @@ export async function loader({ request }: DataFunctionArgs) {
   });
   const { activeCustomer } = await getActiveCustomerAddresses({ request });
   const error = session.get('activeOrderError');
-  return {
+  return json({
     availableCountries,
     eligibleShippingMethods,
     activeCustomer,
     error,
-  };
+  });
 }
 
 export default function CheckoutShipping() {
@@ -265,7 +265,9 @@ export default function CheckoutShipping() {
         <ShippingMethodSelector
           eligibleShippingMethods={eligibleShippingMethods}
           currencyCode={activeOrder?.currencyCode}
-          shippingMethodId={activeOrder?.shippingLines[0]?.shippingMethod.id ?? ""}
+          shippingMethodId={
+            activeOrder?.shippingLines[0]?.shippingMethod.id ?? ''
+          }
           onChange={submitSelectedShippingMethod}
         />
       </div>

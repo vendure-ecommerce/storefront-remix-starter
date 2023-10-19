@@ -15,13 +15,8 @@ import {
   ErrorResult,
   OrderDetailFragment,
 } from '~/generated/graphql';
-import { sessionStorage } from '~/sessions';
+import { getSessionStorage } from '~/sessions';
 import { shippingFormDataIsValid } from '~/utils/validation';
-import {
-  addPaymentToOrder,
-  getNextOrderStates,
-  transitionOrderToState,
-} from '~/providers/checkout/checkout';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
@@ -151,12 +146,12 @@ export async function action({ request, params }: DataFunctionArgs) {
     // Don't do anything
   }
   let headers: ResponseInit['headers'] = {};
-  const session = await sessionStorage.getSession(
+  const session = await getSessionStorage().getSession(
     request?.headers.get('Cookie'),
   );
   session.flash('activeOrderError', error);
   headers = {
-    'Set-Cookie': await sessionStorage.commitSession(session),
+    'Set-Cookie': await getSessionStorage().commitSession(session),
   };
   return json(
     { activeOrder: activeOrder || (await getActiveOrder({ request })) },

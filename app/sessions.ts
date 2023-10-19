@@ -1,4 +1,6 @@
 import { IS_CF_PAGES } from '~/utils/platform-adapter';
+import { SessionStorage } from '@remix-run/server-runtime/dist/sessions';
+import { ErrorResult } from '~/generated/graphql';
 
 function getCookieSessionStorageFactory() {
   if (IS_CF_PAGES) {
@@ -10,13 +12,23 @@ function getCookieSessionStorageFactory() {
     return require(imp.join('/')).createCookieSessionStorage;
   }
 }
+let sessionStorage: SessionStorage<
+  { activeOrderError: ErrorResult } & Record<string, any>
+>;
 
-export const sessionStorage = getCookieSessionStorageFactory()({
-  cookie: {
-    name: 'vendure_remix_session',
-    httpOnly: true,
-    path: '/',
-    sameSite: 'lax',
-    secrets: ['awdbhbjahdbaw'],
-  },
-});
+export function getSessionStorage() {
+  if (sessionStorage) {
+    return sessionStorage;
+  }
+  const factory = getCookieSessionStorageFactory();
+  sessionStorage = factory({
+    cookie: {
+      name: 'vendure_remix_session',
+      httpOnly: true,
+      path: '/',
+      sameSite: 'lax',
+      secrets: ['awdbhbjahdbaw'],
+    },
+  });
+  return sessionStorage;
+}
