@@ -1,5 +1,5 @@
-import { DataFunctionArgs, MetaFunction } from '@remix-run/server-runtime';
-import { useLoaderData, useSubmit } from '@remix-run/react';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { useLoaderData, useSubmit, V2_MetaFunction } from '@remix-run/react';
 import { sdk } from '../../graphqlWrapper';
 import { CollectionCard } from '~/components/collections/CollectionCard';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
@@ -12,12 +12,14 @@ import { ValidatedForm } from 'remix-validated-form';
 import { withZod } from '@remix-validated-form/with-zod';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
-    title: data?.collection
-      ? `${data.collection?.name} - ${APP_META_TITLE}`
-      : APP_META_TITLE,
-  };
+export const meta: V2_MetaFunction = ({ data }) => {
+  return [
+    {
+      title: data?.collection
+        ? `${data.collection?.name} - ${APP_META_TITLE}`
+        : APP_META_TITLE,
+    },
+  ];
 };
 
 const paginationLimitMinimumDefault = 25;

@@ -1,16 +1,14 @@
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import {
   addPaymentToOrder,
-  generateBraintreeClientToken,
   createStripePaymentIntent,
+  generateBraintreeClientToken,
   getEligiblePaymentMethods,
   getNextOrderStates,
   transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { Form, useLoaderData, useOutletContext } from '@remix-run/react';
-import { CreditCardIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { useLoaderData, useOutletContext } from '@remix-run/react';
 import { OutletContext } from '~/types';
-import { sessionStorage } from '~/sessions';
 import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
 import { StripePayments } from '~/components/checkout/stripe/StripePayments';
 import { DummyPayments } from '~/components/checkout/DummyPayments';
@@ -68,7 +66,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
       brainTreeError = e.message;
     }
   }
-  return {
+  return json({
     eligiblePaymentMethods,
     stripePaymentIntent,
     stripePublishableKey,
@@ -76,7 +74,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     brainTreeKey,
     brainTreeError,
     error,
-  };
+  });
 }
 
 export async function action({ params, request }: DataFunctionArgs) {

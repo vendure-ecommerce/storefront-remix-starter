@@ -1,7 +1,7 @@
 import { DocumentNode, print } from 'graphql';
 import { DEMO_API_URL } from './constants';
 import { getSdk } from './generated/graphql';
-import { sessionStorage } from './sessions';
+import { getSessionStorage } from './sessions';
 
 let API_URL =
   typeof process !== 'undefined'
@@ -43,7 +43,7 @@ async function sendQuery<Response, Variables = {}>(options: {
   const headers = new Headers(options.headers);
   const req = options.request;
   headers.append('Content-Type', 'application/json');
-  const session = await sessionStorage.getSession(
+  const session = await getSessionStorage().getSession(
     options.request?.headers.get('Cookie'),
   );
   if (session) {
@@ -92,12 +92,14 @@ function requester<R, V>(
       // If Vendure responded with an auth token, it means a new Vendure session
       // has started. In this case, we will store that auth token in the Remix session
       // so that we can attach it as an Authorization header in all subsequent requests.
-      const session = await sessionStorage.getSession(
+      const session = await getSessionStorage().getSession(
         options?.request?.headers.get('Cookie'),
       );
       if (session) {
         session.set(AUTH_TOKEN_SESSION_KEY, token);
-        headers['Set-Cookie'] = await sessionStorage.commitSession(session);
+        headers['Set-Cookie'] = await getSessionStorage().commitSession(
+          session,
+        );
       }
     }
     headers['x-vendure-api-url'] = API_URL;

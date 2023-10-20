@@ -2,7 +2,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { Select } from '~/components/Select';
 import { Button } from '~/components/Button';
 import { ComponentProps } from 'react';
-import { useTransition } from '@remix-run/react';
+import { useNavigation } from '@remix-run/react';
 import clsx from 'clsx';
 
 export type PaginationProps = {
@@ -19,7 +19,7 @@ export function Pagination({
   appliedPaginationPage,
   ...props
 }: PaginationProps & ComponentProps<'div'>) {
-  const transition = useTransition();
+  const navigation = useNavigation();
 
   return (
     <div
@@ -30,7 +30,7 @@ export function Pagination({
       )}
     >
       <span className="flex gap-4 items-center">
-        {transition.state !== 'idle' && (
+        {navigation.state !== 'idle' && (
           <ArrowPathIcon className="animate-spin h-6 w-6 text-gray-500" />
         )}
         <Select
@@ -52,7 +52,7 @@ export function Pagination({
           name="page"
           type="submit"
           value={appliedPaginationPage - 1}
-          disabled={appliedPaginationPage <= 1 || transition.state !== 'idle'}
+          disabled={appliedPaginationPage <= 1 || navigation.state !== 'idle'}
           className="!text-sm rounded-r-none border-r-0"
         >
           Prev.
@@ -63,7 +63,7 @@ export function Pagination({
           value={appliedPaginationPage + 1}
           disabled={
             appliedPaginationPage * appliedPaginationLimit >= totalItems ||
-            transition.state !== 'idle'
+            navigation.state !== 'idle'
           }
           className="!text-sm rounded-l-none"
         >

@@ -1,24 +1,19 @@
-import {
-  DataFunctionArgs,
-  MetaFunction,
-  json,
-} from '@remix-run/server-runtime';
-import { useState, useRef, RefObject, useEffect } from 'react';
+import { DataFunctionArgs, json } from '@remix-run/server-runtime';
+import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
 import {
   FetcherWithComponents,
-  ShouldReloadFunction,
-  useCatch,
+  ShouldRevalidateFunction,
   useLoaderData,
   useOutletContext,
+  MetaFunction,
 } from '@remix-run/react';
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
 import { CartLoaderData } from '~/routes/api/active-order';
-// import { FetcherWithComponents } from '~/types';
-import { sessionStorage } from '~/sessions';
+import { getSessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
@@ -26,11 +21,13 @@ import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 
 export const meta: MetaFunction = ({ data }) => {
-  return {
-    title: data?.product?.name
-      ? `${data.product.name} - ${APP_META_TITLE}`
-      : APP_META_TITLE,
-  };
+  return [
+    {
+      title: data?.product?.name
+        ? `${data.product.name} - ${APP_META_TITLE}`
+        : APP_META_TITLE,
+    },
+  ];
 };
 
 export async function loader({ params, request }: DataFunctionArgs) {
@@ -40,7 +37,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
       status: 404,
     });
   }
-  const session = await sessionStorage.getSession(
+  const session = await getSessionStorage().getSession(
     request?.headers.get('Cookie'),
   );
   const error = session.get('activeOrderError');
@@ -48,17 +45,16 @@ export async function loader({ params, request }: DataFunctionArgs) {
     { product: product!, error },
     {
       headers: {
-        'Set-Cookie': await sessionStorage.commitSession(session),
+        'Set-Cookie': await getSessionStorage().commitSession(session),
       },
     },
   );
 }
 
-export const unstable_shouldReload: ShouldReloadFunction = () => true;
+export const shoudRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
   const { product, error } = useLoaderData<typeof loader>();
-  const caught = useCatch();
   const { activeOrderFetcher } = useOutletContext<{
     activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
   }>();
