@@ -19,10 +19,7 @@ const netlifyConfig = {
  */
 const devConfig = {
   appDirectory: 'app',
-  assetsBuildDirectory: 'public/build',
-  publicPath: '/build/',
-  serverBuildPath: 'build',
-  serverModuleFormat: 'esm',
+  serverModuleFormat: 'cjs',
   devServerPort: 8002,
   ignoredRouteFiles: ['.*'],
   future: {
