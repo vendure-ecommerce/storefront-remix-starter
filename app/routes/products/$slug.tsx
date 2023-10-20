@@ -51,7 +51,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
   );
 }
 
-export const shoudRevalidate: ShouldRevalidateFunction = () => true;
+export const shouldRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
   const { product, error } = useLoaderData<typeof loader>();
