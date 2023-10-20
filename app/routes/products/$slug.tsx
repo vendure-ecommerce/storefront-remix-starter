@@ -5,10 +5,9 @@ import { getProductBySlug } from '~/providers/products/products';
 import {
   FetcherWithComponents,
   ShouldRevalidateFunction,
-  useCatch,
   useLoaderData,
   useOutletContext,
-  V2_MetaFunction,
+  MetaFunction,
 } from '@remix-run/react';
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
@@ -21,7 +20,7 @@ import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 
-export const meta: V2_MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }) => {
   return [
     {
       title: data?.product?.name
@@ -56,7 +55,6 @@ export const shoudRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
   const { product, error } = useLoaderData<typeof loader>();
-  const caught = useCatch();
   const { activeOrderFetcher } = useOutletContext<{
     activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
   }>();

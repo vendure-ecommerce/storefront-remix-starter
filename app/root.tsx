@@ -10,15 +10,11 @@ import {
   ShouldRevalidateFunction,
   useLoaderData,
   useRouteError,
-  V2_MetaFunction,
+  MetaFunction,
 } from '@remix-run/react';
 import styles from './styles/app.css';
 import { Header } from './components/header/Header';
-import {
-  DataFunctionArgs,
-  json,
-  MetaFunction,
-} from '@remix-run/server-runtime';
+import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
@@ -29,7 +25,7 @@ import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 import { setApiUrl } from '~/graphqlWrapper';
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
 };
 
