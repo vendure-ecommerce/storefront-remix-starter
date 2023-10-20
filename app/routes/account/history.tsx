@@ -1,4 +1,4 @@
-import { useLoaderData, useTransition, useSubmit } from '@remix-run/react';
+import { useLoaderData, useNavigation, useSubmit } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import OrderHistoryItem from '~/components/account/OrderHistoryItem';
 import { getActiveCustomerOrderList } from '~/providers/customer/customer';
@@ -62,7 +62,7 @@ export default function AccountHistory() {
   const { orderList, appliedPaginationLimit, appliedPaginationPage } =
     useLoaderData<typeof loader>();
   const submit = useSubmit();
-  const transition = useTransition();
+  const navigation = useNavigation();
   const showingOrdersFrom = translatePaginationFrom(
     appliedPaginationPage,
     appliedPaginationLimit,
@@ -76,7 +76,7 @@ export default function AccountHistory() {
   return (
     <div className="pt-10 relative">
       {/* Loading-Overlay */}
-      {transition.state !== 'idle' && (
+      {navigation.state !== 'idle' && (
         <div className="absolute top-0 left-0 w-full h-full z-100 bg-white bg-opacity-75"></div>
       )}
 

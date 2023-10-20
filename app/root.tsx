@@ -10,6 +10,7 @@ import {
   ShouldRevalidateFunction,
   useLoaderData,
   useRouteError,
+  V2_MetaFunction,
 } from '@remix-run/react';
 import styles from './styles/app.css';
 import { Header } from './components/header/Header';
@@ -28,8 +29,8 @@ import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 import { setApiUrl } from '~/graphqlWrapper';
 
-export const meta: MetaFunction = () => {
-  return { title: APP_META_TITLE, description: APP_META_DESCRIPTION };
+export const meta: V2_MetaFunction = () => {
+  return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
 };
 
 export function links() {

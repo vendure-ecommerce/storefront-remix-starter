@@ -1,8 +1,4 @@
-import {
-  DataFunctionArgs,
-  json,
-  MetaFunction,
-} from '@remix-run/server-runtime';
+import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
@@ -12,6 +8,7 @@ import {
   useCatch,
   useLoaderData,
   useOutletContext,
+  V2_MetaFunction,
 } from '@remix-run/react';
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
@@ -24,12 +21,14 @@ import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
 import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
-    title: data?.product?.name
-      ? `${data.product.name} - ${APP_META_TITLE}`
-      : APP_META_TITLE,
-  };
+export const meta: V2_MetaFunction = ({ data }) => {
+  return [
+    {
+      title: data?.product?.name
+        ? `${data.product.name} - ${APP_META_TITLE}`
+        : APP_META_TITLE,
+    },
+  ];
 };
 
 export async function loader({ params, request }: DataFunctionArgs) {
