@@ -14,9 +14,10 @@ import { StripePayments } from '~/components/checkout/stripe/StripePayments';
 import { DummyPayments } from '~/components/checkout/DummyPayments';
 import { BraintreeDropIn } from '~/components/checkout/braintree/BraintreePayments';
 import { getActiveOrder } from '~/providers/orders/order';
+import { getSessionStorage } from '~/sessions';
 
 export async function loader({ params, request }: DataFunctionArgs) {
-  const session = await sessionStorage.getSession(
+  const session = await getSessionStorage().getSession(
     request?.headers.get('Cookie'),
   );
   const activeOrder = await getActiveOrder({ request });
