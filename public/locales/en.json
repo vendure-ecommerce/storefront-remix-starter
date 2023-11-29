@@ -1,0 +1,19 @@
+{
+    "common": {
+        "readMore": "Read more:",
+        "tokenError": "Verification token was not provided!",
+        "shopByCategory": "Shop by Category",
+        "browseCategories": "Browse all categories"
+    },
+    "address": {},
+    "account": {},
+    "order": {},
+    "header": {},
+    "footer": {},
+    "navigation": {},
+    "vendure": {
+        "title": "Vendure Remix Starter",
+        "intro": "A headless commerce storefront starter kit built with",
+        "link": "Lightning Fast Headless Commerce with Vendure and Remix"
+    }
+}

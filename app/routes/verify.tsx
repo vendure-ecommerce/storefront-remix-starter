@@ -3,6 +3,8 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { verifyCustomerAccount } from '~/providers/account/account';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 type LoaderReturnType = {
   success: boolean;
@@ -16,9 +18,11 @@ export async function loader({
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
   if (!token) {
+    let t = await i18next.getFixedT(request);
+
     return {
       success: false,
-      error: 'Verification token was not provided!',
+      error: t('tokenError'),
     };
   }
 
