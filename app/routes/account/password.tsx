@@ -15,6 +15,7 @@ import {
   isErrorResult,
   isValidationErrorResponseData,
 } from '~/utils/validation-helper';
+import { useTranslation } from 'react-i18next';
 
 export const validator = withZod(
   z
@@ -61,6 +62,7 @@ export default function AccountPassword() {
   const actionDataHook = useActionData<typeof action>();
   const { state } = useNavigation();
   const formRef = useRef<HTMLFormElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isValidationErrorResponseData(actionDataHook)) {
@@ -93,7 +95,7 @@ export default function AccountPassword() {
               <div>
                 <Input
                   required
-                  label="Current Password"
+                  label={t('account.currentPassword')}
                   name="currentPassword"
                   type="password"
                 />
@@ -103,7 +105,7 @@ export default function AccountPassword() {
               <div>
                 <Input
                   required
-                  label="New Password"
+                  label={t('account.newPassword')}
                   name="newPassword"
                   type="password"
                 />
@@ -111,7 +113,7 @@ export default function AccountPassword() {
               <div>
                 <Input
                   required
-                  label="Confirm Password"
+                  label={t('account.confirmPassword')}
                   name="confirmPassword"
                   type="password"
                 />
@@ -121,29 +123,32 @@ export default function AccountPassword() {
         )}
         {isSaved && (
           <SuccessMessage
-            heading="Success!"
-            message="Your password has been updated."
+            heading={t('account.pwdSuccessHeading')}
+            message={t('account.pwdSuccessMessage')}
           />
         )}
         {errorMessage && (
           <ErrorMessage
-            heading="Password not updated."
+            heading={t('account.pwdErrorMessage')}
             message={errorMessage}
           />
         )}
         {editing ? (
           <div className="flex gap-3">
-            <HighlightedButton type="submit" isSubmitting={state === 'submitting'}>
-              Save Password
+            <HighlightedButton
+              type="submit"
+              isSubmitting={state === 'submitting'}
+            >
+              {t('account.savePassword')}
             </HighlightedButton>
             <Button type="reset" onClick={() => setEditing(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
           </div>
         ) : (
           <>
             <HighlightedButton type="button" onClick={() => setEditing(true)}>
-              <PencilIcon className="w-4 h-4" /> Change Password
+              <PencilIcon className="w-4 h-4" /> {t('account.changePassword')}
             </HighlightedButton>
           </>
         )}

@@ -1,12 +1,14 @@
-import {
-  Outlet, useLoaderData
-} from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import AddAddressCard from '~/components/account/AddAddressCard';
 import EditAddressCard from '~/components/account/EditAddressCard';
 import { Address, ErrorCode, ErrorResult } from '~/generated/graphql';
-import { deleteCustomerAddress, updateCustomerAddress } from '~/providers/account/account';
+import {
+  deleteCustomerAddress,
+  updateCustomerAddress,
+} from '~/providers/account/account';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
+import i18next from 'i18next';
 
 export async function loader({ request }: DataFunctionArgs) {
   const res = await getActiveCustomerAddresses({ request });
@@ -18,13 +20,14 @@ export async function action({ request }: DataFunctionArgs) {
   const formData = await request.formData();
   const id = formData.get('id') as string | null;
   const _action = formData.get('_action');
+  const t = await i18next.getFixedT(request);
 
   // Verify that id is set
   if (!id || id.length === 0) {
     return json<ErrorResult>(
       {
         errorCode: ErrorCode.IdentifierChangeTokenInvalidError, // TODO: I dont think this error is 100% appropriate - decide later
-        message: "Parameter 'id' is missing"
+        message: t('address.idError'),
       },
       {
         status: 400, // Bad request
@@ -32,24 +35,24 @@ export async function action({ request }: DataFunctionArgs) {
     );
   }
 
-  if (_action === "setDefaultShipping") {
+  if (_action === 'setDefaultShipping') {
     updateCustomerAddress({ id, defaultShippingAddress: true }, { request });
     return null;
   }
 
-  if (_action === "setDefaultBilling") {
+  if (_action === 'setDefaultBilling') {
     updateCustomerAddress({ id, defaultBillingAddress: true }, { request });
     return null;
   }
 
-  if (_action === "deleteAddress") {
+  if (_action === 'deleteAddress') {
     const { success } = await deleteCustomerAddress(id, { request });
     return json(null, { status: success ? 200 : 400 });
   }
 
   return json<ErrorResult>(
     {
-      message: 'An unknown error occurred',
+      message: t('common.unknowError'),
       errorCode: ErrorCode.UnknownError,
     },
     {
@@ -69,10 +72,7 @@ export default function AccountAddresses() {
           <AddAddressCard />
           {activeCustomerAddresses?.addresses!.map((address) => {
             return (
-              <EditAddressCard
-                address={address as Address}
-                key={address.id}
-              />
+              <EditAddressCard address={address as Address} key={address.id} />
             );
           })}
         </div>

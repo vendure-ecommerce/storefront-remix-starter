@@ -3,6 +3,8 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { updateCustomerEmailAddress } from '~/providers/account/account';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 type LoaderReturnType = {
   success: boolean;
@@ -14,10 +16,12 @@ export async function loader({
 }: DataFunctionArgs): Promise<LoaderReturnType> {
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
+  const t = await i18next.getFixedT(request);
+
   if (!token) {
     return {
       success: false,
-      error: 'Verification token was not provided!',
+      error: t('tokenError'),
     };
   }
 
@@ -39,6 +43,7 @@ export default function VerifyEmailAddressChangeTokenPage() {
   const [searchParams] = useSearchParams();
   const result = useLoaderData<LoaderReturnType>();
   const btnRef = useRef<HTMLButtonElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!result.success || !btnRef.current) {
@@ -64,8 +69,7 @@ export default function VerifyEmailAddressChangeTokenPage() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-green-700">
-                    Your new E-Mail address has been verified successfully.
-                    Redirecting in 5s...
+                    {t('account.verifyEmailMessage')}
                   </p>
                 </div>
                 <form method="post">

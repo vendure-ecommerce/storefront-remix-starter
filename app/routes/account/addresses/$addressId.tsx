@@ -19,6 +19,7 @@ import CustomerAddressForm, {
 import { updateCustomerAddress } from '~/providers/account/account';
 import { getAvailableCountries } from '~/providers/checkout/checkout';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
+import { useTranslation } from 'react-i18next';
 
 export async function loader({ request, params }: DataFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerAddresses({ request });
@@ -72,6 +73,7 @@ export default function EditAddress() {
   const navigate = useNavigate();
   const { state, close } = useToggleState(true);
   const formRef = useRef<HTMLFormElement>(null);
+  const { t } = useTranslation();
 
   const submit = useSubmit();
 
@@ -92,7 +94,7 @@ export default function EditAddress() {
   return (
     <div>
       <Modal isOpen={state} close={close} afterClose={afterClose}>
-        <Modal.Title>Edit address</Modal.Title>
+        <Modal.Title>{t('address.edit')}</Modal.Title>
         <Modal.Body>
           <CustomerAddressForm
             address={address as Address}
@@ -103,14 +105,14 @@ export default function EditAddress() {
         </Modal.Body>
         <Modal.Footer>
           <Button type="button" onClick={close}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <HighlightedButton
             isSubmitting={navigation.state === 'submitting'}
             type="submit"
             onClick={submitForm}
           >
-            Save
+            {t('common.save')}
           </HighlightedButton>
         </Modal.Footer>
       </Modal>

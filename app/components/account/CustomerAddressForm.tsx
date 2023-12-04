@@ -5,6 +5,7 @@ import { ValidatedForm } from 'remix-validated-form';
 import { Address, AvailableCountriesQuery } from '~/generated/graphql';
 import { Input } from '~/components/Input';
 import { Select } from '~/components/Select';
+import { useTranslation } from 'react-i18next';
 
 export const validator = withZod(
   z.object({
@@ -31,6 +32,8 @@ export default function CustomerAddressForm({
   submit: () => void;
   availableCountries: AvailableCountriesQuery['availableCountries'];
 }) {
+  const { t } = useTranslation();
+
   return (
     <ValidatedForm
       id="editAddressForm"
@@ -54,42 +57,47 @@ export default function CustomerAddressForm({
       <div className="grid grid-cols-1 gap-y-2 my-8">
         <div className="grid grid-cols-2 gap-x-2">
           <Input
-            label="Full name"
+            label={t('address.fullName')}
             name="fullName"
             required
             autoComplete="full-name"
           />
         </div>
-        <Input label="Company" name="company" />
+        <Input label={t('address.company')} name="company" />
         <Input
-          label="Address"
+          label={t('address.streetLine1')}
           name="streetLine1"
           required
           autoComplete="address-line1"
         />
         <Input
-          label="Apartment, suite, etc."
+          label={t('address.streetLine2')}
           name="streetLine2"
           autoComplete="address-line2"
         />
         <div className="grid grid-cols-[144px_1fr] gap-x-2">
           <Input
-            label="Postal code"
+            label={t('address.postalCode')}
             name="postalCode"
             required
             autoComplete="postal-code"
           />
-          <Input label="City" name="city" required autoComplete="locality" />
+          <Input
+            label={t('address.city')}
+            name="city"
+            required
+            autoComplete="locality"
+          />
         </div>
         <Input
-          label="Province / State"
+          label={t('address.province')}
           name="province"
           autoComplete="address-level1"
         />
         <Select
           name="countryCode"
           autoComplete="country"
-          placeholder="Select a country..."
+          placeholder={t('address.selectCountry')}
           required
           label="Country"
         >
@@ -99,7 +107,7 @@ export default function CustomerAddressForm({
             </option>
           ))}
         </Select>
-        <Input label="Phone" name="phone" autoComplete="phone" />
+        <Input label={t('address.phone')} name="phone" autoComplete="phone" />
         <input type="submit" hidden />
       </div>
     </ValidatedForm>

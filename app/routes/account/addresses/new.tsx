@@ -17,6 +17,7 @@ import CustomerAddressForm, {
 } from '~/components/account/CustomerAddressForm';
 import { createCustomerAddress } from '~/providers/account/account';
 import { getAvailableCountries } from '~/providers/checkout/checkout';
+import { useTranslation } from 'react-i18next';
 
 export async function loader({ request, params }: DataFunctionArgs) {
   const { availableCountries } = await getAvailableCountries({ request });
@@ -59,6 +60,7 @@ export default function NewAddress() {
   const actionData = useActionData();
   const navigate = useNavigate();
   const { state, close } = useToggleState(true);
+  const { t } = useTranslation();
 
   const formRef = useRef<HTMLFormElement>(null);
   const submit = useSubmit();
@@ -80,7 +82,7 @@ export default function NewAddress() {
   return (
     <div>
       <Modal isOpen={state} close={close} afterClose={afterClose}>
-        <Modal.Title>New address</Modal.Title>
+        <Modal.Title>{t('address.new')}</Modal.Title>
         <Modal.Body>
           <CustomerAddressForm
             availableCountries={availableCountries}
@@ -90,14 +92,14 @@ export default function NewAddress() {
         </Modal.Body>
         <Modal.Footer>
           <Button type="button" onClick={close}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <HighlightedButton
             isSubmitting={navigation.state === 'submitting'}
             type="submit"
             onClick={submitForm}
           >
-            Save
+            {t('common.save')}
           </HighlightedButton>
         </Modal.Footer>
       </Modal>
