@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from '@remix-run/react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
+import { useTranslation } from 'react-i18next';
 
 export default function FacetFilterControls({
   facetFilterTracker,
@@ -16,6 +17,7 @@ export default function FacetFilterControls({
 }) {
   const [searchParams] = useSearchParams();
   const q = searchParams.getAll('q');
+  const { t } = useTranslation();
 
   return (
     <>
@@ -50,13 +52,15 @@ export default function FacetFilterControls({
             >
               <Dialog.Panel className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-12 flex flex-col overflow-y-auto">
                 <div className="px-4 flex items-center justify-between">
-                  <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                  <h2 className="text-lg font-medium text-gray-900">
+                    {t('common.filters')}
+                  </h2>
                   <button
                     type="button"
                     className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
                     onClick={() => setMobileFiltersOpen(false)}
                   >
-                    <span className="sr-only">Close menu</span>
+                    <span className="sr-only">{t('common.closeMenu')}</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>

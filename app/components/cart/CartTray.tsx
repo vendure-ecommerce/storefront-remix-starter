@@ -6,6 +6,7 @@ import { Link, useLocation } from '@remix-run/react';
 import { Price } from '~/components/products/Price';
 import { CartLoaderData } from '~/routes/api/active-order';
 import { CurrencyCode } from '~/generated/graphql';
+import { useTranslation } from 'react-i18next';
 
 export function CartTray({
   open,
@@ -23,6 +24,8 @@ export function CartTray({
   const currencyCode = activeOrder?.currencyCode || CurrencyCode.Usd;
   const location = useLocation();
   const editable = !location.pathname.startsWith('/checkout');
+  const { t } = useTranslation();
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -58,7 +61,7 @@ export function CartTray({
                   <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Shopping cart
+                        {t('cart.title')}
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
                         <button
@@ -66,7 +69,9 @@ export function CartTray({
                           className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           onClick={() => onClose(false)}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">
+                            {t('common.closePanel')}
+                          </span>
                           <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                         </button>
                       </div>
@@ -83,7 +88,7 @@ export function CartTray({
                         ></CartContents>
                       ) : (
                         <div className="flex items-center justify-center h-48 text-xl text-gray-400">
-                          Your cart is empty
+                          {t('cart.empty')}
                         </div>
                       )}
                     </div>
@@ -92,7 +97,7 @@ export function CartTray({
                   {activeOrder?.totalQuantity && editable && (
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
-                        <p>Subtotal</p>
+                        <p>{t('common.subtotal')}</p>
                         <p>
                           {currencyCode && (
                             <Price
@@ -103,7 +108,7 @@ export function CartTray({
                         </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
-                        Shipping will be calculated at checkout.
+                        {t('cart.shippingMessage')}
                       </p>
                       <div className="mt-6">
                         <Link
@@ -111,7 +116,7 @@ export function CartTray({
                           onClick={() => onClose(false)}
                           className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary-600 hover:bg-primary-700"
                         >
-                          Checkout
+                          {t('cart.checkout')}
                         </Link>
                       </div>
                     </div>

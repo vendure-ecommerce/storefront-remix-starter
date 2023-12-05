@@ -2,11 +2,11 @@ import { RadioGroup } from '@headlessui/react';
 import { classNames } from '~/utils/class-names';
 import { Price } from '~/components/products/Price';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import * as React from 'react';
 import {
   CurrencyCode,
   EligibleShippingMethodsQuery,
 } from '~/generated/graphql';
+import { useTranslation } from 'react-i18next';
 
 export function ShippingMethodSelector({
   eligibleShippingMethods,
@@ -19,10 +19,12 @@ export function ShippingMethodSelector({
   onChange: (value?: string) => void;
   currencyCode?: CurrencyCode;
 }) {
+  const { t } = useTranslation();
+
   return (
     <RadioGroup value={shippingMethodId} onChange={onChange}>
       <RadioGroup.Label className="text-lg font-medium text-gray-900">
-        Delivery method
+        {t('checkout.deliveryMethod')}
       </RadioGroup.Label>
 
       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
