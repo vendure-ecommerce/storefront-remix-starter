@@ -167,7 +167,7 @@ export default function SignInPage() {
                       {login.state !== 'idle' && (
                         <ArrowPathIcon className="animate-spin h-5 w-5 text-gray-500" />
                       )}
-                      Sign in{t('account.signIn')}
+                      {t('account.signIn')}
                     </span>
                   </Button>
                 </div>
