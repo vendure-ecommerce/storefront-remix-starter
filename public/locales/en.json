@@ -27,7 +27,10 @@
     "next": "Next",
     "filters": "Filters",
     "select": "Select...",
-    "home": "Home"
+    "home": "Home",
+    "logoAlt": "Vendure logo",
+    "search": "Search",
+    "goHome": "Go home"
   },
   "address": {
     "new": "New address",
@@ -58,14 +61,26 @@
     "verifyMessage": "Your account has been verified successfully. Redirecting in 5s...",
     "verifyEmailMessage": "Your new E-Mail address has been verified successfully. Redirecting in 5s...",
     "signInTitle": "Sign in to your account",
-    "signIn": "Sign in",
+    "signUp": "Sign In",
+    "signIn": "Sign In",
+    "signOut": "Sign out",
+    "create": "Create a new account",
+    "createError": "We ran into a problem while creating your account!",
+    "login": "login to your existing account",
+    "myAccount": "My Account",
+    "welcomeBack": "Welcome back",
+    "details": "Account Details",
+    "purchaseHistory": "Purchase History",
+    "addresses": "Addresses",
     "register": "register a new account",
     "email": "E-mail",
     "emailAddress": "Email address",
     "password": "Password",
+    "repeatPassword": "Repeat Password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot your password?",
     "errorSignIn": "We ran into a problem signing you in!",
+    "createdMessage": "Your account has been created successfully! A verification link has been sent to your e-mail address.",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
@@ -97,7 +112,24 @@
     "deliveryMethod": "Delivery method",
     "paymentProcessing": "Processing...",
     "paymentLoading": "Loading options...",
-    "pay": "Pay"
+    "paymentMessage": "Note: your payment is still being processed. You will receive an email confirmation once the payment has completed.",
+    "pay": "Pay",
+    "progress": "Progress",
+    "orderNotFound": "No matching order found!",
+    "orderErrorTitle": "An error occured!",
+    "orderErrorMessage": "Unfortunately your payment could not be processed or this confirmation link has expired.",
+    "orderProcessing": "Please wait while we process your order...",
+    "orderSuccessMessage": "Your order has been received!",
+    "braintreeError:": "Braintree error:",
+    "stripeError:": "Stripe error:",
+    "detailsTitle:": "Contact information",
+    "shippingTitle:": "Shipping information",
+    "goToPayment:": "Proceed to payment",
+    "steps": {
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "confirmation": "Confirmation"
+    }
   },
   "order": {
     "placedAt": "Date placed",
@@ -163,13 +195,37 @@
     "recentReviews": "Recent reviews",
     "recentRating": "out of 5 stars"
   },
-  "header": {},
-  "footer": {},
-  "navigation": {},
+  "footer": {
+    "title": "Footer",
+    "shop": "Shop",
+    "support": "Support",
+    "subscribeHeader": "Subscribe to our newsletter",
+    "subscribeIntro": "Be the first to know about exclusive offers & deals.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe"
+  },
+  "navigation": {
+    "support": {
+      "help": "Help",
+      "trackOrder": "Track order",
+      "shipping": "Shipping",
+      "returns": "Returns"
+    },
+    "company": {
+      "about": "About",
+      "blog": "Blog",
+      "responsibility": "Corporate responsibility",
+      "press": "Press"
+    }
+  },
   "vendure": {
     "title": "Vendure Remix Starter",
     "intro": "A headless commerce storefront starter kit built with",
     "link": "Lightning Fast Headless Commerce with Vendure and Remix",
-    "demoCredentials": "Demo credentials"
+    "demoCredentials": "Demo credentials",
+    "exclusive": "Exclusive: Get your own",
+    "repoLinkLabel": "FREE storefront starter kit",
+    "registrationMessage": "Account registration is not supported by the demo Vendure instance. In order to use it, please connect the Remix storefront to your own local / production instance.",
+    "registrationError": "Registration can't be used with Vendure demo shop! Please connect your own instance."
   }
 }

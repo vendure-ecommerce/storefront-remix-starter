@@ -8,12 +8,16 @@ import {
   validateRegistrationForm,
 } from '~/utils/registration-helper';
 import { DEMO_API_URL } from '~/constants';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 export async function action({ params, request }: DataFunctionArgs) {
   const apiUrl = process.env.VENDURE_API_URL || DEMO_API_URL;
   if (apiUrl === DEMO_API_URL) {
+    const t = await i18next.getFixedT(request);
+
     return {
-      form: "Registration can't be used with Vendure demo shop! Please connect your own instance.",
+      form: t('vendure.registrationError'),
     };
   }
 
@@ -38,21 +42,22 @@ export async function action({ params, request }: DataFunctionArgs) {
 export default function SignUpPage() {
   const [searchParams] = useSearchParams();
   const formErrors = useActionData<RegisterValidationErrors>();
+  const { t } = useTranslation();
 
   return (
     <>
       <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl text-gray-900">
-            Create a new account
+            {t('account.create')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
+            {t('common.or')}{' '}
             <Link
               to="/sign-in"
               className="font-medium text-primary-600 hover:text-primary-500"
             >
-              login to your existing account
+              {t('account.login')}
             </Link>
           </p>
         </div>
@@ -60,11 +65,7 @@ export default function SignUpPage() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <div className="bg-yellow-50 border border-yellow-400 text-yellow-800 rounded p-4 text-center text-sm">
-              <p>
-                Account registration is not supported by the demo Vendure
-                instance. In order to use it, please connect the Remix
-                storefront to your own local / production instance.
-              </p>
+              <p>{t('account.registrationMessage')}</p>
             </div>
             <Form className="space-y-6" method="post">
               <input
@@ -77,7 +78,7 @@ export default function SignUpPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email address
+                  {t('account.emailAddress')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -100,7 +101,7 @@ export default function SignUpPage() {
                   htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  First name
+                  {t('account.firstName')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -118,7 +119,7 @@ export default function SignUpPage() {
                   htmlFor="lastName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Last name
+                  {t('account.lastName')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -136,7 +137,7 @@ export default function SignUpPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Password
+                  {t('account.password')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -158,7 +159,7 @@ export default function SignUpPage() {
                   htmlFor="repeatPassword"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Repeat Password
+                  {t('account.repeatPassword')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -186,7 +187,7 @@ export default function SignUpPage() {
                     </div>
                     <div className="ml-3">
                       <h3 className="text-sm font-medium text-red-800">
-                        We ran into a problem while creating your account!
+                        {t('account.createError')}
                       </h3>
                       <p className="text-sm text-red-700 mt-2">
                         {formErrors.form}
@@ -201,7 +202,7 @@ export default function SignUpPage() {
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 >
-                  Sign up
+                  {t('account.signUp')}
                 </button>
               </div>
             </Form>
