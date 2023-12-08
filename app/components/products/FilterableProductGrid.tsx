@@ -56,12 +56,12 @@ export function FilterableProductGrid({
 
           <div className="flex flex-row justify-between items-center gap-4">
             <span className="self-start text-gray-500 text-sm mt-2">
-              {t('products.showing')}{' '}
+              {t('product.showing')}{' '}
               {translatePaginationFrom(
                 appliedPaginationPage,
                 appliedPaginationLimit,
               )}{' '}
-              {t('products.to')}{' '}
+              {t('product.to')}{' '}
               {translatePaginationTo(
                 appliedPaginationPage,
                 appliedPaginationLimit,
