@@ -40,7 +40,7 @@ export default function Checkout() {
               <li key={step} className="flex items-center">
                 {step === state ? (
                   <span aria-current="page" className="text-primary-600">
-                    {step}
+                    {t(`checkout.steps.${step}`)}
                   </span>
                 ) : (
                   <span>{t(`checkout.steps.${step}`)}</span>
@@ -65,7 +65,7 @@ export default function Checkout() {
           {!isConfirmationPage && (
             <div className="mt-10 lg:mt-0">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
-                {t('cart.orderSummary')}
+                {t('order.summary')}
               </h2>
 
               <CartContents

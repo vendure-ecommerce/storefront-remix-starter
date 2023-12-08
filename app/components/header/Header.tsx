@@ -47,7 +47,7 @@ export function Header({
             >
               <UserIcon className="w-4 h-4"></UserIcon>
               <span>
-                {isSignedIn ? t('vendure.myAccount') : t('vendure.signIn')}
+                {isSignedIn ? t('account.myAccount') : t('account.signIn')}
               </span>
             </Link>
           </div>

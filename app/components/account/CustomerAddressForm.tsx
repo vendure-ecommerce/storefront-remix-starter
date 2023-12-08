@@ -57,7 +57,7 @@ export default function CustomerAddressForm({
       <div className="grid grid-cols-1 gap-y-2 my-8">
         <div className="grid grid-cols-2 gap-x-2">
           <Input
-            label={t('address.fullName')}
+            label={t('account.fullName')}
             name="fullName"
             required
             autoComplete="full-name"
@@ -107,7 +107,11 @@ export default function CustomerAddressForm({
             </option>
           ))}
         </Select>
-        <Input label={t('address.phone')} name="phone" autoComplete="phone" />
+        <Input
+          label={t('address.phoneNumber')}
+          name="phone"
+          autoComplete="phone"
+        />
         <input type="submit" hidden />
       </div>
     </ValidatedForm>

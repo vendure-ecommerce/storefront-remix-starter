@@ -120,11 +120,11 @@
     "orderErrorMessage": "Infelizmente, seu pagamento não pôde ser processado ou este link de confirmação expirou.",
     "orderProcessing": "Aguarde enquanto processamos seu pedido...",
     "orderSuccessMessage": "Seu pedido foi recebido!",
-    "braintreeError:": "Erro cerebral:",
-    "stripeError:": "Erro de faixa:",
-    "detailsTitle:": "Informações de contato",
-    "shippingTitle:": "Informação de envio",
-    "goToPayment:": "Prossiga para o pagamento",
+    "braintreeError": "Erro cerebral:",
+    "stripeError": "Erro de faixa:",
+    "detailsTitle": "Informações de contato",
+    "shippingTitle": "Informação de envio",
+    "goToPayment": "Prossiga para o pagamento",
     "steps": {
       "shipping": "Envio",
       "payment": "Pagamento",
@@ -143,7 +143,7 @@
     "trackPackage": "Rastrear pacote",
     "detailedOverview": "Visão geral detalhada",
     "summary": "Resumo do pedido",
-    "shippingAndHandling:": "Envio",
+    "shippingAndHandling": "Envio",
     "totalWithoutTax": "Total antes de impostos:",
     "estimatedTax": "Imposto estimado:",
     "appliedCoupons": "Cupons aplicados:",
@@ -153,7 +153,7 @@
     "historyEnd": "Não há mais pedidos, fim alcançado",
     "items": {
       "fulfilled": "itens cumpridos",
-      "subtotal:": "Subtotal de itens:"
+      "subtotal": "Subtotal de itens:"
     },
     "states": {
       "Draft": "Rascunho",

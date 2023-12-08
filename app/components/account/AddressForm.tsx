@@ -19,7 +19,7 @@ export function AddressForm({
           htmlFor="fullName"
           className="block text-sm font-medium text-gray-700"
         >
-          {t('address.fullName')}
+          {t('account.fullName')}
         </label>
         <div className="mt-1">
           <input
