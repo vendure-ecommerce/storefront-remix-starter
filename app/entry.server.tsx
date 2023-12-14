@@ -31,7 +31,7 @@ export default async function handleRequest(
     .init({
       ...i18n,
       lng,
-      backend: { loadPath: resolve('./public/locales/{{lng}}.json') },
+      backend: { loadPath: resolve('../public/locales/{{lng}}.json') },
     });
 
   return new Promise((resolve, reject) => {
