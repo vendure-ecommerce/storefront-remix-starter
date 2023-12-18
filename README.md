@@ -48,7 +48,7 @@ For a more detailed guide on how to work with code generation, check the wiki ab
 
 #### Local
 
-You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://www.vendure.io/docs/getting-started/). Note that make sure you have enabled the `bearer` method for managing session tokens:
+You can set up a local instance, populated with test data by following the instructions in the Vendure [Getting Started guide](https://docs.vendure.io/getting-started/). Note that make sure you have enabled the `bearer` method for managing session tokens:
 
 ```ts
 // vendure-config.ts
@@ -68,7 +68,7 @@ Currently, both Stripe and Braintree are supported out of the box, but only one 
 ### Stripe integration
 
 This repo has a built-in Stripe payment integration. To enable it, ensure that your Vendure server is set up with
-the [StripePlugin](https://docs.vendure.io/reference/core-plugins/payments-plugin/stripe-plugin).
+the [StripePlugin](https://docs.vendure.io/reference/core-plugins/payments-plugin/stripe-plugin/).
 
 Ensure your new PaymentMethod uses the word `stripe` somewhere in its code, as that's how this integration will know
 to load the Stripe payment element.
@@ -84,7 +84,7 @@ STRIPE_PUBLISHABLE_KEY=pk_test_...
 ### Braintree integration
 
 This repo has built-in Braintree integration. To enable it, ensure that your Vendure server is set up with
-the [BraintreePlugin](https://docs.vendure.io/reference/core-plugins/payments-plugin/braintree-plugin).
+the [BraintreePlugin](https://docs.vendure.io/reference/core-plugins/payments-plugin/braintree-plugin/).
 
 Currently, `storeCustomersInBraintree` has to be set to `true` in plugin options.
 
