@@ -28,11 +28,13 @@ General things missing:
 1. Clone this repo
 2. `yarn install`
 3. Create a `.env` file in the root dir with the following command and update it with your variables:
+   
    ```bash
    cp .env.template .env
    ```
-4. `yarn dev` - run the storefront with a local Remix server
-5. `yarn dev:cf` - runs locally with the Cloudflare Pages configuration
+   
+5. `yarn dev` - run the storefront with a local Remix server
+6. `yarn dev:cf` - runs locally with the Cloudflare Pages configuration
 
 ### Vendure Server
 
