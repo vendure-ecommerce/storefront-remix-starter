@@ -11,6 +11,7 @@ import {
   translatePaginationTo,
   paginationValidationSchema,
 } from '~/utils/pagination';
+import { useTranslation } from 'react-i18next';
 
 const paginationLimitMinimumDefault = 10;
 const allowedPaginationLimits = new Set<number>([
@@ -63,6 +64,7 @@ export default function AccountHistory() {
     useLoaderData<typeof loader>();
   const submit = useSubmit();
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const showingOrdersFrom = translatePaginationFrom(
     appliedPaginationPage,
     appliedPaginationLimit,
@@ -83,8 +85,8 @@ export default function AccountHistory() {
       {orderList.items.length === 0 && (
         <div className="py-16 text-3xl text-center italic text-gray-300 select-none flex justify-center items-center">
           {orderList.totalItems === 0
-            ? 'Your future orders will appear here'
-            : 'No more orders, end reached'}
+            ? t('order.historyEmpty')
+            : t('order.historyEnd')}
         </div>
       )}
       {/* The actual orders */}

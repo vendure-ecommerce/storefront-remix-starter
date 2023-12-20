@@ -4,17 +4,16 @@ import { CartContents } from '~/components/cart/CartContents';
 import { OutletContext } from '~/types';
 import { classNames } from '~/utils/class-names';
 import { CartTotals } from '~/components/cart/CartTotals';
+import { useTranslation } from 'react-i18next';
 
-const steps = [
-  { name: 'Shipping', state: 'shipping' },
-  { name: 'Payment', state: 'payment' },
-  { name: 'Confirmation', state: 'confirmation' },
-];
+const steps = ['shipping', 'payment', 'confirmation'];
 
 export default function Checkout() {
   const outletContext = useOutletContext<OutletContext>();
   const { activeOrder, adjustOrderLine, removeItem } = outletContext;
   const location = useLocation();
+  const { t } = useTranslation();
+
   let state = 'shipping';
   if (location.pathname === '/checkout/payment') {
     state = 'payment';
@@ -31,20 +30,20 @@ export default function Checkout() {
           'max-w-2xl mx-auto pt-8 pb-24 px-4 sm:px-6 lg:px-8',
         )}
       >
-        <h2 className="sr-only">Checkout</h2>
+        <h2 className="sr-only">{t('cart.checkout')}</h2>
         <nav
-          aria-label="Progress"
+          aria-label={t('cart.progress')}
           className="hidden sm:block pb-8 mb-8 border-b"
         >
           <ol role="list" className="flex space-x-4 justify-center">
             {steps.map((step, stepIdx) => (
-              <li key={step.name} className="flex items-center">
-                {step.state === state ? (
+              <li key={step} className="flex items-center">
+                {step === state ? (
                   <span aria-current="page" className="text-primary-600">
-                    {step.name}
+                    {t(`checkout.steps.${step}`)}
                   </span>
                 ) : (
-                  <span>{step.name}</span>
+                  <span>{t(`checkout.steps.${step}`)}</span>
                 )}
 
                 {stepIdx !== steps.length - 1 ? (
@@ -66,7 +65,7 @@ export default function Checkout() {
           {!isConfirmationPage && (
             <div className="mt-10 lg:mt-0">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
-                Order summary
+                {t('order.summary')}
               </h2>
 
               <CartContents

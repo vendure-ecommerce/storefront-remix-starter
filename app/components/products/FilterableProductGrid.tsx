@@ -9,6 +9,7 @@ import { NoResultsHint } from '~/components/products/NoResultsHint';
 import { useRef } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
+import { useTranslation } from 'react-i18next';
 
 export function FilterableProductGrid({
   result,
@@ -30,6 +31,7 @@ export function FilterableProductGrid({
   mobileFiltersOpen: boolean;
   setMobileFiltersOpen: (arg0: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const facetValuesTracker = useRef(new FacetFilterTracker());
   facetValuesTracker.current.update(
     result,
@@ -54,12 +56,12 @@ export function FilterableProductGrid({
 
           <div className="flex flex-row justify-between items-center gap-4">
             <span className="self-start text-gray-500 text-sm mt-2">
-              Showing products{' '}
+              {t('product.showing')}{' '}
               {translatePaginationFrom(
                 appliedPaginationPage,
                 appliedPaginationLimit,
               )}{' '}
-              to{' '}
+              {t('product.to')}{' '}
               {translatePaginationTo(
                 appliedPaginationPage,
                 appliedPaginationLimit,

@@ -8,6 +8,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { useRevalidator } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { OrderDetailFragment } from '~/generated/graphql';
+import { useTranslation } from 'react-i18next';
 
 export async function loader({ params, request }: DataFunctionArgs) {
   try {
@@ -28,6 +29,7 @@ export default function CheckoutConfirmation() {
   const { order, error } = useLoaderData<typeof loader>();
   const revalidator = useRevalidator();
   const [retries, setRetries] = useState(1);
+  const { t } = useTranslation();
 
   const orderNotFound = !order && !error;
   const orderErrored = !order && error;
@@ -65,7 +67,7 @@ export default function CheckoutConfirmation() {
     return (
       <div>
         <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-          No matching order found!
+          {t('checkout.orderNotFound')}
         </h2>
       </div>
     );
@@ -76,11 +78,10 @@ export default function CheckoutConfirmation() {
       <div>
         <h2 className="text-3xl flex items-center space-x-2 sm:text-5xl font-light tracking-tight text-gray-900 my-8">
           <XCircleIcon className="text-red-600 w-8 h-8 sm:w-12 sm:h-12"></XCircleIcon>
-          <span>An error occured!</span>
+          <span>{t('checkout.orderErrorTitle')}</span>
         </h2>
         <p className="text-lg text-gray-700">
-          Unfortunately your payment could not be processed or this confirmation
-          link has expired.
+          {t('checkout.orderErrorMessage')}
         </p>
       </div>
     );
@@ -90,7 +91,7 @@ export default function CheckoutConfirmation() {
     return (
       <div>
         <h2 className="text-3xl flex items-center space-x-2 sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-          Please wait while we process your order...
+          {t('checkout.orderProcessing')}
         </h2>
       </div>
     );
@@ -100,11 +101,11 @@ export default function CheckoutConfirmation() {
     <div>
       <h2 className="text-3xl flex items-center space-x-2 sm:text-5xl font-light tracking-tight text-gray-900 my-8">
         <CheckCircleIcon className="text-green-600 w-8 h-8 sm:w-12 sm:h-12"></CheckCircleIcon>
-        <span>Order Summary</span>
+        <span>{t('order.summary')}</span>
       </h2>
       <p className="text-lg text-gray-700">
-        Your order <span className="font-bold">{order!.code}</span> has been
-        received!
+        {t('checkout.orderSuccessMessage')}{' '}
+        <span className="font-bold">{order!.code}</span>
       </p>
       {order!.active && (
         <div className="rounded-md bg-blue-50 p-4 my-8">
@@ -117,9 +118,7 @@ export default function CheckoutConfirmation() {
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between">
               <p className="text-sm text-blue-700">
-                {' '}
-                Note: your payment is still being processed. You will receive an
-                email confirmation once the payment has completed.
+                {t('checkout.paymentMessage')}
               </p>
             </div>
           </div>

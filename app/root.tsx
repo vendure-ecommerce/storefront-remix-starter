@@ -24,6 +24,9 @@ import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 import { setApiUrl } from '~/graphqlWrapper';
+import { useChangeLanguage } from 'remix-i18next';
+import { useTranslation } from 'react-i18next';
+import i18next from '~/i18next.server';
 
 export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -61,6 +64,7 @@ export type RootLoaderData = {
   activeCustomer: Awaited<ReturnType<typeof getActiveCustomer>>;
   activeChannel: Awaited<ReturnType<typeof activeChannel>>;
   collections: Awaited<ReturnType<typeof getCollections>>;
+  locale: string;
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
@@ -74,11 +78,14 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     (collection) => collection.parent?.name === '__root_collection__',
   );
   const activeCustomer = await getActiveCustomer({ request });
+  const locale = await i18next.getLocale(request);
   const loaderData: RootLoaderData = {
     activeCustomer,
     activeChannel: await activeChannel({ request }),
     collections: topLevelCollections,
+    locale,
   };
+
   return json(loaderData, { headers: activeCustomer._headers });
 }
 
@@ -86,6 +93,8 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const loaderData = useLoaderData<RootLoaderData>();
   const { collections } = loaderData;
+  const { locale } = useLoaderData<typeof loader>();
+  const { i18n } = useTranslation();
   const {
     activeOrderFetcher,
     activeOrder,
@@ -94,6 +103,8 @@ export default function App() {
     refresh,
   } = useActiveOrder();
 
+  useChangeLanguage(locale);
+
   useEffect(() => {
     // When the loader has run, this implies we should refresh the contents
     // of the activeOrder as the user may have signed in or out.
@@ -101,7 +112,7 @@ export default function App() {
   }, [loaderData]);
 
   return (
-    <html lang="en" id="app">
+    <html lang={locale} dir={i18n.dir()} id="app">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

@@ -1,6 +1,9 @@
 import { Form } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
 
 export function SearchBar() {
+  const { t } = useTranslation();
+
   let initialQuery = '';
   if (typeof window === 'undefined') {
     // running in a server environment
@@ -15,7 +18,7 @@ export function SearchBar() {
         type="search"
         name="q"
         defaultValue={initialQuery}
-        placeholder="Search"
+        placeholder={t('common.search')}
         className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
       />
     </Form>

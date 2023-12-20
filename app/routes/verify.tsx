@@ -3,6 +3,8 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { verifyCustomerAccount } from '~/providers/account/account';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 type LoaderReturnType = {
   success: boolean;
@@ -16,9 +18,11 @@ export async function loader({
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
   if (!token) {
+    const t = await i18next.getFixedT(request);
+
     return {
       success: false,
-      error: 'Verification token was not provided!',
+      error: t('common.tokenError'),
     };
   }
 
@@ -53,6 +57,7 @@ export default function VerifyTokenPage() {
   const [searchParams] = useSearchParams();
   const result = useLoaderData<LoaderReturnType>();
   const btnRef = useRef<HTMLButtonElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!result.success || !btnRef.current) {
@@ -78,8 +83,7 @@ export default function VerifyTokenPage() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-green-700">
-                    Your account has been verified successfully. Redirecting in
-                    5s...
+                    {t('account.verifyMessage')}
                   </p>
                 </div>
                 <form method="post">

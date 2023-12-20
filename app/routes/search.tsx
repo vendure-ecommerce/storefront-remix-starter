@@ -7,6 +7,7 @@ import { ValidatedForm } from 'remix-validated-form';
 import { withZod } from '@remix-validated-form/with-zod';
 import { paginationValidationSchema } from '~/utils/pagination';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
+import { useTranslation } from 'react-i18next';
 
 const paginationLimitMinimumDefault = 25;
 const allowedPaginationLimits = new Set<number>([
@@ -34,11 +35,15 @@ export default function Search() {
     facetValueIds,
   );
   const submit = useSubmit();
+  const { t } = useTranslation();
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-          {term ? `Results for "${term}"` : 'All results'}
+          {term
+            ? `${t('common.resultsFor')} "${term}"`
+            : t('common.allResults')}
         </h2>
 
         <FiltersButton

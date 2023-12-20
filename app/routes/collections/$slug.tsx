@@ -11,6 +11,7 @@ import { FiltersButton } from '~/components/FiltersButton';
 import { ValidatedForm } from 'remix-validated-form';
 import { withZod } from '@remix-validated-form/with-zod';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
+import { useTranslation } from 'react-i18next';
 
 export const meta: V2_MetaFunction = ({ data }) => {
   return [
@@ -76,6 +77,8 @@ export default function CollectionSlug() {
     facetValueIds,
   );
   const submit = useSubmit();
+  const { t } = useTranslation();
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center">
@@ -92,7 +95,9 @@ export default function CollectionSlug() {
       <Breadcrumbs items={collection.breadcrumbs}></Breadcrumbs>
       {collection.children?.length ? (
         <div className="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
-          <h2 className="text-2xl font-light text-gray-900">Collections</h2>
+          <h2 className="text-2xl font-light text-gray-900">
+            {t('product.collections')}
+          </h2>
           <div className="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
             {collection.children.map((child) => (
               <CollectionCard
@@ -123,10 +128,12 @@ export default function CollectionSlug() {
 }
 
 export function CatchBoundary() {
+  const { t } = useTranslation();
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-        Collection not found!
+        {t('product.collectionNotFound')}
       </h2>
       <div className="mt-6 grid sm:grid-cols-5 gap-x-4">
         <div className="space-y-6">

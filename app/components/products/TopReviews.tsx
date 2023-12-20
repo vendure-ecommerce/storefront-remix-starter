@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { StarIcon } from '@heroicons/react/24/solid';
 import { classNames } from '~/utils/class-names';
+import { useTranslation } from 'react-i18next';
 
 interface Review {
   id: number;
@@ -51,10 +52,14 @@ const reviews: Review[] = [
 ];
 
 export default function TopReviews() {
+  const { t } = useTranslation();
+
   return (
     <div className="">
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-6xl lg:px-8">
-        <h2 className="text-lg font-medium text-gray-900">Recent reviews</h2>
+        <h2 className="text-lg font-medium text-gray-900">
+          {t('product.recentReviews')}
+        </h2>
         <div className="mt-6 pb-10 border-t border-gray-200 divide-y divide-gray-200 space-y-10">
           {reviews.map((review) => (
             <div
@@ -79,7 +84,10 @@ export default function TopReviews() {
                   </div>
                   <p className="ml-3 text-sm text-gray-700">
                     {review.rating}
-                    <span className="sr-only"> out of 5 stars</span>
+                    <span className="sr-only">
+                      {' '}
+                      {t('product.recentRating')}
+                    </span>
                   </p>
                 </div>
 

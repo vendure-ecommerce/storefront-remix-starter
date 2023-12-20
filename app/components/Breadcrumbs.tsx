@@ -1,11 +1,14 @@
 import { HomeIcon } from '@heroicons/react/24/solid';
 import { Link } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
 
 export function Breadcrumbs({
   items,
 }: {
   items: { name: string; slug: string; id: string }[];
 }) {
+  const { t } = useTranslation();
+
   return (
     <nav className="flex" aria-label="Breadcrumb">
       <ol role="list" className="flex items-center space-x-1 md:space-x-4">
@@ -13,7 +16,7 @@ export function Breadcrumbs({
           <div>
             <Link to="/" className="text-gray-400 hover:text-gray-500">
               <HomeIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
-              <span className="sr-only">Home</span>
+              <span className="sr-only">{t('home')}</span>
             </Link>
           </div>
         </li>

@@ -20,6 +20,7 @@ import { AddressForm } from '~/components/account/AddressForm';
 import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
 import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
 import { getActiveOrder } from '~/providers/orders/order';
+import { useTranslation } from 'react-i18next';
 
 export async function loader({ request }: DataFunctionArgs) {
   const session = await getSessionStorage().getSession(
@@ -59,6 +60,7 @@ export default function CheckoutShipping() {
   const [addressFormChanged, setAddressFormChanged] = useState(false);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
   let navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { customer, shippingAddress } = activeOrder ?? {};
   const isSignedIn = !!activeCustomer?.id;
@@ -147,7 +149,7 @@ export default function CheckoutShipping() {
     <div>
       <div>
         <h2 className="text-lg font-medium text-gray-900">
-          Contact information
+          {t('checkout.detailsTitle')}
         </h2>
 
         {isSignedIn ? (
@@ -171,7 +173,7 @@ export default function CheckoutShipping() {
                 htmlFor="emailAddress"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                {t('account.emailAddress')}
               </label>
               <div className="mt-1">
                 <input
@@ -195,7 +197,7 @@ export default function CheckoutShipping() {
                   htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  First name
+                  {t('account.firstName')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -214,7 +216,7 @@ export default function CheckoutShipping() {
                   htmlFor="lastName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Last name
+                  {t('account.lastName')}
                 </label>
                 <div className="mt-1">
                   <input
@@ -241,7 +243,7 @@ export default function CheckoutShipping() {
         <input type="hidden" name="action" value="setCheckoutShipping" />
         <div className="mt-10 border-t border-gray-200 pt-10">
           <h2 className="text-lg font-medium text-gray-900">
-            Shipping information
+            {t('checkout.shippingTitle')}
           </h2>
         </div>
         {isSignedIn && activeCustomer.addresses?.length ? (
@@ -284,7 +286,7 @@ export default function CheckoutShipping() {
         )}
       >
         <LockClosedIcon className="w-5 h-5"></LockClosedIcon>
-        <span>Proceed to payment</span>
+        <span>{t('checkout.goToPayment')}</span>
       </button>
     </div>
   );
