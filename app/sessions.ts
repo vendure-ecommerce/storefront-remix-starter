@@ -1,15 +1,18 @@
-import { IS_CF_PAGES } from '~/utils/platform-adapter';
+import {
+  IS_CF_PAGES,
+  safeRequireNodeDependency,
+} from '~/utils/platform-adapter';
 import { SessionStorage } from '@remix-run/server-runtime/dist/sessions';
 import { ErrorResult } from '~/generated/graphql';
+import { createCookieSessionStorage } from '@remix-run/cloudflare';
+import { CreateCookieSessionStorageFunction } from '@remix-run/server-runtime';
 
-function getCookieSessionStorageFactory() {
+function getCookieSessionStorageFactory(): CreateCookieSessionStorageFunction {
   if (IS_CF_PAGES) {
-    return require('@remix-run/cloudflare').createCookieSessionStorage;
+    return createCookieSessionStorage;
   } else {
-    // This hack is to prevent the `node` package being bundled in the
-    // Cloudflare Pages context, which causes an error.
-    let imp = ['@remix-run', 'node'];
-    return require(imp.join('/')).createCookieSessionStorage;
+    return safeRequireNodeDependency('@remix-run/node')
+      .createCookieSessionStorage;
   }
 }
 let sessionStorage: SessionStorage<

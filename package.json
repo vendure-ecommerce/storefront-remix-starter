@@ -7,10 +7,10 @@
     "build:cf": "cross-env CF_PAGES=1 remix build",
     "build:nf": "cross-env NETLIFY=1 remix build",
     "build": "tailwindcss -m -i ./tailwind.css -o app/styles/app.css && remix build",
-    "dev:wrangler": "wrangler pages dev ./public",
+    "dev:wrangler": "cross-env CF_PAGES=1 wrangler pages dev ./public",
     "dev:css": "tailwindcss -w -i ./tailwind.css -o app/styles/app.css",
     "dev": "concurrently \"yarn run dev:css\" \"remix dev\"",
-    "dev:cf": "yarn run build:cf && concurrently \"yarn run dev:css\" \"remix watch\" \"yarn run dev:wrangler\"",
+    "dev:cf": "cross-env CF_PAGES=1 remix dev --manual -c \"yarn run dev:wrangler\"",
     "start:cf": "cross-env NODE_ENV=production yarn run dev:wrangler",
     "start": "remix-serve build",
     "generate": "graphql-codegen --config codegen.yml",
@@ -21,13 +21,13 @@
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
     "@netlify/functions": "^1.3.0",
-    "@remix-run/cloudflare": "^2.1.0",
-    "@remix-run/cloudflare-pages": "^2.1.0",
+    "@remix-run/cloudflare": "^2.4.1",
+    "@remix-run/cloudflare-pages": "^2.4.1",
     "@remix-run/netlify": "^1.19.3",
-    "@remix-run/node": "^2.1.0",
-    "@remix-run/react": "^2.1.0",
-    "@remix-run/serve": "^2.1.0",
-    "@remix-run/server-runtime": "^2.1.0",
+    "@remix-run/node": "^2.4.1",
+    "@remix-run/react": "^2.4.1",
+    "@remix-run/serve": "^2.4.1",
+    "@remix-run/server-runtime": "^2.4.1",
     "@remix-run/v1-route-convention": "^0.1.4",
     "@remix-validated-form/with-zod": "^2.0.5",
     "@stripe/react-stripe-js": "^1.15.0",
@@ -47,7 +47,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",
-    "remix": "^2.1.0",
+    "remix": "^2.4.1",
     "remix-i18next": "^5.4.0",
     "remix-validated-form": "^5.1.5",
     "zod": "^3.21.4"
@@ -57,7 +57,7 @@
     "@graphql-codegen/introspection": "^2.2.1",
     "@graphql-codegen/typescript": "^2.8.2",
     "@graphql-codegen/typescript-operations": "^2.5.7",
-    "@remix-run/dev": "^2.0.0",
+    "@remix-run/dev": "^2.4.1",
     "@types/braintree-web-drop-in": "^1.33.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
@@ -70,10 +70,10 @@
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.0",
-    "wrangler": "^2.4.2"
+    "wrangler": "^3.22.3"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18.0.0"
   },
   "sideEffects": false,
   "lint-staged": {

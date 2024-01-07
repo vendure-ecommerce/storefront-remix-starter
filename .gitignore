@@ -7,3 +7,4 @@ node_modules
 /.idea
 /functions
 /.netlify
+/.wrangler

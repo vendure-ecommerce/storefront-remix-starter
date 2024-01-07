@@ -1,5 +1,10 @@
 import { createPagesFunctionHandler } from '@remix-run/cloudflare-pages';
 import * as build from '@remix-run/dev/server-build';
+import { logDevReady } from '@remix-run/server-runtime';
+
+if (process.env.NODE_ENV === 'development') {
+  logDevReady(build);
+}
 
 const handleRequest = createPagesFunctionHandler({
   build,
