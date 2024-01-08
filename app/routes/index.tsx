@@ -43,7 +43,7 @@ export default function Index() {
           </div>
 
           <p className="mt-4 text-2xl text-white">
-          Blooms of Elegance, Delivered with Love
+          Blooms of Elegance, Delivered with Love.
           </p>
         </div>
       </div>
