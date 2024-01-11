@@ -60,3 +60,7 @@ export async function getI18NextServer() {
     plugins: [],
   }).then((config) => new RemixI18Next(config));
 }
+
+export async function getFixedT(request: Request) {
+  return getI18NextServer().then((i18next) => i18next.getFixedT(request));
+}

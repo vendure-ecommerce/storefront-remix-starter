@@ -1,5 +1,5 @@
 import { Outlet, useLoaderData } from '@remix-run/react';
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, json } from '@remix-run/server-runtime';
 import AddAddressCard from '~/components/account/AddAddressCard';
 import EditAddressCard from '~/components/account/EditAddressCard';
 import { Address, ErrorCode, ErrorResult } from '~/generated/graphql';
@@ -8,19 +8,20 @@ import {
   updateCustomerAddress,
 } from '~/providers/account/account';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
-import i18next from 'i18next';
+import { getFixedT } from '~/i18next.server';
+import { LoaderFunctionArgs } from '@remix-run/router';
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const res = await getActiveCustomerAddresses({ request });
   const activeCustomerAddresses = res.activeCustomer;
   return json({ activeCustomerAddresses });
 }
 
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const id = formData.get('id') as string | null;
   const _action = formData.get('_action');
-  const t = await i18next.getFixedT(request);
+  const t = await getFixedT(request);
 
   // Verify that id is set
   if (!id || id.length === 0) {

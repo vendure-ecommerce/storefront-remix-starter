@@ -9,13 +9,11 @@ import {
 } from '~/utils/registration-helper';
 import { API_URL, DEMO_API_URL } from '~/constants';
 import { useTranslation } from 'react-i18next';
-import { getI18NextServer } from '~/i18next.server';
+import { getFixedT } from '~/i18next.server';
 
 export async function action({ request }: ActionFunctionArgs) {
   if (API_URL === DEMO_API_URL) {
-    const t = await getI18NextServer().then((i18next) =>
-      i18next.getFixedT(request),
-    );
+    const t = await getFixedT(request);
 
     return {
       form: t('vendure.registrationError'),

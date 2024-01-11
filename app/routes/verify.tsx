@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
-import { DataFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, redirect } from '@remix-run/server-runtime';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { verifyCustomerAccount } from '~/providers/account/account';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
+import { getFixedT } from '~/i18next.server';
+import { LoaderFunctionArgs } from '@remix-run/router';
 
 type LoaderReturnType = {
   success: boolean;
@@ -14,11 +15,11 @@ type LoaderReturnType = {
 
 export async function loader({
   request,
-}: DataFunctionArgs): Promise<LoaderReturnType> {
+}: LoaderFunctionArgs): Promise<LoaderReturnType> {
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
   if (!token) {
-    const t = await i18next.getFixedT(request);
+    const t = await getFixedT(request);
 
     return {
       success: false,
@@ -35,7 +36,7 @@ export async function loader({
   return { success: true, headersJson };
 }
 
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
   const headersJson = body.get('headers') as string;
   const redirectTarget = body.get('redirect') as string;
