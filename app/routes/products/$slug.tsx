@@ -38,7 +38,8 @@ export async function loader({ params, request }: DataFunctionArgs) {
       status: 404,
     });
   }
-  const session = await getSessionStorage().getSession(
+  const sessionStorage = await getSessionStorage();
+  const session = await sessionStorage.getSession(
     request?.headers.get('Cookie'),
   );
   const error = session.get('activeOrderError');
@@ -46,7 +47,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     { product: product!, error },
     {
       headers: {
-        'Set-Cookie': await getSessionStorage().commitSession(session),
+        'Set-Cookie': await sessionStorage.commitSession(session),
       },
     },
   );

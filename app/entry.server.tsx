@@ -1,12 +1,11 @@
 import type { EntryContext } from '@remix-run/server-runtime';
 import { RemixServer } from '@remix-run/react';
 import isbot from 'isbot';
-import {
-  renderToPipeableStream,
-  renderToReadableStream,
-} from 'react-dom/server';
+
+import ReactDOM from 'react-dom/server';
+
 import { createInstance } from 'i18next';
-import i18next, { getPlatformBackend } from './i18next.server';
+import { getI18NextServer, getPlatformBackend } from './i18next.server';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from './i18n';
 import {
@@ -31,7 +30,7 @@ async function handleCfRequest(
   remixContext: EntryContext,
   jsx: JSX.Element,
 ) {
-  const body = await renderToReadableStream(jsx, {
+  const body = await ReactDOM.renderToReadableStream(jsx, {
     signal: request.signal,
     onError(error: unknown) {
       // Log streaming rendering errors from inside the shell
@@ -65,12 +64,12 @@ async function handleNodeRequest(
   return new Promise((resolve, reject) => {
     let didError = false;
 
-    let { pipe, abort } = renderToPipeableStream(jsx, {
+    let { pipe, abort } = ReactDOM.renderToPipeableStream(jsx, {
       [callbackName]: async () => {
-        const { PassThrough } = safeRequireNodeDependency('node:stream');
+        const { PassThrough } = await safeRequireNodeDependency('node:stream');
 
         const { createReadableStreamFromReadable } =
-          safeRequireNodeDependency('@remix-run/node');
+          await safeRequireNodeDependency('@remix-run/node');
 
         const body = new PassThrough();
         const stream = createReadableStreamFromReadable(body);
@@ -105,11 +104,13 @@ export default async function handleRequest(
   remixContext: EntryContext,
 ) {
   let instance = createInstance();
-  let lng = await i18next.getLocale(request);
+  let lng = await getI18NextServer().then((i18next) =>
+    i18next.getLocale(request),
+  );
 
   await instance
     .use(initReactI18next)
-    .use(getPlatformBackend())
+    .use(await getPlatformBackend())
     .init({
       ...i18n,
       lng,

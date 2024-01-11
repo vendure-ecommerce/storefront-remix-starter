@@ -1,3 +1,4 @@
+import { cssBundleHref } from '@remix-run/css-bundle';
 import {
   isRouteErrorResponse,
   Link,
@@ -12,9 +13,13 @@ import {
   useRouteError,
   MetaFunction,
 } from '@remix-run/react';
-import styles from './styles/app.css';
+import stylesheet from './tailwind.css';
 import { Header } from './components/header/Header';
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
+import {
+  DataFunctionArgs,
+  json,
+  LinksFunction,
+} from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
@@ -26,15 +31,17 @@ import { useActiveOrder } from '~/utils/use-active-order';
 import { setApiUrl } from '~/graphqlWrapper';
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
-import i18next from '~/i18next.server';
+import { getI18NextServer } from '~/i18next.server';
+import i18n from '~/i18n';
 
 export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
 };
 
-export function links() {
-  return [{ rel: 'stylesheet', href: styles }];
-}
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: stylesheet },
+  ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
+];
 
 const devMode =
   typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
@@ -78,7 +85,9 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     (collection) => collection.parent?.name === '__root_collection__',
   );
   const activeCustomer = await getActiveCustomer({ request });
-  const locale = await i18next.getLocale(request);
+  const locale = await getI18NextServer().then((i18next) =>
+    i18next.getLocale(request),
+  );
   const loaderData: RootLoaderData = {
     activeCustomer,
     activeChannel: await activeChannel({ request }),

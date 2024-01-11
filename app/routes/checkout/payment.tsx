@@ -18,8 +18,8 @@ import { getSessionStorage } from '~/sessions';
 import { useTranslation } from 'react-i18next';
 
 export async function loader({ params, request }: DataFunctionArgs) {
-  const session = await getSessionStorage().getSession(
-    request?.headers.get('Cookie'),
+  const session = await getSessionStorage().then((sessionStorage) =>
+    sessionStorage.getSession(request?.headers.get('Cookie')),
   );
   const activeOrder = await getActiveOrder({ request });
 

@@ -43,8 +43,8 @@ async function sendQuery<Response, Variables = {}>(options: {
   const headers = new Headers(options.headers);
   const req = options.request;
   headers.append('Content-Type', 'application/json');
-  const session = await getSessionStorage().getSession(
-    options.request?.headers.get('Cookie'),
+  const session = await getSessionStorage().then((sessionStorage) =>
+    sessionStorage.getSession(options.request?.headers.get('Cookie')),
   );
   if (session) {
     // If we have a vendure auth token stored in the Remix session, then we
@@ -65,7 +65,7 @@ async function sendQuery<Response, Variables = {}>(options: {
   }));
 }
 
-const baseSdk = getSdk<QueryOptions>(requester);
+const baseSdk = getSdk<QueryOptions, unknown>(requester);
 
 type Sdk = typeof baseSdk;
 type SdkWithHeaders = {
@@ -92,14 +92,13 @@ function requester<R, V>(
       // If Vendure responded with an auth token, it means a new Vendure session
       // has started. In this case, we will store that auth token in the Remix session
       // so that we can attach it as an Authorization header in all subsequent requests.
-      const session = await getSessionStorage().getSession(
+      const sessionStorage = await getSessionStorage();
+      const session = await sessionStorage.getSession(
         options?.request?.headers.get('Cookie'),
       );
       if (session) {
         session.set(AUTH_TOKEN_SESSION_KEY, token);
-        headers['Set-Cookie'] = await getSessionStorage().commitSession(
-          session,
-        );
+        headers['Set-Cookie'] = await sessionStorage.commitSession(session);
       }
     }
     headers['x-vendure-api-url'] = API_URL;

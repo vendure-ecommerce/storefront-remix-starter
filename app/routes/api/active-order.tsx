@@ -146,12 +146,13 @@ export async function action({ request, params }: DataFunctionArgs) {
     // Don't do anything
   }
   let headers: ResponseInit['headers'] = {};
-  const session = await getSessionStorage().getSession(
+  const sessionStorage = await getSessionStorage();
+  const session = await sessionStorage.getSession(
     request?.headers.get('Cookie'),
   );
   session.flash('activeOrderError', error);
   headers = {
-    'Set-Cookie': await getSessionStorage().commitSession(session),
+    'Set-Cookie': await sessionStorage.commitSession(session),
   };
   return json(
     { activeOrder: activeOrder || (await getActiveOrder({ request })) },
