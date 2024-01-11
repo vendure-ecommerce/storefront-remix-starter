@@ -22,7 +22,7 @@ import {
 } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
-import { APP_META_DESCRIPTION, APP_META_TITLE, setApiUrl } from '~/constants';
+import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
@@ -31,7 +31,6 @@ import { useActiveOrder } from '~/utils/use-active-order';
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import { getI18NextServer } from '~/i18next.server';
-import i18n from '~/i18n';
 
 export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -74,11 +73,6 @@ export type RootLoaderData = {
 };
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
-  if (typeof context.VENDURE_API_URL === 'string') {
-    // Set the API URL for Cloudflare Pages
-    setApiUrl(context.VENDURE_API_URL);
-  }
-
   const collections = await getCollections(request, { take: 20 });
   const topLevelCollections = collections.filter(
     (collection) => collection.parent?.name === '__root_collection__',
