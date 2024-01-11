@@ -22,13 +22,12 @@ import {
 } from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
-import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
+import { APP_META_DESCRIPTION, APP_META_TITLE, setApiUrl } from '~/constants';
 import { useEffect, useState } from 'react';
 import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { setApiUrl } from '~/graphqlWrapper';
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import { getI18NextServer } from '~/i18next.server';

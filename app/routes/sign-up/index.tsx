@@ -1,5 +1,5 @@
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { registerCustomerAccount } from '~/providers/account/account';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import {
@@ -7,14 +7,15 @@ import {
   RegisterValidationErrors,
   validateRegistrationForm,
 } from '~/utils/registration-helper';
-import { DEMO_API_URL } from '~/constants';
+import { API_URL, DEMO_API_URL } from '~/constants';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
+import { getI18NextServer } from '~/i18next.server';
 
-export async function action({ params, request }: DataFunctionArgs) {
-  const apiUrl = process.env.VENDURE_API_URL || DEMO_API_URL;
-  if (apiUrl === DEMO_API_URL) {
-    const t = await i18next.getFixedT(request);
+export async function action({ request }: ActionFunctionArgs) {
+  if (API_URL === DEMO_API_URL) {
+    const t = await getI18NextServer().then((i18next) =>
+      i18next.getFixedT(request),
+    );
 
     return {
       form: t('vendure.registrationError'),
@@ -65,7 +66,7 @@ export default function SignUpPage() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <div className="bg-yellow-50 border border-yellow-400 text-yellow-800 rounded p-4 text-center text-sm">
-              <p>{t('account.registrationMessage')}</p>
+              <p>{t('vendure.registrationMessage')}</p>
             </div>
             <Form className="space-y-6" method="post">
               <input
