@@ -3,7 +3,7 @@ import type { Config } from 'tailwindcss';
 
 export default {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp')],
+  plugins: [require('@tailwindcss/forms')],
   important: '#app',
 
   theme: {
