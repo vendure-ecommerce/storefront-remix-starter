@@ -6,7 +6,6 @@ import { createRoutesFromFolders } from '@remix-run/v1-route-convention';
 const bareConfig = {
   serverDependenciesToBundle: [
     'remix-i18next',
-    'i18next-fs-backend',
     '@remix-validated-form/with-zod',
   ],
   tailwind: true,
