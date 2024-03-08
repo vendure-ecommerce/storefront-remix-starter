@@ -40,7 +40,6 @@ const cloudflarePagesConfig = {
  */
 const vercelConfig = {
   ignoredRouteFiles: ['**/.*'],
-  ...bareConfig,
 };
 /**
  * @type {import('@remix-run/dev').AppConfig}
