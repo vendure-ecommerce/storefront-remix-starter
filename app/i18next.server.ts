@@ -14,9 +14,7 @@ export async function getPlatformBackend() {
   if (IS_CF_PAGES) {
     return HttpBackend;
   } else {
-    return await safeRequireNodeDependency('i18next-fs-backend').then(
-      (module) => module.default,
-    );
+    return await import('i18next-fs-backend').then((module) => module.default);
   }
 }
 
