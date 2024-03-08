@@ -40,6 +40,7 @@ const cloudflarePagesConfig = {
  */
 const vercelConfig = {
   ignoredRouteFiles: ['**/.*'],
+  ...bareConfig,
 };
 /**
  * @type {import('@remix-run/dev').AppConfig}
@@ -85,5 +86,4 @@ function selectConfig() {
   throw new Error(`Cannot select config`);
 }
 
-// export default selectConfig();
-module.exports = selectConfig();
+export default selectConfig();
