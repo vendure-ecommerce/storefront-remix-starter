@@ -85,4 +85,5 @@ function selectConfig() {
   throw new Error(`Cannot select config`);
 }
 
-export default selectConfig();
+// export default selectConfig();
+module.exports = selectConfig();
