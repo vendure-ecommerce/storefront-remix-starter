@@ -4,10 +4,10 @@ import { createRoutesFromFolders } from '@remix-run/v1-route-convention';
  * @type {import('@remix-run/dev').AppConfig}
  */
 const bareConfig = {
-  routes(defineRoutes) {
-    // uses the v1 convention, works in v1.15+ and v2
-    return createRoutesFromFolders(defineRoutes);
-  },
+  serverDependenciesToBundle: [
+    'remix-i18next',
+    '@remix-validated-form/with-zod',
+  ],
 };
 
 /**
@@ -16,12 +16,12 @@ const bareConfig = {
 const commonConfig = {
   appDirectory: 'app',
   serverModuleFormat: 'esm',
-  serverDependenciesToBundle: [
-    'remix-i18next',
-    '@remix-validated-form/with-zod',
-  ],
   tailwind: true,
   ...bareConfig,
+  routes(defineRoutes) {
+    // uses the v1 convention, works in v1.15+ and v2
+    return createRoutesFromFolders(defineRoutes);
+  },
 };
 
 /**
