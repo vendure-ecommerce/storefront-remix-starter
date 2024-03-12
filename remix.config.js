@@ -8,6 +8,10 @@ const bareConfig = {
     'remix-i18next',
     '@remix-validated-form/with-zod',
   ],
+  routes(defineRoutes) {
+    // uses the v1 convention, works in v1.15+ and v2
+    return createRoutesFromFolders(defineRoutes);
+  },
 };
 
 /**
@@ -18,10 +22,6 @@ const commonConfig = {
   serverModuleFormat: 'esm',
   tailwind: true,
   ...bareConfig,
-  routes(defineRoutes) {
-    // uses the v1 convention, works in v1.15+ and v2
-    return createRoutesFromFolders(defineRoutes);
-  },
 };
 
 /**
