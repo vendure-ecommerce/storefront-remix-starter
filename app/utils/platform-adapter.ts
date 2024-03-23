@@ -1,6 +1,6 @@
 export const IS_CF_PAGES = typeof process === 'undefined';
 
-export const IS_VERCEL = 'VERCEL' in process.env;
+export const IS_VERCEL = typeof process !== 'undefined' && process.env.VERCEL;
 
 // This hack is to prevent `node` modules/packages being bundled in the
 // Cloudflare Pages context, which causes an error.
