@@ -5,35 +5,47 @@ import {
   Links,
   LiveReload,
   Meta,
+  MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
   ShouldRevalidateFunction,
   useLoaderData,
   useRouteError,
-  MetaFunction,
 } from '@remix-run/react';
-import stylesheet from './tailwind.css';
-import { Header } from './components/header/Header';
 import {
   DataFunctionArgs,
   json,
   LinksFunction,
 } from '@remix-run/server-runtime';
-import { getCollections } from '~/providers/collections/collections';
-import { activeChannel } from '~/providers/channel/channel';
-import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
-import { CartTray } from '~/components/cart/CartTray';
-import { getActiveCustomer } from '~/providers/customer/customer';
-import Footer from '~/components/footer/Footer';
-import { useActiveOrder } from '~/utils/use-active-order';
-import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
+import { useChangeLanguage } from 'remix-i18next';
+import Footer from '~/components/_footer/Footer';
 import { getI18NextServer } from '~/i18next.server';
+import { activeChannel } from '~/providers/channel/channel';
+import { getCollections } from '~/providers/collections/collections';
+import { getActiveCustomer } from '~/providers/customer/customer';
+// import { useActiveOrder } from '~/utils/use-active-order';
+import stylesheet from './tailwind.css';
+import { cn } from './utils';
+
+// export const meta: MetaFunction = () => {
+//   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
+// };
 
 export const meta: MetaFunction = () => {
-  return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
+  return [
+    { title: 'Storefront eCommerce' },
+    {
+      property: 'og:title',
+      content: 'Storefront eCommerce',
+    },
+    {
+      name: 'description',
+      content: 'Storefront eCommerce',
+    },
+  ];
 };
 
 export const links: LinksFunction = () => [
@@ -97,53 +109,70 @@ export default function App() {
   const { collections } = loaderData;
   const { locale } = useLoaderData<typeof loader>();
   const { i18n } = useTranslation();
-  const {
-    activeOrderFetcher,
-    activeOrder,
-    adjustOrderLine,
-    removeItem,
-    refresh,
-  } = useActiveOrder();
+  // const {
+  //   activeOrderFetcher,
+  //   activeOrder,
+  //   adjustOrderLine,
+  //   removeItem,
+  //   refresh,
+  // } = useActiveOrder();
 
   useChangeLanguage(locale);
 
   useEffect(() => {
     // When the loader has run, this implies we should refresh the contents
     // of the activeOrder as the user may have signed in or out.
-    refresh();
+    // refresh();
   }, [loaderData]);
 
   return (
-    <html lang={locale} dir={i18n.dir()} id="app">
+    <html lang={locale} dir={i18n.dir()} id="app" className="scroll-smooth">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="icon" href="/favicon.ico" type="image/png"></link>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin={'anonymous'}
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+          rel="stylesheet"
+        />
+
         <Meta />
         <Links />
       </head>
-      <body>
-        <Header
+      <body
+        className={cn(
+          'flex min-h-screen flex-col bg-background font-sans antialiased',
+        )}
+      >
+        {/* <Header
           onCartIconClick={() => setOpen(!open)}
           cartQuantity={activeOrder?.totalQuantity ?? 0}
-        />
+        /> */}
         <main className="">
           <Outlet
-            context={{
-              activeOrderFetcher,
-              activeOrder,
-              adjustOrderLine,
-              removeItem,
-            }}
+            context={
+              {
+                // activeOrderFetcher,
+                // activeOrder,
+                // adjustOrderLine,
+                // removeItem,
+              }
+            }
           />
         </main>
-        <CartTray
+        {/* <CartTray
           open={open}
           onClose={setOpen}
           activeOrder={activeOrder}
           adjustOrderLine={adjustOrderLine}
           removeItem={removeItem}
-        />
+        /> */}
         <ScrollRestoration />
         <Scripts />
         <Footer collections={collections}></Footer>

@@ -1,25 +1,25 @@
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
-import { useState } from 'react';
-import { Price } from '~/components/products/Price';
-import { getProductBySlug } from '~/providers/products/products';
+import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import {
   FetcherWithComponents,
+  MetaFunction,
   ShouldRevalidateFunction,
   useLoaderData,
   useOutletContext,
-  MetaFunction,
 } from '@remix-run/react';
-import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
-import { Breadcrumbs } from '~/components/Breadcrumbs';
-import { APP_META_TITLE } from '~/constants';
-import { CartLoaderData } from '~/routes/api/active-order';
-import { getSessionStorage } from '~/sessions';
-import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { DataFunctionArgs, json } from '@remix-run/server-runtime';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CartLoaderData } from '~/_routes/api/active-order';
 import Alert from '~/components/Alert';
+import { Breadcrumbs } from '~/components/Breadcrumbs';
+import { Price } from '~/components/products/Price';
+import { ScrollableContainer } from '~/components/products/ScrollableContainer';
 import { StockLevelLabel } from '~/components/products/StockLevelLabel';
 import TopReviews from '~/components/products/TopReviews';
-import { ScrollableContainer } from '~/components/products/ScrollableContainer';
-import { useTranslation } from 'react-i18next';
+import { APP_META_TITLE } from '~/constants';
+import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { getProductBySlug } from '~/providers/products/products';
+import { getSessionStorage } from '~/sessions';
 
 export const meta: MetaFunction = ({ data }) => {
   return [

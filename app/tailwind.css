@@ -1,28 +1,114 @@
 @tailwind base;
-/* @tailwind components; */
+@tailwind components;
 @tailwind utilities;
 
 @layer base {
-  button:disabled {
-    cursor: not-allowed;
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+
+    --radius: 0.5rem;
+
+    /* STOREFRONT */
+
+    --brand: 9 100% 63%;
+    --brand-foreground: 0 0% 100%;
+
+    --color-primary: 240 6% 10%;
+    --color-primary-foreground: 0 0% 98%;
+
+    --color-secondary: 240 5% 26%;
+    /* --color-secondary-foreground: 0 0% 9%; */
+
+    --color-tertiary: 240 4% 46%;
+    /* --color-tertiary-foreground: 0 0% 9%; */
+
+    --color-in-stock: 142 81% 22%;
+
+    --color-out-of-stock: 0 72% 51%;
+
+    --color-new-arrival: 271 91% 65%;
+    --color-new-arrival-foreground: 0 0% 100%;
+
+    --color-is-favorite: 330 81% 60%;
+    --color-is-favorite-foreground: 0 0% 100%;
+
+    --color-in-cart: 137 84% 34%;
+    --color-in-cart-foreground: 0 0% 100%;
+
+    --color-free-shipping: 217 91% 60%;
+    --color-free-shipping-foreground: 0 0% 100%;
+
+    --color-has-special-price: 0 84% 60%;
+    --color-has-special-price-foreground: 0 0% 100%;
+
+    --color-star-rating: 28 100% 36%;
+    --color-star-rating-foreground: 0 0% 100%;
+
+    --item-gap: 1.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
   }
 }
 
-@layer utilities {
-  .flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@layer base {
+  * {
+    @apply border-border;
   }
-  .shadow-divider {
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 10px 9px -10px inset;
-  }
-
-  .mirror-x {
-    --tw-scale-x: -1;
-  }
-
-  .text-inherit {
-    color: inherit;
+  body {
+    @apply bg-background text-foreground;
   }
 }

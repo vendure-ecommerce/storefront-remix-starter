@@ -51,6 +51,9 @@
     "remix": "^2.4.1",
     "remix-i18next": "^5.5.0",
     "remix-validated-form": "^5.1.5",
+    "tailwind-merge": "^2.5.2",
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {
