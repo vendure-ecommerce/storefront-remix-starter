@@ -4,7 +4,7 @@ import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from '@remix-run/react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FacetFilterTracker } from '~/components/_facet-filter/facet-filter-tracker';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 
 export default function FacetFilterControls({
   facetFilterTracker,

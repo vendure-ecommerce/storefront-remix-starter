@@ -1,17 +1,22 @@
-import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useLoaderData, useSubmit, V2_MetaFunction } from '@remix-run/react';
-import { sdk } from '../../graphqlWrapper';
-import { CollectionCard } from '~/components/collections/CollectionCard';
-import { Breadcrumbs } from '~/components/Breadcrumbs';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
+import UserCard from '~/components/cards/user/UserCard';
+import Section from '~/components/common/section/Section';
+import SectionContent from '~/components/common/section/SectionContent';
+import SectionHeader from '~/components/common/section/SectionHeader';
+import SectionTitle from '~/components/common/section/SectionTitle';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
+import HorizontalFilterBar from '~/components/filter/horizontal/HorizontalFilterBar';
+import FilterSidebar from '~/components/filter/sidebar/FilterSidebar';
+import ListingFooter from '~/components/listing/ListingFooter';
+import ListingHeader from '~/components/listing/ListingHeader';
+import PageHero from '~/components/pages/PageHero';
 import { APP_META_TITLE } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
-import { useRef, useState } from 'react';
-import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
-import { FiltersButton } from '~/components/FiltersButton';
-import { ValidatedForm } from 'remix-validated-form';
-import { withZod } from '@remix-validated-form/with-zod';
-import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
-import { useTranslation } from 'react-i18next';
+import { sdk } from '../../graphqlWrapper';
 
 export const meta: V2_MetaFunction = ({ data }) => {
   return [
@@ -80,50 +85,131 @@ export default function CollectionSlug() {
   const { t } = useTranslation();
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-          {collection.name}
-        </h2>
-
-        <FiltersButton
-          filterCount={facetValueIds.length}
-          onClick={() => setMobileFiltersOpen(true)}
-        />
-      </div>
-
-      <Breadcrumbs items={collection.breadcrumbs}></Breadcrumbs>
-      {collection.children?.length ? (
-        <div className="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
-          <h2 className="text-2xl font-light text-gray-900">
-            {t('product.collections')}
-          </h2>
-          <div className="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-            {collection.children.map((child) => (
-              <CollectionCard
-                key={child.id}
-                collection={child}
-              ></CollectionCard>
-            ))}
+    <>
+      <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
+        <FilterSidebar />
+        <main className="flex max-w-full flex-col gap-16 pt-12">
+          <Breadcrumbs />
+          <div className="flex flex-col gap-8">
+            <PageHero
+              title={collection.name}
+              description={collection.name}
+              imageSrc={collection.name}
+            />
+            {/* <Section>
+              <SectionHeader className="hidden">
+                <SectionTitle
+                  level="h2"
+                  title="További kategóriák"
+                  className="text-2xl"
+                  srOnly
+                />
+              </SectionHeader>
+              <SectionContent
+                className="flex flex-wrap gap-6"
+                layoutType="grid"
+              >
+                {subcategories.map((subcategory, index) => (
+                  <NanoCard
+                    key={index}
+                    title={subcategory.title}
+                    link={subcategory.link ? subcategory.link : '#'}
+                    imageSrc={subcategory.imageSrc}
+                  />
+                ))}
+              </SectionContent>
+            </Section> */}
           </div>
-        </div>
-      ) : (
-        ''
-      )}
-
-      <ValidatedForm
-        validator={withZod(validator)}
-        method="get"
-        onChange={(e) => submit(e.currentTarget, { preventScrollReset: true })}
-      >
-        <FilterableProductGrid
-          allowedPaginationLimits={allowedPaginationLimits}
-          mobileFiltersOpen={mobileFiltersOpen}
-          setMobileFiltersOpen={setMobileFiltersOpen}
-          {...loaderData}
-        />
-      </ValidatedForm>
-    </div>
+          <Section>
+            <SectionHeader>
+              <SectionTitle
+                level="h2"
+                title="Ingyenes szaktanácsadás szakértőinktől:"
+                className="text-xl"
+              />
+            </SectionHeader>
+            <SectionContent
+              className="flex flex-wrap gap-6"
+              layoutType="default"
+            >
+              {[...Array(3)].map((_, index) => (
+                <UserCard key={index} />
+              ))}
+            </SectionContent>
+          </Section>
+          <HorizontalFilterBar />
+          <div className="flex w-full flex-col gap-8">
+            <ListingHeader
+              showListingInfo={true}
+              showProductCompareSwitch={false}
+              showListingOrder={true}
+            />
+            {/* <ListingTabs
+                tabs={[
+                  { label: "Alapértelmezett", value: "default" },
+                  { label: "Drágák elöl", value: "price-from-expensive" },
+                  { label: "Olcsók elöl", value: "price-from-cheap" },
+                  { label: "Név szerint A - Z", value: "name-a-z" },
+                  { label: "Név szerint Z - A", value: "name-z-a" },
+                  { label: "Legnagyobb kedvezmény", value: "most-special" },
+                  { label: "Legjobbra értékelt", value: "best-rating" },
+                ]}
+              >
+                {productOptions.map((option, index) => (
+                  <ProductCard
+                    key={index}
+                    id={option.id}
+                    title={option.title}
+                    link={option.link}
+                    number={option.number}
+                    priceNormal={option.priceNormal}
+                    priceNet={option.priceNet}
+                    priceCrossed={option.priceCrossed}
+                    imageSrc={option.imageSrc}
+                    hoverImageSrc={option.hoverImageSrc}
+                    rating={option.rating}
+                    reviews={option.reviews}
+                    manufacturer={option.manufacturer}
+                  />
+                ))}
+              </ListingTabs> */}
+            <Section>
+              <SectionHeader className="hidden">
+                <SectionTitle
+                  className="text-5xl"
+                  level="h2"
+                  title="Arcadia evőeszköz család"
+                  srOnly
+                />
+              </SectionHeader>
+              {/* <SectionContent
+                className="grid grid-cols-2 gap-item sm:grid-cols-[repeat(auto-fill,_minmax(13rem,_1fr))]"
+                layoutType="grid"
+              >
+                {productOptions.slice(0, 8).map((option, index) => (
+                  <ProductCard
+                    key={index}
+                    id={option.id}
+                    title={option.title}
+                    link={option.link}
+                    number={option.number}
+                    priceNormal={option.priceNormal}
+                    priceNet={option.priceNet}
+                    priceCrossed={option.priceCrossed}
+                    imageSrc={option.imageSrc}
+                    hoverImageSrc={option.hoverImageSrc}
+                    rating={option.rating}
+                    reviews={option.reviews}
+                    manufacturer={option.manufacturer}
+                  />
+                ))}
+              </SectionContent> */}
+            </Section>
+            <ListingFooter />
+          </div>
+        </main>
+      </div>
+    </>
   );
 }
 

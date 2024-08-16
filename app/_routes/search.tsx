@@ -3,7 +3,7 @@ import { withZod } from '@remix-validated-form/with-zod';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
-import { FacetFilterTracker } from '~/components/_facet-filter/facet-filter-tracker';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import { FiltersButton } from '~/components/FiltersButton';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';

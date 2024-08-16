@@ -2,7 +2,7 @@ import { BookOpenIcon } from '@heroicons/react/24/solid';
 import { useLoaderData } from '@remix-run/react';
 import { LoaderArgs } from '@remix-run/server-runtime';
 import { useTranslation } from 'react-i18next';
-import { CollectionCard } from '~/components/_collections/CollectionCard';
+import { CollectionCard } from '~/components/collections/CollectionCard';
 import { getCollections } from '~/providers/collections/collections';
 
 export async function loader({ request }: LoaderArgs) {
