@@ -1,4 +1,3 @@
-import { FormEvent, useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import {
   Form,
@@ -6,21 +5,22 @@ import {
   useNavigate,
   useOutletContext,
 } from '@remix-run/react';
-import { OutletContext } from '~/types';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AddressForm } from '~/components/_account/AddressForm';
+import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
+import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
 import {
   getAvailableCountries,
   getEligibleShippingMethods,
 } from '~/providers/checkout/checkout';
-import { shippingFormDataIsValid } from '~/utils/validation';
-import { getSessionStorage } from '~/sessions';
-import { classNames } from '~/utils/class-names';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
-import { AddressForm } from '~/components/account/AddressForm';
-import { ShippingMethodSelector } from '~/components/checkout/ShippingMethodSelector';
-import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSelector';
 import { getActiveOrder } from '~/providers/orders/order';
-import { useTranslation } from 'react-i18next';
+import { getSessionStorage } from '~/sessions';
+import { OutletContext } from '~/types';
+import { classNames } from '~/utils/class-names';
+import { shippingFormDataIsValid } from '~/utils/validation';
 
 export async function loader({ request }: DataFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>

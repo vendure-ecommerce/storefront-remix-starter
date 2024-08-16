@@ -6,18 +6,18 @@ import {
   useSubmit,
 } from '@remix-run/react';
 import { DataFunctionArgs, json } from '@remix-run/server-runtime';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
-import { Button } from '~/components/Button';
-import Modal from '~/components/modal/Modal';
-import { HighlightedButton } from '~/components/HighlightedButton';
-import useToggleState from '~/utils/use-toggle-state';
 import CustomerAddressForm, {
   validator,
-} from '~/components/account/CustomerAddressForm';
+} from '~/components/_account/CustomerAddressForm';
+import Modal from '~/components/_modal/Modal';
+import { Button } from '~/components/Button';
+import { HighlightedButton } from '~/components/HighlightedButton';
 import { createCustomerAddress } from '~/providers/account/account';
 import { getAvailableCountries } from '~/providers/checkout/checkout';
-import { useTranslation } from 'react-i18next';
+import useToggleState from '~/utils/use-toggle-state';
 
 export async function loader({ request, params }: DataFunctionArgs) {
   const { availableCountries } = await getAvailableCountries({ request });

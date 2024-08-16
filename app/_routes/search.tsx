@@ -1,13 +1,13 @@
 import { useLoaderData, useSubmit } from '@remix-run/react';
-import { useRef, useState } from 'react';
-import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
-import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
-import { FiltersButton } from '~/components/FiltersButton';
-import { ValidatedForm } from 'remix-validated-form';
 import { withZod } from '@remix-validated-form/with-zod';
-import { paginationValidationSchema } from '~/utils/pagination';
-import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ValidatedForm } from 'remix-validated-form';
+import { FacetFilterTracker } from '~/components/_facet-filter/facet-filter-tracker';
+import { FiltersButton } from '~/components/FiltersButton';
+import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
+import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
+import { paginationValidationSchema } from '~/utils/pagination';
 
 const paginationLimitMinimumDefault = 25;
 const allowedPaginationLimits = new Set<number>([

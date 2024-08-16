@@ -1,26 +1,23 @@
-
-
-import ManufacturerAvatar from "~/components/avatar/ManufacturerAvatar";
-import AddToCartHandler from "~/components/common/product/AddToCartHandler";
-import FavoriteButton from "~/components/common/product/FavoriteProductButton";
-import ProductAvailability from "~/components/common/product/ProductAvailability";
-import ProductBadgeAvatarGroup from "~/components/common/product/ProductBadgeAvatarGroup";
-import ProductBadges from "~/components/common/product/ProductBadges";
-import ProductImage from "~/components/common/product/ProductImage";
-import ProductNumber from "~/components/common/product/ProductNumber";
-import ProductPrice from "~/components/common/product/ProductPrice";
-import ProductRating from "~/components/common/product/ProductRating";
-import ProductTag from "~/components/common/product/ProductTag";
-import ProductTitle from "~/components/common/product/ProductTitle";
+import { useState } from 'react';
+import ManufacturerAvatar from '~/components/avatar/ManufacturerAvatar';
+import AddToCartHandler from '~/components/common/product/AddToCartHandler';
+import FavoriteButton from '~/components/common/product/FavoriteProductButton';
+import ProductAvailability from '~/components/common/product/ProductAvailability';
+import ProductBadgeAvatarGroup from '~/components/common/product/ProductBadgeAvatarGroup';
+import ProductBadges from '~/components/common/product/ProductBadges';
+import ProductImage from '~/components/common/product/ProductImage';
+import ProductNumber from '~/components/common/product/ProductNumber';
+import ProductPrice from '~/components/common/product/ProductPrice';
+import ProductRating from '~/components/common/product/ProductRating';
+import ProductTag from '~/components/common/product/ProductTag';
+import ProductTitle from '~/components/common/product/ProductTitle';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "~/components/ui-custom/MyCard";
-import Link from "next/link";
-import { useState } from "react";
+} from '~/components/ui-custom/MyCard';
 
 interface ProductCardProps {
   id: string;
@@ -65,15 +62,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Card
-      className='flex h-full flex-col gap-4 shadow-none hover:border-primary/30 transition'
+      className="flex h-full flex-col gap-4 shadow-none hover:border-primary/30 transition"
       id={id}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <CardHeader className='relative p-0'>
-        <Link href={link}>
+      <CardHeader className="relative p-0">
+        <a href={link}>
           <ProductImage src={isHovering ? hoverImageSrc : imageSrc} />
-        </Link>
+        </a>
         <FavoriteButton isFavorite={isFavorite} />
         <ProductBadgeAvatarGroup
           isNewArrival={false}
@@ -81,19 +78,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
           hasSpecialPrice={false}
         />
       </CardHeader>
-      <CardContent 
-      className={`flex flex-grow flex-col gap-4 ${showCardFooter ? "pb-0" : ""}`}>
-        <div className='flex flex-wrap items-center justify-between gap-4'>
+      <CardContent
+        className={`flex flex-grow flex-col gap-4 ${
+          showCardFooter ? 'pb-0' : ''
+        }`}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <ManufacturerAvatar manufacturer={manufacturer[0]} />
           <ProductNumber number={number} />
         </div>
-        <div className='flex flex-col gap-1'>
+        <div className="flex flex-col gap-1">
           <ProductAvailability />
-          <Link href={link}>
-            <CardTitle className='text-base'>
+          <a href={link}>
+            <CardTitle className="text-base">
               <ProductTitle title={title} />
             </CardTitle>
-          </Link>
+          </a>
           {showProductRating && (
             <ProductRating rating={rating} totalReviews={reviews} />
           )}
@@ -115,13 +115,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </CardContent>
       {showCardFooter && (
-        <CardFooter className='flex flex-col gap-2 pt-0'>
+        <CardFooter className="flex flex-col gap-2 pt-0">
           <AddToCartHandler
-            className='w-full'
-            addToCartButtonSize='h-10 text-sm w-full'
-            stepperButtonSize='h-9 w-9'
-            iconSize='h-4 w-4'
-            inputSize='h-10'
+            className="w-full"
+            addToCartButtonSize="h-10 text-sm w-full"
+            stepperButtonSize="h-9 w-9"
+            iconSize="h-4 w-4"
+            inputSize="h-10"
           />
         </CardFooter>
       )}

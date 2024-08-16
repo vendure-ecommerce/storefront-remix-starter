@@ -1,15 +1,15 @@
-import FacetFilterControls from '~/components/facet-filter/FacetFilterControls';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FacetFilterTracker } from '~/components/_facet-filter/facet-filter-tracker';
+import FacetFilterControls from '~/components/_facet-filter/FacetFilterControls';
+import { Pagination } from '~/components/Pagination';
+import { NoResultsHint } from '~/components/products/NoResultsHint';
 import { ProductCard } from '~/components/products/ProductCard';
+import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import {
   translatePaginationFrom,
   translatePaginationTo,
 } from '~/utils/pagination';
-import { Pagination } from '~/components/Pagination';
-import { NoResultsHint } from '~/components/products/NoResultsHint';
-import { useRef } from 'react';
-import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
-import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
-import { useTranslation } from 'react-i18next';
 
 export function FilterableProductGrid({
   result,

@@ -4,4 +4,8 @@ function formatNumberWithSeparator(number: number): string {
   return numberFormatter.format(number);
 }
 
-export { formatNumberWithSeparator };
+function generateUniqueId(prefix: string = ''): string {
+  return `${prefix}-${Math.random().toString(36).substring(7)}`;
+}
+
+export { formatNumberWithSeparator, generateUniqueId };

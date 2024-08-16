@@ -4,12 +4,12 @@ import {
   ShoppingBagIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/solid';
-import { Form, Outlet, useLoaderData, useMatches } from '@remix-run/react';
+import { Form, Outlet, useLoaderData } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
-import { TabProps } from '~/components/tabs/Tab';
-import { TabsContainer } from '~/components/tabs/TabsContainer';
-import { getActiveCustomerDetails } from '~/providers/customer/customer';
 import { useTranslation } from 'react-i18next';
+import { TabProps } from '~/components/_tabs/Tab';
+import { TabsContainer } from '~/components/_tabs/TabsContainer';
+import { getActiveCustomerDetails } from '~/providers/customer/customer';
 
 export async function loader({ request }: DataFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerDetails({ request });
