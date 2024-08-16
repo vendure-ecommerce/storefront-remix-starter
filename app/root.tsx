@@ -27,8 +27,10 @@ import { getCollections } from '~/providers/collections/collections';
 import { getActiveCustomer } from '~/providers/customer/customer';
 // import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
+import MobileMenu from './components/common/mobile/MobileMenu';
 import Navbar from './components/common/navbar/Navbar';
 import stylesheet from './tailwind.css';
+import { IGlobalLayoutData } from './types/types';
 import { cn } from './utils/cn';
 
 // export const meta: MetaFunction = () => {
@@ -120,10 +122,16 @@ export default function App() {
 
   useChangeLanguage(locale);
 
+  const [stLayoutData, setLayoutData] = useState<IGlobalLayoutData>();
   useEffect(() => {
     // When the loader has run, this implies we should refresh the contents
     // of the activeOrder as the user may have signed in or out.
     // refresh();
+
+    setLayoutData({
+      showFooterMenu: true,
+      showFooterImage: true,
+    });
   }, [loaderData]);
 
   return (
@@ -153,7 +161,11 @@ export default function App() {
       >
         <Navbar />
         <main className="">
-          <Outlet />
+          <Outlet
+            context={{
+              setLayoutData,
+            }}
+          />
         </main>
         {/* <CartTray
           open={open}
@@ -164,7 +176,18 @@ export default function App() {
         /> */}
         <ScrollRestoration />
         <Scripts />
-        <Footer />
+        <Footer
+          showFooterImage={stLayoutData?.showFooterImage ?? true}
+          showFooterMenu={stLayoutData?.showFooterMenu ?? true}
+        />
+        <MobileMenu
+          showMenuButton={true}
+          showOrderButton={false}
+          showFilterButton={false}
+          showFavoriteProductButton={false}
+          showCompareProductsButton={false}
+          showCartButton={true}
+        />
 
         {devMode && <LiveReload />}
       </body>
