@@ -1,7 +1,4 @@
-
-
-import { Card } from "~/components/ui-custom/MyCard";
-import Link from "next/link";
+import { Card } from '~/components/ui-custom/MyCard';
 
 interface LinkCardProps {
   title?: string;
@@ -9,17 +6,17 @@ interface LinkCardProps {
 }
 
 const LinkCard: React.FC<LinkCardProps> = ({
-  title = "Címsor",
-  link = "#",
+  title = 'Címsor',
+  link = '#',
 }) => {
   return (
-    <Link href={link}>
-      <Card className='group/card flex h-full items-center justify-center gap-4 border p-6 text-center shadow-none hover:border-primary/30 transition'>
-        <div className='text-color-tertiary group-hover/card:text-color-primary transition'>
+    <a href={link}>
+      <Card className="group/card flex h-full items-center justify-center gap-4 border p-6 text-center shadow-none hover:border-primary/30 transition">
+        <div className="text-color-tertiary group-hover/card:text-color-primary transition">
           {title}
         </div>
       </Card>
-    </Link>
+    </a>
   );
 };
 

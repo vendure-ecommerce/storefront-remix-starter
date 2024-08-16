@@ -153,16 +153,7 @@ export default function App() {
       >
         <Navbar />
         <main className="">
-          <Outlet
-            context={
-              {
-                // activeOrderFetcher,
-                // activeOrder,
-                // adjustOrderLine,
-                // removeItem,
-              }
-            }
-          />
+          <Outlet />
         </main>
         {/* <CartTray
           open={open}
