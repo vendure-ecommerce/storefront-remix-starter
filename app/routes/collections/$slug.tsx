@@ -3,6 +3,8 @@ import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
+import NanoCard from '~/components/cards/NanoCard';
+import ProductCard from '~/components/cards/product/ProductCard';
 import UserCard from '~/components/cards/user/UserCard';
 import Section from '~/components/common/section/Section';
 import SectionContent from '~/components/common/section/SectionContent';
@@ -13,6 +15,7 @@ import HorizontalFilterBar from '~/components/filter/horizontal/HorizontalFilter
 import FilterSidebar from '~/components/filter/sidebar/FilterSidebar';
 import ListingFooter from '~/components/listing/ListingFooter';
 import ListingHeader from '~/components/listing/ListingHeader';
+import ListingTabs from '~/components/listing/ListingTabs';
 import PageHero from '~/components/pages/PageHero';
 import { APP_META_TITLE } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
@@ -93,32 +96,34 @@ export default function CollectionSlug() {
           <div className="flex flex-col gap-8">
             <PageHero
               title={collection.name}
-              description={collection.name}
-              imageSrc={collection.name}
+              description={collection.description}
+              imageSrc={collection.featuredAsset?.preview}
             />
-            {/* <Section>
-              <SectionHeader className="hidden">
-                <SectionTitle
-                  level="h2"
-                  title="További kategóriák"
-                  className="text-2xl"
-                  srOnly
-                />
-              </SectionHeader>
-              <SectionContent
-                className="flex flex-wrap gap-6"
-                layoutType="grid"
-              >
-                {subcategories.map((subcategory, index) => (
-                  <NanoCard
-                    key={index}
-                    title={subcategory.title}
-                    link={subcategory.link ? subcategory.link : '#'}
-                    imageSrc={subcategory.imageSrc}
+            {collection.children && (
+              <Section>
+                <SectionHeader className="hidden">
+                  <SectionTitle
+                    level="h2"
+                    title="További kategóriák"
+                    className="text-2xl"
+                    srOnly
                   />
-                ))}
-              </SectionContent>
-            </Section> */}
+                </SectionHeader>
+                <SectionContent
+                  className="flex flex-wrap gap-6"
+                  layoutType="grid"
+                >
+                  {collection.children.map((subcategory, index) => (
+                    <NanoCard
+                      key={index}
+                      title={subcategory.name}
+                      link={`/collections/${subcategory.slug}`}
+                      imageSrc={subcategory.featuredAsset?.preview}
+                    />
+                  ))}
+                </SectionContent>
+              </Section>
+            )}
           </div>
           <Section>
             <SectionHeader>
@@ -144,35 +149,39 @@ export default function CollectionSlug() {
               showProductCompareSwitch={false}
               showListingOrder={true}
             />
-            {/* <ListingTabs
+            {result.items && result.items.length > 0 && (
+              <ListingTabs
                 tabs={[
-                  { label: "Alapértelmezett", value: "default" },
-                  { label: "Drágák elöl", value: "price-from-expensive" },
-                  { label: "Olcsók elöl", value: "price-from-cheap" },
-                  { label: "Név szerint A - Z", value: "name-a-z" },
-                  { label: "Név szerint Z - A", value: "name-z-a" },
-                  { label: "Legnagyobb kedvezmény", value: "most-special" },
-                  { label: "Legjobbra értékelt", value: "best-rating" },
+                  { label: 'Alapértelmezett', value: 'default' },
+                  { label: 'Drágák elöl', value: 'price-from-expensive' },
+                  { label: 'Olcsók elöl', value: 'price-from-cheap' },
+                  { label: 'Név szerint A - Z', value: 'name-a-z' },
+                  { label: 'Név szerint Z - A', value: 'name-z-a' },
+                  { label: 'Legnagyobb kedvezmény', value: 'most-special' },
+                  { label: 'Legjobbra értékelt', value: 'best-rating' },
                 ]}
               >
-                {productOptions.map((option, index) => (
+                {result.items.map((option, index) => (
                   <ProductCard
                     key={index}
-                    id={option.id}
-                    title={option.title}
-                    link={option.link}
-                    number={option.number}
-                    priceNormal={option.priceNormal}
-                    priceNet={option.priceNet}
-                    priceCrossed={option.priceCrossed}
-                    imageSrc={option.imageSrc}
-                    hoverImageSrc={option.hoverImageSrc}
-                    rating={option.rating}
-                    reviews={option.reviews}
-                    manufacturer={option.manufacturer}
+                    id={option.productId}
+                    title={option.productName}
+                    link={`/products/${option.slug}`}
+                    number={'1'}
+                    priceCrossed={option.priceWithTax.max}
+                    priceNormal={option.priceWithTax.min}
+                    priceNet={90}
+                    imageSrc={option.productAsset?.preview ?? ''}
+                    hoverImageSrc={option.productAsset?.preview ?? ''}
+                    rating={1}
+                    reviews={1}
+                    manufacturer={[
+                      { title: 'asd', link: 'asd', imageSrc: 'asd' },
+                    ]}
                   />
                 ))}
-              </ListingTabs> */}
+              </ListingTabs>
+            )}
             <Section>
               <SectionHeader className="hidden">
                 <SectionTitle

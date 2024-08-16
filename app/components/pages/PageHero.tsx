@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Button } from "~/components/ui-custom/MyButton";
-import { Card } from "~/components/ui-custom/MyCard";
+import { useState } from 'react';
+import { Button } from '~/components/ui-custom/MyButton';
+import { Card } from '~/components/ui-custom/MyCard';
 
 interface PageHeroProps {
   title?: string;
@@ -12,9 +12,9 @@ interface PageHeroProps {
 }
 
 const PageHero: React.FC<PageHeroProps> = ({
-  title = "Címsor",
-  description = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima explicabo alias ullam aut quibusdam voluptatum, distinctio sapiente saepe tenetur fugiat odit dignissimos nihil, maiores laborum. Omnis quae numquam aperiam provident. Saepe placeat autem magnam, itaque aliquid officiis omnis tempore laboriosam optio. Inventore temporibus laborum porro facere magnam ad ipsa vel odio amet fugiat. Vitae optio quos velit nihil sapiente nam?",
-  imageSrc = "/category.png",
+  title = 'Címsor',
+  description = '',
+  imageSrc = '/category.png',
   showTitle = true,
   showDescription = true,
   showImage = true,
@@ -30,36 +30,38 @@ const PageHero: React.FC<PageHeroProps> = ({
     : `${description.slice(0, 150)}...`;
 
   return (
-    <Card className='flex flex-col gap-4 border-none bg-transparent shadow-none md:flex-row md:items-center lg:flex-col lg:gap-0 xl:flex-row'>
+    <Card className="flex flex-col gap-4 border-none bg-transparent shadow-none md:flex-row md:items-center lg:flex-col lg:gap-0 xl:flex-row">
       {showImage && (
-        <div className='flex-none self-start overflow-hidden rounded-lg bg-white'>
+        <div className="flex-none self-start overflow-hidden rounded-lg bg-white">
           <img
-            className='aspect-square object-contain object-center'
+            className="aspect-square object-contain object-center"
             src={imageSrc}
             width={280}
             height={280}
-            alt='alt'
-            loading='eager'
+            alt="alt"
+            loading="eager"
           />
         </div>
       )}
       {showTitle && showDescription && (
         <div
-          className={`flex flex-col gap-4 px-0 ${showImage ? "md:px-16 md:py-5 lg:px-0 xl:px-16 xl:py-5" : ""}`}
+          className={`flex flex-col gap-4 px-0 ${
+            showImage ? 'md:px-16 md:py-5 lg:px-0 xl:px-16 xl:py-5' : ''
+          }`}
         >
           {showTitle && (
-            <h1 className='text-5xl font-bold leading-tight'>{title}</h1>
+            <h1 className="text-5xl font-bold leading-tight">{title}</h1>
           )}
           {showDescription && (
             <div>
-              <p className='text-base'>{truncatedText}</p>
+              <p className="text-base">{truncatedText}</p>
               {description.length > 150 && (
                 <Button
-                  variant={"link"}
-                  className='p-0 font-bold'
+                  variant={'link'}
+                  className="p-0 font-bold"
                   onClick={toggleFullText}
                 >
-                  {showFullText ? "Kevesebb" : "Bővebben"}
+                  {showFullText ? 'Kevesebb' : 'Bővebben'}
                 </Button>
               )}
             </div>

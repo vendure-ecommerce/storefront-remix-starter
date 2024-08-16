@@ -1,23 +1,20 @@
+import { useLoaderData } from '@remix-run/react';
+import { LoaderArgs } from '@remix-run/server-runtime';
+import { useTranslation } from 'react-i18next';
+import { getCollections } from '~/providers/collections/collections';
+import { useViewportWidth } from '~/utils/use-viewport-width';
+import LinkCard from '../components/cards/LinkCard';
 import ListGroup from '../components/common/list/ListGroup';
 import ListGroupItem from '../components/common/list/ListGroupItem';
-import HeroGrid from '../components/pages/home/HeroGrid';
-import Usp from '../components/common/section/Usp';
+import HistoryProduct from '../components/common/section/HistoryProduct';
 import Section from '../components/common/section/Section';
+import SectionContent from '../components/common/section/SectionContent';
+import SectionDescription from '../components/common/section/SectionDescription';
+import SectionFooter from '../components/common/section/SectionFooter';
 import SectionHeader from '../components/common/section/SectionHeader';
 import SectionTitle from '../components/common/section/SectionTitle';
-import SectionDescription from '../components/common/section/SectionDescription';
-import SectionContent from '../components/common/section/SectionContent';
-import ManufacturerCard from '../components/cards/manufacturer/ManufacturerCard';
-import LinkCard from '../components/cards/LinkCard';
-import SectionFooter from '../components/common/section/SectionFooter';
-import { Button } from '../components/Button';
-import HistoryProduct from '../components/common/section/HistoryProduct';
-import { useViewportWidth } from '~/utils/use-viewport-width';
-import { LoaderArgs } from '@remix-run/server-runtime';
-import { getCollections } from '~/providers/collections/collections';
-import { useLoaderData } from '@remix-run/react';
-import { useTranslation } from 'react-i18next';
-import { getProductBySlug } from '~/providers/products/products';
+import Usp from '../components/common/section/Usp';
+import HeroGrid from '../components/pages/home/HeroGrid';
 
 export async function loader({ request }: LoaderArgs) {
   const collections = await getCollections(request, { take: 20 });
@@ -34,7 +31,7 @@ export default function Index() {
   const isMobile = width < 1024;
 
   return (
-    <>
+    <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-20 px-6 py-12">
       <div className="flex">
         {isMobile ? null : (
           <div className="hidden w-full max-w-[24.5rem] -translate-x-6 lg:block max-h-[600px] overflow-y-auto">
@@ -207,6 +204,6 @@ export default function Index() {
       </Section>
 
       <HistoryProduct />
-    </>
+    </div>
   );
 }
