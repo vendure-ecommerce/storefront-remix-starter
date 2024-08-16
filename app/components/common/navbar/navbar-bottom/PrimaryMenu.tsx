@@ -5,14 +5,15 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { ChevronDown } from "lucide-react";
+import { useCollections } from "../Navbar";
 
 const PrimaryMenu = () => {
-  // const categoryOptions = dummy.categoryOptions;
+  const collections = useCollections();
 
   return (
     <>
-      {/* categoryOptions */([] as any[]).map((option, index) =>
-        option.megaMenu ? (
+      {collections.map((option, index) =>
+        /* option.megaMenu ? (
           <Popover key={index}>
             <PopoverTrigger asChild>
               <Button className='flex items-center gap-2' variant='ghost'>
@@ -22,14 +23,14 @@ const PrimaryMenu = () => {
             </PopoverTrigger>
             <PopoverContent>Megamenü</PopoverContent>
           </Popover>
-        ) : (
+        ) :  */(
           <Button
             key={index}
             className='flex items-center gap-2'
             variant='ghost'
             asChild
           >
-            <a href={option.link}>{option.title}</a>
+            <a href={`/collections/${option.slug}`}>{option.name}</a>
           </Button>
         )
       )}
