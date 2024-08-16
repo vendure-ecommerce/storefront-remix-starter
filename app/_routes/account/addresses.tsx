@@ -1,15 +1,15 @@
 import { Outlet, useLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs } from '@remix-run/router';
 import { ActionFunctionArgs, json } from '@remix-run/server-runtime';
-import AddAddressCard from '~/components/account/AddAddressCard';
-import EditAddressCard from '~/components/account/EditAddressCard';
+import AddAddressCard from '~/components/_account/AddAddressCard';
+import EditAddressCard from '~/components/_account/EditAddressCard';
 import { Address, ErrorCode, ErrorResult } from '~/generated/graphql';
+import { getFixedT } from '~/i18next.server';
 import {
   deleteCustomerAddress,
   updateCustomerAddress,
 } from '~/providers/account/account';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
-import { getFixedT } from '~/i18next.server';
-import { LoaderFunctionArgs } from '@remix-run/router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const res = await getActiveCustomerAddresses({ request });

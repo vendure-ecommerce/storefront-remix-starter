@@ -8,12 +8,12 @@ import {
 import { Link, useFetcher } from '@remix-run/react';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Address, ErrorResult } from '~/generated/graphql';
 import { Button } from '../Button';
 import { ErrorMessage } from '../ErrorMessage';
 import { HighlightedButton } from '../HighlightedButton';
-import Modal from '../modal/Modal';
-import { useTranslation } from 'react-i18next';
+import Modal from '../_modal/Modal';
 
 type EditAddressProps = {
   address: Address;

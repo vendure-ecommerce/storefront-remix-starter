@@ -3,13 +3,14 @@ import { useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import { withZod } from '@remix-validated-form/with-zod';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ValidatedForm, validationError } from 'remix-validated-form';
 import { z } from 'zod';
 import { Button } from '~/components/Button';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { HighlightedButton } from '~/components/HighlightedButton';
 import { Input } from '~/components/Input';
-import Modal from '~/components/modal/Modal';
+import Modal from '~/components/_modal/Modal';
 import {
   requestUpdateCustomerEmailAddress,
   updateCustomer,
@@ -17,7 +18,6 @@ import {
 import { getActiveCustomerDetails } from '~/providers/customer/customer';
 import useToggleState from '~/utils/use-toggle-state';
 import { replaceEmptyString } from '~/utils/validation';
-import { useTranslation } from 'react-i18next';
 
 enum FormIntent {
   UpdateEmail = 'updateEmail',

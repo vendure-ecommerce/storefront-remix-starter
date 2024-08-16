@@ -1,14 +1,13 @@
-import { DataFunctionArgs } from '@remix-run/server-runtime';
-import { getOrderByCode } from '~/providers/orders/order';
-import { useLoaderData } from '@remix-run/react';
-import { CartContents } from '~/components/cart/CartContents';
-import { CartTotals } from '~/components/cart/CartTotals';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import { useRevalidator } from '@remix-run/react';
+import { useLoaderData, useRevalidator } from '@remix-run/react';
+import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useEffect, useState } from 'react';
-import { OrderDetailFragment } from '~/generated/graphql';
 import { useTranslation } from 'react-i18next';
+import { CartContents } from '~/components/_cart/CartContents';
+import { CartTotals } from '~/components/_cart/CartTotals';
+import { OrderDetailFragment } from '~/generated/graphql';
+import { getOrderByCode } from '~/providers/orders/order';
 
 export async function loader({ params, request }: DataFunctionArgs) {
   try {

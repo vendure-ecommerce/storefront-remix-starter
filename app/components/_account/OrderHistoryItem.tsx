@@ -1,12 +1,12 @@
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { Link } from '@remix-run/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { OrderStateBadge } from '~/components/_account/OrderStateBadge';
 import { Button } from '~/components/Button';
 import { Price } from '~/components/products/Price';
 import { ActiveCustomerOrderListQuery } from '~/generated/graphql';
-import { OrderStateBadge } from '~/components/account/OrderStateBadge';
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { Link } from '@remix-run/react';
-import { useTranslation } from 'react-i18next';
 
 type OrderHistoryItemProps = {
   order?: NonNullable<
