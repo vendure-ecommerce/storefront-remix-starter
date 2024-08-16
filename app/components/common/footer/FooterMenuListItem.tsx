@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui-custom/MyButton';
+import { Button } from '../../ui-custom/MyButton';
 
 interface FooterMenuListItemProps {
   children: React.ReactNode;

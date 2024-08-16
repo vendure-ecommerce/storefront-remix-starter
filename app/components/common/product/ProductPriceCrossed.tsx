@@ -1,6 +1,4 @@
-
-
-import { formatNumberWithSeparator } from "@/helpers/numberFormatting";
+import { formatNumberWithSeparator } from '~/utils';
 
 interface ProductPriceCrossedProps {
   className?: string;
@@ -15,7 +13,9 @@ const ProductPriceCrossed: React.FC<ProductPriceCrossedProps> = ({
 
   return (
     <div
-      className={`line-through text-color-tertiary${className ? ` ${className}` : ""}`}
+      className={`line-through text-color-tertiary${
+        className ? ` ${className}` : ''
+      }`}
     >
       {formattedPrice} Ft
     </div>

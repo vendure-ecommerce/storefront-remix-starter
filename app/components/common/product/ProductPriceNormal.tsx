@@ -1,6 +1,4 @@
-
-
-import { formatNumberWithSeparator } from "@/helpers/numberFormatting";
+import { formatNumberWithSeparator } from '~/utils';
 
 interface ProductPriceNormalProps {
   className?: string;
@@ -15,7 +13,9 @@ const ProductPriceNormal: React.FC<ProductPriceNormalProps> = ({
 
   return (
     <div
-      className={`text-color-primary font-bold${className ? ` ${className}` : ""}`}
+      className={`text-color-primary font-bold${
+        className ? ` ${className}` : ''
+      }`}
     >
       {formattedPrice} Ft
     </div>

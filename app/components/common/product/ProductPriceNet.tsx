@@ -1,6 +1,4 @@
-
-
-import { formatNumberWithSeparator } from "@/helpers/numberFormatting";
+import { formatNumberWithSeparator } from '~/utils';
 
 interface ProductPriceNetProps {
   className?: string;
@@ -14,7 +12,7 @@ const ProductPriceNet: React.FC<ProductPriceNetProps> = ({
   const formattedPrice = formatNumberWithSeparator(priceNet);
 
   return (
-    <div className={`text-color-tertiary${className ? ` ${className}` : ""}`}>
+    <div className={`text-color-tertiary${className ? ` ${className}` : ''}`}>
       (nettó: {formattedPrice} Ft)
     </div>
   );

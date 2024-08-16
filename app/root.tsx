@@ -27,6 +27,7 @@ import { getCollections } from '~/providers/collections/collections';
 import { getActiveCustomer } from '~/providers/customer/customer';
 // import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
+import Navbar from './components/common/navbar/Navbar';
 import stylesheet from './tailwind.css';
 import { cn } from './utils/cn';
 
@@ -150,10 +151,7 @@ export default function App() {
           'flex min-h-screen flex-col bg-background font-sans antialiased',
         )}
       >
-        {/* <Header
-          onCartIconClick={() => setOpen(!open)}
-          cartQuantity={activeOrder?.totalQuantity ?? 0}
-        /> */}
+        <Navbar />
         <main className="">
           <Outlet
             context={

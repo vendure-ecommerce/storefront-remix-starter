@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-sans {
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
 @layer base {
   :root {
     --background: 0 0% 97%;
