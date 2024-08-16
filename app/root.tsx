@@ -166,6 +166,7 @@ export default function App() {
               activeOrder,
               adjustOrderLine,
               removeItem,
+              setLayoutData,
             }}
           />
         </main>
