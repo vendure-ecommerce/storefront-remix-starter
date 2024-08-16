@@ -21,14 +21,14 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChangeLanguage } from 'remix-i18next';
-import Footer from '~/components/_footer/Footer';
 import { getI18NextServer } from '~/i18next.server';
 import { activeChannel } from '~/providers/channel/channel';
 import { getCollections } from '~/providers/collections/collections';
 import { getActiveCustomer } from '~/providers/customer/customer';
 // import { useActiveOrder } from '~/utils/use-active-order';
+import Footer from './components/common/footer/Footer';
 import stylesheet from './tailwind.css';
-import { cn } from './utils';
+import { cn } from './utils/cn';
 
 // export const meta: MetaFunction = () => {
 //   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -175,7 +175,7 @@ export default function App() {
         /> */}
         <ScrollRestoration />
         <Scripts />
-        <Footer collections={collections}></Footer>
+        <Footer />
 
         {devMode && <LiveReload />}
       </body>

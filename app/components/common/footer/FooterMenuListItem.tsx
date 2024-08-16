@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Button } from '@/components/ui-custom/MyButton';
 
 interface FooterMenuListItemProps {
@@ -13,12 +12,12 @@ const FooterMenuListItem: React.FC<FooterMenuListItemProps> = ({
   return (
     <li>
       <Button variant={'link'} asChild>
-        <Link
+        <a
           href="/content"
           className="flex h-9 items-center justify-center !px-0 hover:underline"
         >
           <data value={''}>{children}</data>
-        </Link>
+        </a>
       </Button>
     </li>
   );
