@@ -9,7 +9,9 @@ export function getCollections(
 ) {
   return sdk
     .collections({ options }, { request })
-    .then((result) => result.collections?.items);
+    .then((result) => {
+      return result.collections?.items;
+    });
 }
 
 gql`
@@ -19,6 +21,7 @@ gql`
         id
         name
         slug
+        description
         parent {
           name
         }

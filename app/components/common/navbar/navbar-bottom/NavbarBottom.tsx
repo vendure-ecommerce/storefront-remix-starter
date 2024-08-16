@@ -6,8 +6,11 @@ import React, { useEffect, useRef, useState } from "react";
 import MenuButton from "../../button/MenuButton";
 import PrimaryMenu from "./PrimaryMenu";
 import SecondaryMenu from "./SecondaryMenu";
+import { useCollections } from "../Navbar";
+
 
 const NavbarBottom: React.FC = () => {
+  const collections = useCollections();
   const [showLeftArrow, setShowLeftArrow] = useState<boolean>(false);
   const [showRightArrow, setShowRightArrow] = useState<boolean>(false); // Start with false
   const menuContainerRef = useRef<HTMLDivElement>(null);
@@ -45,7 +48,7 @@ const NavbarBottom: React.FC = () => {
 
   return (
     <div className='flex h-[3.75rem] items-center justify-between gap-12'>
-      <MenuButton />
+      <MenuButton collections={collections}/>
       <div className='relative flex overflow-hidden'>
         {showLeftArrow && (
           <Button

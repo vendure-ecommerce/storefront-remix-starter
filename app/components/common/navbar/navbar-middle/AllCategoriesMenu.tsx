@@ -9,9 +9,10 @@ import {
 } from "~/components/ui-custom/MySheet";
 import ListGroup from "../../list/ListGroup";
 import ListGroupItem from "../../list/ListGroupItem";
+import { useCollections } from "../Navbar";
 
-const AllCategoriesMenu = () => {
-  // const categoryOptions = dummy.categoryOptions;
+export const AllCategoriesMenu = () => {
+  const collections = useCollections();
 
   return (
     <Sheet>
@@ -28,26 +29,24 @@ const AllCategoriesMenu = () => {
             </SheetTitle>
           </SheetHeader>
           <div className='flex flex-col gap-8 py-8'>
-            {/* <ListGroup>
-              {categoryOptions.map((option, index) => (
+            <ListGroup>
+              {collections.map((option, index) => (
                 <ListGroupItem
                   key={index}
                   className='px-3'
-                  title={option.title}
+                  title={option.name}
                   showTitle={true}
-                  link={option.link}
-                  imageSrc={option.imageSrc}
+                  link={option.slug}
+                  imageSrc={option.featuredAsset?.preview}
                   imageClassName='h-10 w-10 rounded-full border'
                   showImage={true}
                   showTrailingIcon={true}
                 />
               ))}
-            </ListGroup> */}
+            </ListGroup>
           </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
   );
 };
-
-export default AllCategoriesMenu;

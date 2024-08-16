@@ -1,5 +1,3 @@
-
-
 import NavbarSearch from "./navbar-middle/NavbarSearch";
 import Logo from "../Logo";
 import AccountButton from "../button/AccountButton";

@@ -17,9 +17,13 @@ import { useViewportWidth } from "~/utils/use-viewport-width";
 import { Menu } from "lucide-react";
 import ListGroup from "../list/ListGroup";
 import ListGroupItem from "../list/ListGroupItem";
+import { getCollections } from "~/providers/collections/collections";
 
-const MenuButton = () => {
-  // const categoryOptions = dummy.categoryOptions;
+export interface IMenuButtonProps {
+  collections: Awaited<ReturnType<typeof getCollections>>;
+}
+
+const MenuButton = ({ collections }: IMenuButtonProps) => {
   const width = useViewportWidth();
   const isMobile = width < 1024;
 
@@ -47,15 +51,15 @@ const MenuButton = () => {
             </SheetTitle>
           </SheetHeader>
           <div className='flex flex-col gap-8 py-8'>
-            {/* <ListGroup>
-              {categoryOptions.map((option, index) => (
+            <ListGroup>
+              {collections.map((option, index) => (
                 <Popover key={index}>
                   <PopoverTrigger className='group/item'>
                     <ListGroupItem
                       className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
-                      title={option.title}
-                      link={option.link}
-                      imageSrc={option.imageSrc}
+                      title={option.name}
+                      link={option.slug}
+                      imageSrc={option.featuredAsset?.preview}
                       imageClassName='h-10 w-10 rounded-full border'
                       showTitle={true}
                       showImage={true}
@@ -72,7 +76,7 @@ const MenuButton = () => {
                   </PopoverContent>
                 </Popover>
               ))}
-            </ListGroup> */}
+            </ListGroup>
           </div>
         </ScrollArea>
       </SheetContent>

@@ -36,7 +36,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         <div className='sticky bottom-0 border-t bg-white'>
           <MobileMenuList>
             <MobileMenuListItem>
-              {showMenuButton && <MenuButton />}
+              {/*showMenuButton && <MenuButton />*/}
               {showOrderButton && <OrderButton />}
               {showFilterButton && <FilterButton />}
               {showFavoriteProductButton && <FavoriteProductButton />}
