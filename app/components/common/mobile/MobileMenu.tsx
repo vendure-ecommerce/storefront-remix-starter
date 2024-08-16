@@ -1,14 +1,12 @@
-
-
-import { useViewportWidth } from "~/utils/use-viewport-width";
-import CartButton from "../button/CartButton";
-import CompareProductsButton from "../button/CompareProductsButton";
-import FavoriteProductButton from "../button/FavoriteProductsButton";
-import FilterButton from "../button/FilterButton";
-import MenuButton from "../button/MenuButton";
-import OrderButton from "../button/OrderButton";
-import MobileMenuList from "./MobileMenuList";
-import MobileMenuListItem from "./MobileMenuListItem";
+import { useViewportWidth } from '~/utils/use-viewport-width';
+import CartButton from '../button/CartButton';
+import CompareProductsButton from '../button/CompareProductsButton';
+import FavoriteProductButton from '../button/FavoriteProductsButton';
+import FilterButton from '../button/FilterButton';
+import MenuButton from '../button/MenuButton';
+import OrderButton from '../button/OrderButton';
+import MobileMenuList from './MobileMenuList';
+import MobileMenuListItem from './MobileMenuListItem';
 
 interface MobileMenuProps {
   showMenuButton?: boolean;
@@ -33,10 +31,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   return (
     <>
       {isMobile ? (
-        <div className='sticky bottom-0 border-t bg-white'>
+        <div className="sticky bottom-0 border-t bg-white">
           <MobileMenuList>
             <MobileMenuListItem>
-              {showMenuButton && <MenuButton />}
+              {/*showMenuButton && <MenuButton />*/}
               {showOrderButton && <OrderButton />}
               {showFilterButton && <FilterButton />}
               {showFavoriteProductButton && <FavoriteProductButton />}

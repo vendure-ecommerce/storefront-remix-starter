@@ -1,8 +1,6 @@
-
-
-import NavbarBottom from "./navbar-bottom/NavbarBottom";
-import NavbarMiddle from "./navbar-middle/NavbarMiddle";
-import NavbarTop from "./navbar-top/NavbarTop";
+import NavbarBottom from './navbar-bottom/NavbarBottom';
+import NavbarMiddle from './navbar-middle/NavbarMiddle';
+import NavbarTop from './navbar-top/NavbarTop';
 
 interface NavbarDesktopProps {
   showNavbarTop?: boolean;
@@ -19,7 +17,7 @@ const NavbarDesktop: React.FC<NavbarDesktopProps> = ({
     <header
       className={`sticky top-0 z-50 col-span-2 hidden border-b bg-white lg:block`}
     >
-      <div className='mx-auto w-full max-w-screen-2xl px-6'>
+      <div className="mx-auto w-full max-w-screen-2xl px-6">
         {showNavbarTop && <NavbarTop />}
         {showNavbarMiddle && <NavbarMiddle />}
         {showNavbarBottom && <NavbarBottom />}

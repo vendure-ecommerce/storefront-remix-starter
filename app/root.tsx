@@ -25,7 +25,7 @@ import { getI18NextServer } from '~/i18next.server';
 import { activeChannel } from '~/providers/channel/channel';
 import { getCollections } from '~/providers/collections/collections';
 import { getActiveCustomer } from '~/providers/customer/customer';
-// import { useActiveOrder } from '~/utils/use-active-order';
+import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
 import MobileMenu from './components/common/mobile/MobileMenu';
 import Navbar from './components/common/navbar/Navbar';
@@ -89,9 +89,9 @@ export type RootLoaderData = {
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
   const collections = await getCollections(request, { take: 20 });
-  const topLevelCollections = collections.filter(
+  /* const topLevelCollections = collections.filter(
     (collection) => collection.parent?.name === '__root_collection__',
-  );
+  ); */
   const activeCustomer = await getActiveCustomer({ request });
   const locale = await getI18NextServer().then((i18next) =>
     i18next.getLocale(request),
@@ -99,7 +99,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
   const loaderData: RootLoaderData = {
     activeCustomer,
     activeChannel: await activeChannel({ request }),
-    collections: topLevelCollections,
+    collections,
     locale,
   };
 
@@ -109,16 +109,15 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
 export default function App() {
   const [open, setOpen] = useState(false);
   const loaderData = useLoaderData<RootLoaderData>();
-  const { collections } = loaderData;
-  const { locale } = useLoaderData<typeof loader>();
+  const { collections, locale } = loaderData;
   const { i18n } = useTranslation();
-  // const {
-  //   activeOrderFetcher,
-  //   activeOrder,
-  //   adjustOrderLine,
-  //   removeItem,
-  //   refresh,
-  // } = useActiveOrder();
+  const {
+    activeOrderFetcher,
+    activeOrder,
+    adjustOrderLine,
+    removeItem,
+    refresh,
+  } = useActiveOrder();
 
   useChangeLanguage(locale);
 
@@ -126,7 +125,7 @@ export default function App() {
   useEffect(() => {
     // When the loader has run, this implies we should refresh the contents
     // of the activeOrder as the user may have signed in or out.
-    // refresh();
+    refresh();
 
     setLayoutData({
       showFooterMenu: true,
@@ -159,11 +158,14 @@ export default function App() {
           'flex min-h-screen flex-col bg-background font-sans antialiased',
         )}
       >
-        <Navbar />
-        <main className="">
+        <Navbar collections={collections} />
+        <main className="mx-auto flex w-full max-w-screen-2xl flex-col gap-20 px-6 py-12">
           <Outlet
             context={{
-              setLayoutData,
+              activeOrderFetcher,
+              activeOrder,
+              adjustOrderLine,
+              removeItem,
             }}
           />
         </main>
