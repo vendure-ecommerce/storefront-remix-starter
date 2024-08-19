@@ -3,6 +3,22 @@ import { redirect } from '@remix-run/server-runtime';
 
 import { paginationValidationSchema } from '~/utils/pagination';
 import { LoaderFunctionArgs } from '@remix-run/router';
+import { SortOrder } from '~/generated/graphql';
+
+function getSortOptions(order: string) {
+  switch (order) {
+    case 'price-from-expensive':
+      return { price: SortOrder.Desc };
+    case 'price-from-cheap':
+      return { price: SortOrder.Asc }; // Ár növekvő sorrend
+    case 'name-a-z':
+      return { name: SortOrder.Asc }; // Név A-Z
+    case 'name-z-a':
+      return { name: SortOrder.Desc }; // Név Z-A
+    default:
+      return {}; // Alapértelmezett rendezés
+  }
+}
 
 /**
  * This loader deals with loading product searches, which is used in both the search page and the
@@ -26,11 +42,15 @@ export function filteredSearchLoaderFromPagination(
         url.searchParams.get('limit') ?? paginationLimitMinimumDefault;
       const page = url.searchParams.get('page') ?? 1;
 
+      const order = url.searchParams.get('order') ?? 'default';
+
       const zodResult = searchPaginationSchema.safeParse({ limit, page });
       if (!zodResult.success) {
         url.search = '';
         throw redirect(url.href);
       }
+
+      const sortOptions = getSortOptions(order);
 
       let resultPromises: [
         ReturnType<typeof search>,
@@ -45,6 +65,7 @@ export function filteredSearchLoaderFromPagination(
             collectionSlug: params.slug,
             take: zodResult.data.limit,
             skip: (zodResult.data.page - 1) * zodResult.data.limit,
+            sort: sortOptions,
           },
         },
         { request },

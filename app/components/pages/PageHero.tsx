@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '~/components/ui-custom/MyButton';
 import { Card } from '~/components/ui-custom/MyCard';
+import { htmlDecode } from '~/utils/html-decode';
 
 interface PageHeroProps {
   title?: string;
@@ -29,6 +30,8 @@ const PageHero: React.FC<PageHeroProps> = ({
     ? description
     : `${description.slice(0, 150)}...`;
 
+  const htmlDecoded = htmlDecode(description);
+
   return (
     <Card className="flex flex-col gap-4 border-none bg-transparent shadow-none md:flex-row md:items-center lg:flex-col lg:gap-0 xl:flex-row">
       {showImage && (
@@ -54,8 +57,11 @@ const PageHero: React.FC<PageHeroProps> = ({
           )}
           {showDescription && (
             <div>
-              <p className="text-base">{truncatedText}</p>
-              {description.length > 150 && (
+              <div
+                className="text-base"
+                dangerouslySetInnerHTML={{ __html: htmlDecoded }}
+              />
+              {/* description.length > 150 && (
                 <Button
                   variant={'link'}
                   className="p-0 font-bold"
@@ -63,7 +69,7 @@ const PageHero: React.FC<PageHeroProps> = ({
                 >
                   {showFullText ? 'Kevesebb' : 'Bővebben'}
                 </Button>
-              )}
+              ) */}
             </div>
           )}
         </div>

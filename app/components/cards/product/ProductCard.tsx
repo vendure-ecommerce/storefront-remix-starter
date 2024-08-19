@@ -39,6 +39,7 @@ interface ProductCardProps {
   isFavorite?: boolean;
   showCardFooter?: boolean;
   showProductRating?: boolean;
+  productTags?: string[];
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -57,6 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isFavorite,
   showCardFooter = true,
   showProductRating = false,
+  productTags = [],
 }) => {
   const [isHovering, setIsHovering] = useState(false);
 
@@ -83,12 +85,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
           showCardFooter ? 'pb-0' : ''
         }`}
       >
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <ManufacturerAvatar manufacturer={manufacturer[0]} />
-          <ProductNumber number={number} />
-        </div>
+        {manufacturer.length > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <ManufacturerAvatar manufacturer={manufacturer[0]} />
+            <ProductNumber number={number} />
+          </div>
+        )}
         <div className="flex flex-col gap-1">
-          <ProductAvailability />
+          {/* <ProductAvailability /> */}
           <a href={link}>
             <CardTitle className="text-base">
               <ProductTitle title={title} />
@@ -111,7 +115,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           priceCrossed={priceCrossed}
         />
         <div>
-          <ProductTag>Komissió termék</ProductTag>
+          {productTags.map((tag, index) => (
+            <ProductTag key={index}>{tag}</ProductTag>
+          ))}
         </div>
       </CardContent>
       {showCardFooter && (

@@ -21,7 +21,7 @@ import { APP_META_TITLE } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
 
-export const meta: V2_MetaFunction = ({ data }) => {
+export const meta: V2_MetaFunction = ({ data }: any) => {
   return [
     {
       title: data?.collection
@@ -73,6 +73,9 @@ export async function loader({ params, request, context }: DataFunctionArgs) {
   };
 }
 
+type ArrayElement<ArrayType extends readonly unknown[]> = 
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+
 export default function CollectionSlug() {
   const loaderData = useLoaderData<typeof loader>();
   const { collection, result, resultWithoutFacetValueFilters, facetValueIds } =
@@ -86,6 +89,32 @@ export default function CollectionSlug() {
   );
   const submit = useSubmit();
   const { t } = useTranslation();
+
+  const getNetPrice = (product: ArrayElement<typeof result.items>) => {
+    return product.price.__typename === 'SinglePrice'
+      ? product.price.value
+      : product.price.__typename === 'PriceRange'
+        ? product.price.min
+        : -1;
+  };
+
+  const getGrossPrice = (product: ArrayElement<typeof result.items>, max = false) => {
+    return product.priceWithTax.__typename === 'SinglePrice'
+      ? product.priceWithTax.value
+      : product.priceWithTax.__typename === 'PriceRange' && !max
+        ? product.priceWithTax.min
+        : product.priceWithTax.__typename === 'PriceRange' && max
+          ? product.priceWithTax.max
+          : -1;
+  };
+
+  const onListingTabChange = (tab: string) => {
+    const formData = new FormData();
+    formData.set("order", tab); // Beállítjuk a rendezési feltételt
+  
+    // Elküldjük az adatokat a submit segítségével
+    submit(formData, { method: "get", preventScrollReset: true });
+  };
 
   return (
     <>
@@ -157,29 +186,36 @@ export default function CollectionSlug() {
                   { label: 'Olcsók elöl', value: 'price-from-cheap' },
                   { label: 'Név szerint A - Z', value: 'name-a-z' },
                   { label: 'Név szerint Z - A', value: 'name-z-a' },
-                  { label: 'Legnagyobb kedvezmény', value: 'most-special' },
-                  { label: 'Legjobbra értékelt', value: 'best-rating' },
+                  // { label: 'Legnagyobb kedvezmény', value: 'most-special' },
+                  // { label: 'Legjobbra értékelt', value: 'best-rating' },
                 ]}
+                onChange={onListingTabChange}
               >
-                {result.items.map((option, index) => (
-                  <ProductCard
-                    key={index}
-                    id={option.productId}
-                    title={option.productName}
-                    link={`/products/${option.slug}`}
-                    number={'1'}
-                    priceCrossed={option.priceWithTax.max}
-                    priceNormal={option.priceWithTax.min}
-                    priceNet={90}
-                    imageSrc={option.productAsset?.preview ?? ''}
-                    hoverImageSrc={option.productAsset?.preview ?? ''}
-                    rating={1}
-                    reviews={1}
-                    manufacturer={[
-                      { title: 'asd', link: 'asd', imageSrc: 'asd' },
-                    ]}
-                  />
-                ))}
+                {result.items.map((option, index) => {
+                  const productFacets = result.facetValues.filter(facetValue => {
+                    return option.facetValueIds.includes(facetValue.facetValue.id);
+                  })
+                  return (
+                    <ProductCard
+                      key={index}
+                      id={option.productId}
+                      title={option.productName}
+                      link={`/products/${option.slug}`}
+                      number={'1'}
+                      priceCrossed={getGrossPrice(option, true)}
+                      priceNormal={getGrossPrice(option)}
+                      priceNet={getNetPrice(option)}
+                      imageSrc={option.productAsset?.preview ?? ''}
+                      hoverImageSrc={option.productAsset?.preview ?? ''}
+                      rating={1}
+                      reviews={1}
+                      manufacturer={[
+                        // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
+                      ]}
+                      productTags={[...productFacets.map(facetValue => facetValue.facetValue.name)]}
+                    />
+                  );
+                })}
               </ListingTabs>
             )}
             <Section>

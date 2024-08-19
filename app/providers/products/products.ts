@@ -83,7 +83,8 @@ export const listedProductFragment = gql`
       preview
     }
     currencyCode
-    priceWithTax {
+    price {
+      __typename
       ... on PriceRange {
         min
         max
@@ -92,6 +93,17 @@ export const listedProductFragment = gql`
         value
       }
     }
+    priceWithTax {
+      __typename
+      ... on PriceRange {
+        min
+        max
+      }
+      ... on SinglePrice {
+        value
+      }
+    }
+    facetValueIds
   }
 `;
 
