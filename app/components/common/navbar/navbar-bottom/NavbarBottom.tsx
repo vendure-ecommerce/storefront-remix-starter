@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import MenuButton from '../../button/MenuButton';
 import PrimaryMenu from './PrimaryMenu';
 import SecondaryMenu from './SecondaryMenu';
+import { useLocation } from '@remix-run/react';
 
 const NavbarBottom: React.FC = () => {
+  const location = useLocation();
   const [showLeftArrow, setShowLeftArrow] = useState<boolean>(false);
   const [showRightArrow, setShowRightArrow] = useState<boolean>(false); // Start with false
   const menuContainerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +42,43 @@ const NavbarBottom: React.FC = () => {
       };
     }
   }, []);
+
+  useEffect(() => {
+    const container = menuContainerRef.current;
+
+    const saveScrollPosition = () => {
+      if (container) {
+        window.localStorage.setItem(
+          'scrollPosition-NavbarBottom',
+          JSON.stringify({
+            left: container.scrollLeft,
+            top: container.scrollTop,
+          }),
+        );
+      }
+    };
+
+    const restoreScrollPosition = () => {
+      if (container) {
+        const savedPosition = JSON.parse(
+          window.localStorage.getItem('scrollPosition-NavbarBottom') || '{}',
+        );
+        if (savedPosition.left !== undefined && savedPosition.top !== undefined) {
+          container.scrollTo(
+            savedPosition.left,
+            savedPosition.top,
+          );
+        }
+      }
+    };
+
+    window.addEventListener("beforeunload", saveScrollPosition);
+    restoreScrollPosition();
+
+    return () => {
+      window.removeEventListener("beforeunload", saveScrollPosition);
+    };
+  }, [location.pathname]);
 
   return (
     <div className="flex h-[3.75rem] items-center justify-between gap-12">
