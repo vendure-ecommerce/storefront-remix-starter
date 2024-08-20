@@ -12,7 +12,7 @@ import ListGroupItem from '../../list/ListGroupItem';
 import { useCollections } from '../Navbar';
 
 export const AllCategoriesMenu = () => {
-  const collections = useCollections();
+  const { collections } = useCollections();
 
   return (
     <Sheet>

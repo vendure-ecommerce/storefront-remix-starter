@@ -1,7 +1,13 @@
-
+import { useCollections } from "~/providers/collections";
 
 const ListingInfo = () => {
-  return <p className='text-sm'>10 megjelenítve, összesen 20</p>;
+  const { collection, pagination } = useCollections();
+
+  return (
+    <p className='text-sm'>
+      {pagination.limit < collection?.totalItems ? pagination.limit : collection?.totalItems} megjelenítve, összesen {collection?.totalItems}
+    </p>
+  );
 };
 
 export default ListingInfo;

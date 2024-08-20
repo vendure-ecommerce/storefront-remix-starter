@@ -20,12 +20,13 @@ interface TabItem {
 interface ListingTabsProps {
   children: React.ReactNode;
   tabs: TabItem[];
+  value: string;
   onChange: (value: string) => void;
 }
 
-const ListingTabs: React.FC<ListingTabsProps> = ({ children, tabs, onChange }) => {
+const ListingTabs: React.FC<ListingTabsProps> = ({ children, tabs, value, onChange }) => {
   return (
-    <Tabs defaultValue={tabs[0].value} className='flex flex-col gap-16'>
+    <Tabs value={value} className='flex flex-col gap-16'>
       <TabsList className='hidden flex-nowrap justify-stretch overflow-auto scrollbar-hide lg:flex'>
         {tabs.map((tab) => (
           <TabsTrigger

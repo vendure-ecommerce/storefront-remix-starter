@@ -1,6 +1,6 @@
-import { useLoaderData, useSubmit, V2_MetaFunction } from '@remix-run/react';
+import { useLoaderData, useSearchParams, useSubmit, V2_MetaFunction } from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import NanoCard from '~/components/cards/NanoCard';
@@ -20,6 +20,18 @@ import PageHero from '~/components/pages/PageHero';
 import { APP_META_TITLE } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
+import { TArrayElement } from '~/types/types';
+import { useCollections } from '~/providers/collections';
+
+export const sortOrders = [
+  { label: 'Alapértelmezett', value: 'default' },
+  { label: 'Drágák elöl', value: 'price-from-expensive' },
+  { label: 'Olcsók elöl', value: 'price-from-cheap' },
+  { label: 'Név szerint A - Z', value: 'name-a-z' },
+  { label: 'Név szerint Z - A', value: 'name-z-a' },
+  // { label: 'Legnagyobb kedvezmény', value: 'most-special' },
+  // { label: 'Legjobbra értékelt', value: 'best-rating' },
+];
 
 export const meta: V2_MetaFunction = ({ data }: any) => {
   return [
@@ -31,12 +43,14 @@ export const meta: V2_MetaFunction = ({ data }: any) => {
   ];
 };
 
-const paginationLimitMinimumDefault = 25;
-const allowedPaginationLimits = new Set<number>([
+const paginationLimitMinimumDefault = 10;
+export const allowedPaginationLimits = new Set<number>([
   paginationLimitMinimumDefault,
+  25,
   50,
   100,
 ]);
+
 const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
   allowedPaginationLimits,
   paginationLimitMinimumDefault,
@@ -73,13 +87,16 @@ export async function loader({ params, request, context }: DataFunctionArgs) {
   };
 }
 
-type ArrayElement<ArrayType extends readonly unknown[]> = 
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-
 export default function CollectionSlug() {
   const loaderData = useLoaderData<typeof loader>();
-  const { collection, result, resultWithoutFacetValueFilters, facetValueIds } =
-    loaderData;
+  const {
+    collection,
+    result,
+    resultWithoutFacetValueFilters,
+    facetValueIds,
+    appliedPaginationLimit,
+    appliedPaginationPage,
+  } = loaderData;
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const facetValuesTracker = useRef(new FacetFilterTracker());
   facetValuesTracker.current.update(
@@ -87,10 +104,16 @@ export default function CollectionSlug() {
     resultWithoutFacetValueFilters,
     facetValueIds,
   );
+  const {
+    setCollection,
+    setSearchParams,
+    setPagination,
+  } = useCollections();
+  const [searchParams] = useSearchParams();
   const submit = useSubmit();
   const { t } = useTranslation();
 
-  const getNetPrice = (product: ArrayElement<typeof result.items>) => {
+  const getNetPrice = (product: TArrayElement<typeof result.items>) => {
     return product.price.__typename === 'SinglePrice'
       ? product.price.value
       : product.price.__typename === 'PriceRange'
@@ -98,7 +121,7 @@ export default function CollectionSlug() {
         : -1;
   };
 
-  const getGrossPrice = (product: ArrayElement<typeof result.items>, max = false) => {
+  const getGrossPrice = (product: TArrayElement<typeof result.items>, max = false) => {
     return product.priceWithTax.__typename === 'SinglePrice'
       ? product.priceWithTax.value
       : product.priceWithTax.__typename === 'PriceRange' && !max
@@ -110,11 +133,22 @@ export default function CollectionSlug() {
 
   const onListingTabChange = (tab: string) => {
     const formData = new FormData();
-    formData.set("order", tab); // Beállítjuk a rendezési feltételt
+    formData.set("order", tab);
   
-    // Elküldjük az adatokat a submit segítségével
     submit(formData, { method: "get", preventScrollReset: true });
   };
+
+  useEffect(() => {
+    setSearchParams(searchParams);
+  }, [searchParams]);
+
+  useEffect(() => {
+    setPagination({
+      limit: appliedPaginationLimit,
+      page: appliedPaginationPage,
+    });
+    setCollection(result);
+  }, [loaderData]);
 
   return (
     <>
@@ -180,15 +214,8 @@ export default function CollectionSlug() {
             />
             {result.items && result.items.length > 0 && (
               <ListingTabs
-                tabs={[
-                  { label: 'Alapértelmezett', value: 'default' },
-                  { label: 'Drágák elöl', value: 'price-from-expensive' },
-                  { label: 'Olcsók elöl', value: 'price-from-cheap' },
-                  { label: 'Név szerint A - Z', value: 'name-a-z' },
-                  { label: 'Név szerint Z - A', value: 'name-z-a' },
-                  // { label: 'Legnagyobb kedvezmény', value: 'most-special' },
-                  // { label: 'Legjobbra értékelt', value: 'best-rating' },
-                ]}
+                tabs={sortOrders}
+                value={searchParams.get("order") ?? "default"}
                 onChange={onListingTabChange}
               >
                 {result.items.map((option, index) => {

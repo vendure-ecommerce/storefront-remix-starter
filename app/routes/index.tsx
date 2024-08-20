@@ -15,6 +15,7 @@ import SectionHeader from '../components/common/section/SectionHeader';
 import SectionTitle from '../components/common/section/SectionTitle';
 import Usp from '../components/common/section/Usp';
 import HeroGrid from '../components/pages/home/HeroGrid';
+import { CollectionsProvider } from '~/providers/collections';
 
 export async function loader({ request }: LoaderArgs) {
   const collections = await getCollections(request, { take: 20 });

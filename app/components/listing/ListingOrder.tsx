@@ -1,5 +1,6 @@
 
 
+import { useSearchParams, useSubmit } from "@remix-run/react";
 import {
   Select,
   SelectContent,
@@ -7,22 +8,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { sortOrders } from "~/routes/collections/$slug";
+import { useCollections } from "~/providers/collections";
+
+const getSortOrderText: (value: string | null) => string = (value) => {
+  return sortOrders.find((order) => order.value === value)?.label || sortOrders[0].label;
+};
 
 interface ListingOrderProps {}
 const ListingOrder: React.FC<ListingOrderProps> = ({}) => {
+  const { searchParams } = useCollections();
+  const submit = useSubmit();
+
+  const onValueChange = (value: string) => {
+    const formData = new FormData();
+    formData.set("order", value);
+  
+    submit(formData, { method: "get", preventScrollReset: true });
+  };
+
   return (
-    <Select>
+    <Select
+      value={searchParams.get('order') || sortOrders[0].value}
+      onValueChange={onValueChange}
+    >
       <SelectTrigger className='w-auto min-w-[220px] rounded-full'>
-        <SelectValue placeholder='Alapértelmezett' />
+        <SelectValue>
+          {getSortOrderText(searchParams.get('order'))}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value='default'>Alapértelmezett</SelectItem>
-        <SelectItem value='price-from-expensive'>Drágák elöl</SelectItem>
-        <SelectItem value='price-from-cheap'>Olcsók elöl</SelectItem>
-        <SelectItem value='name-a-z'>Név szerint A - Z</SelectItem>
-        <SelectItem value='name-z-a'>Név szerint Z - A</SelectItem>
-        <SelectItem value='most-special'>Legnagyobb kedvezmény</SelectItem>
-        <SelectItem value='best-rating'>Legjobbra értékelt</SelectItem>
+        {sortOrders.map((order) => (
+          <SelectItem key={order.value} value={order.value}>{order.label}</SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

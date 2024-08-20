@@ -17,13 +17,10 @@ import { useViewportWidth } from '~/utils/use-viewport-width';
 import { Menu } from 'lucide-react';
 import ListGroup from '../list/ListGroup';
 import ListGroupItem from '../list/ListGroupItem';
-import { getCollections } from '~/providers/collections/collections';
+import { useCollections } from '~/providers/collections';
 
-export interface IMenuButtonProps {
-  collections: Awaited<ReturnType<typeof getCollections>>;
-}
-
-const MenuButton = ({ collections }: IMenuButtonProps) => {
+const MenuButton = () => {
+  const { collections } = useCollections();
   const width = useViewportWidth();
   const isMobile = width < 1024;
 

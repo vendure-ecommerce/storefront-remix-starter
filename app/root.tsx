@@ -32,6 +32,7 @@ import Navbar from './components/common/navbar/Navbar';
 import stylesheet from './tailwind.css';
 import { IGlobalLayoutData } from './types/types';
 import { cn } from './utils/cn';
+import { CollectionsProvider } from './providers/collections';
 
 // export const meta: MetaFunction = () => {
 //   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -134,67 +135,69 @@ export default function App() {
   }, [loaderData]);
 
   return (
-    <html lang={locale} dir={i18n.dir()} id="app" className="scroll-smooth">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" type="image/png"></link>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin={'anonymous'}
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-          rel="stylesheet"
-        />
-
-        <Meta />
-        <Links />
-      </head>
-      <body
-        className={cn(
-          'flex min-h-screen flex-col bg-background font-sans antialiased',
-        )}
-      >
-        <Navbar collections={collections} />
-        <main className="">
-          <Outlet
-            context={{
-              activeOrderFetcher,
-              activeOrder,
-              adjustOrderLine,
-              removeItem,
-              setLayoutData,
-            }}
+    <CollectionsProvider collections={collections || []}>
+      <html lang={locale} dir={i18n.dir()} id="app" className="scroll-smooth">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" type="image/png"></link>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin={'anonymous'}
           />
-        </main>
-        {/* <CartTray
-          open={open}
-          onClose={setOpen}
-          activeOrder={activeOrder}
-          adjustOrderLine={adjustOrderLine}
-          removeItem={removeItem}
-        /> */}
-        <ScrollRestoration />
-        <Scripts />
-        <Footer
-          showFooterImage={stLayoutData?.showFooterImage ?? true}
-          showFooterMenu={stLayoutData?.showFooterMenu ?? true}
-        />
-        <MobileMenu
-          showMenuButton={true}
-          showOrderButton={false}
-          showFilterButton={false}
-          showFavoriteProductButton={false}
-          showCompareProductsButton={false}
-          showCartButton={true}
-        />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+            rel="stylesheet"
+          />
 
-        {devMode && <LiveReload />}
-      </body>
-    </html>
+          <Meta />
+          <Links />
+        </head>
+        <body
+          className={cn(
+            'flex min-h-screen flex-col bg-background font-sans antialiased',
+          )}
+        >
+          <Navbar />
+          <main className="">
+            <Outlet
+              context={{
+                activeOrderFetcher,
+                activeOrder,
+                adjustOrderLine,
+                removeItem,
+                setLayoutData,
+              }}
+            />
+          </main>
+          {/* <CartTray
+            open={open}
+            onClose={setOpen}
+            activeOrder={activeOrder}
+            adjustOrderLine={adjustOrderLine}
+            removeItem={removeItem}
+          /> */}
+          <ScrollRestoration />
+          <Scripts />
+          <Footer
+            showFooterImage={stLayoutData?.showFooterImage ?? true}
+            showFooterMenu={stLayoutData?.showFooterMenu ?? true}
+          />
+          <MobileMenu
+            showMenuButton={true}
+            showOrderButton={false}
+            showFilterButton={false}
+            showFavoriteProductButton={false}
+            showCompareProductsButton={false}
+            showCartButton={true}
+          />
+
+          {devMode && <LiveReload />}
+        </body>
+      </html>
+    </CollectionsProvider>
   );
 }
 

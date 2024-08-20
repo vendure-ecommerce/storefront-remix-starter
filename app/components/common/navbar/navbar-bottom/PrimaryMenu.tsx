@@ -5,10 +5,10 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { ChevronDown } from "lucide-react";
-import { useCollections } from "../Navbar";
+import { useCollections } from "~/providers/collections";
 
 const PrimaryMenu = () => {
-  const collections = useCollections();
+  const { collections } = useCollections();
 
   return (
     <>

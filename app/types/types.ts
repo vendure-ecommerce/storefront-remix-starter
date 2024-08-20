@@ -8,3 +8,6 @@ export interface IGlobalLayoutData {
   showFooterMenu: boolean;
   showFooterImage: boolean;
 }
+
+export type TArrayElement<ArrayType extends readonly unknown[]> = 
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
