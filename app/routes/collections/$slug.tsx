@@ -134,6 +134,12 @@ export default function CollectionSlug() {
   const onListingTabChange = (tab: string) => {
     const formData = new FormData();
     formData.set("order", tab);
+
+    for (const [key, value] of searchParams) {
+      if (key !== "order") {
+        formData.append(key, value);
+      }
+    }
   
     submit(formData, { method: "get", preventScrollReset: true });
   };

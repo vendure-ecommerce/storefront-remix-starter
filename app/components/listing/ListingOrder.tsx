@@ -23,6 +23,12 @@ const ListingOrder: React.FC<ListingOrderProps> = ({}) => {
   const onValueChange = (value: string) => {
     const formData = new FormData();
     formData.set("order", value);
+
+    for (const [key, value] of searchParams) {
+      if (key !== "order") {
+        formData.append(key, value);
+      }
+    }
   
     submit(formData, { method: "get", preventScrollReset: true });
   };

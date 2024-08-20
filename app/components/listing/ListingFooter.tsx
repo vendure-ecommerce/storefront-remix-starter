@@ -18,11 +18,17 @@ const findNextLimit = (set: Set<number>, limit: number) => {
 };
 
 const ListingFooter = () => {
-  const { collection, pagination } = useCollections();
+  const { collection, searchParams, pagination } = useCollections();
   const submit = useSubmit();
 
   const onLoadMore = () => {
     const formData = new FormData();
+    // Get all the params from the URL
+    for (const [key, value] of searchParams) {
+      if (key !== "limit") {
+        formData.append(key, value);
+      }
+    }
 
     formData.set("limit", findNextLimit(allowedPaginationLimits, pagination.limit).toString());
   
