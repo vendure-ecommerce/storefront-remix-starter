@@ -5,27 +5,28 @@ import BreadcrumbItemSeparator from "./BreadcrumbsItemSeparator";
 
 interface BreadcrumbProps {
   className?: string;
+  items: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
 }
 
-const Breadcrumbs: React.FC<BreadcrumbProps> = ({ className }) => {
-  const dummy = {
-    breadcrumbOptions: [] as any[],
-  };
-  const breadcrumbOptions = dummy.breadcrumbOptions;
+const Breadcrumbs: React.FC<BreadcrumbProps> = ({ className, items }) => {
 
   return (
     <div className={`${className ? `${className}` : ""}`}>
       <ScrollArea className='w-full whitespace-nowrap'>
         <div className='flex flex-nowrap items-center gap-2 pb-4'>
-          {breadcrumbOptions.map((option, index) => (
+          {items.map((option, index: number) => (
             <React.Fragment key={index}>
               <div className='flex items-center gap-2'>
                 <BreadcrumbItem
-                  title={option.title}
-                  imageSrc={option.imageSrc}
-                  link={option.link}
+                  title={option.name}
+                  // imageSrc={option.imageSrc}
+                  link={option.slug}
                 />
-                {index < breadcrumbOptions.length - 1 && (
+                {index < items.length - 1 && (
                   <BreadcrumbItemSeparator />
                 )}
               </div>

@@ -49,6 +49,9 @@ export const allowedPaginationLimits = new Set<number>([
   25,
   50,
   100,
+  200,
+  500,
+  1000,
 ]);
 
 const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
@@ -161,7 +164,7 @@ export default function CollectionSlug() {
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
         <FilterSidebar />
         <main className="flex max-w-full flex-col gap-16 pt-12">
-          <Breadcrumbs />
+          <Breadcrumbs items={collection.breadcrumbs.filter((b) => b.slug !== '__root_collection__')} />
           <div className="flex flex-col gap-8">
             <PageHero
               title={collection.name}
@@ -245,7 +248,13 @@ export default function CollectionSlug() {
                       manufacturer={[
                         // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
                       ]}
-                      productTags={[...productFacets.map(facetValue => facetValue.facetValue.name)]}
+                      productTags={[
+                        ...productFacets
+                          .filter(facetValue => facetValue.facetValue.facet.name !== "Brand" && facetValue.facetValue.facet.name !== "Category")
+                          .map(facetValue => {
+                            return `${facetValue.facetValue.facet.name}: ${facetValue.facetValue.name}`
+                          })
+                      ]}
                     />
                   );
                 })}
