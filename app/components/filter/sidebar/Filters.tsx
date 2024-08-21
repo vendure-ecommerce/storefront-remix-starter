@@ -22,12 +22,18 @@ import FilterBlock from "./FilterBlock";
 import FilterBlockContent from "./FilterBlockContent";
 import FilterBlockHeader from "./FilterBlockHeader";
 import { useCollections } from "~/providers/collections";
+import { useEffect, useRef, useState } from "react";
+import { useSubmit } from "@remix-run/react";
 
 interface IFiltersProps {
   collection: any;
 }
 
 const Filters: React.FC<IFiltersProps> = ({ collection }) => {
+  const submit = useSubmit();
+  const { searchParams } = useCollections();
+  const [stSearchTerm, setSearchTerm] = useState<string>('');
+  const rfInputTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* const filterChipsOptions = dummy.filterChipsOptions;
   const checkboxOptions = dummy.checkboxOptions;
@@ -35,6 +41,35 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
   const checkboxRatingOptions = dummy.checkboxRatingOptions;
   const radioRatingOptions = dummy.radioRatingOptions;
   const selectChipOptions = dummy.selectChipOptions; */
+
+  const onSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    
+    const newTerm = evt.target.value;
+    setSearchTerm(newTerm);
+    if (rfInputTimer.current) {
+      clearTimeout(rfInputTimer.current);
+    }
+    rfInputTimer.current = setTimeout(() => {
+      setSearchTerm(newTerm);
+    }, 300);
+  };
+
+  useEffect(() => {
+    const formData = new FormData();
+    // Get all the params from the URL
+    for (const [key, value] of searchParams) {
+      if (key !== "q") {
+        formData.append(key, value);
+      }
+    }
+
+    formData.set("q", stSearchTerm);
+    if (!stSearchTerm) {
+      formData.delete("q");
+    }
+  
+    submit(formData, { method: "get", preventScrollReset: true });
+  }, [stSearchTerm, submit]);
 
   return (
     <div>
@@ -86,6 +121,8 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
                 type='text'
                 placeholder={`Keresés itt: ${collection?.name || ''}`}
                 name={`Keresés itt: ${collection?.name || ''}`}
+                value={stSearchTerm}
+                onChange={onSearchTermChange}
               />
             </div>
           </div>

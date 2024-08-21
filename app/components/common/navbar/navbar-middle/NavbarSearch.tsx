@@ -32,8 +32,7 @@ const NavbarSearch: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(stTerm);
-    fetcher.load("/api/search?q=" + stTerm);
+    
   }, [stTerm]);
 
   console.log(fetcher.data)
