@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import HeroCard from '~/components/cards/HeroCard';
 import GridLayout from '~/components/common/GridLayout';
 import { getCollections } from '~/providers/collections/collections';
@@ -14,7 +15,7 @@ const HeroGrid: React.FC<HeroGridProps> = ({ collections }) => {
       {collections.map((option, index) => (
         <HeroCard
           key={index}
-          imageSrc={option.featuredAsset?.preview}
+          imageSrc={faker.image.url()}
           title={option.name}
           description={option.description}
           link={`/collections/${option.slug}`}
