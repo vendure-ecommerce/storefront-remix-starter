@@ -3648,6 +3648,13 @@ export type SearchFacetValuesQueryVariables = Exact<{
 
 export type SearchFacetValuesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, facetValues: Array<{ __typename?: 'FacetValueResult', count: number, facetValue: { __typename?: 'FacetValue', id: string, name: string, facet: { __typename?: 'Facet', id: string, name: string } } }> } };
 
+export type SearchProductQueryVariables = Exact<{
+  term?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SearchProductQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productName: string, score: number, price: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice' } }> } };
+
 export const OrderDetailFragmentDoc = gql`
     fragment OrderDetail on Order {
   __typename
@@ -4276,6 +4283,23 @@ export const SearchFacetValuesDocument = gql`
   }
 }
     `;
+export const SearchProductDocument = gql`
+    query searchProduct($term: String) {
+  search(input: {term: $term, groupByProduct: true}) {
+    totalItems
+    items {
+      productName
+      score
+      price {
+        ... on PriceRange {
+          min
+          max
+        }
+      }
+    }
+  }
+}
+    `;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -4389,6 +4413,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     searchFacetValues(variables: SearchFacetValuesQueryVariables, options?: C): Promise<SearchFacetValuesQuery> {
       return requester<SearchFacetValuesQuery, SearchFacetValuesQueryVariables>(SearchFacetValuesDocument, variables, options) as Promise<SearchFacetValuesQuery>;
+    },
+    searchProduct(variables?: SearchProductQueryVariables, options?: C): Promise<SearchProductQuery> {
+      return requester<SearchProductQuery, SearchProductQueryVariables>(SearchProductDocument, variables, options) as Promise<SearchProductQuery>;
     }
   };
 }

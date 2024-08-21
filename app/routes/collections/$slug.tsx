@@ -161,8 +161,6 @@ export default function CollectionSlug() {
     setCollection(collection);
   }, [loaderData]);
 
-  console.log(collection);
-
   return (
     <>
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">

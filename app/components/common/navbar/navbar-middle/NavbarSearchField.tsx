@@ -4,9 +4,13 @@ import { Input } from "~/components/ui-custom/MyInput";
 import { Label } from "~/components/ui/label";
 import { Search } from "lucide-react";
 
-const NavbarSearchField: React.FC = () => {
+interface INavbarSearchFieldProps {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const NavbarSearchField: React.FC<INavbarSearchFieldProps> = ({ onChange }) => {
   return (
-    <search className='sticky top-0 mx-auto w-full xl:w-[calc(100%_-_49rem)]'>
+    <search className='sticky top-0 mx-auto w-full '> {/* xl:w-[calc(100%_-_49rem)] '> */}
       <Label className='sr-only' htmlFor='main-serach'>
         Keresés
       </Label>
@@ -20,6 +24,7 @@ const NavbarSearchField: React.FC = () => {
           type='text'
           placeholder='Termékek keresése'
           name='Termékek keresése'
+          onChange={onChange}
         />
       </div>
     </search>
