@@ -1,13 +1,14 @@
 import { Button } from '~/components/ui-custom/MyButton';
 import { useCollections } from '~/providers/collections';
+import { isArrayValid } from '~/utils';
 
 const PrimaryMenu = () => {
-  const { collectionsItems } = useCollections();
+  const { collections } = useCollections();
 
   return (
     <>
-      {collectionsItems &&
-        collectionsItems.map((option, index) => (
+      {isArrayValid(collections) &&
+        collections.map((option, index) => (
           /* option.megaMenu ? (
           <Popover key={index}>
             <PopoverTrigger asChild>

@@ -1,30 +1,39 @@
-import { Combobox } from "~/components/common/Combobox";
-import CheckboxGroup from "~/components/common/checkbox/CheckboxGroup";
-import CheckboxGroupItem from "~/components/common/checkbox/CheckboxGroupItem";
-import CheckboxGroupRatingItem from "~/components/common/checkbox/CheckboxGroupRatingItem";
-import RemoveChip from "~/components/common/chips/RemoveChip";
-import SelectChip from "~/components/common/chips/SelectChip";
-import { Input } from "~/components/ui-custom/MyInput";
+import { Combobox } from '~/components/common/Combobox';
+import CheckboxGroup from '~/components/common/checkbox/CheckboxGroup';
+import CheckboxGroupItem from '~/components/common/checkbox/CheckboxGroupItem';
+import CheckboxGroupRatingItem from '~/components/common/checkbox/CheckboxGroupRatingItem';
+import RemoveChip from '~/components/common/chips/RemoveChip';
+import SelectChip from '~/components/common/chips/SelectChip';
+import { Input } from '~/components/ui-custom/MyInput';
 import {
   RadioGroup,
   RadioGroupItem,
   RadioGroupRatingItem,
-} from "~/components/ui-custom/MyRadioGroup";
-import { Slider } from "~/components/ui-custom/MySlider";
+} from '~/components/ui-custom/MyRadioGroup';
+import { Slider } from '~/components/ui-custom/MySlider';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "~/components/ui/collapsible";
-import { Label } from "~/components/ui/label";
-import { Search } from "lucide-react";
-import FilterBlock from "./FilterBlock";
-import FilterBlockContent from "./FilterBlockContent";
-import FilterBlockHeader from "./FilterBlockHeader";
-import { useCollections } from "~/providers/collections";
+} from '~/components/ui/collapsible';
+import { Label } from '~/components/ui/label';
+import { Search } from 'lucide-react';
+import FilterBlock from './FilterBlock';
+import FilterBlockContent from './FilterBlockContent';
+import FilterBlockHeader from './FilterBlockHeader';
+import { useCollections } from '~/providers/collections';
+import { useEffect, useRef, useState } from 'react';
+import { useSubmit } from '@remix-run/react';
 
-const Filters: React.FC = () => {
-  const { collectionsItems } = useCollections();
+interface IFiltersProps {
+  collection: any;
+}
+
+const Filters: React.FC<IFiltersProps> = ({ collection }) => {
+  const submit = useSubmit();
+  const { searchParams } = useCollections();
+  const [stSearchTerm, setSearchTerm] = useState<string>('');
+  const rfInputTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* const filterChipsOptions = dummy.filterChipsOptions;
   const checkboxOptions = dummy.checkboxOptions;
@@ -33,18 +42,46 @@ const Filters: React.FC = () => {
   const radioRatingOptions = dummy.radioRatingOptions;
   const selectChipOptions = dummy.selectChipOptions; */
 
+  const onSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const newTerm = evt.target.value;
+    setSearchTerm(newTerm);
+    if (rfInputTimer.current) {
+      clearTimeout(rfInputTimer.current);
+    }
+    rfInputTimer.current = setTimeout(() => {
+      setSearchTerm(newTerm);
+    }, 300);
+  };
+
+  useEffect(() => {
+    const formData = new FormData();
+    // Get all the params from the URL
+    for (const [key, value] of searchParams) {
+      if (key !== 'q') {
+        formData.append(key, value);
+      }
+    }
+
+    formData.set('q', stSearchTerm);
+    if (!stSearchTerm) {
+      formData.delete('q');
+    }
+
+    submit(formData, { method: 'get', preventScrollReset: true });
+  }, [stSearchTerm, submit]);
+
   return (
     <div>
       <FilterBlock>
         <FilterBlockHeader
           showFilterIcon={true}
           showBadge={false}
-          badgeText='2 db'
+          badgeText="2 db"
           showChevron={false}
-          title='Aktív szűrőfeltételek'
+          title="Aktív szűrőfeltételek"
         />
-        <FilterBlockContent className='px-3 pb-12 pt-2'>
-          <div className='flex flex-wrap gap-2'>
+        <FilterBlockContent className="px-3 pb-12 pt-2">
+          <div className="flex flex-wrap gap-2">
             {/* {filterChipsOptions.map((option, index) => (
               <RemoveChip
                 key={index}
@@ -61,28 +98,30 @@ const Filters: React.FC = () => {
         <FilterBlockHeader
           showFilterIcon={true}
           showBadge={false}
-          badgeText='2 db'
+          badgeText="2 db"
           showChevron={false}
-          title='Szabadszavas szűrő'
+          title="Szabadszavas szűrő"
         />
         <FilterBlockContent
-          className='px-3 pb-12 pt-2'
+          className="px-3 pb-12 pt-2"
           showResetFilterButton={false}
         >
           <div>
-            <Label className='sr-only' htmlFor='category-filter-serach'>
+            <Label className="sr-only" htmlFor="category-filter-serach">
               Keresés itt:
             </Label>
-            <div className='relative flex-grow'>
-              <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-                <Search className='h-6 w-6' />
+            <div className="relative flex-grow">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <Search className="h-6 w-6" />
               </div>
               <Input
-                className='h-[3.25rem] rounded-full pl-[3rem]'
-                id='category-filter-serach'
-                type='text'
-                placeholder='Keresés itt: Fűnyíró'
-                name='Keresés itt: Fűnyíró'
+                className="h-[3.25rem] rounded-full pl-[3rem]"
+                id="category-filter-serach"
+                type="text"
+                placeholder={`Keresés itt: ${collection?.name || ''}`}
+                name={`Keresés itt: ${collection?.name || ''}`}
+                value={stSearchTerm}
+                onChange={onSearchTermChange}
               />
             </div>
           </div>
@@ -90,19 +129,19 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={true}
               showBadge={true}
-              badgeText='2 db'
+              badgeText="2 db"
               showChevron={true}
-              title='Szöveges checkbox'
+              title="Szöveges checkbox"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='-mx-3'>
+              <div className="-mx-3">
                 {/* <CheckboxGroup>
                   {checkboxOptions.map((option, index) => (
                     <CheckboxGroupItem
@@ -122,19 +161,19 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='2 db'
+              badgeText="2 db"
               showChevron={true}
-              title='Szöveges radio'
+              title="Szöveges radio"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='-mx-3'>
+              <div className="-mx-3">
                 <RadioGroup>
                   {/* {radioOptions.map((option, index) => (
                     <RadioGroupItem
@@ -155,19 +194,19 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='2 db'
+              badgeText="2 db"
               showChevron={true}
-              title='Checkbox értékelés'
+              title="Checkbox értékelés"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='-mx-3'>
+              <div className="-mx-3">
                 {/* <CheckboxGroup>
                   {checkboxRatingOptions.map((option, index) => (
                     <CheckboxGroupRatingItem
@@ -186,19 +225,19 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='2 db'
+              badgeText="2 db"
               showChevron={true}
-              title='Radio értékelés'
+              title="Radio értékelés"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='-mx-3'>
+              <div className="-mx-3">
                 <RadioGroup>
                   {/* {radioRatingOptions.map((option, index) => (
                     <RadioGroupRatingItem
@@ -218,19 +257,19 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='2 db'
+              badgeText="2 db"
               showChevron={true}
-              title='Chips checkbox'
+              title="Chips checkbox"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='mt-4 flex flex-wrap gap-2'>
+              <div className="mt-4 flex flex-wrap gap-2">
                 {/* {selectChipOptions.map((option, index) => (
                   <SelectChip key={index} label={option.label}></SelectChip>
                 ))} */}
@@ -241,30 +280,30 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='1 db'
+              badgeText="1 db"
               showChevron={true}
-              title='Slider egypontos'
+              title="Slider egypontos"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='mt-4 flex flex-col gap-6'>
+              <div className="mt-4 flex flex-col gap-6">
                 <Slider defaultValue={[75]} max={100} step={10} />
-                <div className='w-full'>
-                  <Label htmlFor='value'>Érték</Label>
+                <div className="w-full">
+                  <Label htmlFor="value">Érték</Label>
                   <Input
-                    className='w-full flex-auto'
-                    id='value'
-                    type='number'
+                    className="w-full flex-auto"
+                    id="value"
+                    type="number"
                   />
                 </div>
-                <div className='w-full'>
-                  <p className='text-sm font-medium'>Érték</p>
+                <div className="w-full">
+                  <p className="text-sm font-medium">Érték</p>
                   <Combobox />
                 </div>
               </div>
@@ -274,39 +313,39 @@ const Filters: React.FC = () => {
       </FilterBlock>
 
       <FilterBlock>
-        <Collapsible className='group/collapse'>
-          <CollapsibleTrigger className='w-full'>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
             <FilterBlockHeader
               showFilterIcon={false}
               showBadge={false}
-              badgeText='1 db'
+              badgeText="1 db"
               showChevron={true}
-              title='Slider többpontos'
+              title="Slider többpontos"
             />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <FilterBlockContent>
-              <div className='mt-4 flex flex-col gap-6'>
+              <div className="mt-4 flex flex-col gap-6">
                 <Slider defaultValue={[25, 75]} max={100} step={10} />
-                <div className='flex items-center justify-between gap-2'>
-                  <div className='w-full'>
-                    <Label htmlFor='min'>Min.</Label>
-                    <Input className='flex-auto' id='min' type='number' />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="w-full">
+                    <Label htmlFor="min">Min.</Label>
+                    <Input className="flex-auto" id="min" type="number" />
                   </div>
-                  <div className='mt-5'>-</div>
-                  <div className='w-full'>
-                    <Label htmlFor='max'>Max.</Label>
-                    <Input className='flex-auto' id='max' type='number' />
+                  <div className="mt-5">-</div>
+                  <div className="w-full">
+                    <Label htmlFor="max">Max.</Label>
+                    <Input className="flex-auto" id="max" type="number" />
                   </div>
                 </div>
-                <div className='flex items-center justify-between gap-2'>
-                  <div className='w-full'>
-                    <p className='text-sm font-medium'>Érték</p>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="w-full">
+                    <p className="text-sm font-medium">Érték</p>
                     <Combobox />
                   </div>
-                  <div className='mt-5'>-</div>
-                  <div className='w-full'>
-                    <p className='text-sm font-medium'>Érték</p>
+                  <div className="mt-5">-</div>
+                  <div className="w-full">
+                    <p className="text-sm font-medium">Érték</p>
                     <Combobox />
                   </div>
                 </div>

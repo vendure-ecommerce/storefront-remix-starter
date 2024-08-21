@@ -20,7 +20,7 @@ import ListGroup from '../list/ListGroup';
 import ListGroupItem from '../list/ListGroupItem';
 
 const MenuButton = () => {
-  const { collectionsItems } = useCollections();
+  const { collections } = useCollections();
   const width = useViewportWidth();
   const isMobile = width < 1024;
 
