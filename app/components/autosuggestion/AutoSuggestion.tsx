@@ -17,12 +17,13 @@ import { Badge } from "../ui-custom/MyBadge";
 import { Button } from "../ui-custom/MyButton";
 import { Card } from "../ui-custom/MyCard";
 import { ScrollArea } from "../ui-custom/MyScrollArea";
+import { faker } from "@faker-js/faker";
 
-const AutoSuggestion = () => {
-  const dummy = {
-    productOptions: [] as any[],
-  };
-  const productOptions = dummy.productOptions;
+interface IAutoSuggestionProps {
+  items: any[];
+}
+
+const AutoSuggestion = ({ items }: IAutoSuggestionProps) => {
 
   return (
     <Card
@@ -140,30 +141,34 @@ const AutoSuggestion = () => {
           </div>
         </ScrollArea>
         <ScrollArea className='hidden lg:block'>
-          <Section className='flex flex-grow flex-col gap-4'>
+          <Section className='flex flex-grow flex-col gap-4 min-w-[1000px]'>
             <SectionHeader className='!flex-row items-center justify-between'>
               <SectionTitle
                 level='h3'
                 title='Termék kategória'
                 className='text-lg'
               />
-              <Badge className='rounded-full'>2 db</Badge>
+              <Badge className='rounded-full'>{items.length || 0} db</Badge>
             </SectionHeader>
             {/* Results */}
             <GridLayout>
-              {productOptions.slice(0, 4).map((option, index) => (
-                <SuggestedProductCard
-                  key={index}
-                  id={option.id}
-                  title={option.title}
-                  link={option.link}
-                  priceNormal={option.priceNormal}
-                  priceNet={option.priceNet}
-                  priceCrossed={option.priceCrossed}
-                  imageSrc={option.imageSrc}
-                  hoverImageSrc={option.hoverImageSrc}
-                />
-              ))}
+              {items.map((option, index) => {
+                const image = faker.image.url();
+                return (
+                  <SuggestedProductCard
+                    key={index}
+                    id={option.id}
+                    title={option.productName}
+                    link={option.productName}
+                    priceNormal={option.price.min}
+                    priceNet={option.price.min}
+                    priceCrossed={option.price.max}
+                    imageSrc={image}
+                    hoverImageSrc={image}
+                  />
+                );
+              }
+            )}
             </GridLayout>
             {/* Results */}
             {/* No result */}

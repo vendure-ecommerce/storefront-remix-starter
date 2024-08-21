@@ -14,12 +14,8 @@ const filteredSearchLoader = async ({
   let resultPromises: [ReturnType<typeof search>];
   const searchResultPromise = search(
     {
-      input: {
-        groupByProduct: true,
-        term,
-        take: 25,
-        skip: 0,
-      },
+      term: term as string,
+      groupByProduct: true,
     },
     { request },
   );

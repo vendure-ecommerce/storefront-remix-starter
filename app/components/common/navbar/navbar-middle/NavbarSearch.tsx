@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 
 
 const NavbarSearch: React.FC = () => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<{ result: { items: any[] } }>();
 
   const [stTerm, setTerm] = useState('');
 
@@ -36,7 +36,7 @@ const NavbarSearch: React.FC = () => {
     }
   }, [stTerm]);
 
-  console.log(fetcher.data)
+  console.log(fetcher.data);
 
   return (
     <Dialog>
@@ -52,7 +52,7 @@ const NavbarSearch: React.FC = () => {
       <DialogContent className='h-10/12 overflow-hidden pt-20 xl:pt-10'>
         <div className='mx-auto grid max-w-screen-2xl grid-rows-[auto,_1fr] gap-8'>
           <NavbarSearchField onChange={onInputChange} />
-          <AutoSuggestion />
+          <AutoSuggestion items={fetcher.data?.result?.items || []} />
         </div>
       </DialogContent>
     </Dialog>
