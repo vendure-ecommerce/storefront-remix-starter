@@ -23,8 +23,11 @@ import FilterBlockContent from "./FilterBlockContent";
 import FilterBlockHeader from "./FilterBlockHeader";
 import { useCollections } from "~/providers/collections";
 
-const Filters: React.FC = () => {
-  const { collectionsItems } = useCollections();
+interface IFiltersProps {
+  collection: any;
+}
+
+const Filters: React.FC<IFiltersProps> = ({ collection }) => {
 
   /* const filterChipsOptions = dummy.filterChipsOptions;
   const checkboxOptions = dummy.checkboxOptions;
@@ -81,8 +84,8 @@ const Filters: React.FC = () => {
                 className='h-[3.25rem] rounded-full pl-[3rem]'
                 id='category-filter-serach'
                 type='text'
-                placeholder='Keresés itt: Fűnyíró'
-                name='Keresés itt: Fűnyíró'
+                placeholder={`Keresés itt: ${collection?.name || ''}`}
+                name={`Keresés itt: ${collection?.name || ''}`}
               />
             </div>
           </div>

@@ -166,7 +166,7 @@ export default function CollectionSlug() {
   return (
     <>
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
-        <FilterSidebar />
+        <FilterSidebar collection={collection} />
         <main className="flex max-w-full flex-col gap-16 pt-12">
           <Breadcrumbs items={collection.breadcrumbs.filter((b) => b.slug !== '__root_collection__')} />
           <div className="flex flex-col gap-8">
