@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover';
 import { useCollections } from '~/providers/collections';
+import { isArrayValid } from '~/utils';
 import { useViewportWidth } from '~/utils/use-viewport-width';
 import ListGroup from '../list/ListGroup';
 import ListGroupItem from '../list/ListGroupItem';
@@ -49,8 +50,8 @@ const MenuButton = () => {
           </SheetHeader>
           <div className="flex flex-col gap-8 py-8">
             <ListGroup>
-              {collectionsItems &&
-                collectionsItems.map((option, index) => (
+              {isArrayValid(collections) &&
+                collections.map((option, index) => (
                   <Popover key={index}>
                     <PopoverTrigger className="group/item">
                       <ListGroupItem
