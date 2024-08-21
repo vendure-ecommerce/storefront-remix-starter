@@ -1,6 +1,4 @@
-
-
-import { Badge } from "~/components/ui-custom/MyBadge";
+import { Badge } from '~/components/ui-custom/MyBadge';
 
 interface ProductTagProps {
   className?: string;
@@ -10,8 +8,8 @@ interface ProductTagProps {
 const ProductTag: React.FC<ProductTagProps> = ({ className, children }) => {
   return (
     <Badge
-      className={`rounded-full mr-2 mb-2 ${className ? ` ${className}` : ""}`}
-      variant={"outline"}
+      className={`rounded-full mr-2 mb-2 ${className ? ` ${className}` : ''}`}
+      variant={'outline'}
     >
       {children}
     </Badge>

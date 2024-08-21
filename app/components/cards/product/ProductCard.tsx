@@ -1,8 +1,8 @@
+import { Link } from '@remix-run/react';
 import { useState } from 'react';
 import ManufacturerAvatar from '~/components/avatar/ManufacturerAvatar';
 import AddToCartHandler from '~/components/common/product/AddToCartHandler';
 import FavoriteButton from '~/components/common/product/FavoriteProductButton';
-import ProductAvailability from '~/components/common/product/ProductAvailability';
 import ProductBadgeAvatarGroup from '~/components/common/product/ProductBadgeAvatarGroup';
 import ProductBadges from '~/components/common/product/ProductBadges';
 import ProductImage from '~/components/common/product/ProductImage';
@@ -70,9 +70,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <CardHeader className="relative p-0">
-        <a href={link}>
+        <Link to={link} prefetch="intent">
           <ProductImage src={isHovering ? hoverImageSrc : imageSrc} />
-        </a>
+        </Link>
         <FavoriteButton isFavorite={isFavorite} />
         <ProductBadgeAvatarGroup
           isNewArrival={false}
@@ -93,11 +93,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
         <div className="flex flex-col gap-1">
           {/* <ProductAvailability /> */}
-          <a href={link}>
+          <Link to={link} prefetch="intent">
             <CardTitle className="text-base">
               <ProductTitle title={title} />
             </CardTitle>
-          </a>
+          </Link>
           {showProductRating && (
             <ProductRating rating={rating} totalReviews={reviews} />
           )}
@@ -123,6 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {showCardFooter && (
         <CardFooter className="flex flex-col gap-2 pt-0">
           <AddToCartHandler
+            productId={id}
             className="w-full"
             addToCartButtonSize="h-10 text-sm w-full"
             stepperButtonSize="h-9 w-9"

@@ -1,19 +1,14 @@
-import { Button } from "~/components/ui-custom/MyButton";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { ChevronDown } from "lucide-react";
-import { useCollections } from "~/providers/collections";
+import { Button } from '~/components/ui-custom/MyButton';
+import { useCollections } from '~/providers/collections';
 
 const PrimaryMenu = () => {
   const { collectionsItems } = useCollections();
 
   return (
     <>
-      {collectionsItems.map((option, index) =>
-        /* option.megaMenu ? (
+      {collectionsItems &&
+        collectionsItems.map((option, index) => (
+          /* option.megaMenu ? (
           <Popover key={index}>
             <PopoverTrigger asChild>
               <Button className='flex items-center gap-2' variant='ghost'>
@@ -23,17 +18,15 @@ const PrimaryMenu = () => {
             </PopoverTrigger>
             <PopoverContent>Megamenü</PopoverContent>
           </Popover>
-        ) :  */(
-          <Button
+        ) :  */ <Button
             key={index}
-            className='flex items-center gap-2'
-            variant='ghost'
+            className="flex items-center gap-2"
+            variant="ghost"
             asChild
           >
             <a href={`/collections/${option.slug}`}>{option.name}</a>
           </Button>
-        )
-      )}
+        ))}
     </>
   );
 };

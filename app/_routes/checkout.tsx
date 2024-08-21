@@ -36,7 +36,7 @@ export default function Checkout() {
           className="hidden sm:block pb-8 mb-8 border-b"
         >
           <ol role="list" className="flex space-x-4 justify-center">
-            {steps.map((step, stepIdx) => (
+            {steps?.map((step, stepIdx) => (
               <li key={step} className="flex items-center">
                 {step === state ? (
                   <span aria-current="page" className="text-primary-600">

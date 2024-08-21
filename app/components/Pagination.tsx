@@ -1,10 +1,10 @@
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { Select } from '~/components/Select';
-import { Button } from '~/components/Button';
-import { ComponentProps } from 'react';
 import { useNavigation } from '@remix-run/react';
 import clsx from 'clsx';
+import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '~/components/Button';
+import { Select } from '~/components/Select';
 
 export type PaginationProps = {
   appliedPaginationLimit: number;
@@ -41,7 +41,7 @@ export function Pagination({
           noPlaceholder
           defaultValue={appliedPaginationLimit}
         >
-          {Array.from(allowedPaginationLimits).map((x) => (
+          {Array.from(allowedPaginationLimits)?.map((x) => (
             <option key={x} value={x}>
               {x} {t('common.perPage')}
             </option>

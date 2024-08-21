@@ -1,10 +1,10 @@
 import { Outlet, useOutletContext } from '@remix-run/react';
 import HistoryProduct from '~/components/common/section/HistoryProduct';
 import Usp from '~/components/common/section/Usp';
-import { IGlobalOutletContext } from '~/types/types';
+import { TGlobalOutletContext } from '~/types/types';
 
 export default function CartLayout() {
-  const { setLayoutData } = useOutletContext<IGlobalOutletContext>();
+  const { setLayoutData } = useOutletContext<TGlobalOutletContext>();
   setLayoutData({
     showFooterImage: false,
     showFooterMenu: false,
