@@ -18,7 +18,7 @@ const findNextLimit = (set: Set<number>, limit: number) => {
 };
 
 const ListingFooter = () => {
-  const { collection, searchParams, pagination } = useCollections();
+  const { collectionItems, searchParams, pagination } = useCollections();
   const submit = useSubmit();
 
   const onLoadMore = () => {
@@ -42,13 +42,13 @@ const ListingFooter = () => {
         <Progress
           className='h-1 w-80'
           value={
-            pagination.limit > collection?.totalItems
+            pagination.limit > collectionItems?.totalItems
               ? 100
-              : pagination.limit / collection?.totalItems * 100
+              : pagination.limit / collectionItems?.totalItems * 100
           }
         />
       </div>
-      {collection?.totalItems > pagination.limit && (
+      {collectionItems?.totalItems > pagination.limit && (
         <Button onClick={onLoadMore}>
           Továbbiak megjelenítése
           <ChevronDown className='ml-2 h-4 w-4' />

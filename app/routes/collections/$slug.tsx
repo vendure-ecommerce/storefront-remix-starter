@@ -158,6 +158,7 @@ export default function CollectionSlug() {
       page: appliedPaginationPage,
     });
     setCollectionItems(result);
+    setCollection(collection);
   }, [loaderData]);
 
   console.log(collection);

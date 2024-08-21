@@ -20,7 +20,7 @@ import ListGroupItem from '../list/ListGroupItem';
 import { useCollections } from '~/providers/collections';
 
 const MenuButton = () => {
-  const { collectionsItems } = useCollections();
+  const { collections } = useCollections();
   const width = useViewportWidth();
   const isMobile = width < 1024;
 
@@ -49,7 +49,7 @@ const MenuButton = () => {
           </SheetHeader>
           <div className="flex flex-col gap-8 py-8">
             <ListGroup>
-              {collectionsItems.map((option, index) => (
+              {collections.map((option, index) => (
                 <Popover key={index}>
                   <PopoverTrigger className="group/item">
                     <ListGroupItem
