@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { Button } from '~/components/ui-custom/MyButton';
 import { useCollections } from '~/providers/collections';
 import { isArrayValid } from '~/utils';
@@ -25,7 +26,9 @@ const PrimaryMenu = () => {
             variant="ghost"
             asChild
           >
-            <a href={`/collections/${option.slug}`}>{option.name}</a>
+            <Link prefetch="intent" to={`/collections/${option.slug}`}>
+              {option.name}
+            </Link>
           </Button>
         ))}
     </>
