@@ -109,6 +109,7 @@ export default function CollectionSlug() {
   );
   const {
     setCollection,
+    setCollectionItems,
     setSearchParams,
     setPagination,
   } = useCollections();
@@ -156,8 +157,10 @@ export default function CollectionSlug() {
       limit: appliedPaginationLimit,
       page: appliedPaginationPage,
     });
-    setCollection(result);
+    setCollectionItems(result);
   }, [loaderData]);
+
+  console.log(collection);
 
   return (
     <>

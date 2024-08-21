@@ -8,11 +8,11 @@ import { ChevronDown } from "lucide-react";
 import { useCollections } from "~/providers/collections";
 
 const PrimaryMenu = () => {
-  const { collections } = useCollections();
+  const { collectionsItems } = useCollections();
 
   return (
     <>
-      {collections.map((option, index) =>
+      {collectionsItems.map((option, index) =>
         /* option.megaMenu ? (
           <Popover key={index}>
             <PopoverTrigger asChild>

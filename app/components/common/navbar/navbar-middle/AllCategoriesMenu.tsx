@@ -12,7 +12,7 @@ import ListGroupItem from '../../list/ListGroupItem';
 import { useCollections } from '../Navbar';
 
 export const AllCategoriesMenu = () => {
-  const { collections } = useCollections();
+  const { collectionsItems } = useCollections();
 
   return (
     <Sheet>
@@ -30,7 +30,7 @@ export const AllCategoriesMenu = () => {
           </SheetHeader>
           <div className="flex flex-col gap-8 py-8">
             <ListGroup>
-              {collections.map((option, index) => (
+              {collectionsItems.map((option, index) => (
                 <ListGroupItem
                   key={index}
                   className="px-3"

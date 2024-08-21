@@ -10,6 +10,8 @@ interface ICollectionsProps {
 const CollectionsContext = createContext<{
   collection?: any;
   setCollection: React.Dispatch<React.SetStateAction<any>>;
+  collectionItems?: any;
+  setCollectionItems: React.Dispatch<React.SetStateAction<any>>;
   collections: Awaited<ReturnType<typeof getCollections>>;
   searchParams: URLSearchParams;
   setSearchParams: React.Dispatch<React.SetStateAction<URLSearchParams>>;
@@ -21,6 +23,8 @@ const CollectionsContext = createContext<{
 }>({
   collection: undefined,
   setCollection: () => {},
+  collectionItems: undefined,
+  setCollectionItems: () => {},
 	collections: [],
   searchParams: new URLSearchParams(),
   setSearchParams: () => {},
@@ -44,6 +48,7 @@ export const CollectionsProvider: React.FC<ICollectionsProps> = ({
   children,
 }) => {
   const [stCollection, setCollection] = useState<any>();
+  const [stCollectionItems, setCollectionItems] = useState<any>();
   const [stSearchParams, setSearchParams] = useState(new URLSearchParams());
   const [stPagination, setPagination] = useState({ limit: 25, page: 1 });
 
@@ -52,6 +57,8 @@ export const CollectionsProvider: React.FC<ICollectionsProps> = ({
 			value={{
         collection: stCollection,
         setCollection,
+        collectionItems: stCollectionItems,
+        setCollectionItems,
         collections,
         searchParams: stSearchParams,
         setSearchParams,

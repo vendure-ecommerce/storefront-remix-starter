@@ -21,8 +21,11 @@ import { Search } from "lucide-react";
 import FilterBlock from "./FilterBlock";
 import FilterBlockContent from "./FilterBlockContent";
 import FilterBlockHeader from "./FilterBlockHeader";
+import { useCollections } from "~/providers/collections";
 
 const Filters: React.FC = () => {
+  const { collectionsItems } = useCollections();
+
   /* const filterChipsOptions = dummy.filterChipsOptions;
   const checkboxOptions = dummy.checkboxOptions;
   const radioOptions = dummy.radioOptions;
