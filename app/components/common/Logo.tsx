@@ -1,5 +1,6 @@
 'use client';
 
+import { Link } from '@remix-run/react';
 import React from 'react';
 
 interface LogoProps {
@@ -8,14 +9,14 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className }) => {
   return (
-    <a className="max-w-[10rem]" href="/">
+    <Link className="max-w-[10rem]" to="/" prefetch="intent">
       <img
         src="https://sanitech.hu/image/catalog/branding/logo.png"
         width={256}
         height={42}
         alt="Logó"
       />
-    </a>
+    </Link>
   );
 };
 
