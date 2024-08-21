@@ -1,10 +1,9 @@
-
-
-import React, { useState } from "react";
-import { Button } from "~/components/ui-custom/MyButton";
-import ProductAmountStepper from "./ProductAmountStepper";
+import React, { useState } from 'react';
+import { Button } from '~/components/ui-custom/MyButton';
+import ProductAmountStepper from './ProductAmountStepper';
 
 interface AddToCartHandlerProps {
+  productId?: string;
   className?: string;
   addToCartButtonText?: string;
   addToCartButtonSize?: string;
@@ -14,31 +13,36 @@ interface AddToCartHandlerProps {
 }
 
 const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
-  className = "w-full",
-  addToCartButtonText = "Kosárba",
+  className = 'w-full',
+  addToCartButtonText = 'Kosárba',
   addToCartButtonSize,
   stepperButtonSize,
   iconSize,
   inputSize,
+  productId,
 }) => {
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  // const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [amount, setAmount] = useState(0);
+  if (typeof window !== 'undefined') {
+    localStorage.getItem('cart');
+  }
 
   const handleButtonClick = () => {
-    setIsButtonClicked(true);
+    // setIsButtonClicked(true);
     setAmount(1);
   };
 
   const handleAmountChange = (newAmount: number) => {
     setAmount(newAmount);
     if (newAmount === 0) {
-      setIsButtonClicked(false);
+      // setIsButtonClicked(false);
+    } else if (productId) {
     }
   };
 
   return (
     <div className={`${className}`}>
-      {!isButtonClicked && (
+      {amount === 0 && (
         <Button
           className={`rounded-full ${addToCartButtonSize}`}
           onClick={handleButtonClick}
@@ -46,7 +50,7 @@ const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
           {addToCartButtonText}
         </Button>
       )}
-      {isButtonClicked && (
+      {amount !== 0 && (
         <ProductAmountStepper
           stepperButtonSize={stepperButtonSize}
           iconSize={iconSize}

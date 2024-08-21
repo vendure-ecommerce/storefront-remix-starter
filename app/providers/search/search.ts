@@ -8,16 +8,13 @@ export function search(variables: { term: string }, options: QueryOptions) {
 
 export const simpleSearchQuery = gql`
   query searchProduct($term: String) {
-    search (input: {
-      term: $term
-      groupByProduct: true
-    }) {
+    search(input: { term: $term, groupByProduct: true }) {
       totalItems
       items {
         productName
         score
         price {
-          ...on PriceRange {
+          ... on PriceRange {
             min
             max
           }

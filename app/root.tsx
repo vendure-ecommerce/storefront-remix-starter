@@ -29,10 +29,10 @@ import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
 import MobileMenu from './components/common/mobile/MobileMenu';
 import Navbar from './components/common/navbar/Navbar';
+import { CollectionsProvider } from './providers/collections';
 import stylesheet from './tailwind.css';
 import { IGlobalLayoutData } from './types/types';
 import { cn } from './utils/cn';
-import { CollectionsProvider } from './providers/collections';
 
 // export const meta: MetaFunction = () => {
 //   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -119,6 +119,7 @@ export default function App() {
     removeItem,
     refresh,
   } = useActiveOrder();
+  console.log(activeOrder);
 
   useChangeLanguage(locale);
 

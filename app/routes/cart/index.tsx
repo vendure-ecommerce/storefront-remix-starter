@@ -25,7 +25,7 @@ export default function Cart() {
   return (
     <>
       <div className="flex flex-col gap-y-16">
-        <Breadcrumbs />
+        <Breadcrumbs items={[]} />
         <PageTitle title="5 termék a kosárban" />
         <Section className="grid grid-cols-1 gap-x-20 gap-y-20 lg:grid-cols-[50%_minmax(0,_1fr)]">
           <div className="flex flex-col gap-6">
@@ -43,7 +43,7 @@ export default function Cart() {
                 variant="sm"
               >
                 {product.connectedProducts &&
-                  (product.connectedProducts as Array<any>).map(
+                  (product.connectedProducts as Array<any>)?.map(
                     (connectedProduct, index) => (
                       <HorizontalProductCard
                         key={index}
@@ -122,7 +122,7 @@ export default function Cart() {
         </SectionHeader>
         <SectionContent layoutType="carousel">
           {productOptions &&
-            (productOptions as Array<any>).map((option, index) => (
+            (productOptions as Array<any>)?.map((option, index) => (
               <ProductCard
                 key={index}
                 id={option.id}
@@ -153,7 +153,7 @@ export default function Cart() {
         </SectionHeader>
         <SectionContent layoutType="carousel">
           {productOptions &&
-            (productOptions as Array<any>).map((option, index) => (
+            (productOptions as Array<any>)?.map((option, index) => (
               <ProductCard
                 key={index}
                 id={option.id}

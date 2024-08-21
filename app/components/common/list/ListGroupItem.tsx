@@ -1,7 +1,7 @@
-
-
-import { Badge } from "~/components/ui-custom/MyBadge";
-import { ChevronRight, X } from "lucide-react";
+import { fakerHU as faker } from '@faker-js/faker';
+import { Link } from '@remix-run/react';
+import { ChevronRight, X } from 'lucide-react';
+import { Badge } from '~/components/ui-custom/MyBadge';
 
 interface ListGroupItemProps {
   className?: string;
@@ -26,7 +26,7 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
   badge,
   imageSrc,
   showImage = true,
-  imageClassName = "",
+  imageClassName = '',
   showLeadingIcon = false,
   showTrailingIcon = false,
   showBadge = false,
@@ -34,42 +34,57 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
 }) => {
   const content = (
     <>
-      {showLeadingIcon && <X className='h-5 w-5' />}
-      {showImage && imageSrc && (
+      {showLeadingIcon && <X className="h-5 w-5" />}
+      {showImage && imageSrc ? (
         <img
           className={`${imageClassName}`}
           src={imageSrc}
           width={60}
           height={60}
-          alt='Kategóriakép'
+          alt="Kategóriakép"
         />
-      )}
+      ) : showImage ? (
+        <img
+          className={`${imageClassName}`}
+          src={faker.image.url()}
+          width={60}
+          height={60}
+          alt="Kategóriakép"
+        />
+      ) : null}
       <span
-        className={`text-left line-clamp-2 text-sm font-medium${!showTitle ? "sr-only" : ""}`}
+        className={`text-left line-clamp-2 text-sm font-medium${
+          !showTitle ? 'sr-only' : ''
+        }`}
       >
         {title}
       </span>
       {showTrailingIcon && (
-        <div className='ml-auto'>
-          <ChevronRight className='h-5 w-5' />
+        <div className="ml-auto">
+          <ChevronRight className="h-5 w-5" />
         </div>
       )}
-      {showBadge && <Badge className='ml-auto'>{badge}</Badge>}
+      {showBadge && <Badge className="ml-auto">{badge}</Badge>}
     </>
   );
 
   return (
     <div className={`mx-3`}>
       {isLinkActive ? (
-        <a
-          href={link}
-          className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${className ? ` ${className}` : ""}`}
+        <Link
+          prefetch="intent"
+          to={link}
+          className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${
+            className ? ` ${className}` : ''
+          }`}
         >
           {content}
-        </a>
+        </Link>
       ) : (
         <div
-          className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${className ? ` ${className}` : ""}`}
+          className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${
+            className ? ` ${className}` : ''
+          }`}
         >
           {content}
         </div>

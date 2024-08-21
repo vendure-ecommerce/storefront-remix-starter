@@ -1,7 +1,5 @@
-
-
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import Link from "next/link";
+import { Link } from '@remix-run/react';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
 interface CustomerAvatarProps {
   className?: string;
@@ -22,16 +20,19 @@ const CustomerAvatar: React.FC<CustomerAvatarProps> = ({
 
   return (
     <Link
-      className={`flex items-center gap-2${className ? ` ${className}` : ""}`}
-      href={link}
+      className={`flex items-center gap-2${className ? ` ${className}` : ''}`}
+      to={link}
+      prefetch="intent"
     >
-      <Avatar className='ring-[1px] ring-border'>
+      <Avatar className="ring-[1px] ring-border">
         <AvatarImage src={imageSrc} alt={title} width={80} height={80} />
         <AvatarFallback>{title.charAt(0)}</AvatarFallback>
       </Avatar>
       {showTitle && (
         <div
-          className={`line-clamp-2 font-semibold tracking-tight text-sm${className ? ` ${className}` : ""}`}
+          className={`line-clamp-2 font-semibold tracking-tight text-sm${
+            className ? ` ${className}` : ''
+          }`}
         >
           {title}
         </div>

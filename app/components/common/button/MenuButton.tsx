@@ -1,3 +1,4 @@
+import { Menu } from 'lucide-react';
 import CategoryMenuList from '~/components/pages/category/CategoryMenuList';
 import { Button } from '~/components/ui-custom/MyButton';
 import { ScrollArea } from '~/components/ui-custom/MyScrollArea';
@@ -13,11 +14,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
+import { useCollections } from '~/providers/collections';
+import { isArrayValid } from '~/utils';
 import { useViewportWidth } from '~/utils/use-viewport-width';
-import { Menu } from 'lucide-react';
 import ListGroup from '../list/ListGroup';
 import ListGroupItem from '../list/ListGroupItem';
-import { useCollections } from '~/providers/collections';
 
 const MenuButton = () => {
   const { collections } = useCollections();
@@ -49,30 +50,31 @@ const MenuButton = () => {
           </SheetHeader>
           <div className="flex flex-col gap-8 py-8">
             <ListGroup>
-              {collections.map((option, index) => (
-                <Popover key={index}>
-                  <PopoverTrigger className="group/item">
-                    <ListGroupItem
-                      className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
-                      title={option.name}
-                      link={option.slug}
-                      imageSrc={option.featuredAsset?.preview}
-                      imageClassName="h-10 w-10 rounded-full border"
-                      showTitle={true}
-                      showImage={true}
-                      showTrailingIcon={true}
-                      isLinkActive={false}
-                    />
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="h-[calc(100vh)] w-[calc(100vw_-_385px)] border-l border-t-0 border-r-0 shadow-none rounded-none p-6"
-                    side={'right'}
-                    sideOffset={0}
-                  >
-                    <CategoryMenuList />
-                  </PopoverContent>
-                </Popover>
-              ))}
+              {isArrayValid(collections) &&
+                collections.map((option, index) => (
+                  <Popover key={index}>
+                    <PopoverTrigger className="group/item">
+                      <ListGroupItem
+                        className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
+                        title={option.name}
+                        link={option.slug}
+                        imageSrc={option.featuredAsset?.preview}
+                        imageClassName="h-10 w-10 rounded-full border"
+                        showTitle={true}
+                        showImage={true}
+                        showTrailingIcon={true}
+                        isLinkActive={false}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="h-[calc(100vh)] w-[calc(100vw_-_385px)] border-l border-t-0 border-r-0 shadow-none rounded-none p-6"
+                      side={'right'}
+                      sideOffset={0}
+                    >
+                      <CategoryMenuList />
+                    </PopoverContent>
+                  </Popover>
+                ))}
             </ListGroup>
           </div>
         </ScrollArea>

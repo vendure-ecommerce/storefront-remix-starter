@@ -1,5 +1,5 @@
+import { fakerHU as faker } from '@faker-js/faker';
 import { useState } from 'react';
-import { Button } from '~/components/ui-custom/MyButton';
 import { Card } from '~/components/ui-custom/MyCard';
 import { htmlDecode } from '~/utils/html-decode';
 
@@ -15,7 +15,7 @@ interface PageHeroProps {
 const PageHero: React.FC<PageHeroProps> = ({
   title = 'Címsor',
   description = '',
-  imageSrc = '/category.png',
+  imageSrc,
   showTitle = true,
   showDescription = true,
   showImage = true,
@@ -34,7 +34,7 @@ const PageHero: React.FC<PageHeroProps> = ({
 
   return (
     <Card className="flex flex-col gap-4 border-none bg-transparent shadow-none md:flex-row md:items-center lg:flex-col lg:gap-0 xl:flex-row">
-      {showImage && (
+      {showImage && imageSrc ? (
         <div className="flex-none self-start overflow-hidden rounded-lg bg-white">
           <img
             className="aspect-square object-contain object-center"
@@ -45,7 +45,16 @@ const PageHero: React.FC<PageHeroProps> = ({
             loading="eager"
           />
         </div>
-      )}
+      ) : showImage ? (
+        <img
+          className="aspect-square object-contain object-center"
+          src={faker.image.url()}
+          width={280}
+          height={280}
+          alt="alt"
+          loading="eager"
+        />
+      ) : null}
       {showTitle && showDescription && (
         <div
           className={`flex flex-col gap-4 px-0 ${

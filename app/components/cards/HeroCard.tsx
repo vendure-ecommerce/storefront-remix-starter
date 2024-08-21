@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import {
   Card,
   CardContent,
@@ -37,9 +38,10 @@ const HeroCard: React.FC<HeroCardProps> = ({
   const decoded = htmlDecode(description);
 
   return (
-    <a
+    <Link
+      prefetch="intent"
       className={`h-full${className ? ` ${className}` : ''}`}
-      href={link}
+      to={link}
       style={style}
     >
       <Card className="group/hero-card relative flex h-full min-h-[11rem] items-center gap-4 overflow-hidden rounded-lg border shadow-none hover:border-primary/30 transition">
@@ -54,7 +56,8 @@ const HeroCard: React.FC<HeroCardProps> = ({
             />
           </div>
         )}
-        <div className="absolute inset-x-4 bottom-4 rounded-md bg-white/80 backdrop-blur-lg">
+        {/* bottom-4 ?? */}
+        <div className="absolute inset-x-4 bottom-2 rounded-md bg-white/80 backdrop-blur-lg">
           <CardHeader className="py-2">
             {showTitle && <CardTitle className="text-lg">{title}</CardTitle>}
             {showSubTitle && <CardDescription>{subTitle}</CardDescription>}
@@ -62,14 +65,14 @@ const HeroCard: React.FC<HeroCardProps> = ({
           {showDescription && (
             <CardContent className="pb-3" style={{ overflow: 'hidden' }}>
               <div
-                className="text-sm text-color-tertiary"
+                className="text-sm text-color-tertiary line-clamp-2 overflow-hidden max-w-fit"
                 dangerouslySetInnerHTML={{ __html: decoded }}
               />
             </CardContent>
           )}
         </div>
       </Card>
-    </a>
+    </Link>
   );
 };
 

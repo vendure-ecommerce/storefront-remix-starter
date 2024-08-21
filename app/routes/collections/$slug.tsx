@@ -1,4 +1,9 @@
-import { useLoaderData, useSearchParams, useSubmit, V2_MetaFunction } from '@remix-run/react';
+import {
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
+  V2_MetaFunction,
+} from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,10 +23,10 @@ import ListingHeader from '~/components/listing/ListingHeader';
 import ListingTabs from '~/components/listing/ListingTabs';
 import PageHero from '~/components/pages/PageHero';
 import { APP_META_TITLE } from '~/constants';
+import { useCollections } from '~/providers/collections';
+import { TArrayElement } from '~/types/types';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
-import { TArrayElement } from '~/types/types';
-import { useCollections } from '~/providers/collections';
 
 export const sortOrders = [
   { label: 'Alapértelmezett', value: 'default' },
@@ -43,7 +48,7 @@ export const meta: V2_MetaFunction = ({ data }: any) => {
   ];
 };
 
-const paginationLimitMinimumDefault = 10;
+const paginationLimitMinimumDefault = 24;
 export const allowedPaginationLimits = new Set<number>([
   paginationLimitMinimumDefault,
   25,
@@ -107,12 +112,8 @@ export default function CollectionSlug() {
     resultWithoutFacetValueFilters,
     facetValueIds,
   );
-  const {
-    setCollection,
-    setCollectionItems,
-    setSearchParams,
-    setPagination,
-  } = useCollections();
+  const { setCollection, setCollectionItems, setSearchParams, setPagination } =
+    useCollections();
   const [searchParams] = useSearchParams();
   const submit = useSubmit();
   const { t } = useTranslation();
@@ -121,31 +122,34 @@ export default function CollectionSlug() {
     return product.price.__typename === 'SinglePrice'
       ? product.price.value
       : product.price.__typename === 'PriceRange'
-        ? product.price.min
-        : -1;
+      ? product.price.min
+      : -1;
   };
 
-  const getGrossPrice = (product: TArrayElement<typeof result.items>, max = false) => {
+  const getGrossPrice = (
+    product: TArrayElement<typeof result.items>,
+    max = false,
+  ) => {
     return product.priceWithTax.__typename === 'SinglePrice'
       ? product.priceWithTax.value
       : product.priceWithTax.__typename === 'PriceRange' && !max
-        ? product.priceWithTax.min
-        : product.priceWithTax.__typename === 'PriceRange' && max
-          ? product.priceWithTax.max
-          : -1;
+      ? product.priceWithTax.min
+      : product.priceWithTax.__typename === 'PriceRange' && max
+      ? product.priceWithTax.max
+      : -1;
   };
 
   const onListingTabChange = (tab: string) => {
     const formData = new FormData();
-    formData.set("order", tab);
+    formData.set('order', tab);
 
     for (const [key, value] of searchParams) {
-      if (key !== "order") {
+      if (key !== 'order') {
         formData.append(key, value);
       }
     }
-  
-    submit(formData, { method: "get", preventScrollReset: true });
+
+    submit(formData, { method: 'get', preventScrollReset: true });
   };
 
   useEffect(() => {
@@ -166,7 +170,11 @@ export default function CollectionSlug() {
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
         <FilterSidebar collection={collection} />
         <main className="flex max-w-full flex-col gap-16 pt-12">
-          <Breadcrumbs items={collection.breadcrumbs.filter((b) => b.slug !== '__root_collection__')} />
+          <Breadcrumbs
+            items={collection.breadcrumbs.filter(
+              (b) => b.slug !== '__root_collection__',
+            )}
+          />
           <div className="flex flex-col gap-8">
             <PageHero
               title={collection.name}
@@ -226,13 +234,17 @@ export default function CollectionSlug() {
             {result.items && result.items.length > 0 && (
               <ListingTabs
                 tabs={sortOrders}
-                value={searchParams.get("order") ?? "default"}
+                value={searchParams.get('order') ?? 'default'}
                 onChange={onListingTabChange}
               >
                 {result.items.map((option, index) => {
-                  const productFacets = result.facetValues.filter(facetValue => {
-                    return option.facetValueIds.includes(facetValue.facetValue.id);
-                  })
+                  const productFacets = result.facetValues.filter(
+                    (facetValue) => {
+                      return option.facetValueIds.includes(
+                        facetValue.facetValue.id,
+                      );
+                    },
+                  );
                   return (
                     <ProductCard
                       key={index}
@@ -247,15 +259,21 @@ export default function CollectionSlug() {
                       hoverImageSrc={option.productAsset?.preview ?? ''}
                       rating={1}
                       reviews={1}
-                      manufacturer={[
-                        // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
-                      ]}
+                      manufacturer={
+                        [
+                          // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
+                        ]
+                      }
                       productTags={[
                         ...productFacets
-                          .filter(facetValue => facetValue.facetValue.facet.name !== "Brand" && facetValue.facetValue.facet.name !== "Category")
-                          .map(facetValue => {
-                            return `${facetValue.facetValue.facet.name}: ${facetValue.facetValue.name}`
-                          })
+                          .filter(
+                            (facetValue) =>
+                              facetValue.facetValue.facet.name !== 'Brand' &&
+                              facetValue.facetValue.facet.name !== 'Category',
+                          )
+                          .map((facetValue) => {
+                            return `${facetValue.facetValue.facet.name}: ${facetValue.facetValue.name}`;
+                          }),
                       ]}
                     />
                   );

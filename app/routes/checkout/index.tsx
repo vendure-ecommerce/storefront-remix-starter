@@ -1,4 +1,5 @@
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { useOutletContext } from '@remix-run/react';
 import HorizontalProductCard from '~/components/cards/product/HorizontalProductCard';
 import Section from '~/components/common/section/Section';
 import SectionContent from '~/components/common/section/SectionContent';
@@ -12,8 +13,13 @@ import SummarySubTotal from '~/components/common/summary/SummarySubTotal';
 import SummaryTaxRate from '~/components/common/summary/SummaryTaxRate';
 import CheckoutForm from '~/components/pages/checkout/checkoutForm';
 import PageTitle from '~/components/pages/PageTitle';
+import { TGlobalOutletContext } from '~/types/types';
+import { isArrayValid } from '~/utils';
 
 export default function Checkout() {
+  const outlet = useOutletContext<TGlobalOutletContext>();
+  const { activeOrder, removeItem, adjustOrderLine } = outlet;
+
   const product = {} as any;
 
   return (
@@ -29,39 +35,40 @@ export default function Checkout() {
               <ScrollArea className="h-full w-full overscroll-contain">
                 <div className="flex flex-col gap-16 pr-3">
                   <div className="flex flex-col gap-6">
-                    {[...Array(3)].map((_, index) => (
-                      <HorizontalProductCard
-                        key={index}
-                        title={product.title}
-                        number={product.number}
-                        priceNormal={product.priceNormal}
-                        priceNet={product.priceNet}
-                        priceCrossed={product.priceCrossed}
-                        imageSrc={product.imageSrc}
-                        showAddToCartHandler={false}
-                        showProductAmountStepper={true}
-                        variant={'sm'}
-                      >
-                        {product.connectedProducts &&
-                          (product.connectedProducts as Array<any>).map(
-                            (connectedProduct, index) => (
-                              <HorizontalProductCard
-                                key={index}
-                                title={connectedProduct.title}
-                                number={connectedProduct.number}
-                                priceNormal={connectedProduct.priceNormal}
-                                priceNet={connectedProduct.priceNet}
-                                priceCrossed={connectedProduct.priceCrossed}
-                                imageSrc={connectedProduct.imageSrc}
-                                isConnected={true}
-                                showAddToCartHandler={false}
-                                showProductAmountStepper={true}
-                                variant={'sm'}
-                              />
-                            ),
-                          )}
-                      </HorizontalProductCard>
-                    ))}
+                    {isArrayValid(activeOrder?.shippingLines) &&
+                      activeOrder?.shippingLines.map((_, index) => (
+                        <HorizontalProductCard
+                          key={index}
+                          title={product.title}
+                          number={product.number}
+                          priceNormal={product.priceNormal}
+                          priceNet={product.priceNet}
+                          priceCrossed={product.priceCrossed}
+                          imageSrc={product.imageSrc}
+                          showAddToCartHandler={false}
+                          showProductAmountStepper={true}
+                          variant={'sm'}
+                        >
+                          {product.connectedProducts &&
+                            (product.connectedProducts as Array<any>).map(
+                              (connectedProduct, index) => (
+                                <HorizontalProductCard
+                                  key={index}
+                                  title={connectedProduct.title}
+                                  number={connectedProduct.number}
+                                  priceNormal={connectedProduct.priceNormal}
+                                  priceNet={connectedProduct.priceNet}
+                                  priceCrossed={connectedProduct.priceCrossed}
+                                  imageSrc={connectedProduct.imageSrc}
+                                  isConnected={true}
+                                  showAddToCartHandler={false}
+                                  showProductAmountStepper={true}
+                                  variant={'sm'}
+                                />
+                              ),
+                            )}
+                        </HorizontalProductCard>
+                      ))}
                   </div>
                   <Section className="sticky bottom-0 flex flex-col gap-8 bg-background">
                     <div className="absolute -top-8 left-0 h-8 w-[calc(100%_-_0.5rem)] bg-gradient-to-t from-background from-10%"></div>
