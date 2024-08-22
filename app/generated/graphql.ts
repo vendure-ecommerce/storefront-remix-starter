@@ -3654,7 +3654,7 @@ export type SearchProductQueryVariables = Exact<{
 }>;
 
 
-export type SearchProductQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productName: string, score: number, price: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice' } }> } };
+export type SearchProductQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productName: string, score: number, productAsset?: { __typename?: 'SearchResultAsset', preview: string } | null, productVariantAsset?: { __typename?: 'SearchResultAsset', preview: string } | null, price: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice' } }> } };
 
 export const OrderDetailFragmentDoc = gql`
     fragment OrderDetail on Order {
@@ -4290,6 +4290,12 @@ export const SearchProductDocument = gql`
     totalItems
     items {
       productName
+      productAsset {
+        preview
+      }
+      productVariantAsset {
+        preview
+      }
       score
       price {
         ... on PriceRange {

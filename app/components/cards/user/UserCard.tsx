@@ -7,10 +7,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
 interface ExpertProps {
-  title?: string;
-  expertEmail?: string;
-  expertPhoneNumber?: string;
-  imageSrc?: string;
+  title: string;
+  expertEmail: string;
+  expertPhoneNumber: string;
+  imageSrc: string;
   showTitle?: boolean;
   showEmail?: boolean;
   showPhoneNumber?: boolean;
@@ -18,10 +18,10 @@ interface ExpertProps {
 }
 
 const UserCard: React.FC<ExpertProps> = ({
-  title = faker.person.fullName(),
+  title,
   imageSrc = '',
-  expertPhoneNumber = faker.phone.number(),
-  expertEmail = faker.internet.email(),
+  expertPhoneNumber,
+  expertEmail,
   showTitle = true,
   showImage = true,
   showPhoneNumber = true,

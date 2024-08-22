@@ -9,10 +9,11 @@ import { Search } from "lucide-react";
 import NavbarSearchField from "./NavbarSearchField";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import { typingDelay } from "~/constants";
 
 
 const NavbarSearch: React.FC = () => {
-  const fetcher = useFetcher<{ result: { items: any[] } }>();
+  const fetcher = useFetcher<{ result: { items: any[], totalItems: number } }>();
 
   const [stTerm, setTerm] = useState('');
 
@@ -21,22 +22,23 @@ const NavbarSearch: React.FC = () => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = e.target.value;
     setTerm(newTerm);
+  };
+
+  useEffect(() => {
     if (rfInputTimer.current) {
       clearTimeout(rfInputTimer.current);
     }
     rfInputTimer.current = setTimeout(() => {
-      setTerm(newTerm);
-    }, 300);
-  };
-
-  useEffect(() => {
-    if (stTerm) {
-      fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
-      // fetcher.load("/search" + "?q=" + stTerm);
-    }
+      if (stTerm) {
+        fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
+      }  
+    }, typingDelay);
+    return () => {
+      if (rfInputTimer.current) {
+        clearTimeout(rfInputTimer.current);
+      }
+    };
   }, [stTerm]);
-
-  console.log(fetcher.data);
 
   return (
     <Dialog>
@@ -52,7 +54,10 @@ const NavbarSearch: React.FC = () => {
       <DialogContent className='h-10/12 overflow-hidden pt-20 xl:pt-10'>
         <div className='mx-auto grid max-w-screen-2xl grid-rows-[auto,_1fr] gap-8'>
           <NavbarSearchField onChange={onInputChange} />
-          <AutoSuggestion items={fetcher.data?.result?.items || []} />
+          <AutoSuggestion
+            items={fetcher.data?.result?.items || []}
+            totalItems={fetcher.data?.result?.totalItems || 0}
+          />
         </div>
       </DialogContent>
     </Dialog>

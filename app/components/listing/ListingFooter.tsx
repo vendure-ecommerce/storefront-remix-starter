@@ -4,7 +4,7 @@ import { Progress } from '~/components/ui-custom/MyProgress';
 import { Button } from '~/components/ui-custom/MyButton';
 import { useCollections } from '~/providers/collections';
 import { useSubmit } from '@remix-run/react';
-import { allowedPaginationLimits } from '~/routes/collections/$slug';
+import { allowedPaginationLimits } from '~/constants';
 
 const findNextLimit = (set: Set<number>, limit: number) => {
   for (let element of set) {

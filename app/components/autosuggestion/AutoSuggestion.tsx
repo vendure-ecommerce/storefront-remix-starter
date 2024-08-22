@@ -20,10 +20,11 @@ import { ScrollArea } from "../ui-custom/MyScrollArea";
 import { faker } from "@faker-js/faker";
 
 interface IAutoSuggestionProps {
+  totalItems: number;
   items: any[];
 }
 
-const AutoSuggestion = ({ items }: IAutoSuggestionProps) => {
+const AutoSuggestion = ({ items, totalItems }: IAutoSuggestionProps) => {
 
   return (
     <Card
@@ -148,7 +149,7 @@ const AutoSuggestion = ({ items }: IAutoSuggestionProps) => {
                 title='Termék kategória'
                 className='text-lg'
               />
-              <Badge className='rounded-full'>{items.length || 0} db</Badge>
+              <Badge className='rounded-full'>{totalItems || 0} db</Badge>
             </SectionHeader>
             {/* Results */}
             <GridLayout>
@@ -159,12 +160,12 @@ const AutoSuggestion = ({ items }: IAutoSuggestionProps) => {
                     key={index}
                     id={option.id}
                     title={option.productName}
-                    link={option.productName}
+                    link={option.slug}
                     priceNormal={option.price.min}
                     priceNet={option.price.min}
                     priceCrossed={option.price.max}
-                    imageSrc={image}
-                    hoverImageSrc={image}
+                    imageSrc={option.productAsset.preview}
+                    hoverImageSrc={option.productAsset.preview}
                   />
                 );
               }

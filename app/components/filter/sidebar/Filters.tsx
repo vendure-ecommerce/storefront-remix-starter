@@ -24,6 +24,7 @@ import FilterBlockHeader from './FilterBlockHeader';
 import { useCollections } from '~/providers/collections';
 import { useEffect, useRef, useState } from 'react';
 import { useSubmit } from '@remix-run/react';
+import { typingDelay } from '~/constants';
 
 interface IFiltersProps {
   collection: any;
@@ -45,29 +46,33 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
   const onSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = evt.target.value;
     setSearchTerm(newTerm);
+  };
+
+  useEffect(() => {
     if (rfInputTimer.current) {
       clearTimeout(rfInputTimer.current);
     }
     rfInputTimer.current = setTimeout(() => {
-      setSearchTerm(newTerm);
-    }, 300);
-  };
-
-  useEffect(() => {
-    const formData = new FormData();
-    // Get all the params from the URL
-    for (const [key, value] of searchParams) {
-      if (key !== 'q') {
-        formData.append(key, value);
+      const formData = new FormData();
+      // Get all the params from the URL
+      for (const [key, value] of searchParams) {
+        if (key !== 'q') {
+          formData.append(key, value);
+        }
       }
-    }
-
-    formData.set('q', stSearchTerm);
-    if (!stSearchTerm) {
-      formData.delete('q');
-    }
-
-    submit(formData, { method: 'get', preventScrollReset: true });
+  
+      formData.set('q', stSearchTerm);
+      if (!stSearchTerm) {
+        formData.delete('q');
+      }
+  
+      submit(formData, { method: 'get', preventScrollReset: true });  
+    }, typingDelay);
+    return () => {
+      if (rfInputTimer.current) {
+        clearTimeout(rfInputTimer.current);
+      }
+    };
   }, [stSearchTerm, submit]);
 
   return (

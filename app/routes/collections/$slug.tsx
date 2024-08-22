@@ -27,6 +27,7 @@ import { useCollections } from '~/providers/collections';
 import { TArrayElement } from '~/types/types';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
+import { userCardDummies } from '~/utils/_fakes';
 
 export const sortOrders = [
   { label: 'Alapértelmezett', value: 'default' },
@@ -155,6 +156,8 @@ export default function CollectionSlug() {
     setCollection(collection);
   }, [loaderData]);
 
+  console.log(facetValuesTracker.current.facetsWithValues);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
@@ -209,8 +212,8 @@ export default function CollectionSlug() {
               className="flex flex-wrap gap-6"
               layoutType="default"
             >
-              {[...Array(3)].map((_, index) => (
-                <UserCard key={index} />
+              {userCardDummies.map((props, index) => (
+                <UserCard key={index} {...props} />
               ))}
             </SectionContent>
           </Section>

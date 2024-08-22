@@ -12,6 +12,12 @@ export const simpleSearchQuery = gql`
       totalItems
       items {
         productName
+        productAsset {
+          preview
+        }
+        productVariantAsset {
+          preview
+        }
         score
         price {
           ... on PriceRange {

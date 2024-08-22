@@ -9,7 +9,7 @@ import { CollectionCard } from '~/components/collections/CollectionCard';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import { FiltersButton } from '~/components/FiltersButton';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
-import { APP_META_TITLE } from '~/constants';
+import { allowedPaginationLimits, APP_META_TITLE, paginationLimitMinimumDefault } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
 
@@ -23,12 +23,6 @@ export const meta: V2_MetaFunction = ({ data }) => {
   ];
 };
 
-const paginationLimitMinimumDefault = 25;
-const allowedPaginationLimits = new Set<number>([
-  paginationLimitMinimumDefault,
-  50,
-  100,
-]);
 const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
   allowedPaginationLimits,
   paginationLimitMinimumDefault,
