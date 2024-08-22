@@ -86,6 +86,12 @@ export async function loader({ params, request, context }: DataFunctionArgs) {
   };
 }
 
+const NoResults = () => (
+  <div className="flex justify-center items-center min-h-[800px]">
+    <p className="text-2xl font-bold">Nincs találat</p>
+  </div>
+);
+
 export default function CollectionSlug() {
   const loaderData = useLoaderData<typeof loader>();
   const {
@@ -230,7 +236,7 @@ export default function CollectionSlug() {
                 value={searchParams.get('order') ?? 'default'}
                 onChange={onListingTabChange}
               >
-                {result.items.map((option, index) => {
+                {result.items.length !== 0 && result.items.map((option, index) => {
                   const productFacets = result.facetValues.filter(
                     (facetValue) => {
                       return option.facetValueIds.includes(
@@ -271,6 +277,7 @@ export default function CollectionSlug() {
                     />
                   );
                 })}
+                {result.items.length === 0 && <NoResults />}
               </ListingTabs>
             )}
             <Section>
