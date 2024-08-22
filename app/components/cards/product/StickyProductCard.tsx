@@ -45,7 +45,7 @@ const StickyProductCard: React.FC<ProductCardProps> = ({
             </div>
             <div className="flex flex-col gap-1">
               <ProductAvailability />
-              <Link to="/product" prefetch="intent">
+              <Link preventScrollReset to="/product" prefetch="intent">
                 <CardTitle className="text-sm">
                   <ProductTitle title={title} />
                 </CardTitle>

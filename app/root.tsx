@@ -241,6 +241,7 @@ function DefaultSparseErrorPage({
           </p>
           <div className="mt-6">
             <Link
+              preventScrollReset
               to="/"
               className="text-base font-medium text-primary-600 hover:text-primary-500 inline-flex gap-2"
             >

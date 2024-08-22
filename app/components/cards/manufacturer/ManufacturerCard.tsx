@@ -44,7 +44,7 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
   showProductCount = true,
 }) => {
   return (
-    <Link className="flex grow" to={link} prefetch="intent">
+    <Link className="flex grow" preventScrollReset to={link} prefetch="intent">
       <Card
         className={`group/card flex grow flex-col ${
           showAvatarGroup && showProductCount ? 'gap-4' : 'gap-0'

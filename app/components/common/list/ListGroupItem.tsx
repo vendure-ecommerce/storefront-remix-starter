@@ -73,6 +73,7 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
       {isLinkActive ? (
         <Link
           prefetch="intent"
+          preventScrollReset
           to={link}
           className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${
             className ? ` ${className}` : ''

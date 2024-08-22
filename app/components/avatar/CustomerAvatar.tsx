@@ -21,6 +21,7 @@ const CustomerAvatar: React.FC<CustomerAvatarProps> = ({
   return (
     <Link
       className={`flex items-center gap-2${className ? ` ${className}` : ''}`}
+      preventScrollReset
       to={link}
       prefetch="intent"
     >
