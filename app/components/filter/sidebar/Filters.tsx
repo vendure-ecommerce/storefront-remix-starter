@@ -45,29 +45,33 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
   const onSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = evt.target.value;
     setSearchTerm(newTerm);
+  };
+
+  useEffect(() => {
     if (rfInputTimer.current) {
       clearTimeout(rfInputTimer.current);
     }
     rfInputTimer.current = setTimeout(() => {
-      setSearchTerm(newTerm);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    const formData = new FormData();
-    // Get all the params from the URL
-    for (const [key, value] of searchParams) {
-      if (key !== 'q') {
-        formData.append(key, value);
+      const formData = new FormData();
+      // Get all the params from the URL
+      for (const [key, value] of searchParams) {
+        if (key !== 'q') {
+          formData.append(key, value);
+        }
       }
-    }
-
-    formData.set('q', stSearchTerm);
-    if (!stSearchTerm) {
-      formData.delete('q');
-    }
-
-    submit(formData, { method: 'get', preventScrollReset: true });
+  
+      formData.set('q', stSearchTerm);
+      if (!stSearchTerm) {
+        formData.delete('q');
+      }
+  
+      submit(formData, { method: 'get', preventScrollReset: true });  
+    }, 1000);
+    return () => {
+      if (rfInputTimer.current) {
+        clearTimeout(rfInputTimer.current);
+      }
+    };
   }, [stSearchTerm, submit]);
 
   return (

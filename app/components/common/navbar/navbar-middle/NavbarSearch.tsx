@@ -21,22 +21,23 @@ const NavbarSearch: React.FC = () => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = e.target.value;
     setTerm(newTerm);
+  };
+
+  useEffect(() => {
     if (rfInputTimer.current) {
       clearTimeout(rfInputTimer.current);
     }
     rfInputTimer.current = setTimeout(() => {
-      setTerm(newTerm);
+      if (stTerm) {
+        fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
+      }  
     }, 1000);
-  };
-
-  useEffect(() => {
-    if (stTerm) {
-      fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
-      // fetcher.load("/search" + "?q=" + stTerm);
-    }
+    return () => {
+      if (rfInputTimer.current) {
+        clearTimeout(rfInputTimer.current);
+      }
+    };
   }, [stTerm]);
-
-  console.log(fetcher.data);
 
   return (
     <Dialog>
