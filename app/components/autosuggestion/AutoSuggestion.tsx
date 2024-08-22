@@ -160,12 +160,12 @@ const AutoSuggestion = ({ items, totalItems }: IAutoSuggestionProps) => {
                     key={index}
                     id={option.id}
                     title={option.productName}
-                    link={option.productName}
+                    link={option.slug}
                     priceNormal={option.price.min}
                     priceNet={option.price.min}
                     priceCrossed={option.price.max}
-                    imageSrc={image}
-                    hoverImageSrc={image}
+                    imageSrc={option.productAsset.preview}
+                    hoverImageSrc={option.productAsset.preview}
                   />
                 );
               }
