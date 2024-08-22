@@ -1,11 +1,11 @@
-import { Link, useLoaderData } from '@remix-run/react';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
-import { SearchBar } from '~/components/header/SearchBar';
-import { useRootLoader } from '~/utils/use-root-loader';
 import { UserIcon } from '@heroicons/react/24/solid';
-import { useScrollingUp } from '~/utils/use-scrolling-up';
-import { classNames } from '~/utils/class-names';
+import { Link } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
+import { SearchBar } from '~/components/header/SearchBar';
+import { classNames } from '~/utils/class-names';
+import { useRootLoader } from '~/utils/use-root-loader';
+import { useScrollingUp } from '~/utils/use-scrolling-up';
 
 export function Header({
   onCartIconClick,
@@ -42,6 +42,7 @@ export function Header({
           </div>
           <div>
             <Link
+              preventScrollReset
               to={isSignedIn ? '/account' : '/sign-in'}
               className="flex space-x-1"
             >
@@ -55,7 +56,7 @@ export function Header({
       </div>
       <div className="max-w-6xl mx-auto p-4 flex items-center space-x-4">
         <h1 className="text-white w-10">
-          <Link to="/">
+          <Link preventScrollReset to="/">
             <img
               src="/cube-logo-small.webp"
               width={40}
@@ -68,6 +69,7 @@ export function Header({
           {data.collections.map((collection) => (
             <Link
               className="text-sm md:text-base text-gray-200 hover:text-white"
+              preventScrollReset
               to={'/collections/' + collection.slug}
               prefetch="intent"
               key={collection.id}

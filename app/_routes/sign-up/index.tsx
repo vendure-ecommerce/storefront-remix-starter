@@ -1,15 +1,15 @@
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { ActionFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { useTranslation } from 'react-i18next';
+import { API_URL, DEMO_API_URL } from '~/constants';
+import { getFixedT } from '~/i18next.server';
 import { registerCustomerAccount } from '~/providers/account/account';
-import { XCircleIcon } from '@heroicons/react/24/solid';
 import {
   extractRegistrationFormValues,
   RegisterValidationErrors,
   validateRegistrationForm,
 } from '~/utils/registration-helper';
-import { API_URL, DEMO_API_URL } from '~/constants';
-import { useTranslation } from 'react-i18next';
-import { getFixedT } from '~/i18next.server';
 
 export async function action({ request }: ActionFunctionArgs) {
   if (API_URL === DEMO_API_URL) {
@@ -53,6 +53,7 @@ export default function SignUpPage() {
           <p className="mt-2 text-center text-sm text-gray-600">
             {t('common.or')}{' '}
             <Link
+              preventScrollReset
               to="/sign-in"
               className="font-medium text-primary-600 hover:text-primary-500"
             >

@@ -20,6 +20,7 @@ export function Tab({ Icon, text, to }: TabProps) {
   return (
     <li className={isActive ? `cursor-default` : `cursor-pointer`}>
       <NavLink
+        preventScrollReset
         to={to}
         className={`group w-full gap-x-2 max-w-[12rem] inline-flex items-center justify-around p-4 rounded-t-lg border-b-2 ${
           isActive

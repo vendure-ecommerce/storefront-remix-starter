@@ -41,6 +41,7 @@ const HeroCard: React.FC<HeroCardProps> = ({
     <Link
       prefetch="intent"
       className={`h-full${className ? ` ${className}` : ''}`}
+      preventScrollReset
       to={link}
       style={style}
     >

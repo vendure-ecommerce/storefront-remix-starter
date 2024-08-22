@@ -1,7 +1,7 @@
 import { Form, Link } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
 import { Price } from '~/components/products/Price';
 import { ActiveOrderQuery, CurrencyCode } from '~/generated/graphql';
-import { useTranslation } from 'react-i18next';
 
 export function CartContents({
   orderLines,
@@ -36,7 +36,10 @@ export function CartContents({
               <div>
                 <div className="flex justify-between text-base font-medium text-gray-900">
                   <h3>
-                    <Link to={`/products/${line.productVariant.product.slug}`}>
+                    <Link
+                      preventScrollReset
+                      to={`/products/${line.productVariant.product.slug}`}
+                    >
                       {line.productVariant.name}
                     </Link>
                   </h3>

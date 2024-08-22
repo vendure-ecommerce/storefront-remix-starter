@@ -111,6 +111,7 @@ export default function OrderHistoryItem({
               {/* Product */}
               <div className="inline-flex justify-center items-center justify gap-4">
                 <Link
+                  preventScrollReset
                   to={`/products/${line.productVariant.product.slug}`}
                   className="hover:opacity-50 transition-opacity"
                 >
@@ -122,6 +123,7 @@ export default function OrderHistoryItem({
                 <span className="flex flex-1 flex-col gap-0">
                   {/* Product name */}
                   <Link
+                    preventScrollReset
                     to={`/products/${line.productVariant.product.slug}`}
                     className="text-black text-sm font-semibold line-clamp-3 md:line-clamp-2 max-w-md hover:text-black/50"
                     title={line.productVariant.name}

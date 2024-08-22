@@ -1,11 +1,10 @@
+import { ArrowPathIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { Link, useFetcher, useSearchParams } from '@remix-run/react';
 import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
-import { login } from '~/providers/account/account';
-import { ErrorResult } from '~/generated/graphql';
-import { XCircleIcon } from '@heroicons/react/24/solid';
-import { Button } from '~/components/Button';
-import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
+import { Button } from '~/components/Button';
+import { ErrorResult } from '~/generated/graphql';
+import { login } from '~/providers/account/account';
 
 export async function action({ params, request }: DataFunctionArgs) {
   const body = await request.formData();
@@ -40,6 +39,7 @@ export default function SignInPage() {
           <p className="mt-2 text-center text-sm text-gray-600">
             {t('common.or')}{' '}
             <Link
+              preventScrollReset
               to="/sign-up"
               className="font-medium text-primary-600 hover:text-primary-500"
             >

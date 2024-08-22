@@ -26,7 +26,11 @@ const PrimaryMenu = () => {
             variant="ghost"
             asChild
           >
-            <Link prefetch="intent" to={`/collections/${option.slug}`}>
+            <Link
+              prefetch="intent"
+              preventScrollReset
+              to={`/collections/${option.slug}`}
+            >
               {option.name}
             </Link>
           </Button>
