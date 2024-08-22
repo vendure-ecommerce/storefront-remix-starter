@@ -22,7 +22,7 @@ import ListingFooter from '~/components/listing/ListingFooter';
 import ListingHeader from '~/components/listing/ListingHeader';
 import ListingTabs from '~/components/listing/ListingTabs';
 import PageHero from '~/components/pages/PageHero';
-import { APP_META_TITLE } from '~/constants';
+import { allowedPaginationLimits, APP_META_TITLE, paginationLimitMinimumDefault } from '~/constants';
 import { useCollections } from '~/providers/collections';
 import { TArrayElement } from '~/types/types';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
@@ -48,16 +48,6 @@ export const meta: V2_MetaFunction = ({ data }: any) => {
   ];
 };
 
-const paginationLimitMinimumDefault = 24;
-export const allowedPaginationLimits = new Set<number>([
-  paginationLimitMinimumDefault,
-  25,
-  50,
-  100,
-  200,
-  500,
-  1000,
-]);
 
 const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
   allowedPaginationLimits,

@@ -19,3 +19,21 @@ export let API_URL =
 export function setApiUrl(apiUrl: string) {
   API_URL = apiUrl;
 }
+
+export const paginationLimitMinimumDefault = 24;
+export const allowedPaginationLimits = new Set<number>([
+  paginationLimitMinimumDefault,
+  48,
+  96,
+  192,
+  384,
+  768,
+  1536,
+  3072,
+  6144,
+  12288,
+  24576,
+  49152,
+  98304,
+  196608,
+]);
