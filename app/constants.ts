@@ -20,6 +20,8 @@ export function setApiUrl(apiUrl: string) {
   API_URL = apiUrl;
 }
 
+export const typingDelay = 500;
+
 export const paginationLimitMinimumDefault = 24;
 export const allowedPaginationLimits = new Set<number>([
   paginationLimitMinimumDefault,

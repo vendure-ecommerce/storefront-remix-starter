@@ -24,6 +24,7 @@ import FilterBlockHeader from './FilterBlockHeader';
 import { useCollections } from '~/providers/collections';
 import { useEffect, useRef, useState } from 'react';
 import { useSubmit } from '@remix-run/react';
+import { typingDelay } from '~/constants';
 
 interface IFiltersProps {
   collection: any;
@@ -66,7 +67,7 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
       }
   
       submit(formData, { method: 'get', preventScrollReset: true });  
-    }, 1000);
+    }, typingDelay);
     return () => {
       if (rfInputTimer.current) {
         clearTimeout(rfInputTimer.current);

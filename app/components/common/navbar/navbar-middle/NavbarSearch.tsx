@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import NavbarSearchField from "./NavbarSearchField";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import { typingDelay } from "~/constants";
 
 
 const NavbarSearch: React.FC = () => {
@@ -31,7 +32,7 @@ const NavbarSearch: React.FC = () => {
       if (stTerm) {
         fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
       }  
-    }, 1000);
+    }, typingDelay);
     return () => {
       if (rfInputTimer.current) {
         clearTimeout(rfInputTimer.current);
