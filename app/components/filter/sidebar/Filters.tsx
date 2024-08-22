@@ -50,7 +50,7 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
     }
     rfInputTimer.current = setTimeout(() => {
       setSearchTerm(newTerm);
-    }, 300);
+    }, 1000);
   };
 
   useEffect(() => {

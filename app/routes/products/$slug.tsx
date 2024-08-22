@@ -57,6 +57,7 @@ import { getProductBySlug } from '~/providers/products/products';
 import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
+import { userCardDummies } from '~/utils/_fakes';
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -291,8 +292,8 @@ export default function ProductSlug() {
                 className="flex flex-wrap gap-6"
                 layoutType="default"
               >
-                {[...Array(3)].map((_, index) => (
-                  <UserCard key={index} />
+                {userCardDummies.map((props, index) => (
+                  <UserCard key={index} {...props} />
                 ))}
               </SectionContent>
             </Section>

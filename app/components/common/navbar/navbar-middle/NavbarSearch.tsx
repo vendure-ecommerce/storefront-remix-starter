@@ -26,7 +26,7 @@ const NavbarSearch: React.FC = () => {
     }
     rfInputTimer.current = setTimeout(() => {
       setTerm(newTerm);
-    }, 300);
+    }, 1000);
   };
 
   useEffect(() => {

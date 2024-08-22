@@ -17,6 +17,7 @@ import SummarySubTotal from '~/components/common/summary/SummarySubTotal';
 import SummaryTaxRate from '~/components/common/summary/SummaryTaxRate';
 import PageTitle from '~/components/pages/PageTitle';
 import { Button } from '~/components/ui-custom/MyButton';
+import { userCardDummies } from '~/utils/_fakes';
 
 export default function Cart() {
   const product = {} as any;
@@ -102,8 +103,8 @@ export default function Cart() {
                 className="flex flex-wrap gap-6"
                 layoutType="default"
               >
-                {[...Array(3)].map((_, index) => (
-                  <UserCard key={index} />
+                {userCardDummies.map((props, index) => (
+                  <UserCard key={index} {...props} />
                 ))}
               </SectionContent>
             </Section>
