@@ -40,6 +40,8 @@ const NavbarSearch: React.FC = () => {
     };
   }, [stTerm]);
 
+  console.log(fetcher.data);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
