@@ -6,15 +6,10 @@ import { ValidatedForm } from 'remix-validated-form';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import { FiltersButton } from '~/components/FiltersButton';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
+import { allowedPaginationLimits, paginationLimitMinimumDefault } from '~/constants';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { paginationValidationSchema } from '~/utils/pagination';
 
-const paginationLimitMinimumDefault = 25;
-const allowedPaginationLimits = new Set<number>([
-  paginationLimitMinimumDefault,
-  50,
-  100,
-]);
 const validator = withZod(paginationValidationSchema(allowedPaginationLimits));
 
 export const { filteredSearchLoader: loader } =

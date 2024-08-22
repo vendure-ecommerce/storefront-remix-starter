@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
 import OrderHistoryItem from '~/components/_account/OrderHistoryItem';
 import { Pagination } from '~/components/Pagination';
+import { allowedPaginationLimits, paginationLimitMinimumDefault } from '~/constants';
 import { OrderListOptions, SortOrder } from '~/generated/graphql';
 import { getActiveCustomerOrderList } from '~/providers/customer/customer';
 import {
@@ -13,12 +14,6 @@ import {
   translatePaginationTo,
 } from '~/utils/pagination';
 
-const paginationLimitMinimumDefault = 10;
-const allowedPaginationLimits = new Set<number>([
-  paginationLimitMinimumDefault,
-  20,
-  30,
-]);
 const orderPaginationSchema = paginationValidationSchema(
   allowedPaginationLimits,
 );
