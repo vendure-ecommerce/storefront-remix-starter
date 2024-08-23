@@ -56,6 +56,8 @@ export function filteredSearchLoaderFromPagination(
         ReturnType<typeof search>,
         ReturnType<typeof searchFacetValues>,
       ];
+
+      console.log(facetValueIds);
       const searchResultPromise = search(
         {
           input: {

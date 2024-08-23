@@ -22,18 +22,21 @@ import FilterBlock from './FilterBlock';
 import FilterBlockContent from './FilterBlockContent';
 import FilterBlockHeader from './FilterBlockHeader';
 import { useCollections } from '~/providers/collections';
-import { useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useSubmit } from '@remix-run/react';
 import { typingDelay } from '~/constants';
+import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 
 interface IFiltersProps {
   collection: any;
+  facetValuesTracker: MutableRefObject<FacetFilterTracker>;
 }
 
-const Filters: React.FC<IFiltersProps> = ({ collection }) => {
+const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) => {
   const submit = useSubmit();
   const { searchParams } = useCollections();
   const [stSearchTerm, setSearchTerm] = useState<string>('');
+  const [stFilterTerms, setFilterTerms] = useState<string[]>([]);
   const rfInputTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* const filterChipsOptions = dummy.filterChipsOptions;
@@ -42,6 +45,23 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
   const checkboxRatingOptions = dummy.checkboxRatingOptions;
   const radioRatingOptions = dummy.radioRatingOptions;
   const selectChipOptions = dummy.selectChipOptions; */
+
+  const onResetFilterGroup = (ids?: string[]) => {
+    if (ids === undefined) {
+      setSearchTerm('');
+      setFilterTerms([]);
+    } else {
+      setFilterTerms(stFilterTerms.filter((id) => !ids.includes(id)));
+    }
+  };
+
+  const onFilterItemClick = (itemId: any) => {
+    if (stFilterTerms.includes(itemId)) {
+      setFilterTerms(stFilterTerms.filter((id) => id !== itemId));
+    } else {
+      setFilterTerms([...stFilterTerms, itemId]);
+    }
+  };
 
   const onSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = evt.target.value;
@@ -75,6 +95,25 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
     };
   }, [stSearchTerm, submit]);
 
+  useEffect(() => {
+    const formData = new FormData();
+    for (const [key, value] of searchParams) {
+      if (key !== 'fvid') {
+        formData.append(key, value);
+      }
+    }
+
+    if (!stFilterTerms.length) {
+      formData.delete('fvid');
+    } else {
+      for (const id of stFilterTerms) {
+        formData.append('fvid', id);
+      }
+    }
+
+    submit(formData, { method: 'get', preventScrollReset: true });
+  }, [stFilterTerms]);
+
   return (
     <div>
       <FilterBlock>
@@ -85,7 +124,10 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
           showChevron={false}
           title="Aktív szűrőfeltételek"
         />
-        <FilterBlockContent className="px-3 pb-12 pt-2">
+        <FilterBlockContent
+          className="px-3 pb-12 pt-2"
+          onClick={() => onResetFilterGroup()}
+        >
           <div className="flex flex-wrap gap-2">
             {/* {filterChipsOptions.map((option, index) => (
               <RemoveChip
@@ -132,6 +174,47 @@ const Filters: React.FC<IFiltersProps> = ({ collection }) => {
           </div>
         </FilterBlockContent>
       </FilterBlock>
+
+      {facetValuesTracker.current.facetsWithValues
+        .filter((fv) => fv.name.toLocaleLowerCase() !== 'Category')
+        // .filter((fv) => fv.name.toLocaleLowerCase() !== 'Brand')
+        .map((fv) => {
+          return (
+            <FilterBlock key={fv.id}>
+              <Collapsible className="group/collapse">
+                <CollapsibleTrigger className="w-full">
+                  <FilterBlockHeader
+                    showFilterIcon={true}
+                    showBadge={true}
+                    badgeText={`${fv.values.length.toString()} db`}
+                    showChevron={true}
+                    title={fv.name === 'Brand' ? 'Márka' : fv.name}
+                  />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <FilterBlockContent onClick={() => onResetFilterGroup(fv.values.map((value) => value.id))}>
+                    <div className="-mx-3">
+                      {<CheckboxGroup>
+                        {fv.values.map((option) => (
+                          <CheckboxGroupItem
+                            key={option.id}
+                            label={option.name}
+                            showLabel={true}
+                            id={option.id}
+                            // imageSrc='/path/to/image.jpg'
+                            showImage={true}
+                            checked={stFilterTerms.includes(option.id)}
+                            onClick={onFilterItemClick}
+                          />
+                        ))}
+                      </CheckboxGroup>}
+                    </div>
+                  </FilterBlockContent>
+                </CollapsibleContent>
+              </Collapsible>
+            </FilterBlock>
+          )
+      })}
 
       <FilterBlock>
         <Collapsible className="group/collapse">

@@ -747,6 +747,19 @@ export type CustomField = {
 
 export type CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | LocaleTextCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig | TextCustomFieldConfig;
 
+export type CustomMappings = CustomProductMappings | CustomProductVariantMappings;
+
+export type CustomProductMappings = {
+  __typename?: 'CustomProductMappings';
+  facetValues: Scalars['String'];
+  productSlug: Scalars['String'];
+};
+
+export type CustomProductVariantMappings = {
+  __typename?: 'CustomProductVariantMappings';
+  facetValues: Scalars['String'];
+};
+
 export type Customer = Node & {
   __typename?: 'Customer';
   addresses?: Maybe<Array<Address>>;
@@ -2570,6 +2583,17 @@ export type PriceRange = {
   min: Scalars['Money'];
 };
 
+export type PriceRangeBucket = {
+  __typename?: 'PriceRangeBucket';
+  count: Scalars['Int'];
+  to: Scalars['Int'];
+};
+
+export type PriceRangeInput = {
+  max: Scalars['Int'];
+  min: Scalars['Int'];
+};
+
 export type Product = Node & {
   __typename?: 'Product';
   assets: Array<Asset>;
@@ -2700,7 +2724,7 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ProductVariantCustomFields>;
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars['ID'];
@@ -2719,20 +2743,42 @@ export type ProductVariant = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ProductVariantCustomFields = {
+  __typename?: 'ProductVariantCustomFields';
+  ean?: Maybe<Scalars['String']>;
+  isbn?: Maybe<Scalars['String']>;
+  jan?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
+  mpn?: Maybe<Scalars['String']>;
+  newUntil?: Maybe<Scalars['DateTime']>;
+  shipping?: Maybe<Scalars['Boolean']>;
+  upc?: Maybe<Scalars['String']>;
+  viewed?: Maybe<Scalars['Int']>;
+};
+
 export type ProductVariantFilterParameter = {
   _and?: InputMaybe<Array<ProductVariantFilterParameter>>;
   _or?: InputMaybe<Array<ProductVariantFilterParameter>>;
   createdAt?: InputMaybe<DateOperators>;
   currencyCode?: InputMaybe<StringOperators>;
+  ean?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
+  isbn?: InputMaybe<StringOperators>;
+  jan?: InputMaybe<StringOperators>;
   languageCode?: InputMaybe<StringOperators>;
+  model?: InputMaybe<StringOperators>;
+  mpn?: InputMaybe<StringOperators>;
   name?: InputMaybe<StringOperators>;
+  newUntil?: InputMaybe<DateOperators>;
   price?: InputMaybe<NumberOperators>;
   priceWithTax?: InputMaybe<NumberOperators>;
   productId?: InputMaybe<IdOperators>;
+  shipping?: InputMaybe<BooleanOperators>;
   sku?: InputMaybe<StringOperators>;
   stockLevel?: InputMaybe<StringOperators>;
+  upc?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
+  viewed?: InputMaybe<NumberOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2756,14 +2802,23 @@ export type ProductVariantListOptions = {
 
 export type ProductVariantSortParameter = {
   createdAt?: InputMaybe<SortOrder>;
+  ean?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  isbn?: InputMaybe<SortOrder>;
+  jan?: InputMaybe<SortOrder>;
+  model?: InputMaybe<SortOrder>;
+  mpn?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  newUntil?: InputMaybe<SortOrder>;
   price?: InputMaybe<SortOrder>;
   priceWithTax?: InputMaybe<SortOrder>;
   productId?: InputMaybe<SortOrder>;
+  shipping?: InputMaybe<SortOrder>;
   sku?: InputMaybe<SortOrder>;
   stockLevel?: InputMaybe<SortOrder>;
+  upc?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  viewed?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
@@ -3038,7 +3093,11 @@ export type SearchInput = {
   collectionId?: InputMaybe<Scalars['ID']>;
   collectionSlug?: InputMaybe<Scalars['String']>;
   facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
+  facetValueName?: InputMaybe<Scalars['String']>;
   groupByProduct?: InputMaybe<Scalars['Boolean']>;
+  inStock?: InputMaybe<Scalars['Boolean']>;
+  priceRange?: InputMaybe<PriceRangeInput>;
+  priceRangeWithTax?: InputMaybe<PriceRangeInput>;
   skip?: InputMaybe<Scalars['Int']>;
   sort?: InputMaybe<SearchResultSortParameter>;
   take?: InputMaybe<Scalars['Int']>;
@@ -3052,22 +3111,19 @@ export type SearchReindexResponse = {
 
 export type SearchResponse = {
   __typename?: 'SearchResponse';
-  cacheIdentifier?: Maybe<SearchResponseCacheIdentifier>;
   collections: Array<CollectionResult>;
   facetValues: Array<FacetValueResult>;
   items: Array<SearchResult>;
+  prices: SearchResponsePriceData;
   totalItems: Scalars['Int'];
 };
 
-/**
- * This type is here to allow us to easily purge the Stellate cache
- * of any search results where the collectionSlug is used. We cannot rely on
- * simply purging the SearchResult type, because in the case of an empty 'items'
- * array, Stellate cannot know that that particular query now needs to be purged.
- */
-export type SearchResponseCacheIdentifier = {
-  __typename?: 'SearchResponseCacheIdentifier';
-  collectionSlug?: Maybe<Scalars['String']>;
+export type SearchResponsePriceData = {
+  __typename?: 'SearchResponsePriceData';
+  buckets: Array<PriceRangeBucket>;
+  bucketsWithTax: Array<PriceRangeBucket>;
+  range: PriceRange;
+  rangeWithTax: PriceRange;
 };
 
 export type SearchResult = {
@@ -3075,9 +3131,14 @@ export type SearchResult = {
   /** An array of ids of the Collections in which this result appears */
   collectionIds: Array<Scalars['ID']>;
   currencyCode: CurrencyCode;
+  /** @deprecated Use customProductMappings or customProductVariantMappings */
+  customMappings: CustomMappings;
+  customProductMappings: CustomProductMappings;
+  customProductVariantMappings: CustomProductVariantMappings;
   description: Scalars['String'];
   facetIds: Array<Scalars['ID']>;
   facetValueIds: Array<Scalars['ID']>;
+  inStock?: Maybe<Scalars['Boolean']>;
   price: SearchResultPrice;
   priceWithTax: SearchResultPrice;
   productAsset?: Maybe<SearchResultAsset>;
@@ -3654,7 +3715,7 @@ export type SearchProductQueryVariables = Exact<{
 }>;
 
 
-export type SearchProductQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productName: string, score: number, productAsset?: { __typename?: 'SearchResultAsset', preview: string } | null, productVariantAsset?: { __typename?: 'SearchResultAsset', preview: string } | null, price: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice' } }> } };
+export type SearchProductQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productName: string, score: number, productAsset?: { __typename?: 'SearchResultAsset', preview: string } | null, customProductMappings: { __typename?: 'CustomProductMappings', productSlug: string }, price: { __typename?: 'PriceRange', min: number, max: number } | { __typename?: 'SinglePrice' } }> } };
 
 export const OrderDetailFragmentDoc = gql`
     fragment OrderDetail on Order {
@@ -4293,8 +4354,8 @@ export const SearchProductDocument = gql`
       productAsset {
         preview
       }
-      productVariantAsset {
-        preview
+      customProductMappings {
+        productSlug
       }
       score
       price {

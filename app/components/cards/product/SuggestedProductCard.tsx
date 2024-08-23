@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { useState } from 'react';
 import ProductImage from '~/components/common/product/ProductImage';
 import ProductPriceCrossed from '~/components/common/product/ProductPriceCrossed';
@@ -21,6 +22,7 @@ interface SuggestedProductCardProps {
   priceCrossed: number;
   imageSrc: string;
   hoverImageSrc: string;
+  onItemClick?: () => void;
 }
 
 const SuggestedProductCard: React.FC<SuggestedProductCardProps> = ({
@@ -33,6 +35,7 @@ const SuggestedProductCard: React.FC<SuggestedProductCardProps> = ({
   priceCrossed,
   imageSrc,
   hoverImageSrc,
+  onItemClick,
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   return (
@@ -45,17 +48,17 @@ const SuggestedProductCard: React.FC<SuggestedProductCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <CardHeader className="relative p-0">
-        <a href={link}>
+        <Link to={link} preventScrollReset prefetch="intent" onClick={onItemClick}>
           <ProductImage src={isHovering ? hoverImageSrc : imageSrc} />
-        </a>
+        </Link>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 p-0">
         <div className="flex flex-col gap-1">
-          <a href={link}>
+          <Link to={link} preventScrollReset prefetch="intent" onClick={onItemClick}>
             <CardTitle className="line-clamp-2 text-sm">
               <ProductTitle title={title} />
             </CardTitle>
-          </a>
+          </Link>
         </div>
         <div className="flex flex-col">
           <ProductPriceCrossed

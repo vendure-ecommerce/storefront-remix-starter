@@ -22,9 +22,10 @@ import { faker } from "@faker-js/faker";
 interface IAutoSuggestionProps {
   totalItems: number;
   items: any[];
+  onItemClick?: () => void;
 }
 
-const AutoSuggestion = ({ items, totalItems }: IAutoSuggestionProps) => {
+const AutoSuggestion = ({ items, totalItems, onItemClick }: IAutoSuggestionProps) => {
 
   return (
     <Card
@@ -154,18 +155,18 @@ const AutoSuggestion = ({ items, totalItems }: IAutoSuggestionProps) => {
             {/* Results */}
             <GridLayout>
               {items.map((option, index) => {
-                const image = faker.image.url();
                 return (
                   <SuggestedProductCard
                     key={index}
                     id={option.id}
                     title={option.productName}
-                    link={option.slug}
+                    link={`/products/${option.customProductMappings.productSlug}`}
                     priceNormal={option.price.min}
                     priceNet={option.price.min}
                     priceCrossed={option.price.max}
                     imageSrc={option.productAsset.preview}
                     hoverImageSrc={option.productAsset.preview}
+                    onItemClick={onItemClick}
                   />
                 );
               }

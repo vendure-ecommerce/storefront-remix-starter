@@ -15,8 +15,8 @@ export const simpleSearchQuery = gql`
         productAsset {
           preview
         }
-        productVariantAsset {
-          preview
+        customProductMappings {
+          productSlug 
         }
         score
         price {

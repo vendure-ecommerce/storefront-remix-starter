@@ -5,20 +5,24 @@ import { Label } from "~/components/ui/label";
 
 interface CheckboxGroupItemProps {
   id: string;
+  checked?: boolean;
   className?: string;
   label: string;
   showLabel?: boolean;
   imageSrc?: string;
   showImage?: boolean;
+  onClick?: (id: string) => void;
 }
 
 const CheckboxGroupItem: React.FC<CheckboxGroupItemProps> = ({
   id,
+  checked,
   className,
   label,
   showLabel = true,
   imageSrc,
   showImage = true,
+  onClick,
 }) => {
   return (
     <Label
@@ -35,7 +39,12 @@ const CheckboxGroupItem: React.FC<CheckboxGroupItemProps> = ({
         />
       )}
       <span className={!showLabel ? "sr-only" : ""}>{label}</span>
-      <Checkbox className='ml-auto' id={id} />
+      <Checkbox
+        id={id}
+        className='ml-auto'
+        checked={checked}
+        onClick={() => onClick?.(id)}
+      />
     </Label>
   );
 };

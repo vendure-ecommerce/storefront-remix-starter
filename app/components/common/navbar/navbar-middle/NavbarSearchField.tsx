@@ -3,10 +3,18 @@ import { Label } from '~/components/ui/label';
 import { Search } from 'lucide-react';
 
 interface INavbarSearchFieldProps {
+  value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const NavbarSearchField: React.FC<INavbarSearchFieldProps> = ({ onChange }) => {
+const NavbarSearchField: React.FC<INavbarSearchFieldProps> = ({ value, onChange }) => {
+  const onInputFocus = (evt: React.FocusEvent<HTMLInputElement>) => {
+    evt.currentTarget.setSelectionRange(
+      evt.currentTarget.value.length,
+      evt.currentTarget.value.length
+    )
+  };
+
   return (
     <search className="sticky top-0 mx-auto w-full ">
       {' '}
@@ -24,7 +32,9 @@ const NavbarSearchField: React.FC<INavbarSearchFieldProps> = ({ onChange }) => {
           type="text"
           placeholder="Termékek keresése"
           name="Termékek keresése"
+          value={value}
           onChange={onChange}
+          onFocus={onInputFocus}
         />
       </div>
     </search>
