@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { Button } from '~/components/ui-custom/MyButton';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
@@ -22,13 +23,15 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({
       variant={'outline'}
       asChild
     >
-      <a href={link}>
+      <Link to={link} prefetch="intent" preventScrollReset>
         <Avatar className="h-6 w-6 border">
-          {imageSrc && <AvatarImage src={imageSrc} alt={title} width={80} height={80} />}
+          {imageSrc && (
+            <AvatarImage src={imageSrc} alt={title} width={80} height={80} />
+          )}
           <AvatarFallback>{title.charAt(0)}</AvatarFallback>
         </Avatar>
         {title}
-      </a>
+      </Link>
     </Button>
   );
 };

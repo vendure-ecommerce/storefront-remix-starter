@@ -22,12 +22,16 @@ import ListingFooter from '~/components/listing/ListingFooter';
 import ListingHeader from '~/components/listing/ListingHeader';
 import ListingTabs from '~/components/listing/ListingTabs';
 import PageHero from '~/components/pages/PageHero';
-import { allowedPaginationLimits, APP_META_TITLE, paginationLimitMinimumDefault } from '~/constants';
+import {
+  allowedPaginationLimits,
+  APP_META_TITLE,
+  paginationLimitMinimumDefault,
+} from '~/constants';
 import { useCollections } from '~/providers/collections';
 import { TArrayElement } from '~/types/types';
+import { userCardDummies } from '~/utils/_fakes';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
-import { userCardDummies } from '~/utils/_fakes';
 
 export const sortOrders = [
   { label: 'Alapértelmezett', value: 'default' },
@@ -48,7 +52,6 @@ export const meta: V2_MetaFunction = ({ data }: any) => {
     },
   ];
 };
-
 
 const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
   allowedPaginationLimits,
@@ -156,14 +159,13 @@ export default function CollectionSlug() {
     setCollection(collection);
   }, [loaderData]);
 
-  console.log(facetValuesTracker.current.facetsWithValues);
-
   return (
     <>
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
         <FilterSidebar collection={collection} />
         <main className="flex max-w-full flex-col gap-16 pt-12">
           <Breadcrumbs
+            page="collections"
             items={collection.breadcrumbs.filter(
               (b) => b.slug !== '__root_collection__',
             )}

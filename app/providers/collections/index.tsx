@@ -1,10 +1,9 @@
 import { createContext, useContext, useState } from 'react';
 import { getCollections } from './collections';
-import { loader } from '~/routes/collections/$slug';
 
 interface ICollectionsProps {
-	children?: React.ReactNode;
-	collections: Awaited<ReturnType<typeof getCollections>>;
+  children?: React.ReactNode;
+  collections: Awaited<ReturnType<typeof getCollections>>;
 }
 
 const CollectionsContext = createContext<{
@@ -19,13 +18,15 @@ const CollectionsContext = createContext<{
     limit: number;
     page: number;
   };
-  setPagination: React.Dispatch<React.SetStateAction<{ limit: number, page: number }>>;
+  setPagination: React.Dispatch<
+    React.SetStateAction<{ limit: number; page: number }>
+  >;
 }>({
   collection: undefined,
   setCollection: () => {},
   collectionItems: undefined,
   setCollectionItems: () => {},
-	collections: [],
+  collections: [],
   searchParams: new URLSearchParams(),
   setSearchParams: () => {},
   pagination: {
@@ -54,7 +55,7 @@ export const CollectionsProvider: React.FC<ICollectionsProps> = ({
 
   return (
     <CollectionsContext.Provider
-			value={{
+      value={{
         collection: stCollection,
         setCollection,
         collectionItems: stCollectionItems,
@@ -65,7 +66,7 @@ export const CollectionsProvider: React.FC<ICollectionsProps> = ({
         pagination: stPagination,
         setPagination,
       }}
-		>
+    >
       {children}
     </CollectionsContext.Provider>
   );
