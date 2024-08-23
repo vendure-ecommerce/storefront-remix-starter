@@ -17,7 +17,6 @@ import { Badge } from "../ui-custom/MyBadge";
 import { Button } from "../ui-custom/MyButton";
 import { Card } from "../ui-custom/MyCard";
 import { ScrollArea } from "../ui-custom/MyScrollArea";
-import { faker } from "@faker-js/faker";
 
 interface IAutoSuggestionProps {
   totalItems: number;

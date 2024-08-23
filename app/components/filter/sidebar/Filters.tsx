@@ -26,6 +26,7 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useSubmit } from '@remix-run/react';
 import { typingDelay } from '~/constants';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
+import { useFilterContext } from '~/providers/filter';
 
 interface IFiltersProps {
   collection: any;
@@ -34,32 +35,58 @@ interface IFiltersProps {
 
 const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) => {
   const submit = useSubmit();
-  const { searchParams } = useCollections();
-  const [stSearchTerm, setSearchTerm] = useState<string>('');
-  const [stFilterTerms, setFilterTerms] = useState<string[]>([]);
+  const {
+    filterTerms,
+    searchTerm,
+    priceRange,
+    setFilterTerms,
+    setSearchTerm,
+    setPriceRange,
+  } = useFilterContext();
+  const { searchParams, collectionItems } = useCollections();
   const rfInputTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [stGroupOpen, setGroupOpen] = useState<string[]>([]);
 
-  /* const filterChipsOptions = dummy.filterChipsOptions;
-  const checkboxOptions = dummy.checkboxOptions;
-  const radioOptions = dummy.radioOptions;
-  const checkboxRatingOptions = dummy.checkboxRatingOptions;
-  const radioRatingOptions = dummy.radioRatingOptions;
-  const selectChipOptions = dummy.selectChipOptions; */
+  const getMinMaxPrice = () => {
+    const result = { min: 0, max: 0 };
+    if (collectionItems?.items) {
+      collectionItems?.items.forEach((item: any) => {
+        if (item.priceWithTax.min < result.min) {
+          result.min = item.priceWithTax.min;
+        }
+        if (item.priceWithTax.max > result.max) {
+          result.max = item.priceWithTax.max;
+        }
+      });
+    }
+    return result;
+  };
+
+  const onPriceRangeChange = (values: number[]) => {
+    setPriceRange(values);
+  };
+
+  const onGroupOpenChange = (id: string) => {
+    if (stGroupOpen.includes(id)) {
+      setGroupOpen(stGroupOpen.filter((i) => i !== id));
+    } else {
+      setGroupOpen([...stGroupOpen, id]);
+    }
+  };
 
   const onResetFilterGroup = (ids?: string[]) => {
     if (ids === undefined) {
-      setSearchTerm('');
       setFilterTerms([]);
     } else {
-      setFilterTerms(stFilterTerms.filter((id) => !ids.includes(id)));
+      setFilterTerms(filterTerms.filter((id) => !ids.includes(id)));
     }
   };
 
   const onFilterItemClick = (itemId: any) => {
-    if (stFilterTerms.includes(itemId)) {
-      setFilterTerms(stFilterTerms.filter((id) => id !== itemId));
+    if (filterTerms.includes(itemId)) {
+      setFilterTerms(filterTerms.filter((id) => id !== itemId));
     } else {
-      setFilterTerms([...stFilterTerms, itemId]);
+      setFilterTerms([...filterTerms, itemId]);
     }
   };
 
@@ -80,10 +107,25 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
           formData.append(key, value);
         }
       }
+
+      if (!filterTerms.length) {
+        formData.delete('fvid');
+      } else {
+        for (const id of filterTerms) {
+          formData.append('fvid', id);
+        }
+      }
   
-      formData.set('q', stSearchTerm);
-      if (!stSearchTerm) {
+      formData.set('q', searchTerm);
+      if (!searchTerm) {
         formData.delete('q');
+      }
+
+      formData.set('pr', `${priceRange[0]}-${priceRange[1]}`);
+      if (!priceRange[0] || !priceRange[1]) {
+        formData.delete('pr');
+      } else if (priceRange[0] === getMinMaxPrice().min && priceRange[1] === getMinMaxPrice().max) {
+        formData.delete('pr');
       }
   
       submit(formData, { method: 'get', preventScrollReset: true });  
@@ -93,7 +135,7 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
         clearTimeout(rfInputTimer.current);
       }
     };
-  }, [stSearchTerm, submit]);
+  }, [searchTerm, filterTerms, priceRange, submit]);
 
   useEffect(() => {
     const formData = new FormData();
@@ -103,16 +145,28 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
       }
     }
 
-    if (!stFilterTerms.length) {
+    if (!filterTerms.length) {
       formData.delete('fvid');
     } else {
-      for (const id of stFilterTerms) {
+      for (const id of filterTerms) {
         formData.append('fvid', id);
       }
     }
 
+    formData.set('q', searchTerm);
+    if (!searchTerm) {
+      formData.delete('q');
+    }
+
+    formData.set('pr', `${priceRange[0]}-${priceRange[1]}`);
+    if (!priceRange[0] || !priceRange[1]) {
+      formData.delete('pr');
+    } else if (priceRange[0] === getMinMaxPrice().min && priceRange[1] === getMinMaxPrice().max) {
+      formData.delete('pr');
+    }
+
     submit(formData, { method: 'get', preventScrollReset: true });
-  }, [stFilterTerms]);
+  }, [filterTerms, searchTerm, priceRange, submit]);
 
   return (
     <div>
@@ -167,7 +221,7 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
                 type="text"
                 placeholder={`Keresés itt: ${collection?.name || ''}`}
                 name={`Keresés itt: ${collection?.name || ''}`}
-                value={stSearchTerm}
+                value={searchTerm}
                 onChange={onSearchTermChange}
               />
             </div>
@@ -181,7 +235,11 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
         .map((fv) => {
           return (
             <FilterBlock key={fv.id}>
-              <Collapsible className="group/collapse">
+              <Collapsible
+                className="group/collapse"
+                open={stGroupOpen.includes(fv.id)}
+                onOpenChange={() => onGroupOpenChange(fv.id)}
+              >
                 <CollapsibleTrigger className="w-full">
                   <FilterBlockHeader
                     showFilterIcon={true}
@@ -203,7 +261,7 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
                             id={option.id}
                             // imageSrc='/path/to/image.jpg'
                             showImage={true}
-                            checked={stFilterTerms.includes(option.id)}
+                            checked={filterTerms.includes(option.id)}
                             onClick={onFilterItemClick}
                           />
                         ))}
@@ -215,6 +273,58 @@ const Filters: React.FC<IFiltersProps> = ({ collection, facetValuesTracker }) =>
             </FilterBlock>
           )
       })}
+
+      <FilterBlock>
+        <Collapsible className="group/collapse">
+          <CollapsibleTrigger className="w-full">
+            <FilterBlockHeader
+              showFilterIcon={false}
+              showBadge={false}
+              badgeText=""
+              showChevron={true}
+              title="Ár (tól-ig)"
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <FilterBlockContent>
+              <div className="mt-4 flex flex-col gap-6">
+                <Slider
+                  value={[
+                    priceRange[0] || getMinMaxPrice().min,
+                    priceRange[1] || getMinMaxPrice().max,
+                  ]}
+                  min={getMinMaxPrice().min}
+                  max={getMinMaxPrice().max}
+                  step={10}
+                  onValueChange={onPriceRangeChange}
+                />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="w-full">
+                    <Label htmlFor="min">Min.</Label>
+                    <Input className="flex-auto" id="min" type="number" />
+                  </div>
+                  <div className="mt-5">-</div>
+                  <div className="w-full">
+                    <Label htmlFor="max">Max.</Label>
+                    <Input className="flex-auto" id="max" type="number" />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="w-full">
+                    <p className="text-sm font-medium">Érték</p>
+                    <Combobox />
+                  </div>
+                  <div className="mt-5">-</div>
+                  <div className="w-full">
+                    <p className="text-sm font-medium">Érték</p>
+                    <Combobox />
+                  </div>
+                </div>
+              </div>
+            </FilterBlockContent>
+          </CollapsibleContent>
+        </Collapsible>
+      </FilterBlock>
 
       <FilterBlock>
         <Collapsible className="group/collapse">
