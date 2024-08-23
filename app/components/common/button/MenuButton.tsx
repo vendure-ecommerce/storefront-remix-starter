@@ -1,4 +1,6 @@
+import { useFetcher } from '@remix-run/react';
 import { Menu } from 'lucide-react';
+import { useEffect } from 'react';
 import CategoryMenuList from '~/components/pages/category/CategoryMenuList';
 import { Button } from '~/components/ui-custom/MyButton';
 import { ScrollArea } from '~/components/ui-custom/MyScrollArea';
@@ -14,14 +16,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import { useCollections } from '~/providers/collections';
 import { isArrayValid } from '~/utils';
 import { useViewportWidth } from '~/utils/use-viewport-width';
 import ListGroup from '../list/ListGroup';
 import ListGroupItem from '../list/ListGroupItem';
 
 const MenuButton = () => {
-  const { collections } = useCollections();
+  const fetcher = useFetcher<{
+    result: { items: any[] };
+  }>();
+  useEffect(() => {
+    fetcher.submit(null, { action: '/api/collection-menu', method: 'get' });
+  }, []);
+
   const width = useViewportWidth();
   const isMobile = width < 1024;
 
@@ -50,8 +57,8 @@ const MenuButton = () => {
           </SheetHeader>
           <div className="flex flex-col gap-8 py-8">
             <ListGroup>
-              {isArrayValid(collections) &&
-                collections.map((option, index) => (
+              {isArrayValid(fetcher.data?.result?.items) &&
+                fetcher.data?.result?.items.map((option, index) => (
                   <Popover key={index}>
                     <PopoverTrigger className="group/item">
                       <ListGroupItem

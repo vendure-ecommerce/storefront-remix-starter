@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
-import { sdk } from '../../graphqlWrapper';
-import { listedProductFragment } from '../products/products';
 import { CollectionListOptions } from '~/generated/graphql';
+import { sdk } from '../../graphqlWrapper';
 
 export function getCollections(
   request: Request,

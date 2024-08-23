@@ -8,7 +8,9 @@ interface ProductTagProps {
 const ProductTag: React.FC<ProductTagProps> = ({ className, children }) => {
   return (
     <Badge
-      className={`rounded-full mr-2 mb-2 ${className ? ` ${className}` : ''}`}
+      className={`line-clamp-1 overflow-hidden max-w-fit rounded-full mr-2 mb-2 ${
+        className ? ` ${className}` : ''
+      }`}
       variant={'outline'}
     >
       {children}

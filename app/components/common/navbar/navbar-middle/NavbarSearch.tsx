@@ -1,19 +1,20 @@
-import AutoSuggestion from "~/components/autosuggestion/AutoSuggestion";
-import { Button } from "~/components/ui-custom/MyButton";
+import { useFetcher } from '@remix-run/react';
+import { Search } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import AutoSuggestion from '~/components/autosuggestion/AutoSuggestion';
+import { Button } from '~/components/ui-custom/MyButton';
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "~/components/ui-custom/MySearchDialog";
-import { Search } from "lucide-react";
-import NavbarSearchField from "./NavbarSearchField";
-import { useFetcher } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
-import { typingDelay } from "~/constants";
-
+} from '~/components/ui-custom/MySearchDialog';
+import { typingDelay } from '~/constants';
+import NavbarSearchField from './NavbarSearchField';
 
 const NavbarSearch: React.FC = () => {
-  const fetcher = useFetcher<{ result: { items: any[], totalItems: number } }>();
+  const fetcher = useFetcher<{
+    result: { items: any[]; totalItems: number };
+  }>();
 
   const [stTerm, setTerm] = useState('');
 
@@ -30,8 +31,8 @@ const NavbarSearch: React.FC = () => {
     }
     rfInputTimer.current = setTimeout(() => {
       if (stTerm) {
-        fetcher.submit({ q: stTerm }, { action: "/api/search", method: "get" });
-      }  
+        fetcher.submit({ q: stTerm }, { action: '/api/search', method: 'get' });
+      }
     }, typingDelay);
     return () => {
       if (rfInputTimer.current) {
@@ -46,15 +47,15 @@ const NavbarSearch: React.FC = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className='h-[3.25rem] w-full justify-start gap-4 hover:scale-100'
-          variant={"outline"}
+          className="h-[3.25rem] w-full justify-start gap-4 hover:scale-100"
+          variant={'outline'}
         >
-          <Search className='h-6 w-6' />
-          <span className='text-color-tertiary'>Keresés</span>
+          <Search className="h-6 w-6" />
+          <span className="text-color-tertiary">Keresés</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='h-10/12 overflow-hidden pt-20 xl:pt-10'>
-        <div className='mx-auto grid max-w-screen-2xl grid-rows-[auto,_1fr] gap-8'>
+      <DialogContent className="h-10/12 overflow-hidden pt-20 xl:pt-10">
+        <div className="mx-auto grid max-w-screen-2xl grid-rows-[auto,_1fr] gap-8">
           <NavbarSearchField onChange={onInputChange} />
           <AutoSuggestion
             items={fetcher.data?.result?.items || []}
