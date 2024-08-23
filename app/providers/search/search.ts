@@ -1,7 +1,10 @@
 import gql from 'graphql-tag';
 import { QueryOptions, sdk } from '~/graphqlWrapper';
 
-export function search(variables: { term: string; groupByProduct: boolean }, options: QueryOptions) {
+export function search(
+  variables: { term: string; groupByProduct: boolean },
+  options: QueryOptions,
+) {
   // Használjuk az egyszerűsített lekérdezést
   return sdk.searchProduct(variables, options);
 }
@@ -15,8 +18,8 @@ export const simpleSearchQuery = gql`
         productAsset {
           preview
         }
-        productVariantAsset {
-          preview
+        customProductMappings {
+          productSlug
         }
         score
         price {

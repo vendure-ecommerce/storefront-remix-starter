@@ -168,7 +168,10 @@ export default function CollectionSlug() {
   return (
     <>
       <div className="grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]">
-        <FilterSidebar collection={collection} />
+        <FilterSidebar
+          collection={collection}
+          facetValuesTracker={facetValuesTracker}
+        />
         <main className="flex max-w-full flex-col gap-16 pt-12">
           <Breadcrumbs
             page="collections"
@@ -238,47 +241,48 @@ export default function CollectionSlug() {
                 value={searchParams.get('order') ?? 'default'}
                 onChange={onListingTabChange}
               >
-                {result.items.length !== 0 && result.items.map((option, index) => {
-                  const productFacets = result.facetValues.filter(
-                    (facetValue) => {
-                      return option.facetValueIds.includes(
-                        facetValue.facetValue.id,
-                      );
-                    },
-                  );
-                  return (
-                    <ProductCard
-                      key={index}
-                      id={option.productId}
-                      title={option.productName}
-                      link={`/products/${option.slug}`}
-                      number={'1'}
-                      priceCrossed={getGrossPrice(option, true)}
-                      priceNormal={getGrossPrice(option)}
-                      priceNet={getNetPrice(option)}
-                      imageSrc={option.productAsset?.preview ?? ''}
-                      hoverImageSrc={option.productAsset?.preview ?? ''}
-                      rating={1}
-                      reviews={1}
-                      manufacturer={
-                        [
-                          // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
-                        ]
-                      }
-                      productTags={[
-                        ...productFacets
-                          .filter(
-                            (facetValue) =>
-                              facetValue.facetValue.facet.name !== 'Brand' &&
-                              facetValue.facetValue.facet.name !== 'Category',
-                          )
-                          .map((facetValue) => {
-                            return `${facetValue.facetValue.facet.name}: ${facetValue.facetValue.name}`;
-                          }),
-                      ]}
-                    />
-                  );
-                })}
+                {result.items.length !== 0 &&
+                  result.items.map((option, index) => {
+                    const productFacets = result.facetValues.filter(
+                      (facetValue) => {
+                        return option.facetValueIds.includes(
+                          facetValue.facetValue.id,
+                        );
+                      },
+                    );
+                    return (
+                      <ProductCard
+                        key={index}
+                        id={option.productId}
+                        title={option.productName}
+                        link={`/products/${option.slug}`}
+                        number={'1'}
+                        priceCrossed={getGrossPrice(option, true)}
+                        priceNormal={getGrossPrice(option)}
+                        priceNet={getNetPrice(option)}
+                        imageSrc={option.productAsset?.preview ?? ''}
+                        hoverImageSrc={option.productAsset?.preview ?? ''}
+                        rating={1}
+                        reviews={1}
+                        manufacturer={
+                          [
+                            // Nincs olyan collection ami egy-egy brandet lefedne, nincs értelme renderelni így
+                          ]
+                        }
+                        productTags={[
+                          ...productFacets
+                            .filter(
+                              (facetValue) =>
+                                facetValue.facetValue.facet.name !== 'Brand' &&
+                                facetValue.facetValue.facet.name !== 'Category',
+                            )
+                            .map((facetValue) => {
+                              return `${facetValue.facetValue.facet.name}: ${facetValue.facetValue.name}`;
+                            }),
+                        ]}
+                      />
+                    );
+                  })}
                 {result.items.length === 0 && <NoResults />}
               </ListingTabs>
             )}

@@ -1,4 +1,3 @@
-import { fakerHU as faker } from '@faker-js/faker';
 import {
   Card,
   CardDescription,
@@ -19,7 +18,7 @@ interface ExpertProps {
 
 const UserCard: React.FC<ExpertProps> = ({
   title,
-  imageSrc = '',
+  imageSrc,
   expertPhoneNumber,
   expertEmail,
   showTitle = true,
@@ -31,7 +30,7 @@ const UserCard: React.FC<ExpertProps> = ({
     <Card className="flex items-center gap-4 border-none shadow-none bg-transparent">
       {showImage && (
         <Avatar className="h-14 w-14 ring-[1px] ring-border">
-          <AvatarImage src={faker.image.url()} alt={title} />
+          <AvatarImage src={imageSrc} alt={title} />
           <AvatarFallback>{title.charAt(0)}</AvatarFallback>
         </Avatar>
       )}

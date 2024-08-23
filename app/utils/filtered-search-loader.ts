@@ -41,6 +41,7 @@ export function filteredSearchLoaderFromPagination(
       const limit =
         url.searchParams.get('limit') ?? paginationLimitMinimumDefault;
       const page = url.searchParams.get('page') ?? 1;
+      const priceRange = url.searchParams.get('pr');
 
       const order = url.searchParams.get('order') ?? 'default';
 
@@ -56,12 +57,19 @@ export function filteredSearchLoaderFromPagination(
         ReturnType<typeof search>,
         ReturnType<typeof searchFacetValues>,
       ];
+
       const searchResultPromise = search(
         {
           input: {
             groupByProduct: true,
             term,
             facetValueFilters: [{ or: facetValueIds }],
+            priceRange: priceRange
+              ? {
+                  min: Number(priceRange.split('-')[0]),
+                  max: Number(priceRange.split('-')[1]),
+                }
+              : undefined,
             collectionSlug: params.slug,
             take: zodResult.data.limit,
             skip: (zodResult.data.page - 1) * zodResult.data.limit,
@@ -78,6 +86,12 @@ export function filteredSearchLoaderFromPagination(
               input: {
                 groupByProduct: true,
                 term,
+                priceRange: priceRange
+                  ? {
+                      min: Number(priceRange.split('-')[0]),
+                      max: Number(priceRange.split('-')[1]),
+                    }
+                  : undefined,
                 collectionSlug: params.slug,
               },
             },
