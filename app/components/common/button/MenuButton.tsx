@@ -57,7 +57,7 @@ const MenuButton = () => {
                       <ListGroupItem
                         className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
                         title={option.name}
-                        link={option.slug}
+                        link={`/collections/${option.slug}`}
                         imageSrc={option.featuredAsset?.preview}
                         imageClassName="h-10 w-10 rounded-full border"
                         showTitle={true}
@@ -71,7 +71,7 @@ const MenuButton = () => {
                       side={'right'}
                       sideOffset={0}
                     >
-                      <CategoryMenuList />
+                      <CategoryMenuList collection={option} />
                     </PopoverContent>
                   </Popover>
                 ))}

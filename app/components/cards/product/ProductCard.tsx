@@ -70,7 +70,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <CardHeader className="relative p-0">
-        <Link preventScrollReset to={link} prefetch="intent">
+        <Link to={link} prefetch="intent">
           <ProductImage src={isHovering ? hoverImageSrc : imageSrc} />
         </Link>
         <FavoriteButton isFavorite={isFavorite} />
@@ -93,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
         <div className="flex flex-col gap-1">
           {/* <ProductAvailability /> */}
-          <Link preventScrollReset to={link} prefetch="intent">
+          <Link to={link} prefetch="intent">
             <CardTitle className="text-base">
               <ProductTitle title={title} />
             </CardTitle>
