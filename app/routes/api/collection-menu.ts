@@ -7,7 +7,13 @@ export const loader = async ({
   context,
 }: DataFunctionArgs) => {
   let resultPromise: [ReturnType<typeof getCollectionMenuData>];
-  const menuPromiseRes = getCollectionMenuData();
+  const menuPromiseRes = getCollectionMenuData({
+    filter: {
+      parentId: {
+        eq: '1', // TODO: dinamizalas
+      },
+    },
+  });
   resultPromise = [menuPromiseRes];
 
   const [result] = await Promise.all(resultPromise);

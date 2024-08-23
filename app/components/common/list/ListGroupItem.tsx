@@ -16,6 +16,7 @@ interface ListGroupItemProps {
   showTrailingIcon?: boolean;
   showBadge?: boolean;
   isLinkActive?: boolean;
+  onClick?: () => void;
 }
 
 const ListGroupItem: React.FC<ListGroupItemProps> = ({
@@ -31,6 +32,7 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
   showTrailingIcon = false,
   showBadge = false,
   isLinkActive = true,
+  onClick,
 }) => {
   const content = (
     <>
@@ -72,6 +74,7 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
     <div className={`mx-3`}>
       {isLinkActive ? (
         <Link
+          onClick={onClick}
           prefetch="intent"
           preventScrollReset
           to={link}
@@ -83,6 +86,7 @@ const ListGroupItem: React.FC<ListGroupItemProps> = ({
         </Link>
       ) : (
         <div
+          onClick={onClick}
           className={`flex h-14 w-full cursor-pointer items-center rounded-md hover:bg-primary/5 transition gap-4${
             className ? ` ${className}` : ''
           }`}

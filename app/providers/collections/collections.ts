@@ -46,10 +46,6 @@ gql`
         id
         name
         slug
-        assets {
-          id
-          preview
-        }
       }
       children {
         id

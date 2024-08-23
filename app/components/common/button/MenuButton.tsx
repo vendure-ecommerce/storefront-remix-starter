@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import { Menu } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import CategoryMenuList from '~/components/pages/category/CategoryMenuList';
 import { Button } from '~/components/ui-custom/MyButton';
 import { ScrollArea } from '~/components/ui-custom/MyScrollArea';
@@ -32,8 +32,10 @@ const MenuButton = () => {
   const width = useViewportWidth();
   const isMobile = width < 1024;
 
+  const [stOpen, setOpen] = useState<boolean>(false);
+
   return (
-    <Sheet>
+    <Sheet open={stOpen} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         {isMobile ? (
           <Button variant={'mobileMenu'} size={'mobileMenu'}>
@@ -78,7 +80,7 @@ const MenuButton = () => {
                       side={'right'}
                       sideOffset={0}
                     >
-                      <CategoryMenuList collection={option} />
+                      <CategoryMenuList collection={option} setOpen={setOpen} />
                     </PopoverContent>
                   </Popover>
                 ))}
