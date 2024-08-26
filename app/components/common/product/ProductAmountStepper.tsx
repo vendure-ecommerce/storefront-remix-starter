@@ -6,6 +6,7 @@ import { Label } from '~/components/ui/label';
 import { generateUniqueId } from '~/utils';
 
 interface ProductAmountStepperProps {
+  disabled?: boolean;
   stepperButtonSize?: string;
   iconSize?: string;
   inputSize?: string;
@@ -16,6 +17,7 @@ interface ProductAmountStepperProps {
 }
 
 const ProductAmountStepper: React.FC<ProductAmountStepperProps> = ({
+  disabled = false,
   stepperButtonSize = 'h-9 w-9',
   iconSize = 'h-4 w-4',
   inputSize = 'h-10',
@@ -45,9 +47,13 @@ const ProductAmountStepper: React.FC<ProductAmountStepperProps> = ({
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10);
-    if (!isNaN(newValue) && newValue >= 0) {
-      onAmountChange(newValue);
+    if (!disabled) {
+      const newValue = parseInt(event.target.value, 10);
+      if (!isNaN(newValue) && newValue >= 0) {
+        onAmountChange(newValue);
+      } else if (event.target.value === '') {
+        onAmountChange(0);
+      }
     }
   };
 
@@ -58,6 +64,7 @@ const ProductAmountStepper: React.FC<ProductAmountStepperProps> = ({
       }`}
     >
       <Button
+        disabled={disabled}
         className={`relative flex-none rounded-full p-0 ${stepperButtonSize}`}
         variant={'ghost'}
         onClick={handleDecrease}
@@ -78,6 +85,7 @@ const ProductAmountStepper: React.FC<ProductAmountStepperProps> = ({
         />
       </Label>
       <Button
+        disabled={disabled}
         className={`relative flex-none rounded-full p-0 ${stepperButtonSize}`}
         variant={'ghost'}
         onClick={handleIncrease}

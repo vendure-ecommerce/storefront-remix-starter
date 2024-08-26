@@ -14,6 +14,7 @@ import {
 } from '~/components/ui-custom/MyCard';
 
 interface ProductCardProps {
+  productId: string;
   className?: string;
   title: string;
   number: string;
@@ -24,6 +25,7 @@ interface ProductCardProps {
 }
 
 const StickyProductCard: React.FC<ProductCardProps> = ({
+  productId,
   className,
   title,
   priceNormal,
@@ -68,6 +70,8 @@ const StickyProductCard: React.FC<ProductCardProps> = ({
               />
             </div>
             <AddToCartHandler
+              id="sticky-product-amount"
+              productId={productId}
               className="w-40"
               addToCartButtonSize="h-10 text-sm w-full"
               stepperButtonSize="h-9 w-9"
