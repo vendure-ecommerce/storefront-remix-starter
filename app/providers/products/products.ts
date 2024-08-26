@@ -104,6 +104,7 @@ export const listedProductFragment = gql`
       }
     }
     facetValueIds
+    productVariantId
   }
 `;
 

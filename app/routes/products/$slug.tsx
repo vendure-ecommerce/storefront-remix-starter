@@ -52,13 +52,14 @@ import {
   CollapsibleTrigger,
 } from '~/components/ui/collapsible';
 import { APP_META_TITLE } from '~/constants';
-import { ErrorResult } from '~/generated/graphql';
+import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import { getProductBySlug } from '~/providers/products/products';
 import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import { userCardDummies } from '~/utils/_fakes';
+import { useActiveOrder } from '~/utils/use-active-order';
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -96,7 +97,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
   const { product, error } = useLoaderData<typeof loader>();
-  // console.log(product);
   const { activeOrderFetcher } = useOutletContext<{
     activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
   }>();
@@ -157,8 +157,6 @@ export default function ProductSlug() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  console.log(product);
 
   // Find the collection where the breadcrumb is the most length
   const collection = product.collections
@@ -297,6 +295,8 @@ export default function ProductSlug() {
             <div className="flex items-start gap-8">
               <div className="flex flex-1 flex-col gap-4">
                 <AddToCartHandler
+                  id="product-page-amount"
+                  productId={product.id}
                   className="w-full"
                   addToCartButtonSize="h-16 text-xl w-full"
                   stepperButtonSize="h-[3.75rem] w-[3.75rem]"
@@ -676,6 +676,7 @@ export default function ProductSlug() {
         </Section>
 
         <StickyProductCard
+          productId={product.id}
           className={`transition ${
             showStickyCard ? 'z-20 opacity-100' : 'z-0 opacity-0'
           } !mt-0`}
@@ -730,7 +731,7 @@ export function CatchBoundary() {
   );
 }
 
-function getAddItemToOrderError(error?: ErrorResult): string | undefined {
+export function getAddItemToOrderError(error?: ErrorResult): string | undefined {
   if (!error || !error.errorCode) {
     return undefined;
   }

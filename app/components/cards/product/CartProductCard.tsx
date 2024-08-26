@@ -15,11 +15,14 @@ import {
   CardTitle,
 } from "~/components/ui-custom/MyCard";
 import { Trash } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+import { Link } from "@remix-run/react";
+import AddToCartHandler from "~/components/common/product/AddToCartHandler";
+import { useActiveOrder } from "~/utils/use-active-order";
 
 interface ProductCardProps {
   id: string;
+  lineItemId: string;
   title: string;
   link: string;
   number: string;
@@ -29,15 +32,16 @@ interface ProductCardProps {
   imageSrc: string;
   rating: number;
   reviews: number;
-  manufacturer: {
+  /* manufacturer: {
     title: string;
     imageSrc: string;
     link: string;
-  }[];
+  }[]; */
 }
 
 const CartProductCard: React.FC<ProductCardProps> = ({
   id,
+  lineItemId,
   title,
   link,
   priceNormal,
@@ -45,17 +49,10 @@ const CartProductCard: React.FC<ProductCardProps> = ({
   priceCrossed,
   imageSrc,
 }) => {
-  const [amount, setAmount] = useState(1); // Kezdeti érték beállítása 1-re
+  const { removeItem } = useActiveOrder();
 
-  const handleAmountChange = (newAmount: number) => {
-    setAmount(newAmount);
-    // Itt hozzáadhatod a további logikát, pl. frissítheted az állapotot egy globális állapotkezelőben
-  };
-
-  const handleRemove = () => {
-    // Itt implementálhatod a logikát, ami akkor hajtódik végre, amikor a termék eltávolításra kerül
-    console.log("A termék eltávolításra került");
-    // Például eltávolíthatod a terméket a kosárból, frissítheted az állapotot, stb.
+  const onTrashButtonClick = () => {
+    removeItem(lineItemId);
   };
 
   return (
@@ -64,7 +61,7 @@ const CartProductCard: React.FC<ProductCardProps> = ({
       id={id}
     >
       <CardHeader className='relative flex flex-row items-start gap-4 p-0'>
-        <Link href={link}>
+        <Link to={link} prefetch="intent" preventScrollReset>
           <ProductImage
             className='!w-14 border rounded-lg bg-white'
             src={imageSrc}
@@ -72,7 +69,7 @@ const CartProductCard: React.FC<ProductCardProps> = ({
         </Link>
         <div className='flex flex-col gap-1'>
           <ProductAvailability />
-          <Link href={link}>
+          <Link to={link} prefetch="intent" preventScrollReset>
             <CardTitle className='text-sm'>
               <ProductTitle title={title} />
             </CardTitle>
@@ -81,14 +78,16 @@ const CartProductCard: React.FC<ProductCardProps> = ({
       </CardHeader>
       {/* <CardContent className='flex flex-grow flex-col gap-4 p-0'></CardContent> */}
       <CardFooter className='flex justify-between gap-4 p-0'>
-        <ProductAmountStepper
+        <AddToCartHandler
+          id={"cart-product-card-" + id}
+          productId={id}
           className='w-36 self-end'
           stepperButtonSize='h-7 w-7'
           iconSize='h-4 w-4'
           inputSize='h-8'
-          amount={amount}
-          onAmountChange={handleAmountChange}
-          onRemove={handleRemove}
+          // amount={amount}
+          // onAmountChange={handleAmountChange}
+          // onRemove={handleRemove}
         />
         <div className='flex flex-none flex-col'>
           <ProductPriceCrossed
@@ -105,6 +104,7 @@ const CartProductCard: React.FC<ProductCardProps> = ({
       <Button
         className='absolute -top-1 right-1.5 w-7 h-7 p-0 opacity-20 group-hover/card:opacity-100 transition'
         variant={"ghost"}
+        onClick={onTrashButtonClick}
       >
         <Trash className='h-3.5 w-3.5' />
         <span className='sr-only'>Törlés</span>

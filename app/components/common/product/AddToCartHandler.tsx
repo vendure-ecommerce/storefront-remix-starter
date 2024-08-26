@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/ui-custom/MyButton';
 import ProductAmountStepper from './ProductAmountStepper';
+import { useOrder } from '~/providers/orders';
+import { useActiveOrder } from '~/utils/use-active-order';
+import { clickingDelay } from '~/constants';
 
 interface AddToCartHandlerProps {
+  id?: string;
   productId?: string;
   className?: string;
   addToCartButtonText?: string;
@@ -13,6 +17,7 @@ interface AddToCartHandlerProps {
 }
 
 const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
+  id,
   className = 'w-full',
   addToCartButtonText = 'Kosárba',
   addToCartButtonSize,
@@ -21,11 +26,23 @@ const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
   inputSize,
   productId,
 }) => {
+  const {
+    error,
+    amountHandlers,
+    addAmountHandler,
+    removeAmountHandler
+  } = useOrder();
   // const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const {
+    activeOrderFetcher,
+    activeOrder,
+    removeItem,
+    refresh,
+  } = useActiveOrder();
+  const rfOrderTimer = useRef<NodeJS.Timeout>();
+  const productLine = activeOrder?.lines.find((line) => line.productVariant.id === productId);
+
   const [amount, setAmount] = useState(0);
-  if (typeof window !== 'undefined') {
-    localStorage.getItem('cart');
-  }
 
   const handleButtonClick = () => {
     // setIsButtonClicked(true);
@@ -34,11 +51,80 @@ const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
 
   const handleAmountChange = (newAmount: number) => {
     setAmount(newAmount);
-    if (newAmount === 0) {
-      // setIsButtonClicked(false);
-    } else if (productId) {
-    }
   };
+
+  useEffect(() => {
+    if (activeOrder && productLine && activeOrderFetcher.state === 'idle') {
+      setAmount(productLine.quantity);
+    }
+  }, [activeOrder, activeOrderFetcher]);
+
+  useEffect(() => {
+    if (rfOrderTimer.current) {
+      clearTimeout(rfOrderTimer.current);
+    }
+    if (activeOrderFetcher.state === 'idle') {
+      rfOrderTimer.current = setTimeout(() => {
+        if (amount === 0 && productLine) {
+          removeItem(productLine.id);
+        } else if (productLine && amount !== 0) {
+          activeOrderFetcher.submit(
+            {
+              action: "adjustItem",
+              lineId: productLine.id,
+              quantity: amount,
+            },
+            {
+              method: 'post',
+              action: `/api/active-order`,
+              preventScrollReset: true,
+            }
+          )
+        } else if (amount !== 0) {
+          activeOrderFetcher.submit(
+            {
+              action: "addItemToOrder",
+              quantity: amount,
+              variantId: productId!,
+            },
+            {
+              method: 'post',
+              action: `/api/active-order`,
+              preventScrollReset: true,
+            }
+          );
+        }
+  
+        for (let i = 0; i < amountHandlers.length; i++) {
+          if (amountHandlers[i].id !== id) {
+            amountHandlers[i].refresh();
+          }
+        }
+      }, clickingDelay);
+  
+    }
+    
+    return () => {
+      if (rfOrderTimer.current) {
+        clearTimeout(rfOrderTimer.current);
+      }
+    };
+  }, [amount]);
+
+  useEffect(() => {
+    if (id) {
+      addAmountHandler({
+        id,
+        refresh,
+      })
+    }
+
+    return () => {
+      if (id) {
+        removeAmountHandler(id);
+      }
+    }
+  }, []);
 
   return (
     <div className={`${className}`}>
@@ -52,6 +138,7 @@ const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
       )}
       {amount !== 0 && (
         <ProductAmountStepper
+          disabled={activeOrderFetcher.state !== 'idle'}
           stepperButtonSize={stepperButtonSize}
           iconSize={iconSize}
           inputSize={inputSize}

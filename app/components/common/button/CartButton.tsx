@@ -18,11 +18,13 @@ import SummaryTotal from "../summary/SummaryProductTotal";
 import SummaryShippingCost from "../summary/SummaryShippingCost";
 import SummarySubTotal from "../summary/SummarySubTotal";
 import SummaryTaxRate from "../summary/SummaryTaxRate";
+import { useActiveOrder } from "~/utils/use-active-order";
 
 const CartButton = () => {
-  // const productOptions = dummy.productOptions;
   const width = useViewportWidth();
   const isMobile = width < 1024;
+
+  const { activeOrder } = useActiveOrder();
 
   return (
     <Sheet>
@@ -31,9 +33,11 @@ const CartButton = () => {
           <Button variant={"mobileMenu"} size={"mobileMenu"}>
             <div className='relative flex h-6 w-12 items-center justify-center rounded-full group-hover:bg-accent'>
               <ShoppingCart className='h-4 w-4' />
-              <div className='absolute -top-1.5 right-0'>
-                <Badge variant={"counter"}>2</Badge>
-              </div>
+              {activeOrder?.lines.length !== 0 && (
+                <div className='absolute -top-1.5 right-0'>
+                  <Badge variant={"counter"}>{activeOrder?.lines.length}</Badge>
+                </div>
+              )}
             </div>
             Kosár
           </Button>
@@ -42,7 +46,9 @@ const CartButton = () => {
             <div className='sr-only'>Kosár</div>
             <ShoppingCart className='h-4 w-4' />
             <div className='absolute right-0 top-0'>
-              <Badge variant={"counter"}>2</Badge>
+              {activeOrder?.lines.length !== 0 && (
+                <Badge variant={"counter"}>{activeOrder?.lines.length}</Badge>  
+              )}
             </div>
           </Button>
         )}
@@ -57,31 +63,47 @@ const CartButton = () => {
           </SheetHeader>
           <div className='flex flex-col gap-12 px-4 pb-4 pt-8'>
             <div className='flex flex-col gap-12'>
-              {/* {productOptions.map((option, index) => (
+              {activeOrder?.lines.map((option, index) => (
                 <CartProductCard
                   key={index}
-                  id={option.id}
-                  title={option.title}
-                  link={option.link}
-                  number={option.number}
-                  priceNormal={option.priceNormal}
-                  priceNet={option.priceNet}
-                  priceCrossed={option.priceCrossed}
-                  imageSrc={option.imageSrc}
-                  rating={option.rating}
-                  reviews={option.reviews}
-                  manufacturer={option.manufacturer}
+                  id={option.productVariant.id}
+                  lineItemId={option.id}
+                  title={option.productVariant.name}
+                  link={`/products/${option.productVariant.product.slug}`}
+                  number={option.quantity.toString()}
+                  priceNormal={option.unitPriceWithTax}
+                  priceNet={option.unitPriceWithTax}
+                  priceCrossed={option.unitPriceWithTax}
+                  imageSrc={option.featuredAsset?.preview || ""}
+                  rating={5}
+                  reviews={5}
                 />
-              ))} */}
+              ))}
             </div>
             <Summary>
               <div className='flex flex-col gap-2'>
-                <SummarySubTotal />
-                <SummaryTaxRate />
-                <SummaryShippingCost />
-                <SummaryDiscount />
+                <SummarySubTotal
+                  value={activeOrder?.subTotalWithTax}
+                  currencyCode={activeOrder?.currencyCode}
+                />
+                <SummaryTaxRate
+                  tax={activeOrder?.taxSummary[0]}
+                  value={activeOrder?.taxSummary[0]?.taxTotal}
+                  currencyCode={activeOrder?.currencyCode}
+                />
+                <SummaryShippingCost
+                  value={activeOrder?.shippingWithTax}
+                  currencyCode={activeOrder?.currencyCode}
+                />
+                {/* <SummaryDiscount
+                  
+                /> */}
               </div>
-              <SummaryTotal className='text-xl font-bold' />
+              <SummaryTotal
+                className='text-xl font-bold'
+                value={activeOrder?.totalWithTax}
+                currencyCode={activeOrder?.currencyCode}
+              />
             </Summary>
           </div>
           <footer className='sticky bottom-0 bg-white p-4'>

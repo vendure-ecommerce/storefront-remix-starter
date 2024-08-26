@@ -243,6 +243,7 @@ export default function CollectionSlug() {
               >
                 {result.items.length !== 0 &&
                   result.items.map((option, index) => {
+
                     const productFacets = result.facetValues.filter(
                       (facetValue) => {
                         return option.facetValueIds.includes(
@@ -253,7 +254,7 @@ export default function CollectionSlug() {
                     return (
                       <ProductCard
                         key={index}
-                        id={option.productId}
+                        id={option.productVariantId}
                         title={option.productName}
                         link={`/products/${option.slug}`}
                         number={'1'}
