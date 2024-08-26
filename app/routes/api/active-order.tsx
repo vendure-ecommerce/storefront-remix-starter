@@ -114,7 +114,6 @@ export async function action({ request, params }: DataFunctionArgs) {
         const result = await adjustOrderLine(lineId?.toString(), +quantity, {
           request,
         });
-        console.log(result);
         if (result.adjustOrderLine.__typename === 'Order') {
           activeOrder = result.adjustOrderLine;
         } else {

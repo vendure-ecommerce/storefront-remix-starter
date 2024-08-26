@@ -20,6 +20,27 @@ export function setApiUrl(apiUrl: string) {
   API_URL = apiUrl;
 }
 
+export const userCardDummies = [
+  {
+    title: "Craig Auer IV",
+    expertEmail: "craig.auer@faker.com",
+    expertPhoneNumber: "(555) 555-5555",
+    imageSrc: "https://avatars.githubusercontent.com/u/64640969?v=4",
+  },
+  {
+    title: "Gerardo Parisian",
+    expertEmail: "gerardo.parisian@faker.com",
+    expertPhoneNumber: "(555) 555-5555",
+    imageSrc: "https://avatars.githubusercontent.com/u/64640969?v=4",
+  },
+  {
+    title: "Cody Becker",
+    expertEmail: "cody.becker@faker.com",
+    expertPhoneNumber: "(555) 555-5555",
+    imageSrc: "https://avatars.githubusercontent.com/u/64640969?v=4",
+  }
+];
+
 export const typingDelay = 500;
 export const clickingDelay = 300;
 

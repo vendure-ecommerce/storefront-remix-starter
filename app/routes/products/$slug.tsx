@@ -51,14 +51,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '~/components/ui/collapsible';
-import { APP_META_TITLE } from '~/constants';
+import { APP_META_TITLE, userCardDummies } from '~/constants';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import { getProductBySlug } from '~/providers/products/products';
 import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
-import { userCardDummies } from '~/utils/_fakes';
 import { useActiveOrder } from '~/utils/use-active-order';
 
 export const meta: MetaFunction = ({ data }) => {

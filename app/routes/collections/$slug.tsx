@@ -26,10 +26,10 @@ import {
   allowedPaginationLimits,
   APP_META_TITLE,
   paginationLimitMinimumDefault,
+  userCardDummies,
 } from '~/constants';
 import { useCollections } from '~/providers/collections';
 import { TArrayElement } from '~/types/types';
-import { userCardDummies } from '~/utils/_fakes';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
 
