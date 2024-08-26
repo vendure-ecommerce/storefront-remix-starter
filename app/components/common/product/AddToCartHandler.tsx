@@ -3,7 +3,7 @@ import { Button } from '~/components/ui-custom/MyButton';
 import ProductAmountStepper from './ProductAmountStepper';
 import { useOrder } from '~/providers/orders';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { typingDelay } from '~/constants';
+import { clickingDelay } from '~/constants';
 
 interface AddToCartHandlerProps {
   id?: string;
@@ -100,7 +100,7 @@ const AddToCartHandler: React.FC<AddToCartHandlerProps> = ({
             amountHandlers[i].refresh();
           }
         }
-      }, typingDelay);
+      }, clickingDelay);
   
     }
     

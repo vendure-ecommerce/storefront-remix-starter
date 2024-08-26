@@ -21,6 +21,7 @@ export function setApiUrl(apiUrl: string) {
 }
 
 export const typingDelay = 500;
+export const clickingDelay = 300;
 
 export const paginationLimitMinimumDefault = 24;
 export const allowedPaginationLimits = new Set<number>([
