@@ -3,7 +3,6 @@ import { Menu } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CategoryMenuList from '~/components/pages/category/CategoryMenuList';
 import { Button } from '~/components/ui-custom/MyButton';
-import { ScrollArea } from '~/components/ui-custom/MyScrollArea';
 import {
   Sheet,
   SheetContent,
@@ -51,42 +50,42 @@ const MenuButton = () => {
         )}
       </SheetTrigger>
       <SheetContent side={isMobile ? 'right' : 'left'}>
-        <ScrollArea className="h-full w-full">
-          <SheetHeader className="sticky top-0 z-10 bg-white px-4 py-4">
-            <SheetTitle className="flex items-center gap-2">
-              Kategóriák
-            </SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-col gap-8 py-8">
-            <ListGroup>
-              {isArrayValid(fetcher.data?.result?.items) &&
-                fetcher.data?.result?.items.map((option, index) => (
-                  <Popover key={index}>
-                    <PopoverTrigger className="group/item">
-                      <ListGroupItem
-                        className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
-                        title={option.name}
-                        link={`/collections/${option.slug}`}
-                        imageSrc={option.featuredAsset?.preview}
-                        imageClassName="h-10 w-10 rounded-full border"
-                        showTitle={true}
-                        showImage={true}
-                        showTrailingIcon={true}
-                        isLinkActive={false}
-                      />
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="h-[calc(100vh)] w-[calc(100vw_-_385px)] border-l border-t-0 border-r-0 shadow-none rounded-none p-6"
-                      side={'right'}
-                      sideOffset={0}
-                    >
-                      <CategoryMenuList collection={option} setOpen={setOpen} />
-                    </PopoverContent>
-                  </Popover>
-                ))}
-            </ListGroup>
-          </div>
-        </ScrollArea>
+        {/* <ScrollArea className="h-full w-full"> */}
+        <SheetHeader className="sticky top-0 z-10 bg-white px-4 py-4">
+          <SheetTitle className="flex items-center gap-2">
+            Kategóriák
+          </SheetTitle>
+        </SheetHeader>
+        <div className="flex flex-col gap-8 py-8">
+          <ListGroup>
+            {isArrayValid(fetcher.data?.result?.items) &&
+              fetcher.data?.result?.items.map((option, index) => (
+                <Popover key={index}>
+                  <PopoverTrigger className="group/item">
+                    <ListGroupItem
+                      className='px-3 group-[[data-state="open"]]/item:bg-primary/5'
+                      title={option.name}
+                      link={`/collections/${option.slug}`}
+                      imageSrc={option.featuredAsset?.preview}
+                      imageClassName="h-10 w-10 rounded-full border"
+                      showTitle={true}
+                      showImage={true}
+                      showTrailingIcon={true}
+                      isLinkActive={false}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="h-[calc(100vh)] w-[calc(100vw_-_385px)] border-l border-t-0 border-r-0 shadow-none rounded-none p-6 overflow-y-auto"
+                    side={'right'}
+                    sideOffset={0}
+                  >
+                    <CategoryMenuList collection={option} setOpen={setOpen} />
+                  </PopoverContent>
+                </Popover>
+              ))}
+          </ListGroup>
+        </div>
+        {/* </ScrollArea> */}
       </SheetContent>
     </Sheet>
   );

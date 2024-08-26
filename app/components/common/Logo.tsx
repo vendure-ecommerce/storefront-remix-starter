@@ -9,7 +9,11 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className }) => {
   return (
-    <Link className="max-w-[10rem]" preventScrollReset to="/" prefetch="intent">
+    <Link
+      className="max-w-[10rem]"
+      /* preventScrollReset */ to="/"
+      prefetch="intent"
+    >
       <img
         src="https://sanitech.hu/image/catalog/branding/logo.png"
         width={256}

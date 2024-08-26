@@ -10,7 +10,6 @@ const ProductTag: React.FC<ProductTagProps> = ({ className, children }) => {
     <Badge
       className={`rounded-full mr-2 mb-2 ${className ? ` ${className}` : ''}`}
       variant={'outline'}
-      truncate
     >
       {children}
     </Badge>

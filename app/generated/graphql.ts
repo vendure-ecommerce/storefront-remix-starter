@@ -3995,6 +3995,30 @@ export type GenerateBraintreeClientTokenQuery = {
   generateBraintreeClientToken?: string | null;
 };
 
+export type CollectionChildrenQueryVariables = Exact<{
+  options?: InputMaybe<CollectionListOptions>;
+}>;
+
+export type CollectionChildrenQuery = {
+  __typename?: 'Query';
+  collections: {
+    __typename?: 'CollectionList';
+    items: Array<{
+      __typename?: 'Collection';
+      id: string;
+      name: string;
+      slug: string;
+      description: string;
+      parentId: string;
+      featuredAsset?: {
+        __typename?: 'Asset';
+        id: string;
+        preview: string;
+      } | null;
+    }>;
+  };
+};
+
 export type CollectionsQueryVariables = Exact<{
   options?: InputMaybe<CollectionListOptions>;
 }>;
@@ -4071,7 +4095,6 @@ export type GetCollectionsForMenuQuery = {
       name: string;
       slug: string;
       description: string;
-      parentId: string;
       featuredAsset?: {
         __typename?: 'Asset';
         id: string;
@@ -5608,6 +5631,23 @@ export const GenerateBraintreeClientTokenDocument = gql`
     generateBraintreeClientToken
   }
 `;
+export const CollectionChildrenDocument = gql`
+  query collectionChildren($options: CollectionListOptions) {
+    collections(options: $options) {
+      items {
+        id
+        name
+        slug
+        description
+        parentId
+        featuredAsset {
+          id
+          preview
+        }
+      }
+    }
+  }
+`;
 export const CollectionsDocument = gql`
   query collections($options: CollectionListOptions) {
     collections(options: $options) {
@@ -5663,7 +5703,6 @@ export const GetCollectionsForMenuDocument = gql`
         name
         slug
         description
-        parentId
         featuredAsset {
           id
           preview
@@ -6196,6 +6235,19 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options,
       ) as Promise<GenerateBraintreeClientTokenQuery>;
+    },
+    collectionChildren(
+      variables?: CollectionChildrenQueryVariables,
+      options?: C,
+    ): Promise<CollectionChildrenQuery> {
+      return requester<
+        CollectionChildrenQuery,
+        CollectionChildrenQueryVariables
+      >(
+        CollectionChildrenDocument,
+        variables,
+        options,
+      ) as Promise<CollectionChildrenQuery>;
     },
     collections(
       variables?: CollectionsQueryVariables,

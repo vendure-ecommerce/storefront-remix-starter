@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react';
 import { Dispatch, SetStateAction } from 'react';
-import ListGroupItem from '~/components/common/list/ListGroupItem';
+import { ListGroupItemWithChildren } from '~/components/common/list/ListGroupItem';
 import { Button } from '~/components/ui-custom/MyButton';
 
 interface CategoryMenuListProps {
@@ -33,13 +33,14 @@ const CategoryMenuList: React.FC<CategoryMenuListProps> = ({
           </Link>
         </Button>
       </div>
-      <div className="grid grow grid-cols-2 gap-8 overflow-y-scroll">
+      <div className="grid grow grid-cols-2 gap-8 ">
         <menu className="grow">
           {collection?.children &&
             collection.children.map((c: any) => {
               return (
                 <li className="flex flex-col justify-items-stretch gap-4">
-                  <ListGroupItem
+                  <ListGroupItemWithChildren
+                    id={c.id}
                     title={c.name}
                     isLinkActive={true}
                     link={`/collections/${c.slug}`}
@@ -50,6 +51,7 @@ const CategoryMenuList: React.FC<CategoryMenuListProps> = ({
                     showTrailingIcon={true}
                     imageSrc={c.featuredAsset?.preview}
                     className="px-6"
+                    indent={0}
                   />
                   {/* <Link
                     to={`/collections/${c.slug}`}
