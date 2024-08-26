@@ -120,7 +120,6 @@ export default function App() {
     removeItem,
     refresh,
   } = useActiveOrder();
-  // console.log(activeOrder);
 
   useChangeLanguage(locale);
 
