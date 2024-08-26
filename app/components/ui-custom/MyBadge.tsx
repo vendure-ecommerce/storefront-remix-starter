@@ -38,12 +38,15 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  truncate?: boolean;
+}
 
 function Badge({
   className,
   variant,
   children,
+  truncate,
   ...props
 }: BadgeProps & { children?: React.ReactNode }) {
   let computedClassName = className;
@@ -63,7 +66,10 @@ function Badge({
       className,
     );
   } else {
-    computedClassName = cn(badgeVariants({ variant }), className, {});
+    computedClassName = cn(badgeVariants({ variant }), className, {
+      'overflow-hidden line-clamp-1 max-w-fit w-fit max-h-fit h-auto leading-tight select-none':
+        truncate,
+    });
   }
 
   return (

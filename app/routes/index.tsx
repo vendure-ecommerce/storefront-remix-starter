@@ -46,7 +46,7 @@ export default function Index() {
                   imageSrc={option.featuredAsset?.preview}
                   imageClassName="h-10 w-10 rounded-full border"
                   showImage={true}
-                  showTrailingIcon={true}
+                  showTrailingIcon={false}
                 />
               ))}
             </ListGroup>

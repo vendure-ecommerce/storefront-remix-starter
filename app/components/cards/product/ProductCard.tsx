@@ -116,7 +116,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         />
         <div>
           {productTags.map((tag, index) => (
-            <ProductTag key={index}>{tag}</ProductTag>
+            <ProductTag key={index} truncate>
+              {tag}
+            </ProductTag>
           ))}
         </div>
       </CardContent>
