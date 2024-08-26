@@ -10,7 +10,7 @@ import {
 } from '@remix-run/react';
 import { DataFunctionArgs } from '@remix-run/server-runtime';
 import { ChevronDown, ChevronRight, Heart, Scale } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ManufacturerAvatar from '~/components/avatar/ManufacturerAvatar';
 import ManufacturerCard from '~/components/cards/manufacturer/ManufacturerCard';
@@ -57,6 +57,7 @@ import { getProductBySlug } from '~/providers/products/products';
 import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
+import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import { userCardDummies } from '~/utils/_fakes';
 
 export const meta: MetaFunction = ({ data }) => {
@@ -135,7 +136,8 @@ export default function ProductSlug() {
     (fv) => fv.facet.name === 'Category',
   );
 
-  const [showStickyCard, setShowStickyCard] = useState(false);
+  const brand = product.facetValues.find((fv) => fv.facet.code === 'brand');
+
   const productOptions: any[] = [];
   const manufacturerOptions: any[] = [];
   const subcategories: any[] = [];
@@ -144,13 +146,38 @@ export default function ProductSlug() {
     (f) => f.facet.code !== 'category' && f.facet.code !== 'brand',
   );
 
+  const [showStickyCard, setShowStickyCard] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyCard(window.scrollY > 500);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  console.log(product);
+
+  // Find the collection where the breadcrumb is the most length
+  const collection = product.collections
+    .sort((a, b) => b.breadcrumbs.length - a.breadcrumbs.length)[0];
+
   return (
     <>
       <div className="mx-auto w-full px-6 lg:max-w-screen-2xl space-y-6">
         <div className="mb-16"></div>
 
+        <Breadcrumbs
+          page="collections"
+          items={collection.breadcrumbs.filter(
+            (b) => b.slug !== '__root_collection__',
+          )}
+        />
+
         <Section className="mx-auto grid max-w-screen-sm grid-cols-1 gap-16 lg:max-w-full lg:grid-cols-2 lg:gap-20 pb-12">
-          <div className="flex flex-auto flex-col gap-4 self-start lg:sticky lg:top-[14rem] lg:flex-row">
+          <div className="flex flex-auto flex-col gap-4 self-start lg:sticky lg:top-[14rem] lg:flex-row mt-0">
             <ProductImage
               className="rounded-lg bg-primary/5"
               src={product.featuredAsset?.preview || product.assets[0]?.preview}
@@ -165,11 +192,20 @@ export default function ProductSlug() {
           <div className="flex flex-col gap-16">
             <div className="flex w-full flex-col gap-8">
               <div className="flex items-center justify-between gap-4">
-                {category && (
+                {category && !brand && (
                   <ManufacturerAvatar
                     manufacturer={{
                       title: category.name as string,
                       link: `/collections/${category.code}`,
+                      imageSrc: '',
+                    }}
+                  />
+                )}
+                {brand && (
+                  <ManufacturerAvatar
+                    manufacturer={{
+                      title: brand.name as string,
+                      link: `/collections/${brand.code}`,
                       imageSrc: '',
                     }}
                   />
@@ -642,7 +678,7 @@ export default function ProductSlug() {
         <StickyProductCard
           className={`transition ${
             showStickyCard ? 'z-20 opacity-100' : 'z-0 opacity-0'
-          }`}
+          } !mt-0`}
           title={product.name}
           number={product.variants[0].sku}
           priceNormal={product.variants[0].priceWithTax}

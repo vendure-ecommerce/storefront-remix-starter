@@ -32,8 +32,15 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    onCloseButtonClick?: () => void;
+  }
+>(({
+  className,
+  children,
+  onCloseButtonClick,
+  ...props
+}, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -48,6 +55,7 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Close
         className='absolute right-6 top-10 z-20 rounded-full opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary'
         asChild
+        onClick={onCloseButtonClick}
       >
         <Button
           variant={"ghost"}

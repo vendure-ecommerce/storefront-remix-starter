@@ -13,7 +13,7 @@ const ProductDescription: FC<{
   const htmlDecoded = htmlDecode(description);
 
   return (
-    <Collapsible className="group/collapse">
+    <Collapsible className="group/collapse" defaultOpen>
       <CollapsibleTrigger className="flex h-14 w-full items-center justify-between gap-4 text-2xl font-bold">
         Leírás
         <ChevronDown className="h-6 w-6"></ChevronDown>
