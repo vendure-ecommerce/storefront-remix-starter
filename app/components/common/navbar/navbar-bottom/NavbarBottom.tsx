@@ -1,10 +1,10 @@
-import { Button } from '~/components/ui-custom/MyButton';
+import { useLocation } from '@remix-run/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from '~/components/ui-custom/MyButton';
 import MenuButton from '../../button/MenuButton';
 import PrimaryMenu from './PrimaryMenu';
 import SecondaryMenu from './SecondaryMenu';
-import { useLocation } from '@remix-run/react';
 
 const NavbarBottom: React.FC = () => {
   const location = useLocation();
@@ -63,27 +63,29 @@ const NavbarBottom: React.FC = () => {
         const savedPosition = JSON.parse(
           window.localStorage.getItem('scrollPosition-NavbarBottom') || '{}',
         );
-        if (savedPosition.left !== undefined && savedPosition.top !== undefined) {
-          container.scrollTo(
-            savedPosition.left,
-            savedPosition.top,
-          );
+        if (
+          savedPosition.left !== undefined &&
+          savedPosition.top !== undefined
+        ) {
+          container.scrollTo(savedPosition.left, savedPosition.top);
         }
       }
     };
 
-    window.addEventListener("beforeunload", saveScrollPosition);
+    window.addEventListener('beforeunload', saveScrollPosition);
     restoreScrollPosition();
 
     return () => {
-      window.removeEventListener("beforeunload", saveScrollPosition);
+      window.removeEventListener('beforeunload', saveScrollPosition);
     };
   }, [location.pathname]);
 
   return (
-    <div className="flex h-[3.75rem] items-center justify-between gap-12">
-      <MenuButton />
-      <div className="relative flex overflow-hidden">
+    <div className="grid grid-cols-4 h-[3.75rem] items-center justify-between">
+      <div className="flex w-auto">
+        <MenuButton />
+      </div>
+      <div className="relative flex overflow-hidden col-span-2">
         {showLeftArrow && (
           <Button
             onClick={() => scrollMenu('left')}
@@ -110,7 +112,9 @@ const NavbarBottom: React.FC = () => {
           </Button>
         )}
       </div>
-      <SecondaryMenu />
+      <div className="flex w-auto justify-end justify-self-end gap-2 ">
+        <SecondaryMenu />
+      </div>
     </div>
   );
 };
