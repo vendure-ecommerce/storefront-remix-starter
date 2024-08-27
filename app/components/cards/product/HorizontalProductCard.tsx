@@ -16,8 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui-custom/MyCard';
+import { useActiveOrder } from '~/utils/use-active-order';
 
 interface ProductCardProps {
+  id: string;
+  lineItemId: string;
   title: string;
   number: string;
   priceNormal: number;
@@ -32,6 +35,8 @@ interface ProductCardProps {
 }
 
 const HorizontalProductCard: React.FC<ProductCardProps> = ({
+  id,
+  lineItemId,
   title,
   number,
   priceNormal,
@@ -45,17 +50,11 @@ const HorizontalProductCard: React.FC<ProductCardProps> = ({
   variant = 'default',
 }) => {
   const isSmall = variant === 'sm';
-  const [amount, setAmount] = useState(1); // Kezdeti érték beállítása 1-re
+  
+  const { removeItem } = useActiveOrder();
 
-  const handleAmountChange = (newAmount: number) => {
-    setAmount(newAmount);
-    // Itt hozzáadhatod a további logikát, pl. frissítheted az állapotot egy globális állapotkezelőben
-  };
-
-  const handleRemove = () => {
-    // Itt implementálhatod a logikát, ami akkor hajtódik végre, amikor a termék eltávolításra kerül
-    console.log('A termék eltávolításra került');
-    // Például eltávolíthatod a terméket a kosárból, frissítheted az állapotot, stb.
+  const onTrashButtonClick = () => {
+    removeItem(lineItemId);
   };
 
   return (
@@ -118,8 +117,10 @@ const HorizontalProductCard: React.FC<ProductCardProps> = ({
                 className="text-right text-xs"
               />
             </div>
-            {showAddToCartHandler ? (
+            {showAddToCartHandler && (
               <AddToCartHandler
+                id={"horizontal-product-card-" + id}
+                productId={id}
                 className="w-40"
                 addToCartButtonText="Kiválaszt"
                 addToCartButtonSize="h-10 text-sm w-full"
@@ -127,7 +128,7 @@ const HorizontalProductCard: React.FC<ProductCardProps> = ({
                 iconSize="h-4 w-4"
                 inputSize="h-10"
               />
-            ) : showProductAmountStepper ? (
+            )/* : showProductAmountStepper ? (
               <ProductAmountStepper
                 className="w-36 self-end"
                 stepperButtonSize="h-7 w-7"
@@ -144,7 +145,7 @@ const HorizontalProductCard: React.FC<ProductCardProps> = ({
               >
                 1 db
               </Badge>
-            )}
+            )*/}
           </CardFooter>
         </Card>
       </div>
