@@ -61,6 +61,7 @@ const NavbarSearch: React.FC = () => {
       <DialogContent
         className="h-10/12 overflow-hidden pt-20 xl:pt-10"
         onEscapeKeyDown={() => setOpen(false)}
+        onCloseButtonClick={() => setOpen(false)}
       >
         <div className="mx-auto grid max-w-screen-2xl grid-rows-[auto,_1fr] gap-8">
           <NavbarSearchField value={stTerm} onChange={onInputChange} />

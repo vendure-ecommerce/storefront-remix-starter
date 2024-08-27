@@ -118,6 +118,16 @@ export async function updateCustomerPassword(
     .then((res) => res.updateCustomerPassword);
 }
 
+export async function requestPasswordReset(
+  input: { emailAddress: string; },
+  options: QueryOptions,
+) {
+  console.log(input.emailAddress);
+  return sdk
+    .requestPasswordReset(input, options)
+    .then((res) => res.requestPasswordReset);
+} 
+
 gql`
   mutation login($email: String!, $password: String!, $rememberMe: Boolean) {
     login(username: $email, password: $password, rememberMe: $rememberMe) {
@@ -254,4 +264,23 @@ gql`
       }
     }
   }
+`;
+
+gql`
+  mutation requestPasswordReset(
+    $emailAddress: String!
+) {
+    requestPasswordReset(
+        emailAddress: $emailAddress
+    ) {
+        __typename
+        ... on NativeAuthStrategyError {
+            errorCode
+            message
+        }
+        ... on Success {
+            success
+        }
+    }
+}
 `;
