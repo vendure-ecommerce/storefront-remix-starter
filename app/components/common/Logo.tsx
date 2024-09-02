@@ -15,7 +15,8 @@ const Logo: React.FC<LogoProps> = ({ className }) => {
       prefetch="intent"
     >
       <img
-        src="https://sanitech.hu/image/catalog/branding/logo.png"
+        // src="https://sanitech.hu/image/catalog/branding/logo.png"
+        src="https://parkgep.hu/image/cache/catalog/branding/logo-color-3071x596.webp"
         width={256}
         height={42}
         alt="Logó"
