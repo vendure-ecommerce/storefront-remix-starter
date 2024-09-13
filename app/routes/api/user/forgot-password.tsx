@@ -11,7 +11,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
     return json(formError, { status: 400 });
   }
 
-  try {
     const result = await requestPasswordReset({ emailAddress: email }, { request });
 
     console.log(result);
@@ -27,8 +26,4 @@ export async function action({ params, request }: ActionFunctionArgs) {
       const formError = { form: result.message || "An error occurred" };
       return json(formError, { status: 401 });
     }
-  } catch (error) {
-    const formError = { form: "An unexpected error occurred" };
-    return json(formError, { status: 500 });
-  }
 }

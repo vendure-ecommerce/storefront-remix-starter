@@ -2599,7 +2599,7 @@ export type Product = Node & {
   assets: Array<Asset>;
   collections: Array<Collection>;
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ProductCustomFields>;
   description: Scalars['String'];
   enabled: Scalars['Boolean'];
   facetValues: Array<FacetValue>;
@@ -2622,6 +2622,11 @@ export type ProductVariantListArgs = {
   options?: InputMaybe<ProductVariantListOptions>;
 };
 
+export type ProductCustomFields = {
+  __typename?: 'ProductCustomFields';
+  weight?: Maybe<Scalars['Int']>;
+};
+
 export type ProductFilterParameter = {
   _and?: InputMaybe<Array<ProductFilterParameter>>;
   _or?: InputMaybe<Array<ProductFilterParameter>>;
@@ -2633,6 +2638,7 @@ export type ProductFilterParameter = {
   name?: InputMaybe<StringOperators>;
   slug?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
+  weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductList = PaginatedList & {
@@ -2706,6 +2712,7 @@ export type ProductSortParameter = {
   name?: InputMaybe<SortOrder>;
   slug?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductTranslation = {
@@ -2754,6 +2761,7 @@ export type ProductVariantCustomFields = {
   shipping?: Maybe<Scalars['Boolean']>;
   upc?: Maybe<Scalars['String']>;
   viewed?: Maybe<Scalars['Int']>;
+  weight?: Maybe<Scalars['Int']>;
 };
 
 export type ProductVariantFilterParameter = {
@@ -2779,6 +2787,7 @@ export type ProductVariantFilterParameter = {
   upc?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
   viewed?: InputMaybe<NumberOperators>;
+  weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2819,6 +2828,7 @@ export type ProductVariantSortParameter = {
   upc?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   viewed?: InputMaybe<SortOrder>;
+  weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {

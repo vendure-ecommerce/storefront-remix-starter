@@ -5,6 +5,7 @@ import {
   LogoutMutation,
   RegisterCustomerAccountMutation,
   RegisterCustomerAccountMutationVariables,
+  RequestPasswordResetMutation,
   UpdateAddressInput,
   UpdateCustomerInput,
   VerifyCustomerAccountMutation,
@@ -118,15 +119,12 @@ export async function updateCustomerPassword(
     .then((res) => res.updateCustomerPassword);
 }
 
-export async function requestPasswordReset(
+export const requestPasswordReset = async(
   input: { emailAddress: string; },
   options: QueryOptions,
-) {
-  console.log(input.emailAddress);
-  return sdk
-    .requestPasswordReset(input, options)
-    .then((res) => res.requestPasswordReset);
-} 
+): Promise<RequestPasswordResetMutation['requestPasswordReset']> => {
+  return sdk.requestPasswordReset(input, options).then((res) => res.requestPasswordReset);
+};
 
 gql`
   mutation login($email: String!, $password: String!, $rememberMe: Boolean) {

@@ -1,7 +1,6 @@
 import { redirect, json, ActionFunctionArgs } from "@remix-run/server-runtime";
 import { login } from "~/providers/account/account";
 
-
 export async function action({ params, request }: ActionFunctionArgs) {
   const body = await request.formData();
   const email = body.get('email');
