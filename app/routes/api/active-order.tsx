@@ -133,6 +133,7 @@ export async function action({ request, params }: DataFunctionArgs) {
       const result = await addItemToOrder(variantId, quantity, {
         request,
       });
+
       if (result.addItemToOrder.__typename === 'Order') {
         activeOrder = result.addItemToOrder;
       } else {

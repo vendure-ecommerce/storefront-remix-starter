@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
-import { CartLoaderData } from '~/routes/api/active-order';
 import { useEffect } from 'react';
+import { CartLoaderData } from '~/_routes/api/active-order';
 
 export function useActiveOrder() {
   const activeOrderFetcher = useFetcher<CartLoaderData>();

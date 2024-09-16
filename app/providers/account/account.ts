@@ -5,6 +5,7 @@ import {
   LogoutMutation,
   RegisterCustomerAccountMutation,
   RegisterCustomerAccountMutationVariables,
+  RequestPasswordResetMutation,
   UpdateAddressInput,
   UpdateCustomerInput,
   VerifyCustomerAccountMutation,
@@ -117,6 +118,13 @@ export async function updateCustomerPassword(
     .updateCustomerPassword(input, options)
     .then((res) => res.updateCustomerPassword);
 }
+
+export const requestPasswordReset = async(
+  input: { emailAddress: string; },
+  options: QueryOptions,
+): Promise<RequestPasswordResetMutation['requestPasswordReset']> => {
+  return sdk.requestPasswordReset(input, options).then((res) => res.requestPasswordReset);
+};
 
 gql`
   mutation login($email: String!, $password: String!, $rememberMe: Boolean) {
@@ -254,4 +262,23 @@ gql`
       }
     }
   }
+`;
+
+gql`
+  mutation requestPasswordReset(
+    $emailAddress: String!
+) {
+    requestPasswordReset(
+        emailAddress: $emailAddress
+    ) {
+        __typename
+        ... on NativeAuthStrategyError {
+            errorCode
+            message
+        }
+        ... on Success {
+            success
+        }
+    }
+}
 `;
