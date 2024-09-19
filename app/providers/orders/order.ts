@@ -61,6 +61,14 @@ export function setOrderShippingMethod(
   return sdk.setOrderShippingMethod({ shippingMethodId }, options);
 }
 
+export function setOrderBillingAddress(
+  input: CreateAddressInput,
+  options: QueryOptions,
+) {
+  return sdk.setOrderBillingAddress({ input }, options);
+}
+
+
 gql`
   mutation setCustomerForOrder($input: CreateCustomerInput!) {
     setCustomerForOrder(input: $input) {
@@ -180,6 +188,17 @@ gql`
       countryCode
       phoneNumber
     }
+    billingAddress {
+      fullName
+      streetLine1
+      streetLine2
+      company
+      city
+      province
+      postalCode
+      countryCode
+      phoneNumber
+    }
     shippingLines {
       shippingMethod {
         id
@@ -228,6 +247,18 @@ gql`
   query orderByCode($code: String!) {
     orderByCode(code: $code) {
       ...OrderDetail
+    }
+  }
+`;
+
+gql`
+  mutation setOrderBillingAddress($input: CreateAddressInput!) {
+    setOrderBillingAddress(input: $input) {
+      ...OrderDetail
+      ... on ErrorResult {
+        errorCode
+        message
+      }
     }
   }
 `;

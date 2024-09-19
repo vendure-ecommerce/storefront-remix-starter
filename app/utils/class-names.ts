@@ -1,13 +1,10 @@
 import React from 'react';
 
-export function classNames(...classes: string[]) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function mergeClassName(
-  props: React.HTMLAttributes<any>,
-  className: string,
-) {
+function mergeClassName(props: React.HTMLAttributes<any>, className: string) {
   if (props.className !== undefined) {
     return {
       ...props,
@@ -20,3 +17,5 @@ export function mergeClassName(
     className: className,
   };
 }
+
+export { classNames, mergeClassName };
