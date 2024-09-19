@@ -255,19 +255,16 @@ export default function ProductSlug() {
                       {`Kapcsolat ${index + 1} leírásas`}
                     </SectionDescription>
                   </SectionHeader>
-                  {[...Array(3)].map((_, index) => (
+                  {product.variants.map((variant, index) => (
                     <HorizontalProductCard
                       key={index}
-                      title={product.name}
+                      title={variant.name}
                       number={'1'}
-                      priceNormal={product.variants[0].priceWithTax}
-                      priceNet={product.variants[0].priceWithTax}
-                      priceCrossed={product.variants[0].priceWithTax}
-                      imageSrc={
-                        product.featuredAsset?.preview ||
-                        product.assets[0]?.preview
-                      }
-                    />
+                      priceNormal={variant.priceWithTax}
+                      priceNet={variant.priceWithTax}
+                      priceCrossed={variant.priceWithTax}
+                      imageSrc={product.featuredAsset?.preview ||
+                        product.assets[0]?.preview} id={variant.id} lineItemId={''}                    />
                   ))}
                   <Button variant={'outline'}>
                     Továbbiak megjelenítése
