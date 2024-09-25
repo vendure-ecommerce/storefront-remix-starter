@@ -1,106 +1,110 @@
-
-
-import LoginForm from "~/components/form/SignUpForm";
-import { Button } from "~/components/ui-custom/MyButton";
-import { ScrollArea } from "~/components/ui-custom/MyScrollArea";
+import { useState } from 'react';
+import { Button } from '~/components/ui-custom/MyButton';
+import { ScrollArea } from '~/components/ui-custom/MyScrollArea';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "~/components/ui-custom/MySheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { ChevronDown, User } from "lucide-react";
-import ListGroup from "../list/ListGroup";
-import ListGroupItem from "../list/ListGroupItem";
+} from '~/components/ui-custom/MySheet';
+import { ChevronDown, User, ArrowLeft } from 'lucide-react';
+import SignInForm from '~/components/form/SignInForm';
+import SignUpForm from '~/components/form/SignUpForm';
+import PasswordForm from '~/components/form/PasswordForm';
 
 const AccountButton = () => {
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleForm = () => setShowSignUp((prevState) => !prevState);
+
+  const handleSheetChange = (open: boolean | ((prevState: boolean) => boolean)) => {
+    setIsOpen(open);
+    if (!open) {
+      setShowSignUp(false);
+      setShowPasswordForm(false);
+    }
+  };
+
+  const handleForgotPasswordClick = () => {
+    setShowPasswordForm(true);
+    setShowSignUp(false);
+  };
+
   return (
     <>
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={handleSheetChange}>
         <SheetTrigger asChild>
-          <Button className='flex items-center gap-2' variant={"ghost"}>
+          <Button className='flex items-center gap-2' variant={'ghost'}>
             <User className='h-4 w-4' />
             Fiókom
             <ChevronDown className='h-4 w-4' />
           </Button>
         </SheetTrigger>
-        <SheetContent className='overflow-hidden' side={"right"}>
+        <SheetContent className='overflow-hidden' side={'right'}>
           <ScrollArea className='h-full w-full'>
             <SheetHeader className='sticky top-0 z-10 bg-white px-4 py-4'>
               <SheetTitle className='flex items-center gap-2'>
-                Fiókom
+                {showPasswordForm ? 'Jelszó visszaállítás' : showSignUp ? 'Regisztráció' : 'Belépés'}
               </SheetTitle>
             </SheetHeader>
             <div className='flex flex-col gap-8 px-4 pb-4 pt-8'>
-              {/* <ListGroup className='-ml-6 -mr-4'>
-                {accountMenuOptions
-                  .flatMap((option) => (option.active ? option.active : []))
-                  .map((option, index) => (
-                    <ListGroupItem
-                      key={index}
-                      className='px-3'
-                      title={option.title}
-                      link={option.link}
-                      imageSrc={option.imageSrc}
-                      imageClassName='h-6 w-6'
-                      badge={option.notification}
-                      showBadge={option.notification > 0}
-                    />
-                  ))}
-              </ListGroup> */}
               <div className='rounded-lg bg-primary/5 p-4'>
-                <LoginForm />
+                {showPasswordForm ? (
+                  <PasswordForm />
+                ) : showSignUp ? (
+                  <SignUpForm />
+                ) : (
+                  <SignInForm />
+                )}
+                {showPasswordForm ? (
+                  <div className='mt-6 text-center'>
+                    <Button className='text-base' variant={"link"} size={"default"} onClick={() => setShowPasswordForm(false)}>
+                      <ArrowLeft className='mr-2 h-4 w-4' />
+                      Vissza a bejelentkezéshez
+                    </Button>
+                  </div>
+                ) : (
+                  <p className='mt-6 text-center'>
+                    {showSignUp ? (
+                      <>
+                        Már van fiókod?{' '}
+                        <button
+                          type='button'
+                          onClick={toggleForm}
+                          className='font-bold text-secondary-foreground underline'
+                        >
+                          Kattints ide a belépéshez.
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        Nincs fiókod?{' '}
+                        <button
+                          type='button'
+                          onClick={toggleForm}
+                          className='font-bold text-secondary-foreground underline'
+                        >
+                          Kattints ide a regisztrációhoz.
+                        </button>
+                      </>
+                    )}
+                    {!showSignUp && !showPasswordForm && (
+                      <div className='mt-6 text-center'>
+                        <Button className='text-base' variant={"link"} size={"default"} onClick={handleForgotPasswordClick}>
+                          Elfelejtett jelszó
+                        </Button>
+                      </div>
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           </ScrollArea>
         </SheetContent>
       </Sheet>
-
-      <div className='hidden'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className='flex items-center gap-2' variant={"ghost"}>
-              <User className='h-4 w-4' />
-              Fiókom
-              <ChevronDown className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-full'>
-            <DropdownMenuLabel>Fiókom</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <a href='/account/dashboard'>Vezérlőpult</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/settings'>Személyes adatok</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/orders'>Rendelések</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/favorites'>Kedvencek</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/addresses/shipping'>Szállítás</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/addresses/billing'>Számlázás</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <a href='/account/subscriptions'>Feliratkozások</a>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
     </>
   );
 };
