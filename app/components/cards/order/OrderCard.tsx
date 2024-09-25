@@ -11,7 +11,7 @@ import OrderMeta from "~/components/common/order/OrderMeta";
 import OrderNumber from "~/components/common/order/OrderNumber";
 import OrderPrice from "~/components/common/order/OrderPrice";
 import ProductImage from "~/components/common/product/ProductImage";
-import Link from "next/link";
+import { Link } from "@remix-run/react";
 
 interface OrderCardProps {
   id: string;
@@ -38,7 +38,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
       id={id}
     >
       <CardHeader className='relative flex gap-2 p-0'>
-        <Link href={link}>
+        <Link to={link}>
           <ProductImage src={imageSrc} />
         </Link>
         <div className='grid grid-cols-3 gap-2'>

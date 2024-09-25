@@ -1,8 +1,8 @@
 
 
 import { Card, CardTitle } from "~/components/ui-custom/MyCard";
-import Link from "next/link";
 import React from "react";
+import { Link } from "@remix-run/react";
 
 interface MenuCardProps {
   className?: string;
@@ -30,7 +30,7 @@ const MenuCard: React.FC<MenuCardProps> = ({
   );
 
   return (
-    <Link href={link}>
+    <Link to={link}>
       <Card className='flex flex-col items-center gap-4 border p-6 shadow-none transition hover:border-primary/30'>
         {showIcon && icon && <IconWrapper>{icon}</IconWrapper>}
         {showTitle && <CardTitle className='text-base'>{title}</CardTitle>}
