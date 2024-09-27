@@ -12,12 +12,12 @@ import { ChevronDown, User, ArrowLeft } from 'lucide-react';
 import SignInForm from '~/components/form/SignInForm';
 import SignUpForm from '~/components/form/SignUpForm';
 import PasswordForm from '~/components/form/PasswordForm';
+
 import { useActiveOrder } from '~/utils/use-active-order';
 import { useCustomer } from '~/providers/customer';
 
 const AccountButton = () => {
   const { activeCustomer } = useCustomer();
-
   const [showSignUp, setShowSignUp] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

@@ -864,6 +864,17 @@ interface CustomField {
 
 union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | LocaleTextCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig | TextCustomFieldConfig
 
+union CustomMappings = CustomProductMappings | CustomProductVariantMappings
+
+type CustomProductMappings {
+  facetValues: String!
+  productSlug: String!
+}
+
+type CustomProductVariantMappings {
+  facetValues: String!
+}
+
 type Customer implements Node {
   addresses: [Address!]
   createdAt: DateTime!
@@ -2878,11 +2889,21 @@ type PriceRange {
   min: Money!
 }
 
+type PriceRangeBucket {
+  count: Int!
+  to: Int!
+}
+
+input PriceRangeInput {
+  max: Int!
+  min: Int!
+}
+
 type Product implements Node {
   assets: [Asset!]!
   collections: [Collection!]!
   createdAt: DateTime!
-  customFields: JSON
+  customFields: ProductCustomFields
   description: String!
   enabled: Boolean!
   facetValues: [FacetValue!]!
@@ -2902,6 +2923,10 @@ type Product implements Node {
   variants: [ProductVariant!]!
 }
 
+type ProductCustomFields {
+  weight: Int
+}
+
 input ProductFilterParameter {
   _and: [ProductFilterParameter!]
   _or: [ProductFilterParameter!]
@@ -2913,6 +2938,7 @@ input ProductFilterParameter {
   name: StringOperators
   slug: StringOperators
   updatedAt: DateOperators
+  weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -2987,6 +3013,7 @@ input ProductSortParameter {
   name: SortOrder
   slug: SortOrder
   updatedAt: SortOrder
+  weight: SortOrder
 }
 
 type ProductTranslation {
@@ -3003,7 +3030,7 @@ type ProductVariant implements Node {
   assets: [Asset!]!
   createdAt: DateTime!
   currencyCode: CurrencyCode!
-  customFields: JSON
+  customFields: ProductVariantCustomFields
   facetValues: [FacetValue!]!
   featuredAsset: Asset
   id: ID!
@@ -3022,20 +3049,43 @@ type ProductVariant implements Node {
   updatedAt: DateTime!
 }
 
+type ProductVariantCustomFields {
+  ean: String
+  isbn: String
+  jan: String
+  model: String
+  mpn: String
+  newUntil: DateTime
+  shipping: Boolean
+  upc: String
+  viewed: Int
+  weight: Int
+}
+
 input ProductVariantFilterParameter {
   _and: [ProductVariantFilterParameter!]
   _or: [ProductVariantFilterParameter!]
   createdAt: DateOperators
   currencyCode: StringOperators
+  ean: StringOperators
   id: IDOperators
+  isbn: StringOperators
+  jan: StringOperators
   languageCode: StringOperators
+  model: StringOperators
+  mpn: StringOperators
   name: StringOperators
+  newUntil: DateOperators
   price: NumberOperators
   priceWithTax: NumberOperators
   productId: IDOperators
+  shipping: BooleanOperators
   sku: StringOperators
   stockLevel: StringOperators
+  upc: StringOperators
   updatedAt: DateOperators
+  viewed: NumberOperators
+  weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -3064,14 +3114,24 @@ input ProductVariantListOptions {
 
 input ProductVariantSortParameter {
   createdAt: SortOrder
+  ean: SortOrder
   id: SortOrder
+  isbn: SortOrder
+  jan: SortOrder
+  model: SortOrder
+  mpn: SortOrder
   name: SortOrder
+  newUntil: SortOrder
   price: SortOrder
   priceWithTax: SortOrder
   productId: SortOrder
+  shipping: SortOrder
   sku: SortOrder
   stockLevel: SortOrder
+  upc: SortOrder
   updatedAt: SortOrder
+  viewed: SortOrder
+  weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -3312,7 +3372,11 @@ input SearchInput {
   collectionId: ID
   collectionSlug: String
   facetValueFilters: [FacetValueFilterInput!]
+  facetValueName: String
   groupByProduct: Boolean
+  inStock: Boolean
+  priceRange: PriceRangeInput
+  priceRangeWithTax: PriceRangeInput
   skip: Int
   sort: SearchResultSortParameter
   take: Int
@@ -3324,30 +3388,31 @@ type SearchReindexResponse {
 }
 
 type SearchResponse {
-  cacheIdentifier: SearchResponseCacheIdentifier
   collections: [CollectionResult!]!
   facetValues: [FacetValueResult!]!
   items: [SearchResult!]!
+  prices: SearchResponsePriceData!
   totalItems: Int!
 }
 
-"""
-This type is here to allow us to easily purge the Stellate cache
-of any search results where the collectionSlug is used. We cannot rely on
-simply purging the SearchResult type, because in the case of an empty 'items'
-array, Stellate cannot know that that particular query now needs to be purged.
-"""
-type SearchResponseCacheIdentifier {
-  collectionSlug: String
+type SearchResponsePriceData {
+  buckets: [PriceRangeBucket!]!
+  bucketsWithTax: [PriceRangeBucket!]!
+  range: PriceRange!
+  rangeWithTax: PriceRange!
 }
 
 type SearchResult {
   """An array of ids of the Collections in which this result appears"""
   collectionIds: [ID!]!
   currencyCode: CurrencyCode!
+  customMappings: CustomMappings! @deprecated(reason: "Use customProductMappings or customProductVariantMappings")
+  customProductMappings: CustomProductMappings!
+  customProductVariantMappings: CustomProductVariantMappings!
   description: String!
   facetIds: [ID!]!
   facetValueIds: [ID!]!
+  inStock: Boolean
   price: SearchResultPrice!
   priceWithTax: SearchResultPrice!
   productAsset: SearchResultAsset

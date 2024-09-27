@@ -6,6 +6,7 @@ import {
   LogoutMutation,
   RegisterCustomerAccountMutation,
   RegisterCustomerAccountMutationVariables,
+  RequestPasswordResetMutation,
   UpdateAddressInput,
   UpdateCustomerInput,
   VerifyCustomerAccountMutation,
@@ -339,3 +340,4 @@ gql`
 }
 
 `;
+

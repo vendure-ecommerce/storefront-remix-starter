@@ -5,28 +5,25 @@ import {
   Links,
   LiveReload,
   Meta,
+  MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
   ShouldRevalidateFunction,
   useLoaderData,
   useRouteError,
-  MetaFunction,
 } from '@remix-run/react';
-import stylesheet from './tailwind.css';
-import { Header } from './components/header/Header';
 import {
   DataFunctionArgs,
   json,
   LinksFunction,
 } from '@remix-run/server-runtime';
-import { getCollections } from '~/providers/collections/collections';
-import { activeChannel } from '~/providers/channel/channel';
-import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
 import { useEffect, useState } from 'react';
+
 import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
+
 import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
 import MobileMenu from './components/common/mobile/MobileMenu';
@@ -38,12 +35,23 @@ import { cn } from './utils/cn';
 import { OrderProvider } from './providers/orders';
 import { CustomerProvider } from './providers/customer';
 
+
 // export const meta: MetaFunction = () => {
 //   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
 // };
 
 export const meta: MetaFunction = () => {
-  return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
+  return [
+    { title: 'Storefront eCommerce' },
+    {
+      property: 'og:title',
+      content: 'Storefront eCommerce',
+    },
+    {
+      name: 'description',
+      content: 'Storefront eCommerce',
+    },
+  ];
 };
 
 export const links: LinksFunction = () => [
@@ -84,9 +92,9 @@ export type RootLoaderData = {
 
 export async function loader({ request, params, context }: DataFunctionArgs) {
   const collections = await getCollections(request, { take: 20 });
-  const topLevelCollections = collections.filter(
+  /* const topLevelCollections = collections.filter(
     (collection) => collection.parent?.name === '__root_collection__',
-  );
+  ); */
   const activeCustomer = await getActiveCustomer({ request });
   const locale = await getI18NextServer().then((i18next) =>
     i18next.getLocale(request),
@@ -94,7 +102,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
   const loaderData: RootLoaderData = {
     activeCustomer,
     activeChannel: await activeChannel({ request }),
-    collections: topLevelCollections,
+    collections,
     locale,
   };
 
@@ -104,8 +112,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
 export default function App() {
   const [open, setOpen] = useState(false);
   const loaderData = useLoaderData<RootLoaderData>();
-  const { collections } = loaderData;
-  const { locale } = useLoaderData<typeof loader>();
+  const { collections, locale } = loaderData;
   const { i18n } = useTranslation();
   const {
     activeOrderFetcher,
@@ -117,10 +124,16 @@ export default function App() {
 
   useChangeLanguage(locale);
 
+  const [stLayoutData, setLayoutData] = useState<IGlobalLayoutData>();
   useEffect(() => {
     // When the loader has run, this implies we should refresh the contents
     // of the activeOrder as the user may have signed in or out.
     refresh();
+
+    setLayoutData({
+      showFooterMenu: true,
+      showFooterImage: true,
+    });
   }, [loaderData]);
 
   return (
@@ -241,6 +254,7 @@ function DefaultSparseErrorPage({
           </p>
           <div className="mt-6">
             <Link
+              preventScrollReset
               to="/"
               className="text-base font-medium text-primary-600 hover:text-primary-500 inline-flex gap-2"
             >

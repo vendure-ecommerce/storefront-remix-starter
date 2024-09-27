@@ -24,6 +24,7 @@ export const useOrder = () => {
   return useContext(OrderContext);
 };
 
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const sessionStorage = await getSessionStorage();
   const session = await sessionStorage.getSession(
