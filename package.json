@@ -9,7 +9,7 @@
     "build:nf": "cross-env NETLIFY=1 remix build",
     "build": "remix build",
     "dev:wrangler": "cross-env CF_PAGES=1 wrangler pages dev ./public",
-    "dev": "remix dev",
+    "dev": "PORT=3002 remix dev",
     "dev:cf": "cross-env CF_PAGES=1 remix dev --manual -c \"yarn run dev:wrangler\"",
     "start:cf": "cross-env NODE_ENV=production yarn run dev:wrangler",
     "start": "remix-serve build",

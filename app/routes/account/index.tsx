@@ -1,383 +1,101 @@
-import { CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useActionData, useLoaderData, useNavigation } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
-import { withZod } from '@remix-validated-form/with-zod';
-import { useEffect, useRef, useState } from 'react';
-import { ValidatedForm, validationError } from 'remix-validated-form';
-import { z } from 'zod';
-import { Button } from '~/components/Button';
-import { ErrorMessage } from '~/components/ErrorMessage';
-import { HighlightedButton } from '~/components/HighlightedButton';
-import { Input } from '~/components/Input';
-import Modal from '~/components/modal/Modal';
-import {
-  requestUpdateCustomerEmailAddress,
-  updateCustomer,
-} from '~/providers/account/account';
-import { getActiveCustomerDetails } from '~/providers/customer/customer';
-import useToggleState from '~/utils/use-toggle-state';
-import { replaceEmptyString } from '~/utils/validation';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from "react";
+import dummy from "../../_dummy/dummy_sanitech.json";
+import Breadcrumbs from "~/components/breadcrumbs/Breadcrumbs";
+import Sidebar from "~/components/common/Sidebar";
+import ListGroup from "~/components/common/list/ListGroup";
+import ListGroupItem from "~/components/common/list/ListGroupItem";
+import HistoryProduct from "~/components/common/section/HistoryProduct";
+import { ScrollArea } from "~/components/ui-custom/MyScrollArea";
+import Billing from "./addresses/billing";
+import Dashboard from "./dashboard";
+import Favorites from "./favorites/page";
+import Orders from "./orders/page";
+import Settings from "./settings/page";
+import Subscriptions  from "./subscriptions/page";
+import Shipping from "./addresses/shipping/page";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/server-runtime";
+import { getActiveCustomerDetails } from "~/providers/customer/customer";
+import { useLoaderData } from "@remix-run/react";
+import { useCustomer } from "~/providers/customer";
 
-enum FormIntent {
-  UpdateEmail = 'updateEmail',
-  UpdateDetails = 'updateDetails',
+const pages = {
+  billing: Billing,
+  shipping: Shipping,
+  dashboard: Dashboard,
+  favorites: Favorites,
+  orders: Orders,
+  settings: Settings,
+  subscriptions: Subscriptions,
 }
 
-export const validator = withZod(
-  z.object({
-    title: z.string(),
-    firstName: z.string().min(1, { message: 'First name is required' }),
-    lastName: z.string().min(1, { message: 'Last name is required' }),
-    phoneNumber: z.string(),
-  }),
-);
-
-const changeEmailValidator = withZod(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: 'Email is required' })
-      .email('Must be a valid email'),
-    password: z.string().min(1, { message: 'Password is required' }),
-  }),
-);
-
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerDetails({ request });
-  if (!activeCustomer) {
-    return redirect('/sign-in');
-  }
+
   return json({ activeCustomer });
 }
 
-function isFormError(err: unknown): err is FormError {
-  return (err as FormError).message !== undefined;
-}
+export default function AccountLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { activeCustomer } = useLoaderData<typeof loader>();
+  const { setActiveCustomer } = useCustomer();
+  const [stCurrentPage, setStCurrentPage] = useState("dashboard");
 
-function isEmailSavedResponse(
-  response: unknown,
-): response is EmailSavedResponse {
-  return (response as EmailSavedResponse).newEmailAddress !== undefined;
-}
+  const accountMenuOptions = dummy.accountMenuOptions;
 
-function isCustomerUpdatedResponse(
-  response: unknown,
-): response is CustomerUpdatedResponse {
-  return (response as CustomerUpdatedResponse).customerUpdated !== undefined;
-}
-
-type FormError = {
-  message: string;
-  intent?: string;
-};
-
-type EmailSavedResponse = {
-  newEmailAddress: string;
-};
-
-type CustomerUpdatedResponse = {
-  customerUpdated: true;
-};
-
-export async function action({ request }: DataFunctionArgs) {
-  const body = await request.formData();
-  const intent = body.get('intent') as FormIntent | null;
-
-  const formError = (formError: FormError, init?: number | ResponseInit) => {
-    return json<FormError>(formError, init);
+  const onPageChange = (page: string) => {
+    setStCurrentPage(page);
   };
 
-  if (intent === FormIntent.UpdateEmail) {
-    const result = await changeEmailValidator.validate(body);
-
-    if (result.error) {
-      return validationError(result.error);
-    }
-
-    const { email, password } = result.data;
-
-    const updateResult = await requestUpdateCustomerEmailAddress(
-      password,
-      email,
-      { request },
-    );
-
-    if (updateResult.__typename !== 'Success') {
-      return formError(
-        { message: updateResult.message, intent: FormIntent.UpdateEmail },
-        {
-          status: 401,
-        },
-      );
-    }
-
-    return json<EmailSavedResponse>(
-      {
-        newEmailAddress: email,
-      },
-      { status: 200 },
-    );
-  }
-
-  if (intent === FormIntent.UpdateDetails) {
-    const result = await validator.validate(body);
-
-    if (result.error) {
-      return validationError(result.error);
-    }
-
-    const { title, firstName, lastName, phoneNumber } = result.data;
-    await updateCustomer(
-      { title, firstName, lastName, phoneNumber },
-      { request },
-    );
-
-    return json({
-      customerUpdated: true,
-    });
-  }
-
-  return formError({ message: 'No valid form intent' }, { status: 401 });
-}
-
-export default function AccountDetails() {
-  const { activeCustomer } = useLoaderData<typeof loader>();
-  const actionDataHook = useActionData<typeof action>();
-  const { t } = useTranslation();
-
-  const { firstName, lastName, title, phoneNumber, emailAddress } =
-    activeCustomer;
-  const fullName = `${title ? title + ' ' : ''}${firstName} ${lastName}`;
-
-  const { state } = useNavigation();
-  const [formError, setFormError] = useState<FormError>();
-  const [emailSavedResponse, setEmailSavedResponse] =
-    useState<EmailSavedResponse>();
-  const [showChangeEmailModal, openChangeEmailModal, closeChangeEmailModal] =
-    useToggleState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const emailInputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const CurrentChild = (pages as any)[stCurrentPage];
 
   useEffect(() => {
-    if (!actionDataHook) {
-      return;
-    }
-
-    if (isEmailSavedResponse(actionDataHook)) {
-      setEmailSavedResponse(actionDataHook);
-      closeChangeEmailModal();
-      return;
-    }
-
-    if (isCustomerUpdatedResponse(actionDataHook)) {
-      setIsEditing(false);
-      setFormError(undefined);
-      return;
-    }
-
-    if (isFormError(actionDataHook)) {
-      setFormError(actionDataHook);
-      return;
-    }
-  }, [actionDataHook]);
-
-  useEffect(() => {
-    formRef.current?.reset();
-  }, [isEditing]);
+    setActiveCustomer(activeCustomer);
+  }, [activeCustomer]);
 
   return (
     <>
-      <Modal
-        isOpen={showChangeEmailModal}
-        close={() => closeChangeEmailModal()}
-        afterOpen={() => emailInputRef.current?.focus()}
-        size="small"
-      >
-        <ValidatedForm validator={changeEmailValidator} method="post">
-          <Modal.Title>{t('account.changeEmailModal.title')}</Modal.Title>
-          <Modal.Body>
-            <div className="space-y-4 my-8">
-              <p>{t('account.changeEmailModal.heading')}</p>
-              <p>
-                {t('account.changeEmailModal.currentEmail')}{' '}
-                <strong>{emailAddress}</strong>
-              </p>
-
-              <div className="space-y-1">
-                <input
-                  type="hidden"
-                  name="intent"
-                  value={FormIntent.UpdateEmail}
-                />
-                <Input
-                  ref={emailInputRef}
-                  autoFocus
-                  label={t('account.changeEmailModal.new')}
-                  name="email"
-                  required
-                />
-                <Input
-                  label={t('account.password')}
-                  type="password"
-                  name="password"
-                  required
-                />
-                <input type="submit" hidden />
+      <div className='mx-auto flex w-full max-w-screen-2xl flex-col gap-20 px-6 pb-12'>
+        <div className='grid grid-cols-1 gap-x-[4.5rem] lg:grid-cols-[20rem_minmax(0,_1fr)]'>
+          <Sidebar>
+            <ScrollArea className='h-full w-full overscroll-contain'>
+              <div className='flex flex-col gap-8 pb-0 pt-9'>
+                <ListGroup>
+                  {accountMenuOptions
+                    .flatMap((option) => (option.active ? option.active : []))
+                    .map((option, index) => (
+                      <ListGroupItem
+                        key={index}
+                        className='px-3'
+                        title={option.title}
+                        link={"/account"}
+                        imageSrc={option.imageSrc}
+                        imageClassName='h-6 w-6'
+                        badge={option.notification}
+                        showBadge={option.notification > 0}
+                        onClick={() => {
+                          if (option.link.indexOf("addresses") === -1) {
+                            onPageChange(option.link.replace("/account/", ""));
+                          } else {
+                            onPageChange(option.link.replace("/account/addresses/", ""));
+                          }
+                        }}
+                      />
+                    ))}
+                </ListGroup>
               </div>
-              {formError && formError.intent === FormIntent.UpdateEmail && (
-                <ErrorMessage
-                  heading={t('account.changeEmailModal.errorMessage')}
-                  message={formError.message}
-                />
-              )}
+            </ScrollArea>
+          </Sidebar>
+          <main className='flex flex-col gap-12 pt-12'>
+            {/* <Breadcrumbs /> */}
+            <div className='flex flex-auto flex-col gap-16'>
+              <CurrentChild />
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="reset" onClick={() => closeChangeEmailModal()}>
-              {t('common.cancel')}
-            </Button>
-            <HighlightedButton
-              type="submit"
-              isSubmitting={state === 'submitting'}
-            >
-              {t('common.save')}
-            </HighlightedButton>
-          </Modal.Footer>
-        </ValidatedForm>
-      </Modal>
-
-      <div className="space-y-10 p-4 mt-5">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <h3 className="text-sm text-gray-500">{t('account.email')}</h3>
-            {emailSavedResponse ? (
-              <span>
-                <span className="italic text-gray-800">
-                  {emailSavedResponse.newEmailAddress}
-                </span>
-                <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {t('account.changeEmailConfirmation')}
-                </span>
-              </span>
-            ) : (
-              <span>{emailAddress}</span>
-            )}
-          </div>
-          <div className="col-span-2">
-            <HighlightedButton
-              type="button"
-              onClick={() => openChangeEmailModal()}
-            >
-              <PencilIcon className="w-4 h-4" />{' '}
-              {t('account.changeEmailButton')}
-            </HighlightedButton>
-          </div>
+          </main>
         </div>
-        <div className="border-t border-gray-200 pt-10">
-          <ValidatedForm
-            validator={validator}
-            formRef={formRef}
-            method="post"
-            id="details"
-            defaultValues={{
-              title: title ?? undefined,
-              firstName,
-              lastName,
-              phoneNumber: phoneNumber ?? undefined,
-            }}
-          >
-            <input
-              type="hidden"
-              name="intent"
-              value={FormIntent.UpdateDetails}
-            />
-            <div className="gap-4 grid sm:grid-cols-2">
-              {isEditing && (
-                <div className="col-span-2">
-                  <Input
-                    label={t('account.title')}
-                    name="title"
-                    className="sm:w-1/4"
-                  />
-                </div>
-              )}
-              {isEditing ? (
-                <>
-                  <div>
-                    <Input
-                      label={t('account.firstName')}
-                      name="firstName"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      label={t('account.lastName')}
-                      name="lastName"
-                      required
-                    />
-                  </div>
-                </>
-              ) : (
-                <div>
-                  <h3 className="text-sm text-gray-500">
-                    {t('account.fullName')}
-                  </h3>
-                  {replaceEmptyString(fullName)}
-                </div>
-              )}
-
-              <div>
-                {isEditing ? (
-                  <Input label={t('account.phoneNumber')} name="phoneNumber" />
-                ) : (
-                  <div>
-                    <h3 className="text-sm text-gray-500">
-                      {t('account.phoneNumber')}
-                    </h3>
-                    {replaceEmptyString(phoneNumber)}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-2">
-                {isEditing ? (
-                  <>
-                    {formError &&
-                      formError.intent === FormIntent.UpdateDetails && (
-                        <ErrorMessage
-                          heading={t('account.errorMessage')}
-                          message={formError.message}
-                        />
-                      )}
-
-                    <div className="flex gap-x-4">
-                      <HighlightedButton
-                        type="submit"
-                        isSubmitting={state === 'submitting'}
-                      >
-                        <CheckIcon className="w-4 h-4" /> {t('common.save')}
-                      </HighlightedButton>
-
-                      <Button type="reset" onClick={() => setIsEditing(false)}>
-                        <XMarkIcon className="w-4 h-4" /> {t('common.cancel')}
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <HighlightedButton
-                    type="button"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <PencilIcon className="w-4 h-4" /> {t('common.edit')}
-                  </HighlightedButton>
-                )}
-              </div>
-            </div>
-          </ValidatedForm>
-        </div>
+        <HistoryProduct />
       </div>
     </>
   );
