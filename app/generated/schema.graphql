@@ -357,6 +357,11 @@ input CreateCustomerInput {
   title: String
 }
 
+input CreateProductHistoryInput {
+  customerId: ID!
+  productVariantId: ID!
+}
+
 """
 @description
 ISO 4217 currency code
@@ -1048,6 +1053,7 @@ enum ErrorCode {
   PASSWORD_VALIDATION_ERROR
   PAYMENT_DECLINED_ERROR
   PAYMENT_FAILED_ERROR
+  PRODUCT_HISTORY_ERROR
   UNKNOWN_ERROR
   VERIFICATION_TOKEN_EXPIRED_ERROR
   VERIFICATION_TOKEN_INVALID_ERROR
@@ -1982,10 +1988,12 @@ type Mutation {
 
   """Create a new Customer Address"""
   createCustomerAddress(input: CreateAddressInput!): Address!
+  createProductHistory(input: CreateProductHistoryInput!): ProductHistoryResult!
   createStripePaymentIntent: String
 
   """Delete an existing Address"""
   deleteCustomerAddress(id: ID!): Success!
+  deleteProductHistory(input: ProductHistoryInput!): DeletionResponse!
 
   """
   Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
@@ -2085,6 +2093,7 @@ type Mutation {
 
   """Update the password of the active Customer"""
   updateCustomerPassword(currentPassword: String!, newPassword: String!): UpdateCustomerPasswordResult!
+  updateProductHistory(input: UpdateProductHistoryInput!): UpdateResult!
 
   """
   Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
@@ -2903,7 +2912,7 @@ type Product implements Node {
   assets: [Asset!]!
   collections: [Collection!]!
   createdAt: DateTime!
-  customFields: ProductCustomFields
+  customFields: JSON
   description: String!
   enabled: Boolean!
   facetValues: [FacetValue!]!
@@ -2923,10 +2932,6 @@ type Product implements Node {
   variants: [ProductVariant!]!
 }
 
-type ProductCustomFields {
-  weight: Int
-}
-
 input ProductFilterParameter {
   _and: [ProductFilterParameter!]
   _or: [ProductFilterParameter!]
@@ -2938,7 +2943,50 @@ input ProductFilterParameter {
   name: StringOperators
   slug: StringOperators
   updatedAt: DateOperators
-  weight: NumberOperators
+}
+
+type ProductHistory {
+  createdAt: DateTime!
+  customerId: ID!
+  id: ID!
+  productVariantId: ID!
+  updatedAt: DateTime!
+}
+
+type ProductHistoryError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+input ProductHistoryFilterInput {
+  customerId: ID
+}
+
+input ProductHistoryInput {
+  customerId: ID!
+  productVariantId: ID!
+}
+
+type ProductHistoryList {
+  items: [ProductHistory!]!
+  totalItems: Int!
+}
+
+input ProductHistoryListOptions {
+  filter: ProductHistoryFilterInput
+  skip: Int = 0
+  sort: ProductHistorySortInput
+  take: Int = 10
+}
+
+union ProductHistoryResult = ProductHistory | ProductHistoryError
+
+input ProductHistorySortInput {
+  createdAt: SortOrder
+  customerId: SortOrder
+  id: SortOrder
+  productVariantId: SortOrder
+  updatedAt: SortOrder
 }
 
 type ProductList implements PaginatedList {
@@ -3013,7 +3061,6 @@ input ProductSortParameter {
   name: SortOrder
   slug: SortOrder
   updatedAt: SortOrder
-  weight: SortOrder
 }
 
 type ProductTranslation {
@@ -3059,7 +3106,6 @@ type ProductVariantCustomFields {
   shipping: Boolean
   upc: String
   viewed: Int
-  weight: Int
 }
 
 input ProductVariantFilterParameter {
@@ -3085,7 +3131,6 @@ input ProductVariantFilterParameter {
   upc: StringOperators
   updatedAt: DateOperators
   viewed: NumberOperators
-  weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -3131,7 +3176,6 @@ input ProductVariantSortParameter {
   upc: SortOrder
   updatedAt: SortOrder
   viewed: SortOrder
-  weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -3262,6 +3306,8 @@ type Query {
   Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result.
   """
   product(id: ID, slug: String): Product
+  productHistories(options: ProductHistoryListOptions): ProductHistoryList!
+  productHistory(input: ProductHistoryInput!): ProductHistory
 
   """Get a list of Products"""
   products(options: ProductListOptions): ProductList!
@@ -3678,6 +3724,17 @@ input UpdateOrderInput {
 }
 
 union UpdateOrderItemsResult = InsufficientStockError | NegativeQuantityError | Order | OrderLimitError | OrderModificationError
+
+input UpdateProductHistoryInput {
+  id: ID!
+  updatedAt: DateTime!
+}
+
+type UpdateResult {
+  affected: Int
+  generatedMaps: [JSON]
+  raw: JSON
+}
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload

@@ -394,6 +394,11 @@ export type CreateCustomerInput = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateProductHistoryInput = {
+  customerId: Scalars['ID'];
+  productVariantId: Scalars['ID'];
+};
+
 /**
  * @description
  * ISO 4217 currency code
@@ -936,6 +941,7 @@ export enum ErrorCode {
   PasswordValidationError = 'PASSWORD_VALIDATION_ERROR',
   PaymentDeclinedError = 'PAYMENT_DECLINED_ERROR',
   PaymentFailedError = 'PAYMENT_FAILED_ERROR',
+  ProductHistoryError = 'PRODUCT_HISTORY_ERROR',
   UnknownError = 'UNKNOWN_ERROR',
   VerificationTokenExpiredError = 'VERIFICATION_TOKEN_EXPIRED_ERROR',
   VerificationTokenInvalidError = 'VERIFICATION_TOKEN_INVALID_ERROR'
@@ -1695,9 +1701,11 @@ export type Mutation = {
   authenticate: AuthenticationResult;
   /** Create a new Customer Address */
   createCustomerAddress: Address;
+  createProductHistory: ProductHistoryResult;
   createStripePaymentIntent?: Maybe<Scalars['String']>;
   /** Delete an existing Address */
   deleteCustomerAddress: Success;
+  deleteProductHistory: DeletionResponse;
   /**
    * Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
    *
@@ -1771,6 +1779,7 @@ export type Mutation = {
   updateCustomerEmailAddress: UpdateCustomerEmailAddressResult;
   /** Update the password of the active Customer */
   updateCustomerPassword: UpdateCustomerPasswordResult;
+  updateProductHistory: UpdateResult;
   /**
    * Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
    *
@@ -1814,8 +1823,18 @@ export type MutationCreateCustomerAddressArgs = {
 };
 
 
+export type MutationCreateProductHistoryArgs = {
+  input: CreateProductHistoryInput;
+};
+
+
 export type MutationDeleteCustomerAddressArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationDeleteProductHistoryArgs = {
+  input: ProductHistoryInput;
 };
 
 
@@ -1911,6 +1930,11 @@ export type MutationUpdateCustomerEmailAddressArgs = {
 export type MutationUpdateCustomerPasswordArgs = {
   currentPassword: Scalars['String'];
   newPassword: Scalars['String'];
+};
+
+
+export type MutationUpdateProductHistoryArgs = {
+  input: UpdateProductHistoryInput;
 };
 
 
@@ -2599,7 +2623,7 @@ export type Product = Node & {
   assets: Array<Asset>;
   collections: Array<Collection>;
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<ProductCustomFields>;
+  customFields?: Maybe<Scalars['JSON']>;
   description: Scalars['String'];
   enabled: Scalars['Boolean'];
   facetValues: Array<FacetValue>;
@@ -2622,11 +2646,6 @@ export type ProductVariantListArgs = {
   options?: InputMaybe<ProductVariantListOptions>;
 };
 
-export type ProductCustomFields = {
-  __typename?: 'ProductCustomFields';
-  weight?: Maybe<Scalars['Int']>;
-};
-
 export type ProductFilterParameter = {
   _and?: InputMaybe<Array<ProductFilterParameter>>;
   _or?: InputMaybe<Array<ProductFilterParameter>>;
@@ -2638,7 +2657,53 @@ export type ProductFilterParameter = {
   name?: InputMaybe<StringOperators>;
   slug?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
-  weight?: InputMaybe<NumberOperators>;
+};
+
+export type ProductHistory = {
+  __typename?: 'ProductHistory';
+  createdAt: Scalars['DateTime'];
+  customerId: Scalars['ID'];
+  id: Scalars['ID'];
+  productVariantId: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ProductHistoryError = ErrorResult & {
+  __typename?: 'ProductHistoryError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+};
+
+export type ProductHistoryFilterInput = {
+  customerId?: InputMaybe<Scalars['ID']>;
+};
+
+export type ProductHistoryInput = {
+  customerId: Scalars['ID'];
+  productVariantId: Scalars['ID'];
+};
+
+export type ProductHistoryList = {
+  __typename?: 'ProductHistoryList';
+  items: Array<ProductHistory>;
+  totalItems: Scalars['Int'];
+};
+
+export type ProductHistoryListOptions = {
+  filter?: InputMaybe<ProductHistoryFilterInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<ProductHistorySortInput>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type ProductHistoryResult = ProductHistory | ProductHistoryError;
+
+export type ProductHistorySortInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  customerId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  productVariantId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type ProductList = PaginatedList & {
@@ -2712,7 +2777,6 @@ export type ProductSortParameter = {
   name?: InputMaybe<SortOrder>;
   slug?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
-  weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductTranslation = {
@@ -2761,7 +2825,6 @@ export type ProductVariantCustomFields = {
   shipping?: Maybe<Scalars['Boolean']>;
   upc?: Maybe<Scalars['String']>;
   viewed?: Maybe<Scalars['Int']>;
-  weight?: Maybe<Scalars['Int']>;
 };
 
 export type ProductVariantFilterParameter = {
@@ -2787,7 +2850,6 @@ export type ProductVariantFilterParameter = {
   upc?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
   viewed?: InputMaybe<NumberOperators>;
-  weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2828,7 +2890,6 @@ export type ProductVariantSortParameter = {
   upc?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   viewed?: InputMaybe<SortOrder>;
-  weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
@@ -2942,6 +3003,8 @@ export type Query = {
   orderByCode?: Maybe<Order>;
   /** Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
   product?: Maybe<Product>;
+  productHistories: ProductHistoryList;
+  productHistory?: Maybe<ProductHistory>;
   /** Get a list of Products */
   products: ProductList;
   /** Search Products based on the criteria set by the `SearchInput` */
@@ -2983,6 +3046,16 @@ export type QueryOrderByCodeArgs = {
 export type QueryProductArgs = {
   id?: InputMaybe<Scalars['ID']>;
   slug?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryProductHistoriesArgs = {
+  options?: InputMaybe<ProductHistoryListOptions>;
+};
+
+
+export type QueryProductHistoryArgs = {
+  input: ProductHistoryInput;
 };
 
 
@@ -3424,6 +3497,18 @@ export type UpdateOrderInput = {
 
 export type UpdateOrderItemsResult = InsufficientStockError | NegativeQuantityError | Order | OrderLimitError | OrderModificationError;
 
+export type UpdateProductHistoryInput = {
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type UpdateResult = {
+  __typename?: 'UpdateResult';
+  affected?: Maybe<Scalars['Int']>;
+  generatedMaps?: Maybe<Array<Maybe<Scalars['JSON']>>>;
+  raw?: Maybe<Scalars['JSON']>;
+};
+
 export type User = Node & {
   __typename?: 'User';
   authenticationMethods: Array<AuthenticationMethod>;
@@ -3720,6 +3805,41 @@ export type SetOrderBillingAddressMutationVariables = Exact<{
 
 
 export type SetOrderBillingAddressMutation = { __typename?: 'Mutation', setOrderBillingAddress: { __typename?: 'NoActiveOrderError', errorCode: ErrorCode, message: string } | { __typename: 'Order', id: string, code: string, active: boolean, createdAt: any, state: string, currencyCode: CurrencyCode, totalQuantity: number, subTotal: number, subTotalWithTax: number, shippingWithTax: number, totalWithTax: number, taxSummary: Array<{ __typename?: 'OrderTaxSummary', description: string, taxRate: number, taxTotal: number }>, customer?: { __typename?: 'Customer', id: string, firstName: string, lastName: string, emailAddress: string } | null, shippingAddress?: { __typename?: 'OrderAddress', fullName?: string | null, streetLine1?: string | null, streetLine2?: string | null, company?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, countryCode?: string | null, phoneNumber?: string | null } | null, billingAddress?: { __typename?: 'OrderAddress', fullName?: string | null, streetLine1?: string | null, streetLine2?: string | null, company?: string | null, city?: string | null, province?: string | null, postalCode?: string | null, countryCode?: string | null, phoneNumber?: string | null } | null, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number, shippingMethod: { __typename?: 'ShippingMethod', id: string, name: string } }>, lines: Array<{ __typename?: 'OrderLine', id: string, unitPriceWithTax: number, linePriceWithTax: number, quantity: number, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, product: { __typename?: 'Product', id: string, slug: string } } }>, payments?: Array<{ __typename?: 'Payment', id: string, state: string, method: string, amount: number, metadata?: any | null }> | null } };
+
+export type CreateProductHistoryMutationVariables = Exact<{
+  input: CreateProductHistoryInput;
+}>;
+
+
+export type CreateProductHistoryMutation = { __typename?: 'Mutation', createProductHistory: { __typename?: 'ProductHistory', id: string } | { __typename?: 'ProductHistoryError', errorCode: ErrorCode, message: string } };
+
+export type UpdateProductHistoryMutationVariables = Exact<{
+  input: UpdateProductHistoryInput;
+}>;
+
+
+export type UpdateProductHistoryMutation = { __typename?: 'Mutation', updateProductHistory: { __typename?: 'UpdateResult', affected?: number | null, generatedMaps?: Array<any | null> | null, raw?: any | null } };
+
+export type ProductHistoriesQueryVariables = Exact<{
+  options?: InputMaybe<ProductHistoryListOptions>;
+}>;
+
+
+export type ProductHistoriesQuery = { __typename?: 'Query', productHistories: { __typename?: 'ProductHistoryList', totalItems: number, items: Array<{ __typename?: 'ProductHistory', id: string, customerId: string, productVariantId: string, createdAt: any, updatedAt: any }> } };
+
+export type ProductHistoryQueryVariables = Exact<{
+  input: ProductHistoryInput;
+}>;
+
+
+export type ProductHistoryQuery = { __typename?: 'Query', productHistory?: { __typename?: 'ProductHistory', id: string, customerId: string, productVariantId: string, createdAt: any, updatedAt: any } | null };
+
+export type DeleteProductHistoryMutationVariables = Exact<{
+  input: ProductHistoryInput;
+}>;
+
+
+export type DeleteProductHistoryMutation = { __typename?: 'Mutation', deleteProductHistory: { __typename?: 'DeletionResponse', result: DeletionResult, message?: string | null } };
 
 export type DetailedProductFragment = { __typename?: 'Product', id: string, name: string, description: string, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }>, facetValues: Array<{ __typename?: 'FacetValue', id: string, code: string, name: string, facet: { __typename?: 'Facet', id: string, code: string, name: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null, assets: Array<{ __typename?: 'Asset', id: string, preview: string }>, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, priceWithTax: number, currencyCode: CurrencyCode, sku: string, stockLevel: string, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null }> };
 
@@ -4419,6 +4539,63 @@ export const SetOrderBillingAddressDocument = gql`
   }
 }
     ${OrderDetailFragmentDoc}`;
+export const CreateProductHistoryDocument = gql`
+    mutation createProductHistory($input: CreateProductHistoryInput!) {
+  createProductHistory(input: $input) {
+    ... on ProductHistory {
+      id
+    }
+    ... on ProductHistoryError {
+      errorCode
+      message
+    }
+  }
+}
+    `;
+export const UpdateProductHistoryDocument = gql`
+    mutation updateProductHistory($input: UpdateProductHistoryInput!) {
+  updateProductHistory(input: $input) {
+    ... on UpdateResult {
+      affected
+      generatedMaps
+      raw
+    }
+  }
+}
+    `;
+export const ProductHistoriesDocument = gql`
+    query productHistories($options: ProductHistoryListOptions) {
+  productHistories(options: $options) {
+    items {
+      id
+      customerId
+      productVariantId
+      createdAt
+      updatedAt
+    }
+    totalItems
+  }
+}
+    `;
+export const ProductHistoryDocument = gql`
+    query productHistory($input: ProductHistoryInput!) {
+  productHistory(input: $input) {
+    id
+    customerId
+    productVariantId
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const DeleteProductHistoryDocument = gql`
+    mutation deleteProductHistory($input: ProductHistoryInput!) {
+  deleteProductHistory(input: $input) {
+    result
+    message
+  }
+}
+    `;
 export const ProductDocument = gql`
     query product($slug: String, $id: ID) {
   product(slug: $slug, id: $id) {
@@ -4604,6 +4781,21 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     setOrderBillingAddress(variables: SetOrderBillingAddressMutationVariables, options?: C): Promise<SetOrderBillingAddressMutation> {
       return requester<SetOrderBillingAddressMutation, SetOrderBillingAddressMutationVariables>(SetOrderBillingAddressDocument, variables, options) as Promise<SetOrderBillingAddressMutation>;
+    },
+    createProductHistory(variables: CreateProductHistoryMutationVariables, options?: C): Promise<CreateProductHistoryMutation> {
+      return requester<CreateProductHistoryMutation, CreateProductHistoryMutationVariables>(CreateProductHistoryDocument, variables, options) as Promise<CreateProductHistoryMutation>;
+    },
+    updateProductHistory(variables: UpdateProductHistoryMutationVariables, options?: C): Promise<UpdateProductHistoryMutation> {
+      return requester<UpdateProductHistoryMutation, UpdateProductHistoryMutationVariables>(UpdateProductHistoryDocument, variables, options) as Promise<UpdateProductHistoryMutation>;
+    },
+    productHistories(variables?: ProductHistoriesQueryVariables, options?: C): Promise<ProductHistoriesQuery> {
+      return requester<ProductHistoriesQuery, ProductHistoriesQueryVariables>(ProductHistoriesDocument, variables, options) as Promise<ProductHistoriesQuery>;
+    },
+    productHistory(variables: ProductHistoryQueryVariables, options?: C): Promise<ProductHistoryQuery> {
+      return requester<ProductHistoryQuery, ProductHistoryQueryVariables>(ProductHistoryDocument, variables, options) as Promise<ProductHistoryQuery>;
+    },
+    deleteProductHistory(variables: DeleteProductHistoryMutationVariables, options?: C): Promise<DeleteProductHistoryMutation> {
+      return requester<DeleteProductHistoryMutation, DeleteProductHistoryMutationVariables>(DeleteProductHistoryDocument, variables, options) as Promise<DeleteProductHistoryMutation>;
     },
     product(variables?: ProductQueryVariables, options?: C): Promise<ProductQuery> {
       return requester<ProductQuery, ProductQueryVariables>(ProductDocument, variables, options) as Promise<ProductQuery>;

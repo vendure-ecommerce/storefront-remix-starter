@@ -11,8 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui-custom/MyCard";
-import Link from "next/link";
+
 import { useState } from "react";
+import { Link } from "@remix-run/react";
 
 interface HistoryProductCardProps {
   className?: string;
@@ -47,13 +48,13 @@ const HistoryProductCard: React.FC<HistoryProductCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <CardHeader className='relative p-0'>
-        <Link href={link}>
+        <Link to={link}>
           <ProductImage src={isHovering ? hoverImageSrc : imageSrc} />
         </Link>
       </CardHeader>
       <CardContent className='flex flex-col gap-4'>
         <div className='flex flex-col gap-1'>
-          <Link href={link}>
+          <Link to={link}>
             <CardTitle className='line-clamp-2 text-base'>
               <ProductTitle title={title} />
             </CardTitle>

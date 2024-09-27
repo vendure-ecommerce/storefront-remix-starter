@@ -5,10 +5,11 @@ import {
   json,
   MetaFunction,
   ShouldRevalidateFunction,
+  useFetcher,
   useLoaderData,
   useOutletContext,
 } from '@remix-run/react';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { LoaderFunctionArgs } from '@remix-run/server-runtime';
 import { ChevronDown, ChevronRight, Heart, Scale } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,13 +53,14 @@ import {
   CollapsibleTrigger,
 } from '~/components/ui/collapsible';
 import { APP_META_TITLE, userCardDummies } from '~/constants';
-import { ErrorCode, ErrorResult } from '~/generated/graphql';
+import { ErrorCode, ErrorResult, SortOrder } from '~/generated/graphql';
 import { getProductBySlug } from '~/providers/products/products';
 import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
-import { useActiveOrder } from '~/utils/use-active-order';
+import HistoryProduct from '~/components/common/section/HistoryProduct';
+import { getProductHistoryList } from '~/providers/product-histroy/product-history';
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -70,7 +72,7 @@ export const meta: MetaFunction = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }: DataFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { product } = await getProductBySlug(params.slug!, { request });
   if (!product) {
     throw new Response('Not Found', {
@@ -82,8 +84,18 @@ export async function loader({ params, request }: DataFunctionArgs) {
     request?.headers.get('Cookie'),
   );
   const error = session.get('activeOrderError');
+
+  const productHistory = await getProductHistoryList({
+    skip: 0,
+    take: 10,
+    sort: { updatedAt: SortOrder.Asc },
+    filter: {
+      customerId: '2',
+    },
+  });
+
   return json(
-    { product: product!, error },
+    { product: product!, error, productHistory: productHistory.productHistories },
     {
       headers: {
         'Set-Cookie': await sessionStorage.commitSession(session),
@@ -95,7 +107,8 @@ export async function loader({ params, request }: DataFunctionArgs) {
 export const shouldRevalidate: ShouldRevalidateFunction = () => true;
 
 export default function ProductSlug() {
-  const { product, error } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+  const { product, error, productHistory } = useLoaderData<typeof loader>();
   const { activeOrderFetcher } = useOutletContext<{
     activeOrderFetcher: FetcherWithComponents<CartLoaderData>;
   }>();
@@ -152,14 +165,28 @@ export default function ProductSlug() {
       setShowStickyCard(window.scrollY > 500);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (activeOrder && activeOrder.customer) {
+      const formData = new FormData();
+      formData.append('variantId', selectedVariantId);
+      formData.append('customerId', activeOrder.customer.id);
+      fetcher.submit(formData, {
+        action: '/api/product-history',
+        method: 'POST',
+        navigate: false,
+      });
+    }
+  }, [selectedVariantId]);
+
   // Find the collection where the breadcrumb is the most length
-  const collection = product.collections
-    .sort((a, b) => b.breadcrumbs.length - a.breadcrumbs.length)[0];
+  const collection = product.collections.sort(
+    (a, b) => b.breadcrumbs.length - a.breadcrumbs.length,
+  )[0];
 
   return (
     <>
@@ -263,8 +290,13 @@ export default function ProductSlug() {
                       priceNormal={variant.priceWithTax}
                       priceNet={variant.priceWithTax}
                       priceCrossed={variant.priceWithTax}
-                      imageSrc={product.featuredAsset?.preview ||
-                        product.assets[0]?.preview} id={variant.id} lineItemId={''}                    />
+                      imageSrc={
+                        product.featuredAsset?.preview ||
+                        product.assets[0]?.preview
+                      }
+                      id={variant.id}
+                      lineItemId={''}
+                    />
                   ))}
                   <Button variant={'outline'}>
                     Továbbiak megjelenítése
@@ -377,22 +409,21 @@ export default function ProductSlug() {
             <SectionDescription>Leírás</SectionDescription>
           </SectionHeader>
           <SectionContent layoutType="carousel">
-            {productOptions &&
-              productOptions.map((option, index) => (
+            {Array(10).map((option, index) => (
                 <ProductCard
                   key={index}
-                  id={option.id}
-                  title={option.title}
-                  link={option.link}
-                  number={option.number}
-                  priceNormal={option.priceNormal}
-                  priceNet={option.priceNet}
-                  priceCrossed={option.priceCrossed}
-                  imageSrc={option.imageSrc}
-                  hoverImageSrc={option.hoverImageSrc}
-                  rating={option.rating}
-                  reviews={option.reviews}
-                  manufacturer={option.manufacturer}
+                  id={"option.id"}
+                  title={"option.title"}
+                  link={"option.link"}
+                  number={"option.number"}
+                  priceNormal={10}
+                  priceNet={10}
+                  priceCrossed={10}
+                  imageSrc={"option.imageSrc"}
+                  hoverImageSrc={"option.hoverImageSrc"}
+                  rating={10}
+                  reviews={10}
+                  manufacturer={[ ]}
                 />
               ))}
           </SectionContent>
@@ -408,22 +439,21 @@ export default function ProductSlug() {
             <SectionDescription>Leírás</SectionDescription>
           </SectionHeader>
           <SectionContent layoutType="carousel">
-            {productOptions &&
-              productOptions.map((option, index) => (
+            {productHistory.items.map((productHistory, index) => (
                 <ProductCard
                   key={index}
-                  id={option.id}
-                  title={option.title}
-                  link={option.link}
-                  number={option.number}
-                  priceNormal={option.priceNormal}
-                  priceNet={option.priceNet}
-                  priceCrossed={option.priceCrossed}
-                  imageSrc={option.imageSrc}
-                  hoverImageSrc={option.hoverImageSrc}
-                  rating={option.rating}
-                  reviews={option.reviews}
-                  manufacturer={option.manufacturer}
+                  id={productHistory.productVariantId}
+                  title={"productHistory."}
+                  link={"option.name"}
+                  number={"10"}
+                  priceNormal={10}
+                  priceNet={10}
+                  priceCrossed={10}
+                  imageSrc={"option.name"}
+                  hoverImageSrc={"option.name"}
+                  rating={10}
+                  reviews={10}
+                  manufacturer={ [ ] }
                 />
               ))}
           </SectionContent>
@@ -727,7 +757,9 @@ export function CatchBoundary() {
   );
 }
 
-export function getAddItemToOrderError(error?: ErrorResult): string | undefined {
+export function getAddItemToOrderError(
+  error?: ErrorResult,
+): string | undefined {
   if (!error || !error.errorCode) {
     return undefined;
   }
