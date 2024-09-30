@@ -2949,7 +2949,7 @@ type ProductHistory {
   createdAt: DateTime!
   customerId: ID!
   id: ID!
-  productVariantId: ID!
+  productVariant: ProductVariant!
   updatedAt: DateTime!
 }
 
@@ -2962,6 +2962,10 @@ input ProductHistoryFilterInput {
   customerId: ID
 }
 
+input ProductHistoryId {
+  id: ID!
+}
+
 input ProductHistoryInput {
   customerId: ID!
   productVariantId: ID!
@@ -2969,7 +2973,6 @@ input ProductHistoryInput {
 
 type ProductHistoryList {
   items: [ProductHistory!]!
-  totalItems: Int!
 }
 
 input ProductHistoryListOptions {
@@ -3279,6 +3282,7 @@ type Query {
   """A list of Facets available to the shop"""
   facets(options: FacetListOptions): FacetList!
   generateBraintreeClientToken: String
+  getProductVariantsFromProductHistory(input: [ProductHistoryId]!): [ProductVariant]
 
   """Returns information about the current authenticated User"""
   me: CurrentUser

@@ -59,11 +59,26 @@ gql`
       items {
         id
         customerId
-        productVariantId
+        productVariant {
+          id
+          name
+          price
+          priceWithTax
+          product {
+            id
+            featuredAsset {
+              id
+              preview
+            }
+            translations {
+              languageCode
+              slug
+            }
+          }
+        }
         createdAt
         updatedAt
       }
-      totalItems
     }
   }
 `;
@@ -73,7 +88,18 @@ gql`
     productHistory(input: $input) {
       id
       customerId
-      productVariantId
+      productVariant {
+        id
+        sku
+        name
+        product {
+          id
+          translations {
+            languageCode
+            slug
+          }
+        }
+      }
       createdAt
       updatedAt
     }

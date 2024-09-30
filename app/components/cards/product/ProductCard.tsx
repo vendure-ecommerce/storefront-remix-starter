@@ -26,9 +26,9 @@ interface ProductCardProps {
   number: string;
   priceNormal: number;
   priceNet: number;
-  priceCrossed: number;
-  imageSrc: string;
-  hoverImageSrc: string;
+  priceCrossed: number | undefined;
+  imageSrc: string | undefined;
+  hoverImageSrc: string | undefined;
   rating: number;
   reviews: number;
   manufacturer: {
@@ -61,6 +61,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productTags = [],
 }) => {
   const [isHovering, setIsHovering] = useState(false);
+  console.log(link);
 
   return (
     <Card

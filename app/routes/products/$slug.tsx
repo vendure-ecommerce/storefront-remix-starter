@@ -59,7 +59,6 @@ import { getSessionStorage } from '~/sessions';
 import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
-import HistoryProduct from '~/components/common/section/HistoryProduct';
 import { getProductHistoryList } from '~/providers/product-histroy/product-history';
 
 export const meta: MetaFunction = ({ data }) => {
@@ -95,7 +94,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   });
 
   return json(
-    { product: product!, error, productHistory: productHistory.productHistories },
+    {
+      product: product!,
+      error,
+      productHistory: productHistory.productHistories,
+    },
     {
       headers: {
         'Set-Cookie': await sessionStorage.commitSession(session),
@@ -410,22 +413,22 @@ export default function ProductSlug() {
           </SectionHeader>
           <SectionContent layoutType="carousel">
             {Array(10).map((option, index) => (
-                <ProductCard
-                  key={index}
-                  id={"option.id"}
-                  title={"option.title"}
-                  link={"option.link"}
-                  number={"option.number"}
-                  priceNormal={10}
-                  priceNet={10}
-                  priceCrossed={10}
-                  imageSrc={"option.imageSrc"}
-                  hoverImageSrc={"option.hoverImageSrc"}
-                  rating={10}
-                  reviews={10}
-                  manufacturer={[ ]}
-                />
-              ))}
+              <ProductCard
+                key={index}
+                id={'option.id'}
+                title={'option.title'}
+                link={'option.link'}
+                number={'option.number'}
+                priceNormal={10}
+                priceNet={10}
+                priceCrossed={10}
+                imageSrc={'option.imageSrc'}
+                hoverImageSrc={'option.hoverImageSrc'}
+                rating={10}
+                reviews={10}
+                manufacturer={[]}
+              />
+            ))}
           </SectionContent>
         </Section>
 
@@ -440,22 +443,24 @@ export default function ProductSlug() {
           </SectionHeader>
           <SectionContent layoutType="carousel">
             {productHistory.items.map((productHistory, index) => (
-                <ProductCard
-                  key={index}
-                  id={productHistory.productVariantId}
-                  title={"productHistory."}
-                  link={"option.name"}
-                  number={"10"}
-                  priceNormal={10}
-                  priceNet={10}
-                  priceCrossed={10}
-                  imageSrc={"option.name"}
-                  hoverImageSrc={"option.name"}
-                  rating={10}
-                  reviews={10}
-                  manufacturer={ [ ] }
-                />
-              ))}
+              <ProductCard
+                key={index}
+                id={productHistory.productVariant.id}
+                title={productHistory.productVariant.name}
+                link={`/products/${productHistory.productVariant.product.translations[0].slug}`}
+                number={'10'}
+                priceNormal={productHistory.productVariant.price}
+                priceNet={productHistory.productVariant.priceWithTax}
+                priceCrossed={undefined}
+                imageSrc={
+                  productHistory.productVariant.product.featuredAsset?.preview
+                }
+                hoverImageSrc={'option.name'}
+                rating={10}
+                reviews={10}
+                manufacturer={[]}
+              />
+            ))}
           </SectionContent>
         </Section>
 

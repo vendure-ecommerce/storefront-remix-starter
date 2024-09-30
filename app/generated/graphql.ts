@@ -2664,7 +2664,7 @@ export type ProductHistory = {
   createdAt: Scalars['DateTime'];
   customerId: Scalars['ID'];
   id: Scalars['ID'];
-  productVariantId: Scalars['ID'];
+  productVariant: ProductVariant;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -2678,6 +2678,10 @@ export type ProductHistoryFilterInput = {
   customerId?: InputMaybe<Scalars['ID']>;
 };
 
+export type ProductHistoryId = {
+  id: Scalars['ID'];
+};
+
 export type ProductHistoryInput = {
   customerId: Scalars['ID'];
   productVariantId: Scalars['ID'];
@@ -2686,7 +2690,6 @@ export type ProductHistoryInput = {
 export type ProductHistoryList = {
   __typename?: 'ProductHistoryList';
   items: Array<ProductHistory>;
-  totalItems: Scalars['Int'];
 };
 
 export type ProductHistoryListOptions = {
@@ -2985,6 +2988,7 @@ export type Query = {
   /** A list of Facets available to the shop */
   facets: FacetList;
   generateBraintreeClientToken?: Maybe<Scalars['String']>;
+  getProductVariantsFromProductHistory?: Maybe<Array<Maybe<ProductVariant>>>;
   /** Returns information about the current authenticated User */
   me?: Maybe<CurrentUser>;
   /** Returns the possible next states that the activeOrder can transition to */
@@ -3030,6 +3034,11 @@ export type QueryFacetArgs = {
 
 export type QueryFacetsArgs = {
   options?: InputMaybe<FacetListOptions>;
+};
+
+
+export type QueryGetProductVariantsFromProductHistoryArgs = {
+  input: Array<InputMaybe<ProductHistoryId>>;
 };
 
 
@@ -3825,14 +3834,14 @@ export type ProductHistoriesQueryVariables = Exact<{
 }>;
 
 
-export type ProductHistoriesQuery = { __typename?: 'Query', productHistories: { __typename?: 'ProductHistoryList', totalItems: number, items: Array<{ __typename?: 'ProductHistory', id: string, customerId: string, productVariantId: string, createdAt: any, updatedAt: any }> } };
+export type ProductHistoriesQuery = { __typename?: 'Query', productHistories: { __typename?: 'ProductHistoryList', items: Array<{ __typename?: 'ProductHistory', id: string, customerId: string, createdAt: any, updatedAt: any, productVariant: { __typename?: 'ProductVariant', id: string, name: string, price: number, priceWithTax: number, product: { __typename?: 'Product', id: string, featuredAsset?: { __typename?: 'Asset', id: string, preview: string } | null, translations: Array<{ __typename?: 'ProductTranslation', languageCode: LanguageCode, slug: string }> } } }> } };
 
 export type ProductHistoryQueryVariables = Exact<{
   input: ProductHistoryInput;
 }>;
 
 
-export type ProductHistoryQuery = { __typename?: 'Query', productHistory?: { __typename?: 'ProductHistory', id: string, customerId: string, productVariantId: string, createdAt: any, updatedAt: any } | null };
+export type ProductHistoryQuery = { __typename?: 'Query', productHistory?: { __typename?: 'ProductHistory', id: string, customerId: string, createdAt: any, updatedAt: any, productVariant: { __typename?: 'ProductVariant', id: string, sku: string, name: string, product: { __typename?: 'Product', id: string, translations: Array<{ __typename?: 'ProductTranslation', languageCode: LanguageCode, slug: string }> } } } | null };
 
 export type DeleteProductHistoryMutationVariables = Exact<{
   input: ProductHistoryInput;
@@ -4569,11 +4578,26 @@ export const ProductHistoriesDocument = gql`
     items {
       id
       customerId
-      productVariantId
+      productVariant {
+        id
+        name
+        price
+        priceWithTax
+        product {
+          id
+          featuredAsset {
+            id
+            preview
+          }
+          translations {
+            languageCode
+            slug
+          }
+        }
+      }
       createdAt
       updatedAt
     }
-    totalItems
   }
 }
     `;
@@ -4582,7 +4606,18 @@ export const ProductHistoryDocument = gql`
   productHistory(input: $input) {
     id
     customerId
-    productVariantId
+    productVariant {
+      id
+      sku
+      name
+      product {
+        id
+        translations {
+          languageCode
+          slug
+        }
+      }
+    }
     createdAt
     updatedAt
   }

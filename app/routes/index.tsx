@@ -1,5 +1,5 @@
 import { useLoaderData } from '@remix-run/react';
-import { LoaderArgs } from '@remix-run/server-runtime';
+import { json, LoaderArgs } from '@remix-run/server-runtime';
 import { useTranslation } from 'react-i18next';
 import { getCollections } from '~/providers/collections/collections';
 import { useViewportWidth } from '~/utils/use-viewport-width';
@@ -15,17 +15,46 @@ import SectionHeader from '../components/common/section/SectionHeader';
 import SectionTitle from '../components/common/section/SectionTitle';
 import Usp from '../components/common/section/Usp';
 import HeroGrid from '../components/pages/home/HeroGrid';
+import { getProductBySlug } from '~/providers/products/products';
+import { getSessionStorage } from '~/sessions';
+import { getProductHistoryList } from '~/providers/product-histroy/product-history';
+import { SortOrder } from '~/generated/graphql';
+import ProductCard from '~/components/cards/product/ProductCard';
 
 export async function loader({ request }: LoaderArgs) {
   const collections = await getCollections(request, { take: 20 });
 
-  return {
-    collections,
-  };
+  const sessionStorage = await getSessionStorage();
+  const session = await sessionStorage.getSession(
+    request?.headers.get('Cookie'),
+  );
+  const error = session.get('activeOrderError');
+
+  const productHistory = await getProductHistoryList({
+    skip: 0,
+    take: 10,
+    sort: { updatedAt: SortOrder.Asc },
+    filter: {
+      customerId: '2',
+    },
+  });
+
+  return json(
+    {
+      collections,
+      error,
+      productHistory,
+    },
+    {
+      headers: {
+        'Set-Cookie': await sessionStorage.commitSession(session),
+      },
+    },
+  );
 }
 
 export default function Index() {
-  const { collections } = useLoaderData<typeof loader>();
+  const { collections, error, productHistory } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
   const width = useViewportWidth();
   const isMobile = width < 1024;
@@ -203,7 +232,44 @@ export default function Index() {
         </SectionContent>
       </Section>
 
-      <HistoryProduct />
+      <Section>
+        <SectionHeader>
+          <SectionTitle
+            className="text-5xl"
+            level="h2"
+            title="Megtekintett termékek"
+          />
+          <SectionDescription>Leírás</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+          layoutType="carousel"
+        >
+          {productHistory.productHistories.items.map(
+            (productHistory, index) => (
+              <ProductCard
+                key={index}
+                id={productHistory.productVariant.id}
+                title={productHistory.productVariant.name}
+                link={`/products/${productHistory.productVariant.product.translations[0].slug}`}
+                number={'10'}
+                priceNormal={productHistory.productVariant.price}
+                priceNet={productHistory.productVariant.priceWithTax}
+                priceCrossed={undefined}
+                imageSrc={
+                  productHistory.productVariant.product.featuredAsset?.preview
+                }
+                hoverImageSrc={
+                  productHistory.productVariant.product.featuredAsset?.preview
+                }
+                rating={10}
+                reviews={10}
+                manufacturer={[]}
+              />
+            ),
+          )}
+        </SectionContent>
+      </Section>
     </div>
   );
 }

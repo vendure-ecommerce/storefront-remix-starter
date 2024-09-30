@@ -1,9 +1,9 @@
-import LinkCard from "~/components/cards/LinkCard";
-import HistoryProductCard from "~/components/cards/product/HistoryProductCard";
-import SectionContent from "~/components/common/section/SectionContent";
-import Section from "./Section";
-import SectionHeader from "./SectionHeader";
-import SectionTitle from "./SectionTitle";
+import LinkCard from '~/components/cards/LinkCard';
+import HistoryProductCard from '~/components/cards/product/HistoryProductCard';
+import SectionContent from '~/components/common/section/SectionContent';
+import Section from './Section';
+import SectionHeader from './SectionHeader';
+import SectionTitle from './SectionTitle';
 
 interface Product {
   id: string;
@@ -21,24 +21,27 @@ interface HistoryProductProps {
   error?: string;
 }
 
-const HistoryProduct: React.FC<HistoryProductProps> = ({ productHistoryList, error }) => {
+const HistoryProduct: React.FC<HistoryProductProps> = ({
+  productHistoryList,
+  error,
+}) => {
   return (
-    <Section className='gap-7'>
+    <Section className="gap-7">
       <SectionHeader>
         <SectionTitle
-          className='text-2xl'
-          level='h2'
-          title='Korábban megnézett termékek'
+          className="text-2xl"
+          level="h2"
+          title="Korábban megnézett termékek"
         />
       </SectionHeader>
       <SectionContent
-        carouselItemClassName='basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.285%]'
-        layoutType='carousel'
+        carouselItemClassName="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.285%]"
+        layoutType="carousel"
       >
         {error ? (
           <div>Error: {error}</div>
         ) : (
-          productHistoryList.map((option, index) => (
+          productHistoryList?.map((option, index) => (
             <HistoryProductCard
               key={index}
               id={option.id}
@@ -52,7 +55,7 @@ const HistoryProduct: React.FC<HistoryProductProps> = ({ productHistoryList, err
             />
           ))
         )}
-        <LinkCard title='Összes előzmény' link='/collection/product/history' />
+        <LinkCard title="Összes előzmény" link="/collection/product/history" />
       </SectionContent>
     </Section>
   );
