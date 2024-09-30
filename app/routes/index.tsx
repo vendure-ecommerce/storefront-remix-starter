@@ -1,111 +1,275 @@
 import { useLoaderData } from '@remix-run/react';
-import { getCollections } from '~/providers/collections/collections';
-import { CollectionCard } from '~/components/collections/CollectionCard';
-import { BookOpenIcon } from '@heroicons/react/24/solid';
-import { LoaderArgs } from '@remix-run/server-runtime';
+import { json, LoaderArgs } from '@remix-run/server-runtime';
 import { useTranslation } from 'react-i18next';
+import { getCollections } from '~/providers/collections/collections';
+import { useViewportWidth } from '~/utils/use-viewport-width';
+import LinkCard from '../components/cards/LinkCard';
+import ListGroup from '../components/common/list/ListGroup';
+import ListGroupItem from '../components/common/list/ListGroupItem';
+import HistoryProduct from '../components/common/section/HistoryProduct';
+import Section from '../components/common/section/Section';
+import SectionContent from '../components/common/section/SectionContent';
+import SectionDescription from '../components/common/section/SectionDescription';
+import SectionFooter from '../components/common/section/SectionFooter';
+import SectionHeader from '../components/common/section/SectionHeader';
+import SectionTitle from '../components/common/section/SectionTitle';
+import Usp from '../components/common/section/Usp';
+import HeroGrid from '../components/pages/home/HeroGrid';
+import { getProductBySlug } from '~/providers/products/products';
+import { getSessionStorage } from '~/sessions';
+import { getProductHistoryList } from '~/providers/product-histroy/product-history';
+import { SortOrder } from '~/generated/graphql';
+import ProductCard from '~/components/cards/product/ProductCard';
 
 export async function loader({ request }: LoaderArgs) {
   const collections = await getCollections(request, { take: 20 });
-  return {
-    collections,
-  };
+
+  const sessionStorage = await getSessionStorage();
+  const session = await sessionStorage.getSession(
+    request?.headers.get('Cookie'),
+  );
+  const error = session.get('activeOrderError');
+
+  const productHistory = await getProductHistoryList({
+    skip: 0,
+    take: 10,
+    sort: { updatedAt: SortOrder.Asc },
+    filter: {
+      customerId: '2',
+    },
+  });
+
+  return json(
+    {
+      collections,
+      error,
+      productHistory,
+    },
+    {
+      headers: {
+        'Set-Cookie': await sessionStorage.commitSession(session),
+      },
+    },
+  );
 }
 
 export default function Index() {
-  const { collections } = useLoaderData<typeof loader>();
+  const { collections, error, productHistory } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
-  const headerImage = collections[0]?.featuredAsset?.preview;
+  const width = useViewportWidth();
+  const isMobile = width < 1024;
 
   return (
-    <>
-      <div className="relative">
-        {/* Decorative image and overlay */}
-        <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-          {headerImage && (
-            <img
-              className="absolute inset-0 w-full"
-              src={headerImage + '?w=800'}
-              alt="header"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-400 to-black mix-blend-darken" />
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gray-900 opacity-50"
-        />
-        <div className="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
-          <div className="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
-            <h1 className="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-yellow-600 via-red-500 to-blue-600">
-              {t('vendure.title')}
-            </h1>
+    <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-20 px-6 py-12">
+      <div className="flex">
+        {isMobile ? null : (
+          <div className="hidden w-full max-w-[24.5rem] -translate-x-6 lg:block max-h-[600px] overflow-y-auto">
+            <ListGroup>
+              {collections.map((option, index) => (
+                <ListGroupItem
+                  key={index}
+                  className="px-3"
+                  title={option.name}
+                  showTitle={true}
+                  link={`/collections/${option.slug}`}
+                  imageSrc={option.featuredAsset?.preview}
+                  imageClassName="h-10 w-10 rounded-full border"
+                  showImage={true}
+                  showTrailingIcon={false}
+                />
+              ))}
+            </ListGroup>
           </div>
-
-          <p className="mt-4 text-2xl text-white">
-            {t('vendure.intro')}{' '}
-            <a
-              href="https://www.vendure.io"
-              className="text-blue-300 hover:text-blue-500"
-            >
-              Vendure
-            </a>{' '}
-            &{' '}
-            <a
-              href="~/routes/__cart/index"
-              className="text-red-300 hover:text-red-500"
-            >
-              Remix
-            </a>
-          </p>
-          <p className="mt-4 text-gray-300 space-x-1">
-            <BookOpenIcon className="w-5 h-5 inline" />
-            <span>{t('common.readMore')}</span>
-            <a
-              className="text-primary-200 hover:text-primary-400"
-              href="https://www.vendure.io/blog/2022/05/lightning-fast-headless-commerce-with-vendure-and-remix"
-            >
-              {t('vendure.link')}
-            </a>
-          </p>
-        </div>
+        )}
+        <HeroGrid
+          collections={collections
+            // .sort(() => 0.5 - Math.random())
+            .slice(0, 4)}
+        />
       </div>
 
-      <section
-        aria-labelledby="category-heading"
-        className="pt-24 sm:pt-32 xl:max-w-7xl xl:mx-auto xl:px-8"
-      >
-        <div className="px-4 sm:px-6 lg:px-8 xl:px-0">
-          <h2
-            id="category-heading"
-            className="text-2xl font-light tracking-tight text-gray-900"
-          >
-            {t('common.shopByCategory')}
-          </h2>
-        </div>
+      <Usp />
 
-        <div className="mt-4 flow-root">
-          <div className="-my-2">
-            <div className="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
-              <div className="grid justify-items-center grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
-                {collections.map((collection) => (
-                  <CollectionCard key={collection.id} collection={collection} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      <Section>
+        <SectionHeader>
+          <SectionTitle
+            className="text-5xl"
+            level="h2"
+            title="Arcadia evőeszköz család"
+          />
+          <SectionDescription>Arcadia evőeszköz család</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+          layoutType="carousel"
+        >
+          {/* {products.slice(0, 8).map((option, index) => (
+            <ProductCard
+              key={index}
+              id={option.id}
+              title={option.title}
+              link={option.link}
+              number={option.number}
+              priceNormal={option.priceNormal}
+              priceNet={option.priceNet}
+              priceCrossed={option.priceCrossed}
+              imageSrc={option.imageSrc}
+              hoverImageSrc={option.hoverImageSrc}
+              rating={option.rating}
+              reviews={option.reviews}
+              manufacturer={option.manufacturer}
+            />
+          ))} */}
+        </SectionContent>
+      </Section>
 
-        <div className="mt-6 px-4 sm:hidden">
-          <a
-            href="~/routes/__cart/index#"
-            className="block text-sm font-semibold text-primary-600 hover:text-primary-500"
-          >
-            {t('common.browseCategories')}
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
-        </div>
-      </section>
-    </>
+      <Section>
+        <SectionHeader>
+          <SectionTitle className="text-5xl" level="h2" title="Kategóriák" />
+          <SectionDescription>Kategóriák</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="flex grow basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-[14.285%]"
+          layoutType="carousel"
+        >
+          {/* {categoryOptions.map((option, index) => (
+            <CategoryCard
+              key={index}
+              id={option.id}
+              title={option.title}
+              link={option.link}
+              imageSrc={option.imageSrc}
+              productCount={option.productCount}
+              sampleProducts={option.sampleProducts}
+            />
+          ))} */}
+        </SectionContent>
+      </Section>
+
+      <Section>
+        <SectionHeader>
+          <SectionTitle className="text-5xl" level="h2" title="Márkák" />
+          <SectionDescription>Leírás</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="flex grow basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-[14.285%]"
+          layoutType="carousel"
+        >
+          {/* {manufacturerOptions.map((option, index) => (
+            <ManufacturerCard
+              key={index}
+              id={option.id}
+              title={option.title}
+              link={option.link}
+              imageSrc={option.imageSrc}
+              productCount={option.productCount}
+              sampleProducts={option.sampleProducts}
+              showAvatarGroup={false}
+              showProductCount={false}
+            />
+          ))} */}
+        </SectionContent>
+      </Section>
+
+      <Section>
+        <SectionHeader>
+          <SectionTitle
+            className="text-5xl"
+            level="h2"
+            title="Cikkek és tippek a vásárlás segítéséhez"
+          />
+          <SectionDescription>Leírás</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          className="grid grid-cols-2 gap-item sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+          layoutType="grid"
+        >
+          {/* {articleOptions.map((option, index) => (
+            <ArticleCard
+              key={index}
+              id={option.id}
+              title={option.title}
+              link={option.link}
+              imageSrc={option.imageSrc}
+              description={option.description}
+              author={option.author}
+              category={option.category}
+            />
+          ))} */}
+          <LinkCard title="További bejegyzések" link="/collection/article" />
+        </SectionContent>
+        <SectionFooter>
+          {/* <a href='/collection/article'>
+            <Button>További bejegyzések</Button>
+          </a> */}
+        </SectionFooter>
+      </Section>
+
+      <Section>
+        <SectionHeader>
+          <SectionTitle
+            className="text-5xl"
+            level="h2"
+            title="Rólunk mondták"
+          />
+          <SectionDescription>Leírás</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+          layoutType="carousel"
+        >
+          {/* {reviewOptions.map((option, index) => (
+            <ReviewCard
+              key={index}
+              id={option.id}
+              title={option.title}
+              imageSrc={option.imageSrc}
+              date={option.date}
+              customer={option.customer}
+              rating={option.rating}
+            />
+          ))} */}
+        </SectionContent>
+      </Section>
+
+      <Section>
+        <SectionHeader>
+          <SectionTitle
+            className="text-5xl"
+            level="h2"
+            title="Megtekintett termékek"
+          />
+          <SectionDescription>Leírás</SectionDescription>
+        </SectionHeader>
+        <SectionContent
+          carouselItemClassName="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+          layoutType="carousel"
+        >
+          {productHistory.productHistories.items.map(
+            (productHistory, index) => (
+              <ProductCard
+                key={index}
+                id={productHistory.productVariant.id}
+                title={productHistory.productVariant.name}
+                link={`/products/${productHistory.productVariant.product.translations[0].slug}`}
+                number={'10'}
+                priceNormal={productHistory.productVariant.price}
+                priceNet={productHistory.productVariant.priceWithTax}
+                priceCrossed={undefined}
+                imageSrc={
+                  productHistory.productVariant.product.featuredAsset?.preview
+                }
+                hoverImageSrc={
+                  productHistory.productVariant.product.featuredAsset?.preview
+                }
+                rating={10}
+                reviews={10}
+                manufacturer={[]}
+              />
+            ),
+          )}
+        </SectionContent>
+      </Section>
+    </div>
   );
 }

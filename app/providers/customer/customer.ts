@@ -45,6 +45,9 @@ gql`
   query activeCustomerAddresses {
     activeCustomer {
       id
+      firstName
+      lastName
+      emailAddress
       addresses {
         id
         company

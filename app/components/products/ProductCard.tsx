@@ -1,5 +1,5 @@
-import { SearchQuery } from '~/generated/graphql';
 import { Link } from '@remix-run/react';
+import { SearchQuery } from '~/generated/graphql';
 import { Price } from './Price';
 
 export type ProductCardProps = SearchQuery['search']['items'][number];
@@ -11,7 +11,12 @@ export function ProductCard({
   currencyCode,
 }: ProductCardProps) {
   return (
-    <Link className="flex flex-col" prefetch="intent" to={`/products/${slug}`}>
+    <Link
+      className="flex flex-col"
+      prefetch="intent"
+      preventScrollReset
+      to={`/products/${slug}`}
+    >
       <img
         className="rounded-xl flex-grow object-cover aspect-[7/8]"
         alt=""

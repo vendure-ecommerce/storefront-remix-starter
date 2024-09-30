@@ -1,0 +1,1613 @@
+{
+  "accountMenuOptions": [
+    {
+      "active": [
+        {
+          "id": "1",
+          "title": "Vezérlőpult",
+          "link": "/account/dashboard",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNldHRpbmdzIj48cGF0aCBkPSJNMTIuMjIgMmgtLjQ0YTIgMiAwIDAgMC0yIDJ2LjE4YTIgMiAwIDAgMS0xIDEuNzNsLS40My4yNWEyIDIgMCAwIDEtMiAwbC0uMTUtLjA4YTIgMiAwIDAgMC0yLjczLjczbC0uMjIuMzhhMiAyIDAgMCAwIC43MyAyLjczbC4xNS4xYTIgMiAwIDAgMSAxIDEuNzJ2LjUxYTIgMiAwIDAgMS0xIDEuNzRsLS4xNS4wOWEyIDIgMCAwIDAtLjczIDIuNzNsLjIyLjM4YTIgMiAwIDAgMCAyLjczLjczbC4xNS0uMDhhMiAyIDAgMCAxIDIgMGwuNDMuMjVhMiAyIDAgMCAxIDEgMS43M1YyMGEyIDIgMCAwIDAgMiAyaC40NGEyIDIgMCAwIDAgMi0ydi0uMThhMiAyIDAgMCAxIDEtMS43M2wuNDMtLjI1YTIgMiAwIDAgMSAyIDBsLjE1LjA4YTIgMiAwIDAgMCAyLjczLS43M2wuMjItLjM5YTIgMiAwIDAgMC0uNzMtMi43M2wtLjE1LS4wOGEyIDIgMCAwIDEtMS0xLjc0di0uNWEyIDIgMCAwIDEgMS0xLjc0bC4xNS0uMDlhMiAyIDAgMCAwIC43My0yLjczbC0uMjItLjM4YTIgMiAwIDAgMC0yLjczLS43M2wtLjE1LjA4YTIgMiAwIDAgMS0yIDBsLS40My0uMjVhMiAyIDAgMCAxLTEtMS43M1Y0YTIgMiAwIDAgMC0yLTJ6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMyIvPjwvc3ZnPg==",
+          "notification": 0
+        },
+        {
+          "id": "2",
+          "title": "Személyes adatok",
+          "link": "/account/settings",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXItY29nIj48Y2lyY2xlIGN4PSIxOCIgY3k9IjE1IiByPSIzIi8+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiLz48cGF0aCBkPSJNMTAgMTVINmE0IDQgMCAwIDAtNCA0djIiLz48cGF0aCBkPSJtMjEuNyAxNi40LS45LS4zIi8+PHBhdGggZD0ibTE1LjIgMTMuOS0uOS0uMyIvPjxwYXRoIGQ9Im0xNi42IDE4LjcuMy0uOSIvPjxwYXRoIGQ9Im0xOS4xIDEyLjIuMy0uOSIvPjxwYXRoIGQ9Im0xOS42IDE4LjctLjQtMSIvPjxwYXRoIGQ9Im0xNi44IDEyLjMtLjQtMSIvPjxwYXRoIGQ9Im0xNC4zIDE2LjYgMS0uNCIvPjxwYXRoIGQ9Im0yMC43IDEzLjggMS0uNCIvPjwvc3ZnPg==",
+          "notification": 0
+        },
+        {
+          "id": "3",
+          "title": "Rendelési előzmények",
+          "link": "/account/orders",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWhpc3RvcnkiPjxwYXRoIGQ9Ik0zIDEyYTkgOSAwIDEgMCA5LTkgOS43NSA5Ljc1IDAgMCAwLTYuNzQgMi43NEwzIDgiLz48cGF0aCBkPSJNMyAzdjVoNSIvPjxwYXRoIGQ9Ik0xMiA3djVsNCAyIi8+PC9zdmc+",
+          "notification": 3
+        },
+        {
+          "id": "4",
+          "title": "Kedvenc termékek",
+          "link": "/account/favorites",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJvb2staGVhcnQiPjxwYXRoIGQ9Ik00IDE5LjV2LTE1QTIuNSAyLjUgMCAwIDEgNi41IDJIMjB2MjBINi41YTIuNSAyLjUgMCAwIDEgMC01SDIwIi8+PHBhdGggZD0iTTE2IDguMkMxNiA3IDE1IDYgMTMuOCA2Yy0uOCAwLTEuNC4zLTEuOC45LS40LS42LTEtLjktMS44LS45QzkgNiA4IDcgOCA4LjJjMCAuNi4zIDEuMi43IDEuNmgwQzEwIDExLjEgMTIgMTMgMTIgMTNzMi0xLjkgMy4zLTMuMWgwYy40LS40LjctMSAuNy0xLjd6Ii8+PC9zdmc+",
+          "notification": 5
+        },
+        {
+          "id": "6",
+          "title": "Szállítási címek",
+          "link": "/account/addresses/shipping",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXRydWNrIj48cGF0aCBkPSJNMTQgMThWNmEyIDIgMCAwIDAtMi0ySDRhMiAyIDAgMCAwLTIgMnYxMWExIDEgMCAwIDAgMSAxaDIiLz48cGF0aCBkPSJNMTUgMThIOSIvPjxwYXRoIGQ9Ik0xOSAxOGgyYTEgMSAwIDAgMCAxLTF2LTMuNjVhMSAxIDAgMCAwLS4yMi0uNjI0bC0zLjQ4LTQuMzVBMSAxIDAgMCAwIDE3LjUyIDhIMTQiLz48Y2lyY2xlIGN4PSIxNyIgY3k9IjE4IiByPSIyIi8+PGNpcmNsZSBjeD0iNyIgY3k9IjE4IiByPSIyIi8+PC9zdmc+",
+          "notification": 2
+        },
+        {
+          "id": "7",
+          "title": "Számlázási adatok",
+          "link": "/account/addresses/billing",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJlY2VpcHQtdGV4dCI+PHBhdGggZD0iTTQgMnYyMGwyLTEgMiAxIDItMSAyIDEgMi0xIDIgMSAyLTEgMiAxVjJsLTIgMS0yLTEtMiAxLTItMS0yIDEtMi0xLTIgMVoiLz48cGF0aCBkPSJNMTQgOEg4Ii8+PHBhdGggZD0iTTE2IDEySDgiLz48cGF0aCBkPSJNMTMgMTZIOCIvPjwvc3ZnPg==",
+          "notification": 3
+        },
+        {
+          "id": "8",
+          "title": "Feliratkozások",
+          "link": "/account/subscriptions",
+          "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNlbmQiPjxwYXRoIGQ9Im0yMiAyLTcgMjAtNC05LTktNFoiLz48cGF0aCBkPSJNMjIgMiAxMSAxMyIvPjwvc3ZnPg==",
+          "notification": 5
+        }
+      ]
+    },
+    {
+      "inactive": [
+        {
+          "id": "5",
+          "title": "Értékelések",
+          "link": "/account/reviews",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 99
+        },
+        {
+          "id": "9",
+          "title": "Tevékenységek",
+          "link": "/account/actions",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 0
+        }
+      ]
+    }
+  ],
+  "addressOptions": [
+    {
+      "id": "1",
+      "title": "Cím",
+      "shipping": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ],
+      "billing": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Cím",
+      "shipping": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ],
+      "billing": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ]
+    }
+  ],
+  "articleOptions": [
+    {
+      "id": "1",
+      "title": "Porcelán étkészletek a mindennapokban",
+      "link": "/article",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/blog/porcelan-etkeszletek-a-mindennapokban-375x375.webp",
+      "description": "A porcelán étkészletek alapvető szerepe a háztartásokban és a vendéglátóiparban.",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Sanitech",
+          "imageSrc": "",
+          "link": "#"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "A mikrózható, hőálló elviteles műanyag dobozok felhasználhatósága",
+      "link": "/article",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/blog/mikrozhato-hoallo-elviteles-muanyag-dobozok-vendeglatoipari-es-haztartasi-felhasznalasa-375x375.webp",
+      "description": "Konyhai kényelem és környezetvédelem.",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Sanitech",
+          "imageSrc": "",
+          "link": "#"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Fedezd fel a Glory kozmetikumok innovatív világát",
+      "link": "/article",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/blog/fedezd-fel-a-glory-komzetikumok-innovativ-vilagat-375x375.webp",
+      "description": "A Glory termékeket jellemzően az innováció és a minőség ötvözése jellemzi.",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Sanitech",
+          "imageSrc": "",
+          "link": "#"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "A szalvéták világa: Típusok és felhasználási területek",
+      "link": "/article",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/blog/a-szalvetak-vilaga-375x375.webp",
+      "description": "A szalvéták apró, ám annál fontosabb tárgyak, melyek számos helyzetben és környezetben elengedhet...",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Sanitech",
+          "imageSrc": "",
+          "link": "#"
+        }
+      ]
+    }
+  ],
+  "breadcrumbOptions": [
+    {
+      "title": "Főoldal",
+      "imageSrc": "/cub-cadet.webp",
+      "link": "/"
+    },
+    {
+      "title": "Kategória",
+      "imageSrc": "/cub-cadet.webp",
+      "link": "/collection/product/category"
+    },
+    {
+      "title": "Termék",
+      "imageSrc": "/cub-cadet.webp",
+      "link": "/product"
+    }
+  ],
+  "categoryOptions": [
+    {
+      "id": "1",
+      "title": "Higiéniai termékek",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/higeniai-termekek-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Marplast szappanadagoló 0,55 l fekete",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m714-black_marplast-szappanadagolo-0-55-l-fekete/marplast-szappanadagolo-0-55-l-fekete-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Marplast világoszöld szappanadagoló 0,17 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m764-green_marplast-vilagoszold-szappanadagolo-0-17-l/marplast-vilagoszold-szappanadagolo-0-17-l-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Marplast fekete szappanadagoló 0,17 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m764-black_marplast-fekete-szappanadagolo-0-17-l/marplast-fekete-szappanadagolo-0-17-l-0-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Eldobható termékek",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/eldobhato-termekek-kategoria-1.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Öntetes tálka 30 ml natúr",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pp331_ontetes-talka-30-ml-natur/ontetes-talka-30-ml-natur-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Öntetes tálka 50 ml natúr",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/74805_ontetes-talka-50-ml-natur/ontetes-talka-50-ml-natur-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Öntetes tálka 50 ml fekete",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/d-7050c_ontetes-talka-50-ml-fekete/ontetes-talka-50-ml-fekete-0-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Tálalóeszközök és asztali kiegészítők",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/talaloeszkozok-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Jégvödör fém fogantyúval 80 x 75 x 65 mm",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/400300_jegvodor-fem-fogantyuval-80-x-75-x-65-mm/jegvodor-fem-fogantyuval-80-x-75-x-65-mm-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Pezsgősvödör 110 mm",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/vr9913_pezsgosvodor-110-mm/pezsgosvodor-110-mm-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Kínáló tálka 'Mini' melamin, 5,5 cm, 0,02 l, fehér kék peremmel",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_talaloeszkozok-es-asztali-kiegeszitok/kinalo-szervirozo-talak/kinalo-talka-mini-melamin-5-5-cm-0-02-l-feher-kek-peremmel-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Konyha és pult kiegészítők",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/konyha-pult-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Műanyag ételtároló doboz 0,5 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m20001_muanyag-eteltarolo-doboz-0-5-l/muanyag-eteltarolo-doboz-0-5-l-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Műanyag ételtároló doboz 0,8 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m20002_muanyag-eteltarolo-doboz-0-8-l/muanyag-eteltarolo-doboz-0-8-l-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Műanyag szögletes ételtároló doboz 1,2 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m20003_muanyag-szogletes-eteltarolo-doboz-1-2-l/muanyag-szogletes-eteltarolo-doboz-1-2-l-0-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Porcelánáru",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/porcelan-termekek-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Kerámia pizzatányér La pizza dekor mintás 30 cm",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_porcelanaru/porcelan-pizzatanyerok/keramia-pizzatanyer-la-pizza-dekor-mintas-30-cm-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Porcelán pizzatányér 31 cm zöld",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_porcelanaru/porcelan-pizzatanyerok/porcelan-pizzatanyer-31-cm-zold-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Porcelán mintás pizzatányér 31 cm",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_porcelanaru/porcelan-pizzatanyerok/porcelan-mintas-pizzatanyer-31-cm-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Üvegáru",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/uvegaru-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Cortina üveg pohár 2,5 dl",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/mor-39138_cortina-uveg-pohar-2-5-dl/cortina-uveg-pohar-2-5-dl-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Üveg kancsó 'Alpes' 1,3 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_uvegaru/egyeb-uveg-termekek/uveg-kancsok-es-kiontok/uveg-kancso-alpes-1-3-l-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Bistro jelölt üveg kancsó 250 ml",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/0000_uvegaru/egyeb-uveg-termekek/uveg-kancsok-es-kiontok/bistro-jelolt-uveg-kancso-250-ml-400x323.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Egyéb termékek",
+      "description": "",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/catalog/kategoria/talaloeszkozok-kategoria.png",
+      "productCount": 83,
+      "megaMenu": false,
+      "sampleProducts": [
+        {
+          "title": "Műanyag szósznyomó/szószadagoló palack piros 240 ml",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-41526r1_muanyag-szosznyomo-szoszadagolo-palack-piros-240-ml/muanyag-szosznyomo-szoszadagolo-palack-piros-240-ml-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Műanyag szósznyomó/szószadagoló palack fehér 240 ml",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-41526b1_muanyag-szosznyomo-szoszadagolo-palack-feher-240-ml/muanyag-szosznyomo-szoszadagolo-palack-feher-240-ml-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Műanyag szósznyomó/szószadagoló palack sárga 240 ml",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-41526g1_muanyag-szosznyomo-szoszadagolo-palack-sarga-240-ml/muanyag-szosznyomo-szoszadagolo-palack-sarga-240-ml-0-400x323.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "categoryPageOptions": [
+    {
+      "id": "1",
+      "title": "Tálalóeszközök és asztali kiegészítők",
+      "description": "Az asztali kiegészítők a vendéglátóipari fogyóeszközök részét képezik háztartási, illetve vendéglátóipari, kereskedelmi egység számára. Az ehhez szükséges eszközöket, legyen szó gyümölcstartóról, cukrorról, jamről, vajról, mézről, kenyérről, tányérról,  állványról, cloche-ról, rozsdamentes evőeszközről, jégvödörről, italhűtőről, chafingről és egyéb tálalóeszközről azt megtalálja a sanitech.hu webáruházban. Vásároljon online, sorban állás nélkül, házhoz szállítással!",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok-kategoria-200x199.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Marplast szappanadagoló 0,55 l fekete",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m714-black_marplast-szappanadagolo-0-55-l-fekete/marplast-szappanadagolo-0-55-l-fekete-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Marplast világoszöld szappanadagoló 0,17 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m764-green_marplast-vilagoszold-szappanadagolo-0-17-l/marplast-vilagoszold-szappanadagolo-0-17-l-0-400x323.webp",
+          "link": "/"
+        },
+        {
+          "title": "Marplast fekete szappanadagoló 0,17 l",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/m764-black_marplast-fekete-szappanadagolo-0-17-l/marplast-fekete-szappanadagolo-0-17-l-0-400x323.webp",
+          "link": "/"
+        }
+      ],
+      "children": [
+        {
+          "id": "2",
+          "title": "Asztali kiegészítők",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/asztali-kiegeszitok-200x200.webp",
+          "link": "#"
+        },
+        {
+          "id": "11",
+          "title": "Tálalóeszközök",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/talaloeszkozok-200x200.webp",
+          "link": "#"
+        },
+        {
+          "id": "20",
+          "title": "Evőeszközök",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/evoeszkozok-200x200.webp",
+          "link": "#"
+        }
+      ]
+    }
+  ],
+  "categoryTreeOptions": [
+    {
+      "id": "1",
+      "title": "Tálalóeszközök és asztali kiegészítők",
+      "description": "",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok-kategoria-200x199.webp",
+      "children": [
+        {
+          "id": "2",
+          "title": "Asztali kiegészítők",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/asztali-kiegeszitok-200x200.webp",
+          "children": [
+            {
+              "id": "3",
+              "title": "Fűszer és joghurt és dresszing",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/fuszer-joghurt-dresszing-150x150.webp"
+            },
+            {
+              "id": "4",
+              "title": "Cukor és tea és méz és jam",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/cukor-tea-mez-jam-150x150.webp"
+            },
+            {
+              "id": "5",
+              "title": "Szósz és vaj",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/szosz-vaj-150x150.webp"
+            },
+            {
+              "id": "6",
+              "title": "Gyümölcstartók",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/gyumolcstartok-150x150.webp"
+            },
+            {
+              "id": "7",
+              "title": "Kenyértartók",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/kenyertartok-150x150.webp"
+            },
+            {
+              "id": "8",
+              "title": "Tányéralátétek",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/tanyeralatetek-150x150.webp"
+            },
+            {
+              "id": "9",
+              "title": "Állványok és kiemelők",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/allvanyok-kiemelok-150x150.webp"
+            },
+            {
+              "id": "10",
+              "title": "Cloche és búra",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/asztali-kiegeszitok/cloche-bura-150x150.webp"
+            }
+          ]
+        },
+        {
+          "id": "11",
+          "title": "Tálalóeszközök",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/talaloeszkozok-200x200.webp",
+          "children": [
+            {
+              "id": "10",
+              "title": "Fingerfood melamin termékek",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/fingerfood-melamin-termekek-150x150.webp"
+            },
+            {
+              "id": "11",
+              "title": "Fa tálalóeszközök",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/fa-talaloeszkozok-150x150.webp"
+            },
+            {
+              "id": "12",
+              "title": "Porcelán tálalóeszközök",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/porcelan-talaloeszkozok-150x150.webp"
+            },
+            {
+              "id": "13",
+              "title": "Rozsdamentes tálalóeszközök",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/rozsdamentes-talaloeszkozok-150x150.webp"
+            },
+            {
+              "id": "14",
+              "title": "Kínáló szervírozó tálak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/kinalo-szervirozo-talak-150x150.webp"
+            },
+            {
+              "id": "15",
+              "title": "Chafing",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/chafing-150x150.webp"
+            },
+            {
+              "id": "16",
+              "title": "Szedőeszközök és merőkanalak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/szedoeszkozok-merokanalak-150x150.webp"
+            },
+            {
+              "id": "17",
+              "title": "Csipeszek és fogók",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/csipeszek-fogok-150x150.webp"
+            },
+            {
+              "id": "18",
+              "title": "Grill eszközök",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/grill-eszkozok-150x150.webp"
+            },
+            {
+              "id": "19",
+              "title": "Jégvödrök és italhűtők és hűtőszettek",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/talaloeszkozok/jegvodrok-italhutok-hutoszettek-150x150.webp"
+            }
+          ]
+        },
+        {
+          "id": "20",
+          "title": "Evőeszközök",
+          "description": "",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/evoeszkozok-200x200.webp",
+          "children": [
+            {
+              "id": "21",
+              "title": "Rozsdamentes kanalak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-kanalak-150x150.webp"
+            },
+            {
+              "id": "22",
+              "title": "Rozsdamentes villák",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-villak-150x150.webp"
+            },
+            {
+              "id": "23",
+              "title": "Rozsdamentes kések",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-kesek-150x150.webp"
+            },
+            {
+              "id": "24",
+              "title": "Rozsdamentes kiskanalak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-kiskanalak-150x150.webp"
+            },
+            {
+              "id": "25",
+              "title": "Rozsdamentes desszertkanalak és fagylaltos kanalak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-desszertkanalak-fagylaltos-kanalak-150x150.webp"
+            },
+            {
+              "id": "26",
+              "title": "Rozsdamentes long drink kanalak",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/rozsdamentes-long-drink-kanalak-150x150.webp"
+            },
+            {
+              "id": "27",
+              "title": "Steak - Pizza",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/steak-pizza-150x150.webp"
+            },
+            {
+              "id": "28",
+              "title": "Tramontina kések",
+              "description": "",
+              "imageSrc": "https://sanitech.hu/image/cache/catalog/kategoria/evoeszkozok/tramontina-kesek-150x150.webp"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkboxOptions": [
+    {
+      "id": "option1",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option2",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option3",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option4",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option5",
+      "label": "Tulajdonság"
+    }
+  ],
+  "checkboxRatingOptions": [
+    {
+      "id": "option1",
+      "label": "Nagyon rossz",
+      "rating": 1
+    },
+    {
+      "id": "option2",
+      "label": "Rossz",
+      "rating": 2
+    },
+    {
+      "id": "option3",
+      "label": "Átlagos",
+      "rating": 3
+    },
+    {
+      "id": "option4",
+      "label": "Jó",
+      "rating": 4
+    },
+    {
+      "id": "option5",
+      "label": "Kiváló",
+      "rating": 5
+    }
+  ],
+  "customerOptions": [
+    {
+      "title": "Vásárló",
+      "imageSrc": "https://github.com/shadcn.png"
+    }
+  ],
+  "filterChipsOptions": [
+    {
+      "id": "remove-chip-1",
+      "attribute": "Gyűjtőkapacitás",
+      "value": "25 l"
+    },
+    {
+      "id": "remove-chip-2",
+      "attribute": "Indítás",
+      "value": "Elektromos"
+    },
+    {
+      "id": "remove-chip-3",
+      "attribute": "Energiaforrás",
+      "value": "Akkumulátor"
+    }
+  ],
+  "footerMenuOptions": [
+    {
+      "title": "Információk",
+      "items": [
+        "Kapcsolat",
+        "Cégadatok",
+        "Gyakori kérédsek",
+        "Higiéniai tanácsadás",
+        "Üzleti lehetőség",
+        "Adatvédelmi szabályzat",
+        "Általános Szerződési Feltételek"
+      ]
+    },
+    {
+      "title": "Problémák",
+      "items": ["Elállás / Felmondás", "Garancia", "Szavatosság / Jótállás"]
+    },
+    {
+      "title": "Rendelés",
+      "items": ["Vásárlási útmutató", "Vásárlással kapcsolatos információk"]
+    },
+    {
+      "title": "Szállítás és Fizetés",
+      "items": [
+        "Fizetés Banki átutalással",
+        "Fizetés Bankkártyával",
+        "Fizetés utánvéttel",
+        "Fizetés telephelyünkön",
+        "Ingyenes kiszállítás részletei",
+        "Kiszállítás futárral",
+        "Kiszállítás futárral"
+      ]
+    }
+  ],
+  "heroGridOptions": [
+    {
+      "id": "1",
+      "title": "Környezetbarát termékek",
+      "description": "Fából, papírból, bambuszból, PLA és speciális biorostból készült termékek.",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/slider/slider-1-1378x557.webp"
+    },
+    {
+      "id": "2",
+      "title": "Üveg poharak",
+      "description": "Bármilyen italhoz és alkalomra.",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/slider/uveg-poharak-1378x557.webp"
+    },
+    {
+      "id": "3",
+      "title": "Tisztítószerek",
+      "description": "Tisztaság és hatékonyság környezetbarát kivitelben!",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/slider/slider-3-1378x557.webp"
+    },
+    {
+      "id": "4",
+      "title": "Gyógyászati segédeszközök",
+      "description": "Gondoljon még idő előtt a mozgásszervi panaszok megelőzésére!",
+      "link": "/collection/product/category",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/slider/slider-2-1378x557.webp"
+    }
+  ],
+  "manufacturerOptions": [
+    {
+      "id": "1",
+      "title": "Abena",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/abena-logo-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Advantage üveg termékek",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/advantage-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "ALPHA illatosító család",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/alpha-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Arcadia evőeszköz család",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Aspergo üveg termékek",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/aspergo-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Baguette evőeszköz család",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/baguette-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Bali evőeszköz család",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/bali-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Basic porcelánok",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/basic-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "beGreen",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/begreen-100x100.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Bonna Aqua porcelánok",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/bonna-aqua-300x300.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "orderOptions": [
+    {
+      "id": "1",
+      "title": "#218489HT81",
+      "link": "/account/orders/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "connectedProducts": [
+        {
+          "id": "10",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "11",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "12",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "13",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "#218489HT82",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "connectedProducts": [
+        {
+          "id": "20",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "21",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "22",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "#218489HT83",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "connectedProducts": [
+        {
+          "id": "30",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "31",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "32",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "33",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "34",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "#218489HT84",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "connectedProducts": [
+        {
+          "id": "40",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "41",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "42",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "43",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "44",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "45",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        },
+        {
+          "id": "46",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp"
+        }
+      ]
+    }
+  ],
+  "productOptions": [
+    {
+      "id": "1",
+      "title": "Arcadia rozsdamentes acél szervizkanál",
+      "link": "/product",
+      "number": "PAD-6261444",
+      "priceNormal": 3900,
+      "priceNet": 3071,
+      "priceCrossed": 3900,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "rating": 4.92,
+      "reviews": 83,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ],
+      "connectedProducts": [
+        {
+          "id": "10",
+          "title": "Kapcsolódó Termék 1",
+          "link": "/product",
+          "number": "456",
+          "priceNormal": 500,
+          "priceNet": 400,
+          "priceCrossed": 600,
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261445_arcadia-rozsdamentes-acel-szervizvilla/arcadia-rozsdamentes-acel-szervizvilla-1-56x383.webp"
+        },
+        {
+          "id": "11",
+          "title": "Kapcsolódó Termék 2",
+          "link": "/product",
+          "number": "456",
+          "priceNormal": 500,
+          "priceNet": 400,
+          "priceCrossed": 600,
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261445_arcadia-rozsdamentes-acel-szervizvilla/arcadia-rozsdamentes-acel-szervizvilla-1-56x383.webp"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Arcadia rozsdamentes acél szervizvilla",
+      "link": "/product",
+      "number": "PAD-6261445",
+      "priceNormal": 3900,
+      "priceNet": 3071,
+      "priceCrossed": 3900,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261445_arcadia-rozsdamentes-acel-szervizvilla/arcadia-rozsdamentes-acel-szervizvilla-1-56x383.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261445_arcadia-rozsdamentes-acel-szervizvilla/arcadia-rozsdamentes-acel-szervizvilla-1-56x383.webp",
+      "rating": 4.56,
+      "reviews": 15,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Arcadia rozsdamentes acél tortalapát",
+      "link": "/product",
+      "number": "PAD-6261458",
+      "priceNormal": 5535,
+      "priceNet": 4358,
+      "priceCrossed": 5535,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261458_arcadia-rozsdamentes-acel-tortalapat/arcadia-rozsdamentes-acel-tortalapat-1-73x385.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261458_arcadia-rozsdamentes-acel-tortalapat/arcadia-rozsdamentes-acel-tortalapat-1-73x385.webp",
+      "rating": 4.78,
+      "reviews": 112,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Arcadia rozsdamentes acél merőkanál",
+      "link": "/product",
+      "number": "PAD-6261440",
+      "priceNormal": 11975,
+      "priceNet": 9429,
+      "priceCrossed": 11975,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261440_arcadia-rozsdamentes-acel-merokanal/arcadia-rozsdamentes-acel-merokanal-1-130x387.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261440_arcadia-rozsdamentes-acel-merokanal/arcadia-rozsdamentes-acel-merokanal-1-130x387.webp",
+      "rating": 4.28,
+      "reviews": 6,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Arcadia rozsdamentes acél teáskanál",
+      "link": "/product",
+      "number": "PAD-6261436",
+      "priceNormal": 13105,
+      "priceNet": 10319,
+      "priceCrossed": 13105,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261436_arcadia-rozsdamentes-acel-teaskanal/arcadia-rozsdamentes-acel-teaskanal-1-82x390.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261436_arcadia-rozsdamentes-acel-teaskanal/arcadia-rozsdamentes-acel-teaskanal-1-82x390.webp",
+      "rating": 5,
+      "reviews": 2,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Arcadia rozsdamentes acél süteményes villa",
+      "link": "/product",
+      "number": "PAD-6261455",
+      "priceNormal": 17375,
+      "priceNet": 13681,
+      "priceCrossed": 17375,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261455_arcadia-rozsdamentes-acel-sutemenyes-villa/arcadia-rozsdamentes-acel-sutemenyes-villa-0-495x400.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261455_arcadia-rozsdamentes-acel-sutemenyes-villa/arcadia-rozsdamentes-acel-sutemenyes-villa-0-495x400.webp",
+      "rating": 4.43,
+      "reviews": 17,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Arcadia rozsdamentes acél fagylaltkanál",
+      "link": "/product",
+      "number": "PAD-6261457",
+      "priceNormal": 17985,
+      "priceNet": 14161,
+      "priceCrossed": 17985,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261457_arcadia-rozsdamentes-acel-fagylaltkanal/arcadia-rozsdamentes-acel-fagylaltkanal-1-76x393.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261457_arcadia-rozsdamentes-acel-fagylaltkanal/arcadia-rozsdamentes-acel-fagylaltkanal-1-76x393.webp",
+      "rating": 4.11,
+      "reviews": 3,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Arcadia rozsdamentes acél long-drink kanál",
+      "link": "/product",
+      "number": "PAD-6261467",
+      "priceNormal": 18595,
+      "priceNet": 14642,
+      "priceCrossed": 18595,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261467_arcadia-rozsdamentes-acel-long-drink-kanal/arcadia-rozsdamentes-acel-long-drink-kanal-1-62x387.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261467_arcadia-rozsdamentes-acel-long-drink-kanal/arcadia-rozsdamentes-acel-long-drink-kanal-1-62x387.webp",
+      "rating": 4.99,
+      "reviews": 99,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Arcadia rozsdamentes acél evőkanál",
+      "link": "/product",
+      "number": "PAD-6261401",
+      "priceNormal": 19200,
+      "priceNet": 15118,
+      "priceCrossed": 19200,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261401_arcadia-rozsdamentes-acel-evokanal/arcadia-rozsdamentes-acel-evokanal-1-78x377.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261401_arcadia-rozsdamentes-acel-evokanal/arcadia-rozsdamentes-acel-evokanal-1-78x377.webp",
+      "rating": 3.81,
+      "reviews": 105,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Arcadia rozsdamentes acél evővilla",
+      "link": "/product",
+      "number": "PAD-6261408",
+      "priceNormal": 19200,
+      "priceNet": 15118,
+      "priceCrossed": 19200,
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261408_arcadia-rozsdamentes-acel-evovilla/arcadia-rozsdamentes-acel-evovilla-1-55x376.webp",
+      "hoverImageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261408_arcadia-rozsdamentes-acel-evovilla/arcadia-rozsdamentes-acel-evovilla-1-55x376.webp",
+      "rating": 4.69,
+      "reviews": 69,
+      "manufacturer": [
+        {
+          "title": "Arcadia evőeszköz család",
+          "imageSrc": "https://sanitech.hu/image/cache/catalog/gyarto/arcadia-100x100.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "productReviewOptions": [
+    {
+      "id": "1",
+      "title": "Termék",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "date": "2023.10.10.",
+      "rating": 1,
+      "textRating": "Nagyon rossz",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "2",
+      "title": "Termék",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "date": "2023.10.10.",
+      "rating": 2,
+      "textRating": "Rossz",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "3",
+      "title": "Termék",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "date": "2023.10.10.",
+      "rating": 3,
+      "textRating": "Közepes",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "4",
+      "title": "Termék",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "textRating": "Jó",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "5",
+      "title": "Termék",
+      "imageSrc": "https://sanitech.hu/image/cache/catalog/termek/pad-6261444_arcadia-rozsdamentes-acel-szervizkanal/arcadia-rozsdamentes-acel-szervizkanal-1-83x383.webp",
+      "date": "2023.10.10.",
+      "rating": 5,
+      "textRating": "Nagyon jó",
+      "description": "Ez egy leírás"
+    }
+  ],
+  "radioOptions": [
+    {
+      "id": "option1",
+      "label": "Tulajdonság",
+      "value": "option-1"
+    },
+    {
+      "id": "option2",
+      "label": "Tulajdonság",
+      "value": "option-2"
+    },
+    {
+      "id": "option3",
+      "label": "Tulajdonság",
+      "value": "option-3"
+    },
+    {
+      "id": "option4",
+      "label": "Tulajdonság",
+      "value": "option-4"
+    },
+    {
+      "id": "option5",
+      "label": "Tulajdonság",
+      "value": "option-5"
+    }
+  ],
+  "radioRatingOptions": [
+    {
+      "id": "option1",
+      "label": "Nagyon rossz",
+      "value": "option-1",
+      "rating": 1
+    },
+    {
+      "id": "option2",
+      "label": "Rossz",
+      "value": "option-2",
+      "rating": 2
+    },
+    {
+      "id": "option3",
+      "label": "Átlagos",
+      "value": "option-3",
+      "rating": 3
+    },
+    {
+      "id": "option4",
+      "label": "Jó",
+      "value": "option-4",
+      "rating": 4
+    },
+    {
+      "id": "option5",
+      "label": "Kiváló",
+      "value": "option-5",
+      "rating": 5
+    }
+  ],
+  "reviewOptions": [
+    {
+      "id": "1",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "selectChipOptions": [
+    {
+      "id": "select-chip-1",
+      "label": "Engem válassz!"
+    },
+    {
+      "id": "select-chip-2",
+      "label": "Ide kattints!"
+    },
+    {
+      "id": "select-chip-3",
+      "label": "Ne ide!"
+    }
+  ],
+  "serviceOptions": [
+    {
+      "id": "1",
+      "title": "Szállítás",
+      "number": "13AB77BE603",
+      "priceNormal": 10000,
+      "priceNet": 10000,
+      "priceCrossed": 10000,
+      "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjVmNDIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cnVjayI+PHBhdGggZD0iTTE0IDE4VjZhMiAyIDAgMCAwLTItMkg0YTIgMiAwIDAgMC0yIDJ2MTFhMSAxIDAgMCAwIDEgMWgyIi8+PHBhdGggZD0iTTE1IDE4SDkiLz48cGF0aCBkPSJNMTkgMThoMmExIDEgMCAwIDAgMS0xdi0zLjY1YTEgMSAwIDAgMC0uMjItLjYyNGwtMy40OC00LjM1QTEgMSAwIDAgMCAxNy41MiA4SDE0Ii8+PGNpcmNsZSBjeD0iMTciIGN5PSIxOCIgcj0iMiIvPjxjaXJjbGUgY3g9IjciIGN5PSIxOCIgcj0iMiIvPjwvc3ZnPg=="
+    }
+  ],
+  "uspCardOptions": [
+    {
+      "id": "1",
+      "title": "Hazai és import termékek széles választéka",
+      "description": "Hazai és import termékek széles választéka bővebben.",
+      "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjVmNDIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zaG9wcGluZy1iYXNrZXQiPjxwYXRoIGQ9Im0xNSAxMS0xIDkiLz48cGF0aCBkPSJtMTkgMTEtNC03Ii8+PHBhdGggZD0iTTIgMTFoMjAiLz48cGF0aCBkPSJtMy41IDExIDEuNiA3LjRhMiAyIDAgMCAwIDIgMS42aDkuOGEyIDIgMCAwIDAgMi0xLjZsMS43LTcuNCIvPjxwYXRoIGQ9Ik00LjUgMTUuNWgxNSIvPjxwYXRoIGQ9Im01IDExIDQtNyIvPjxwYXRoIGQ9Im05IDExIDEgOSIvPjwvc3ZnPg=="
+    },
+    {
+      "id": "2",
+      "title": "Megbízhatóság",
+      "description": "Megbízhatóság bővebben.",
+      "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjVmNDIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1oYW5kc2hha2UiPjxwYXRoIGQ9Im0xMSAxNyAyIDJhMSAxIDAgMSAwIDMtMyIvPjxwYXRoIGQ9Im0xNCAxNCAyLjUgMi41YTEgMSAwIDEgMCAzLTNsLTMuODgtMy44OGEzIDMgMCAwIDAtNC4yNCAwbC0uODguODhhMSAxIDAgMSAxLTMtM2wyLjgxLTIuODFhNS43OSA1Ljc5IDAgMCAxIDcuMDYtLjg3bC40Ny4yOGEyIDIgMCAwIDAgMS40Mi4yNUwyMSA0Ii8+PHBhdGggZD0ibTIxIDMgMSAxMWgtMiIvPjxwYXRoIGQ9Ik0zIDMgMiAxNGw2LjUgNi41YTEgMSAwIDEgMCAzLTMiLz48cGF0aCBkPSJNMyA0aDgiLz48L3N2Zz4="
+    },
+    {
+      "id": "3",
+      "title": "Minőség és ár / érték arány",
+      "description": "Minőség és ár / érték arány bővebben.",
+      "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjVmNDIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10aHVtYnMtdXAiPjxwYXRoIGQ9Ik03IDEwdjEyIi8+PHBhdGggZD0iTTE1IDUuODggMTQgMTBoNS44M2EyIDIgMCAwIDEgMS45MiAyLjU2bC0yLjMzIDhBMiAyIDAgMCAxIDE3LjUgMjJINGEyIDIgMCAwIDEtMi0ydi04YTIgMiAwIDAgMSAyLTJoMi43NmEyIDIgMCAwIDAgMS43OS0xLjExTDEyIDJoMGEzLjEzIDMuMTMgMCAwIDEgMyAzLjg4WiIvPjwvc3ZnPg=="
+    },
+    {
+      "id": "4",
+      "title": "Rugalmas szállítás",
+      "description": "Rugalmas szállítás bővebben.",
+      "imageSrc": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjVmNDIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cnVjayI+PHBhdGggZD0iTTE0IDE4VjZhMiAyIDAgMCAwLTItMkg0YTIgMiAwIDAgMC0yIDJ2MTFhMSAxIDAgMCAwIDEgMWgyIi8+PHBhdGggZD0iTTE1IDE4SDkiLz48cGF0aCBkPSJNMTkgMThoMmExIDEgMCAwIDAgMS0xdi0zLjY1YTEgMSAwIDAgMC0uMjItLjYyNGwtMy40OC00LjM1QTEgMSAwIDAgMCAxNy41MiA4SDE0Ii8+PGNpcmNsZSBjeD0iMTciIGN5PSIxOCIgcj0iMiIvPjxjaXJjbGUgY3g9IjciIGN5PSIxOCIgcj0iMiIvPjwvc3ZnPg=="
+    }
+  ]
+}
