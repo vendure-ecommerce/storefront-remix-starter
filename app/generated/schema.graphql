@@ -78,6 +78,8 @@ enum AssetType {
 }
 
 input AuthenticationInput {
+  facebook: FacebookAuthInput
+  google: GoogleAuthInput
   native: NativeAuthInput
 }
 
@@ -1058,6 +1060,10 @@ interface ErrorResult {
   message: String!
 }
 
+input FacebookAuthInput {
+  token: String!
+}
+
 type Facet implements Node {
   code: String!
   createdAt: DateTime!
@@ -1254,6 +1260,10 @@ enum GlobalFlag {
   FALSE
   INHERIT
   TRUE
+}
+
+input GoogleAuthInput {
+  token: String!
 }
 
 """
@@ -2903,7 +2913,7 @@ type Product implements Node {
   assets: [Asset!]!
   collections: [Collection!]!
   createdAt: DateTime!
-  customFields: ProductCustomFields
+  customFields: JSON
   description: String!
   enabled: Boolean!
   facetValues: [FacetValue!]!
@@ -2923,10 +2933,6 @@ type Product implements Node {
   variants: [ProductVariant!]!
 }
 
-type ProductCustomFields {
-  weight: Int
-}
-
 input ProductFilterParameter {
   _and: [ProductFilterParameter!]
   _or: [ProductFilterParameter!]
@@ -2938,7 +2944,6 @@ input ProductFilterParameter {
   name: StringOperators
   slug: StringOperators
   updatedAt: DateOperators
-  weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -3013,7 +3018,6 @@ input ProductSortParameter {
   name: SortOrder
   slug: SortOrder
   updatedAt: SortOrder
-  weight: SortOrder
 }
 
 type ProductTranslation {
@@ -3059,7 +3063,6 @@ type ProductVariantCustomFields {
   shipping: Boolean
   upc: String
   viewed: Int
-  weight: Int
 }
 
 input ProductVariantFilterParameter {
@@ -3085,7 +3088,6 @@ input ProductVariantFilterParameter {
   upc: StringOperators
   updatedAt: DateOperators
   viewed: NumberOperators
-  weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -3131,7 +3133,6 @@ input ProductVariantSortParameter {
   upc: SortOrder
   updatedAt: SortOrder
   viewed: SortOrder
-  weight: SortOrder
 }
 
 type ProductVariantTranslation {

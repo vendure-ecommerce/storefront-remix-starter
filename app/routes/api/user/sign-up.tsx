@@ -18,6 +18,8 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const variables = extractRegistrationFormValues(body);
   const result = await registerCustomerAccount({ request }, variables);
 
+  console.dir(result._headers);
+
   if (result.__typename === 'Success') {
     return json({ success: true });
   } else {

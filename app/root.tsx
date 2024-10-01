@@ -19,22 +19,22 @@ import {
   LinksFunction,
 } from '@remix-run/server-runtime';
 import { useEffect, useState } from 'react';
-
-import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
-import Footer from '~/components/footer/Footer';
 
 import { useActiveOrder } from '~/utils/use-active-order';
 import Footer from './components/common/footer/Footer';
 import MobileMenu from './components/common/mobile/MobileMenu';
-import Navbar from './components/common/navbar/Navbar';
 import { CollectionsProvider } from './providers/collections';
 import stylesheet from './tailwind.css';
 import { IGlobalLayoutData } from './types/types';
 import { cn } from './utils/cn';
 import { OrderProvider } from './providers/orders';
 import { CustomerProvider } from './providers/customer';
-
+import { getCollections } from './providers/collections/collections';
+import { useTranslation } from 'react-i18next';
+import { useChangeLanguage } from 'remix-i18next';
+import { getI18NextServer } from './i18next.server';
+import { activeChannel } from './providers/channel/channel';
 
 // export const meta: MetaFunction = () => {
 //   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -115,6 +115,7 @@ export default function App() {
   const { collections, locale } = loaderData;
   const { i18n } = useTranslation();
   const {
+    activeCustomer,
     activeOrderFetcher,
     activeOrder,
     adjustOrderLine,
@@ -138,79 +139,90 @@ export default function App() {
 
   return (
     <CollectionsProvider collections={collections || []}>
-      <CustomerProvider>
-        <OrderProvider>
-          <html lang={locale} dir={i18n.dir()} id="app" className="scroll-smooth">
-            <head>
-              <meta charSet="utf-8" />
-              <meta name="viewport" content="width=device-width,initial-scale=1" />
-              <link rel="icon" href="/favicon.ico" type="image/png"></link>
-              <link rel="preconnect" href="https://fonts.googleapis.com" />
-              <link
-                rel="preconnect"
-                href="https://fonts.gstatic.com"
-                crossOrigin={'anonymous'}
-              />
-              <link
-                href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-                rel="stylesheet"
-              />
+      <OrderProvider>
+        <html lang={locale} dir={i18n.dir()} id="app" className="scroll-smooth">
+          <head>
+            <meta charSet="utf-8" />
+            <meta
+              name="viewport"
+              content="width=device-width,initial-scale=1"
+            />
+            <link rel="icon" href="/favicon.ico" type="image/png"></link>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link
+              rel="preconnect"
+              href="https://fonts.gstatic.com"
+              crossOrigin={'anonymous'}
+            />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+              rel="stylesheet"
+            />
 
-              {/* Google and Facebook authentication  */}
-              <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-              <script src="https://accounts.google.com/gsi/client" async defer></script>
+            {/* Google and Facebook authentication  */}
+            <script
+              async
+              defer
+              crossOrigin="anonymous"
+              src="https://connect.facebook.net/en_US/sdk.js"
+            ></script>
+            <script
+              src="https://accounts.google.com/gsi/client"
+              async
+              defer
+            ></script>
 
-              <Meta />
-              <Links />
-            </head>
-            <body
-              className={cn(
-                'flex min-h-screen flex-col bg-background font-sans antialiased',
-              )}
-            >
-              <div id="g_id_onload"
-                data-client_id="512253564474-6e13qu1sb2oj3mjnjlpbfashmk1ehh40.apps.googleusercontent.com"
-                data-callback="handleCredentialResponse">
-              </div>
-              <Navbar />
-              <main className="">
-                <Outlet
-                  context={{
-                    activeOrderFetcher,
-                    activeOrder,
-                    adjustOrderLine,
-                    removeItem,
-                    setLayoutData,
-                  }}
-                />
-              </main>
-              {/* <CartTray
-                open={open}
-                onClose={setOpen}
-                activeOrder={activeOrder}
-                adjustOrderLine={adjustOrderLine}
-                removeItem={removeItem}
-              /> */}
-              <ScrollRestoration />
-              <Scripts />
-              <Footer
-                showFooterImage={stLayoutData?.showFooterImage ?? true}
-                showFooterMenu={stLayoutData?.showFooterMenu ?? true}
+            <Meta />
+            <Links />
+          </head>
+          <body
+            className={cn(
+              'flex min-h-screen flex-col bg-background font-sans antialiased',
+            )}
+          >
+            <div
+              id="g_id_onload"
+              data-client_id="512253564474-6e13qu1sb2oj3mjnjlpbfashmk1ehh40.apps.googleusercontent.com"
+              data-callback="handleCredentialResponse"
+            ></div>
+            <main className="">
+              <Outlet
+                context={{
+                  activeCustomer,
+                  activeOrderFetcher,
+                  activeOrder,
+                  adjustOrderLine,
+                  removeItem,
+                  setLayoutData,
+                }}
               />
-              <MobileMenu
-                showMenuButton={true}
-                showOrderButton={false}
-                showFilterButton={false}
-                showFavoriteProductButton={false}
-                showCompareProductsButton={false}
-                showCartButton={true}
-              />
+            </main>
+            {/* <CartTray
+              open={open}
+              onClose={setOpen}
+              activeOrder={activeOrder}
+              adjustOrderLine={adjustOrderLine}
+              removeItem={removeItem}
+            /> */}
+            <ScrollRestoration />
+            <Scripts />
+            <Footer
+              showFooterImage={stLayoutData?.showFooterImage ?? true}
+              showFooterMenu={stLayoutData?.showFooterMenu ?? true}
+            />
+            <MobileMenu
+              showMenuButton={true}
+              showOrderButton={false}
+              showFilterButton={false}
+              showFavoriteProductButton={false}
+              showCompareProductsButton={false}
+              showCartButton={true}
+            />
 
-              {devMode && <LiveReload />}
-            </body>
-          </html>
-        </OrderProvider>
-      </CustomerProvider>
+            {devMode && <LiveReload />}
+          </body>
+        </html>
+      </OrderProvider>
     </CollectionsProvider>
   );
 }

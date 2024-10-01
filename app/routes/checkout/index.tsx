@@ -1,6 +1,15 @@
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { json, redirect, useLoaderData, useOutletContext } from '@remix-run/react';
-import { ActionFunction, ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/server-runtime';
+import {
+  json,
+  redirect,
+  useLoaderData,
+  useOutletContext,
+} from '@remix-run/react';
+import {
+  ActionFunction,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+} from '@remix-run/server-runtime';
 import HorizontalProductCard from '~/components/cards/product/HorizontalProductCard';
 import Section from '~/components/common/section/Section';
 import SectionContent from '~/components/common/section/SectionContent';
@@ -13,12 +22,24 @@ import SummarySubTotal from '~/components/common/summary/SummarySubTotal';
 import SummaryTaxRate from '~/components/common/summary/SummaryTaxRate';
 import CheckoutForm from '~/components/pages/checkout/checkoutForm';
 import PageTitle from '~/components/pages/PageTitle';
-import { addPaymentToOrder, getAvailableCountries, getEligiblePaymentMethods, getEligibleShippingMethods } from '~/providers/checkout/checkout';
+import {
+  addPaymentToOrder,
+  getAvailableCountries,
+  getEligiblePaymentMethods,
+  getEligibleShippingMethods,
+} from '~/providers/checkout/checkout';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
-import { getActiveOrder, setCustomerForOrder, setOrderBillingAddress, setOrderShippingAddress, setOrderShippingMethod } from '~/providers/orders/order';
+import {
+  getActiveOrder,
+  setCustomerForOrder,
+  setOrderBillingAddress,
+  setOrderShippingAddress,
+  setOrderShippingMethod,
+} from '~/providers/orders/order';
 import { transitionOrderToState } from '~/providers/checkout/checkout';
 import { getSessionStorage } from '~/sessions';
 import { TGlobalOutletContext } from '~/types/types';
+import Navbar from '~/components/common/navbar/Navbar';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>
@@ -30,7 +51,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   console.log(activeOrder);
 
   //check if there is an active order if not redirect to homepage
-/*   if (
+  /*   if (
     !session ||
     !activeOrder ||
     !activeOrder.active ||
@@ -41,8 +62,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { activeCustomer } = await getActiveCustomerAddresses({ request });
   const { availableCountries } = await getAvailableCountries({ request });
-  const { eligibleShippingMethods } = await getEligibleShippingMethods({ request });
-  const { eligiblePaymentMethods } = await getEligiblePaymentMethods({ request });
+  const { eligibleShippingMethods } = await getEligibleShippingMethods({
+    request,
+  });
+  const { eligiblePaymentMethods } = await getEligiblePaymentMethods({
+    request,
+  });
 
   const error = session.get('activeOrderError');
 
@@ -115,55 +140,76 @@ export async function action({ request, params }: ActionFunctionArgs) {
     phoneNumber: '06306672959',
   };
 
-  const setCustomerForOrderResult = await setCustomerForOrder({ 
+  const setCustomerForOrderResult = await setCustomerForOrder(
+    {
       emailAddress: email,
       firstName: 'Martin',
-      lastName: 'Serdult' 
-    }, { request }
+      lastName: 'Serdult',
+    },
+    { request },
   );
   console.log('setCustomerForOrderResult', setCustomerForOrderResult); //This makes sense when you want to create a guest order
 
-
-  const orderShippingAddressResult = await setOrderShippingAddress(shippingAddress, { request });
+  const orderShippingAddressResult = await setOrderShippingAddress(
+    shippingAddress,
+    { request },
+  );
   console.log('orderShippingAddressResult', orderShippingAddressResult);
 
-  const orderBillingAddressResult = await setOrderBillingAddress(billingAddress, { request });
+  const orderBillingAddressResult = await setOrderBillingAddress(
+    billingAddress,
+    { request },
+  );
   console.log('orderBillingAddressResult', setOrderBillingAddress);
 
-  const orderShippingMethodResult = await setOrderShippingMethod('1', { request }); //We will get the Order ShippingMethod from one of the selected cards on the second section called 'Szállítási cím'
+  const orderShippingMethodResult = await setOrderShippingMethod('1', {
+    request,
+  }); //We will get the Order ShippingMethod from one of the selected cards on the second section called 'Szállítási cím'
   console.log('orderShippingMethodResult', orderShippingMethodResult);
 
-  const orderPaymentMethodResult = await addPaymentToOrder({ method: 'standard-payment', metadata: {} }, { request });// A Payment may only be added when Order is in "ArrangingPayment" state.
+  const orderPaymentMethodResult = await addPaymentToOrder(
+    { method: 'standard-payment', metadata: {} },
+    { request },
+  ); // A Payment may only be added when Order is in "ArrangingPayment" state.
   console.log('orderPaymentMethodResult', orderPaymentMethodResult); // A Payment may only be added when Order is in "ArrangingPayment" state.
 
-  const transitionOrderToStateResult = await transitionOrderToState('ArrangingPayment', { request });
+  const transitionOrderToStateResult = await transitionOrderToState(
+    'ArrangingPayment',
+    { request },
+  );
   console.log('transitionOrderToStateResult', transitionOrderToStateResult);
 
-  console.log("Shipping Address:", shippingAddress);
-  console.log("Billing Address:", billingAddress);
+  console.log('Shipping Address:', shippingAddress);
+  console.log('Billing Address:', billingAddress);
 
   return { success: true, message: 'Order successfully placed!' };
-};
-
+}
 
 export default function Checkout() {
   const outlet = useOutletContext<TGlobalOutletContext>();
   const { activeOrder, removeItem, adjustOrderLine } = outlet;
-  const { availableCountries, eligibleShippingMethods, activeCustomer, eligiblePaymentMethods, error } = useLoaderData<typeof loader>();
+  const {
+    availableCountries,
+    eligibleShippingMethods,
+    activeCustomer,
+    eligiblePaymentMethods,
+    error,
+  } = useLoaderData<typeof loader>();
 
   const product = {} as any;
 
   return (
     <>
+      <Navbar />
       <PageTitle title="Rendelés" srOnly />
       <div className="flex flex-col gap-y-32">
         <div className="relative mx-auto grid max-w-screen-sm grid-cols-1 gap-16 lg:max-w-full lg:grid-cols-2 lg:gap-20">
           <div className="flex flex-col gap-16">
             <CheckoutForm
-            availableCountries={availableCountries}
-            eligibleShippingMethods={eligibleShippingMethods}
-            eligiblePaymentMethods={eligiblePaymentMethods}
-            activeCustomer={activeCustomer}
+              availableCountries={availableCountries}
+              eligibleShippingMethods={eligibleShippingMethods}
+              eligiblePaymentMethods={eligiblePaymentMethods}
+              activeCustomer={activeCustomer}
             />
           </div>
           <div className="flex h-full flex-col gap-16">
@@ -181,7 +227,7 @@ export default function Checkout() {
                         priceNormal={option.unitPriceWithTax}
                         priceNet={option.unitPriceWithTax}
                         priceCrossed={option.unitPriceWithTax}
-                        imageSrc={option.featuredAsset?.preview || ""}
+                        imageSrc={option.featuredAsset?.preview || ''}
                         showAddToCartHandler={true}
                         showProductAmountStepper={true}
                         variant="sm"
@@ -220,7 +266,7 @@ export default function Checkout() {
                     </SectionHeader>
                     <SectionContent className="grid grid-cols-1 gap-4">
                       <Summary>
-                        <div className='flex flex-col gap-2'>
+                        <div className="flex flex-col gap-2">
                           <SummarySubTotal
                             value={activeOrder?.subTotalWithTax}
                             currencyCode={activeOrder?.currencyCode}
@@ -239,7 +285,7 @@ export default function Checkout() {
                           /> */}
                         </div>
                         <SummaryTotal
-                          className='text-xl font-bold'
+                          className="text-xl font-bold"
                           value={activeOrder?.totalWithTax}
                           currencyCode={activeOrder?.currencyCode}
                         />

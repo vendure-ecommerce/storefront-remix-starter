@@ -14,16 +14,22 @@ export function getActiveCustomerAddresses(options: QueryOptions) {
   return sdk.activeCustomerAddresses(undefined, options);
 }
 
-export function getActiveCustomerOrderList(orderListOptions: OrderListOptions, options: QueryOptions) {
-  return sdk.activeCustomerOrderList({orderListOptions}, options);
+export function getActiveCustomerOrderList(
+  orderListOptions: OrderListOptions,
+  options: QueryOptions,
+) {
+  return sdk.activeCustomerOrderList({ orderListOptions }, options);
 }
 
 gql`
   query activeCustomer {
     activeCustomer {
       id
+      title
       firstName
       lastName
+      emailAddress
+      phoneNumber
     }
   }
 `;

@@ -3,6 +3,7 @@ import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import HorizontalProductCard from '~/components/cards/product/HorizontalProductCard';
 import ProductCard from '~/components/cards/product/ProductCard';
 import UserCard from '~/components/cards/user/UserCard';
+import Navbar from '~/components/common/navbar/Navbar';
 import DeliveryInformation from '~/components/common/section/DeliveryInformation';
 import Section from '~/components/common/section/Section';
 import SectionContent from '~/components/common/section/SectionContent';
@@ -28,12 +29,15 @@ export default function Cart() {
 
   return (
     <>
+      <Navbar />
       <div className="mx-auto w-full px-6 lg:max-w-screen-2xl">
         <div className="flex flex-col gap-20 py-12">
           <Outlet />
           <div className="flex flex-col gap-y-16">
             <Breadcrumbs items={[]} />
-            <PageTitle title={`${activeOrder?.lines.length || 0} termék a kosárban`} />
+            <PageTitle
+              title={`${activeOrder?.lines.length || 0} termék a kosárban`}
+            />
             <Section className="grid grid-cols-1 gap-x-20 gap-y-20 lg:grid-cols-[50%_minmax(0,_1fr)]">
               <div className="flex flex-col gap-6">
                 {activeOrder?.lines.map((option, index) => (
@@ -46,7 +50,7 @@ export default function Cart() {
                     priceNormal={option.unitPriceWithTax}
                     priceNet={option.unitPriceWithTax}
                     priceCrossed={option.unitPriceWithTax}
-                    imageSrc={option.featuredAsset?.preview || ""}
+                    imageSrc={option.featuredAsset?.preview || ''}
                     showAddToCartHandler={true}
                     showProductAmountStepper={true}
                     variant="sm"
@@ -77,11 +81,15 @@ export default function Cart() {
               <div className="flex flex-col gap-16">
                 <Section className="flex flex-col gap-8 px-0">
                   <SectionHeader className="hidden">
-                    <SectionTitle level="h3" title="Összesítő táblázat" srOnly />
+                    <SectionTitle
+                      level="h3"
+                      title="Összesítő táblázat"
+                      srOnly
+                    />
                   </SectionHeader>
                   <SectionContent className="grid grid-cols-1 gap-4">
                     <Summary>
-                      <div className='flex flex-col gap-2'>
+                      <div className="flex flex-col gap-2">
                         <SummarySubTotal
                           value={activeOrder?.subTotalWithTax}
                           currencyCode={activeOrder?.currencyCode}
@@ -100,7 +108,7 @@ export default function Cart() {
                         /> */}
                       </div>
                       <SummaryTotal
-                        className='text-xl font-bold'
+                        className="text-xl font-bold"
                         value={activeOrder?.totalWithTax}
                         currencyCode={activeOrder?.currencyCode}
                       />

@@ -1,18 +1,20 @@
-import { json, LoaderFunctionArgs } from "@remix-run/server-runtime";
-import { createContext, useContext, useEffect, useState } from "react";
-import { getActiveCustomerDetails } from "./customer";
-import { useLoaderData } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from '@remix-run/server-runtime';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { getActiveCustomer } from './customer';
+import { useFetcher, useLoaderData } from '@remix-run/react';
+
+interface ActiveCustomer {
+  __typename?: 'Customer';
+  id: string;
+  title?: string | null;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  phoneNumber?: string | null;
+}
 
 const CustomerContext = createContext<{
-  activeCustomer: {
-    __typename?: "Customer";
-    id: string;
-    title?: string | null;
-    firstName: string;
-    lastName: string;
-    phoneNumber?: string | null;
-    emailAddress: string;
-  } | null | undefined;
+  activeCustomer: ActiveCustomer | undefined | null;
   setActiveCustomer: (customer: any) => void;
 }>({
   activeCustomer: undefined,
@@ -21,30 +23,37 @@ const CustomerContext = createContext<{
 
 export const useCustomer = () => {
   if (!CustomerContext) {
-    throw new Error("useCustomer must be used within an CustomerProvider");
+    throw new Error('useCustomer must be used within an CustomerProvider');
   }
 
   return useContext(CustomerContext);
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { activeCustomer } = await getActiveCustomerDetails({ request });
-  
-  return json({ activeCustomer });
-};
-
 export const CustomerProvider = ({ children }: any) => {
-  const { activeCustomer } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
 
-  const [stActiveCustomer, setActiveCustomer] = useState<any>(
-    activeCustomer?.__typename ? activeCustomer : undefined
-  );
+  const [stActiveCustomer, setActiveCustomer] = useState<any>();
+
+  useEffect(() => {
+    fetcher.submit(new FormData(), {
+      method: 'GET',
+      action: '/api/user/get-active-customer',
+    });
+  }, []);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      setActiveCustomer(fetcher.data);
+    }
+  }, [fetcher]);
 
   return (
-    <CustomerContext.Provider value={{
-      activeCustomer: stActiveCustomer,
-      setActiveCustomer,
-    }}>
+    <CustomerContext.Provider
+      value={{
+        activeCustomer: stActiveCustomer,
+        setActiveCustomer,
+      }}
+    >
       {children}
     </CustomerContext.Provider>
   );

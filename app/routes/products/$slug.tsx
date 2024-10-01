@@ -59,6 +59,7 @@ import { isArrayValid } from '~/utils';
 import { CartLoaderData } from '../api/active-order';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import { useActiveOrder } from '~/utils/use-active-order';
+import Navbar from '~/components/common/navbar/Navbar';
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -152,17 +153,19 @@ export default function ProductSlug() {
       setShowStickyCard(window.scrollY > 500);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Find the collection where the breadcrumb is the most length
-  const collection = product.collections
-    .sort((a, b) => b.breadcrumbs.length - a.breadcrumbs.length)[0];
+  const collection = product.collections.sort(
+    (a, b) => b.breadcrumbs.length - a.breadcrumbs.length,
+  )[0];
 
   return (
     <>
+      <Navbar />
       <div className="mx-auto w-full px-6 lg:max-w-screen-2xl space-y-6">
         <div className="mb-16"></div>
 
@@ -263,8 +266,13 @@ export default function ProductSlug() {
                       priceNormal={variant.priceWithTax}
                       priceNet={variant.priceWithTax}
                       priceCrossed={variant.priceWithTax}
-                      imageSrc={product.featuredAsset?.preview ||
-                        product.assets[0]?.preview} id={variant.id} lineItemId={''}                    />
+                      imageSrc={
+                        product.featuredAsset?.preview ||
+                        product.assets[0]?.preview
+                      }
+                      id={variant.id}
+                      lineItemId={''}
+                    />
                   ))}
                   <Button variant={'outline'}>
                     Továbbiak megjelenítése
@@ -727,7 +735,9 @@ export function CatchBoundary() {
   );
 }
 
-export function getAddItemToOrderError(error?: ErrorResult): string | undefined {
+export function getAddItemToOrderError(
+  error?: ErrorResult,
+): string | undefined {
   if (!error || !error.errorCode) {
     return undefined;
   }

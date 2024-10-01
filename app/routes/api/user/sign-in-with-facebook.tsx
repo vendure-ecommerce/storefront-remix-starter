@@ -1,24 +1,31 @@
-import { redirect, json, ActionFunctionArgs } from "@remix-run/server-runtime";
-import { authenticateWithFacebook, login } from "~/providers/account/account";
+import { ActionFunctionArgs } from '@remix-run/server-runtime';
+import { authenticateWithFacebook } from '~/providers/account/account';
 
 export async function action({ params, request }: ActionFunctionArgs) {
   const body = await request.formData();
   const token = body.get('token');
 
   if (typeof token === 'string') {
-    
     const result = await authenticateWithFacebook(token, { request });
-    console.log(result);
+
     if (result.authenticate.__typename === 'CurrentUser') {
-      return json({
-        success: true,
-        redirectTo: '/account',
-        headers: result._headers // Ha szükség van rá, ez a kliensre kerülhet
-      });
+      return new Response(
+        JSON.stringify({
+          success: true,
+          redirectTo: '/account',
+        }),
+        {
+          status: 200,
+          headers: result._headers,
+        },
+      );
     } else {
-      return json(result, {
+      return new Response(JSON.stringify(result), {
         status: 401,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-    } 
+    }
   }
 }

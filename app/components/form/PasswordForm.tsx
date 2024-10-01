@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { Button } from "../ui-custom/MyButton";
-import { Input } from "../ui-custom/MyInput";
-import { Label } from "../ui/label";
-import { Form, useActionData, useNavigate } from "@remix-run/react";
-import { action } from "~/routes/api/user/forgot-password";
+import { useEffect } from 'react';
+import { Button } from '../ui-custom/MyButton';
+import { Input } from '../ui-custom/MyInput';
+import { Label } from '../ui/label';
+import { useFetcher, useNavigate } from '@remix-run/react';
+import { action as forgotPasswordAction } from '~/routes/api/user/forgot-password';
 
 interface IPasswordFormProps {
   onSuccess: () => void;
@@ -11,31 +11,43 @@ interface IPasswordFormProps {
 
 const PasswordForm = ({ onSuccess }: IPasswordFormProps) => {
   const navigate = useNavigate();
-  const actionData = useActionData<typeof action>();
+  const forgotPasswordFetcher = useFetcher<typeof forgotPasswordAction>();
 
   useEffect(() => {
-    if (actionData && "success" in actionData) {
+    if (forgotPasswordFetcher.data) {
       onSuccess();
-      navigate("/success");
+      navigate('/success');
     }
-  }, [actionData]);
+  }, [forgotPasswordFetcher.data]);
+
+  const onForgotPassword = () => {
+    const formData = new FormData();
+    formData.append(
+      'email',
+      (document.getElementById('email-address') as HTMLInputElement)?.value,
+    );
+
+    forgotPasswordFetcher.submit(formData, {
+      method: 'post',
+      action: 'api/user/forgot-password',
+      navigate: false,
+    });
+  };
 
   return (
-    <Form
-      method='post'
-      action='api/user/forgot-password'
-      className='flex flex-col gap-6'
-    >
-      <div className='grid w-full items-center'>
-        <Label className='mb-1.5' htmlFor='email-address'>
+    <div className="flex flex-col gap-6">
+      <div className="grid w-full items-center">
+        <Label className="mb-1.5" htmlFor="email-address">
           Email cím
         </Label>
-        <Input name='email' type='text' id='email-address' />
+        <Input name="email" type="text" id="email-address" />
       </div>
-      <div className='flex flex-col gap-4'>
-        <Button type="submit">Új jelszó kérése</Button>
+      <div className="flex flex-col gap-4">
+        <Button type="button" onClick={onForgotPassword}>
+          Új jelszó kérése
+        </Button>
       </div>
-    </Form>
+    </div>
   );
 };
 

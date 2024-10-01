@@ -32,6 +32,7 @@ import { useCollections } from '~/providers/collections';
 import { TArrayElement } from '~/types/types';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { sdk } from '../../graphqlWrapper';
+import Navbar from '~/components/common/navbar/Navbar';
 
 export const sortOrders = [
   { label: 'Alapértelmezett', value: 'default' },
@@ -243,7 +244,6 @@ export default function CollectionSlug() {
               >
                 {result.items.length !== 0 &&
                   result.items.map((option, index) => {
-
                     const productFacets = result.facetValues.filter(
                       (facetValue) => {
                         return option.facetValueIds.includes(
