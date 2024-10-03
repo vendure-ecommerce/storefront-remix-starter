@@ -19,5 +19,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   console.dir('Active customer: ' + JSON.stringify(customer));
 
-  return json({ activeCustomer: customer }, { headers: customer._headers });
+  return {
+    activeCustomer: customer,
+    headers: customer._headers,
+  };
 };

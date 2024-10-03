@@ -54,8 +54,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   eligibleShippingMethods,
   eligiblePaymentMethods,
 }) => {
-  const { activeCustomerFetcher, activeCustomer } =
-    useActiveOrder<OutletContext>();
+  const { activeCustomerFetcher, activeCustomer } = useActiveOrder();
 
   const [isAccountSectionFilled, setIsAccountSectionFilled] = useState(
     activeCustomer !== null && activeCustomer !== undefined,
@@ -133,7 +132,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   }, [email, password]);
 
   useEffect(() => {
-    if (activeCustomer.activeCustomer) {
+    if (activeCustomer?.activeCustomer) {
+      setIsAccountSectionFilled(true);
     }
   }, [activeCustomer]);
 
@@ -146,8 +146,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       setShowLoginForm(false);
     }
   }, [emailFetcher.data]);
-
-  //  console.log(activeCustomer);    SET ACTIVE COSTUMER LATER!!!444!
 
   const handleSubscriptionToggle = () => {
     setIsSubscribed(!isSubscribed);
