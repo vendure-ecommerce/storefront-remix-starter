@@ -1,9 +1,6 @@
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { json, useLoaderData, useOutletContext } from '@remix-run/react';
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-} from '@remix-run/server-runtime';
+import { LoaderFunctionArgs } from '@remix-run/server-runtime';
 import HorizontalProductCard from '~/components/cards/product/HorizontalProductCard';
 import Section from '~/components/common/section/Section';
 import SectionContent from '~/components/common/section/SectionContent';
@@ -17,24 +14,17 @@ import SummaryTaxRate from '~/components/common/summary/SummaryTaxRate';
 import CheckoutForm from '~/components/pages/checkout/checkoutForm';
 import PageTitle from '~/components/pages/PageTitle';
 import {
-  addPaymentToOrder,
   getAvailableCountries,
   getEligiblePaymentMethods,
   getEligibleShippingMethods,
 } from '~/providers/checkout/checkout';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
-import {
-  getActiveOrder,
-  setCustomerForOrder,
-  setOrderBillingAddress,
-  setOrderShippingAddress,
-  setOrderShippingMethod,
-} from '~/providers/orders/order';
-import { transitionOrderToState } from '~/providers/checkout/checkout';
+import { getActiveOrder } from '~/providers/orders/order';
 import { getSessionStorage } from '~/sessions';
 import { TGlobalOutletContext } from '~/types/types';
-import Navbar from '~/components/common/navbar/Navbar';
 import { CheckoutProvider } from '~/providers/checkout';
+import { CartLoaderData } from '~/_routes/api/active-order';
+import { useActiveOrder } from '~/utils/use-active-order';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>
@@ -75,87 +65,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
-  const formData = await request.formData();
-
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
-
-  const email = 'serdult.martin@hotmail.hu';
-
-  const shippingAddress = {
-    fullName: 'Serdult Martin',
-    company: 'Storefront',
-    streetLine1: 'Ihász utca',
-    streetLine2: '13',
-    countryCode: 'HU',
-    city: 'Budapest',
-    province: 'Budapest',
-    postalCode: '1103',
-    phoneNumber: '06306672959',
-  };
-
-  const billingAddress = {
-    fullName: 'Serdult Martin',
-    company: 'Storefront',
-    streetLine1: 'Ihász utca',
-    streetLine2: '13',
-    countryCode: 'HU',
-    city: 'Budapest',
-    province: 'Budapest',
-    postalCode: '1103',
-    phoneNumber: '06306672959',
-  };
-
-  const setCustomerForOrderResult = await setCustomerForOrder(
-    {
-      emailAddress: email,
-      firstName: 'Martin',
-      lastName: 'Serdult',
-    },
-    { request },
-  );
-  console.log('setCustomerForOrderResult', setCustomerForOrderResult); //This makes sense when you want to create a guest order
-
-  const orderShippingAddressResult = await setOrderShippingAddress(
-    shippingAddress,
-    { request },
-  );
-  console.log('orderShippingAddressResult', orderShippingAddressResult);
-
-  const orderBillingAddressResult = await setOrderBillingAddress(
-    billingAddress,
-    { request },
-  );
-  console.log('orderBillingAddressResult', setOrderBillingAddress);
-
-  const orderShippingMethodResult = await setOrderShippingMethod('1', {
-    request,
-  }); //We will get the Order ShippingMethod from one of the selected cards on the second section called 'Szállítási cím'
-  console.log('orderShippingMethodResult', orderShippingMethodResult);
-
-  const orderPaymentMethodResult = await addPaymentToOrder(
-    { method: 'standard-payment', metadata: {} },
-    { request },
-  ); // A Payment may only be added when Order is in "ArrangingPayment" state.
-  console.log('orderPaymentMethodResult', orderPaymentMethodResult); // A Payment may only be added when Order is in "ArrangingPayment" state.
-
-  const transitionOrderToStateResult = await transitionOrderToState(
-    'ArrangingPayment',
-    { request },
-  );
-  console.log('transitionOrderToStateResult', transitionOrderToStateResult);
-
-  console.log('Shipping Address:', shippingAddress);
-  console.log('Billing Address:', billingAddress);
-
-  return { success: true, message: 'Order successfully placed!' };
-}
-
 export default function Checkout() {
   const outlet = useOutletContext<TGlobalOutletContext>();
-  const { activeOrder, removeItem, adjustOrderLine } = outlet;
+  //const { activeOrder, removeItem, adjustOrderLine } = outlet;
   const {
     availableCountries,
     eligibleShippingMethods,
@@ -163,6 +75,8 @@ export default function Checkout() {
     eligiblePaymentMethods,
     error,
   } = useLoaderData<typeof loader>();
+
+  const { activeOrder, refresh } = useActiveOrder();
 
   const product = {} as any;
 
@@ -177,6 +91,7 @@ export default function Checkout() {
                 availableCountries={availableCountries}
                 eligibleShippingMethods={eligibleShippingMethods}
                 eligiblePaymentMethods={eligiblePaymentMethods}
+                refreshActiveOrder={refresh}
               />
             </div>
             <div className="flex h-full flex-col gap-16">

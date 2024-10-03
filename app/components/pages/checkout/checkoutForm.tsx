@@ -23,7 +23,6 @@ import FormField from '~/components/form/checkoutForm/FormField';
 import { useFetcher } from '@remix-run/react';
 import { typingDelay } from '~/constants';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { OutletContext } from '~/types';
 
 interface CheckoutFormProps {
   availableCountries: {
@@ -47,12 +46,14 @@ interface CheckoutFormProps {
     eligibilityMessage?: string | null;
     isEligible: boolean;
   }[];
+  refreshActiveOrder(): void;
 }
 
 const CheckoutForm: React.FC<CheckoutFormProps> = ({
   availableCountries,
   eligibleShippingMethods,
   eligiblePaymentMethods,
+  refreshActiveOrder,
 }) => {
   const { activeCustomerFetcher, activeCustomer } = useActiveOrder();
 
@@ -60,7 +61,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     activeCustomer !== null && activeCustomer !== undefined,
   );
   const [isPaymentSectionFilled, setIsPaymentSectionFilled] = useState(false);
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const width = useViewportWidth();
@@ -103,23 +106,29 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     result: { __typename: string; _headers: JSON };
   }>();
 
+  const orderFetcher = useFetcher<{
+    result: { success: boolean; message: string };
+  }>();
+
   useEffect(() => {
     if (rfInputTimer.current) {
       clearTimeout(rfInputTimer.current);
     }
     rfInputTimer.current = setTimeout(() => {
-      if (email) {
+      if (emailAddress) {
         emailFetcher.submit(
-          { email: email },
+          { email: emailAddress },
           { action: '/api/user/search-for-user', method: 'post' },
         );
       }
 
       if (emailFetcher.data && password) {
         loginFetcher.submit(
-          { email: email, password: password, rememberMe: false },
+          { email: emailAddress, password: password, rememberMe: false },
           { action: '/api/user/sign-in-with-button', method: 'post' },
         );
+
+        console.log(loginFetcher.data);
 
         activeCustomerFetcher.load('/api/user/get-active-customer');
       }
@@ -129,7 +138,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         clearTimeout(rfInputTimer.current);
       }
     };
-  }, [email, password]);
+  }, [emailAddress, password]);
 
   useEffect(() => {
     if (activeCustomer?.activeCustomer) {
@@ -152,10 +161,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   };
 
   const handleAccountSubmit = () => {
-    if (email) {
+    if (emailAddress && firstName && lastName) {
       setIsAccountSectionFilled(true);
     } else {
-      alert('Please provide a valid email address.');
+      alert('Please fill out all required account fields.');
     }
   };
 
@@ -163,7 +172,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     if (validateShippingSection()) {
       setIsShippingSectionFilled(true);
     } else {
-      alert('Please fill out all required fields.');
+      alert('Please fill out all required shipping fields.');
     }
   };
 
@@ -197,8 +206,42 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       isShippingSectionFilled &&
       validateBillingSection()
     ) {
+      orderFetcher.submit(
+        {
+          emailAddress: emailAddress,
+          firstName: firstName,
+          lastName: lastName,
+          shippingAddress: JSON.stringify({
+            fullName: shippingFullName,
+            company: shippingCompany,
+            streetLine1: shippingStreetLine1,
+            streetLine2: shippingStreetLine2,
+            city: shippingCity,
+            province: shippingProvince,
+            postalCode: shippingPostalCode,
+            phoneNumber: shippingPhoneNumber,
+          }),
+          billingAddress: JSON.stringify({
+            fullName: billingFullName,
+            company: billingCompany,
+            streetLine1: billingStreetLine1,
+            streetLine2: billingStreetLine2,
+            city: billingCity,
+            province: billingProvince,
+            postalCode: billingPostalCode,
+            phoneNumber: billingPhoneNumber,
+          }),
+          paymentMethodId:
+            eligiblePaymentMethods.find((pm) => pm.isEligible)?.id || '',
+          isSubscribed: isSubscribed.toString(),
+        },
+        {
+          method: 'post',
+          action: '/api/checkout/send-order',
+        },
+      );
     } else {
-      alert('Please fill all required sections before submitting.');
+      alert('Please fill all required billing fields.');
     }
   };
 
@@ -268,11 +311,11 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                     name="email"
                     type="email"
                     id="email"
-                    value={email}
+                    value={emailAddress}
                     onChange={handleEmailChange}
                   />
                 </div>
-                {showLoginForm && (
+                {showLoginForm ? (
                   <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Jelszó</Label>
                     <Input
@@ -283,6 +326,31 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                       onChange={handlePasswordChange}
                     />
                   </div>
+                ) : (
+                  <>
+                    <div className="flex gap-6">
+                      <div className="grid w-1/2 items-center">
+                        <Label htmlFor="lastName">Vezetéknév</Label>
+                        <Input
+                          name="lastName"
+                          type="lastName"
+                          id="lastName"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                        />
+                      </div>
+                      <div className="grid w-1/2 items-center">
+                        <Label htmlFor="firstName">Keresztnév</Label>
+                        <Input
+                          name="firstName"
+                          type="firstName"
+                          id="firstName"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </>
                 )}
                 <p>
                   Az e-mail cím megadásával Ön elfogadja{' '}
@@ -318,10 +386,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                 <UserCard
                   showPhoneNumber
                   showEmail
-                  expertEmail={activeCustomer?.emailAddress || ''}
+                  expertEmail={
+                    activeCustomer?.activeCustomer?.emailAddress || ''
+                  }
                   title={''}
                   expertPhoneNumber={
-                    activeCustomer?.addresses?.[0]?.phoneNumber || ''
+                    activeCustomer?.activeCustomer?.phoneNumber || ''
                   }
                   imageSrc={''}
                 />
@@ -684,7 +754,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                       name="billingAddress[fullName]"
                       label="Teljes név"
                       type="text"
-                      value={billingFullName}
+                      value={'Valami'}
                       onChange={(e) => setBillingFullName(e.target.value)}
                     />
                     <FormField
@@ -834,7 +904,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                   ></div>
                 </div>
               ) : null}
-              <a className="mt-16 w-full" href="/confirmation">
+              <a className="mt-16 w-full">
                 <Button
                   className="h-16 w-full text-xl"
                   onClick={handleFormSubmit}
