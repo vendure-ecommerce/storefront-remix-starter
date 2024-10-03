@@ -1,8 +1,5 @@
 import { json, LoaderFunctionArgs } from '@remix-run/server-runtime';
-import {
-  getActiveCustomer,
-  getActiveCustomerDetails,
-} from '~/providers/customer/customer';
+import { getActiveCustomer } from '~/providers/customer/customer';
 import { getSessionStorage } from '~/sessions';
 
 export type ActiveCustomerData = Awaited<ReturnType<typeof loader>>;
@@ -22,5 +19,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   console.dir('Active customer: ' + JSON.stringify(customer));
 
-  return json({ activeOrder: customer }, { headers: customer._headers });
+  return json({ activeCustomer: customer }, { headers: customer._headers });
 };

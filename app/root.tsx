@@ -115,6 +115,7 @@ export default function App() {
   const { collections, locale } = loaderData;
   const { i18n } = useTranslation();
   const {
+    activeCustomerFetcher,
     activeCustomer,
     activeOrderFetcher,
     activeOrder,
@@ -188,6 +189,7 @@ export default function App() {
             <main className="">
               <Outlet
                 context={{
+                  activeCustomerFetcher,
                   activeCustomer,
                   activeOrderFetcher,
                   activeOrder,

@@ -2915,6 +2915,7 @@ export type Query = {
   collection?: Maybe<Collection>;
   /** A list of Collections available to the shop */
   collections: CollectionList;
+  customerExistsByEmail: Scalars['Boolean'];
   /** Returns a list of payment methods and their eligibility based on the current active Order */
   eligiblePaymentMethods: Array<PaymentMethodQuote>;
   /** Returns a list of eligible shipping methods based on the current active Order */
@@ -2957,6 +2958,11 @@ export type QueryCollectionArgs = {
 
 export type QueryCollectionsArgs = {
   options?: InputMaybe<CollectionListOptions>;
+};
+
+
+export type QueryCustomerExistsByEmailArgs = {
+  emailAddress: Scalars['String'];
 };
 
 
@@ -3663,6 +3669,13 @@ export type ActiveCustomerOrderListQueryVariables = Exact<{
 
 export type ActiveCustomerOrderListQuery = { __typename?: 'Query', activeCustomer?: { __typename?: 'Customer', orders: { __typename?: 'OrderList', totalItems: number, items: Array<{ __typename?: 'Order', code: string, state: string, orderPlacedAt?: any | null, currencyCode: CurrencyCode, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shippingWithTax: number, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number }>, taxSummary: Array<{ __typename?: 'OrderTaxSummary', taxBase: number, taxTotal: number }>, discounts: Array<{ __typename?: 'Discount', amountWithTax: number }>, fulfillments?: Array<{ __typename?: 'Fulfillment', trackingCode?: string | null }> | null, lines: Array<{ __typename?: 'OrderLine', quantity: number, discountedLinePriceWithTax: number, discountedUnitPriceWithTax: number, fulfillmentLines?: Array<{ __typename?: 'FulfillmentLine', quantity: number, fulfillment: { __typename?: 'Fulfillment', state: string, updatedAt: any } }> | null, featuredAsset?: { __typename?: 'Asset', name: string, source: string, preview: string } | null, productVariant: { __typename?: 'ProductVariant', name: string, sku: string, currencyCode: CurrencyCode, priceWithTax: number, product: { __typename?: 'Product', slug: string } } }> }> } } | null };
 
+export type CustomerExistsByEmailQueryVariables = Exact<{
+  emailAddress: Scalars['String'];
+}>;
+
+
+export type CustomerExistsByEmailQuery = { __typename?: 'Query', customerExistsByEmail: boolean };
+
 export type SetCustomerForOrderMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
@@ -4358,6 +4371,11 @@ export const ActiveCustomerOrderListDocument = gql`
   }
 }
     `;
+export const CustomerExistsByEmailDocument = gql`
+    query customerExistsByEmail($emailAddress: String!) {
+  customerExistsByEmail(emailAddress: $emailAddress)
+}
+    `;
 export const SetCustomerForOrderDocument = gql`
     mutation setCustomerForOrder($input: CreateCustomerInput!) {
   setCustomerForOrder(input: $input) {
@@ -4610,6 +4628,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     activeCustomerOrderList(variables?: ActiveCustomerOrderListQueryVariables, options?: C): Promise<ActiveCustomerOrderListQuery> {
       return requester<ActiveCustomerOrderListQuery, ActiveCustomerOrderListQueryVariables>(ActiveCustomerOrderListDocument, variables, options) as Promise<ActiveCustomerOrderListQuery>;
+    },
+    customerExistsByEmail(variables: CustomerExistsByEmailQueryVariables, options?: C): Promise<CustomerExistsByEmailQuery> {
+      return requester<CustomerExistsByEmailQuery, CustomerExistsByEmailQueryVariables>(CustomerExistsByEmailDocument, variables, options) as Promise<CustomerExistsByEmailQuery>;
     },
     setCustomerForOrder(variables: SetCustomerForOrderMutationVariables, options?: C): Promise<SetCustomerForOrderMutation> {
       return requester<SetCustomerForOrderMutation, SetCustomerForOrderMutationVariables>(SetCustomerForOrderDocument, variables, options) as Promise<SetCustomerForOrderMutation>;

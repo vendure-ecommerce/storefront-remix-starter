@@ -3219,6 +3219,7 @@ type Query {
 
   """A list of Collections available to the shop"""
   collections(options: CollectionListOptions): CollectionList!
+  customerExistsByEmail(emailAddress: String!): Boolean!
 
   """
   Returns a list of payment methods and their eligibility based on the current active Order

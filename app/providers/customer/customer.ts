@@ -21,6 +21,13 @@ export function getActiveCustomerOrderList(
   return sdk.activeCustomerOrderList({ orderListOptions }, options);
 }
 
+export function customerExistsByEmail(
+  emailAddress: string,
+  options: QueryOptions,
+) {
+  return sdk.customerExistsByEmail({ emailAddress }, options);
+}
+
 gql`
   query activeCustomer {
     activeCustomer {
@@ -133,5 +140,11 @@ gql`
         }
       }
     }
+  }
+`;
+
+gql`
+  query customerExistsByEmail($emailAddress: String!) {
+    customerExistsByEmail(emailAddress: $emailAddress)
   }
 `;
