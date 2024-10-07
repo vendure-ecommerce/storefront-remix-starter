@@ -23,7 +23,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const billingAddress: CreateAddressInput = JSON.parse(
     formData.get('billingAddress') as string,
   );
-  const paymentMethodId = formData.get('paymentMethodId') as string;
+  const paymentMethodCode = formData.get('paymentMethodCode') as string;
+  const shippingMethodId = formData.get('shippingMethodId') as string;
   const isSubscribed = formData.get('isSubscribed') === 'true';
 
   console.log('------------------------------------');
@@ -34,7 +35,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   console.log('Customer lastName:', lastName);
   console.log('Shipping Address:', shippingAddress);
   console.log('Billing Address:', billingAddress);
-  console.log('Payment Method ID:', paymentMethodId);
+  console.log('Payment Method code:', paymentMethodCode);
+  console.log('Shipping Method ID:', shippingMethodId);
   console.log('Is Subscribed:', isSubscribed);
   console.log('------------------------------------');
   console.log('------------------------------------');
@@ -55,12 +57,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
     { request },
   );
 
-  const orderShippingMethodResult = await setOrderShippingMethod('1', {
-    request,
-  }); //We will get the Order ShippingMethod from one of the selected cards on the second section called 'Szállítási cím'
+  const orderShippingMethodResult = await setOrderShippingMethod(
+    shippingMethodId,
+    {
+      request,
+    },
+  ); //We will get the Order ShippingMethod from one of the selected cards on the second section called 'Szállítási cím'
 
   const orderPaymentMethodResult = await addPaymentToOrder(
-    { method: 'standard-payment', metadata: {} },
+    { method: paymentMethodCode, metadata: {} },
     { request },
   ); // A Payment may only be added when Order is in "ArrangingPayment" state.
 

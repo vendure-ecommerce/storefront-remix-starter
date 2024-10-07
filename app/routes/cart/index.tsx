@@ -27,6 +27,17 @@ export default function Cart() {
   const productOptions: any[] = [];
   const { activeOrder } = useActiveOrder();
 
+  // Calculation the sum of the order
+  const discountSum =
+    activeOrder?.discounts?.reduce(
+      (sum, discount) => sum + discount.amountWithTax,
+      0,
+    ) || 0;
+
+  const totalWithoutDiscounts = activeOrder
+    ? activeOrder.totalWithTax - discountSum
+    : 0;
+
   return (
     <>
       <Navbar />
@@ -91,7 +102,7 @@ export default function Cart() {
                     <Summary>
                       <div className="flex flex-col gap-2">
                         <SummarySubTotal
-                          value={activeOrder?.subTotalWithTax}
+                          value={totalWithoutDiscounts}
                           currencyCode={activeOrder?.currencyCode}
                         />
                         <SummaryTaxRate
@@ -103,9 +114,16 @@ export default function Cart() {
                           value={activeOrder?.shippingWithTax}
                           currencyCode={activeOrder?.currencyCode}
                         />
-                        {/* <SummaryDiscount
-                          
-                        /> */}
+                        {Array.isArray(activeOrder?.discounts) &&
+                          activeOrder?.discounts.map((discount) => {
+                            return (
+                              <SummaryDiscount
+                                discount={discount.amountWithTax}
+                                currencyCode={activeOrder?.currencyCode}
+                                description={discount.description}
+                              />
+                            );
+                          })}
                       </div>
                       <SummaryTotal
                         className="text-xl font-bold"

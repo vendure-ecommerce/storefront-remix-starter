@@ -22,8 +22,12 @@ export function useActiveOrder() {
     activeOrderFetcher.load('/api/active-order');
   }
 
-  const { activeCustomer } = activeCustomerFetcher.data ?? {};
+  const activeCustomer = activeCustomerFetcher.data?.activeCustomer ?? null;
+  const activeCustomerAddresses =
+    activeCustomerFetcher.data?.activeCustomerAddresses ?? null;
+
   const { activeOrder } = activeOrderFetcher.data ?? {};
+
   const removeItem = (lineId: string) => {
     activeOrderFetcher.submit(
       {
@@ -51,6 +55,7 @@ export function useActiveOrder() {
   };
   return {
     activeCustomerFetcher,
+    activeCustomerAddresses,
     activeCustomer,
     activeOrderFetcher,
     activeOrder,

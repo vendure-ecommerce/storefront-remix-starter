@@ -25,6 +25,7 @@ import { TGlobalOutletContext } from '~/types/types';
 import { CheckoutProvider } from '~/providers/checkout';
 import { CartLoaderData } from '~/_routes/api/active-order';
 import { useActiveOrder } from '~/utils/use-active-order';
+import SummaryDiscount from '~/components/common/summary/SummaryDiscount';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>
@@ -32,8 +33,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 
   const activeOrder = await getActiveOrder({ request });
-
-  console.log(activeOrder);
 
   //check if there is an active order if not redirect to homepage
   /*   if (
@@ -78,6 +77,17 @@ export default function Checkout() {
 
   const { activeOrder, refresh } = useActiveOrder();
 
+  // Calculation the sum of the order
+  const discountSum =
+    activeOrder?.discounts?.reduce(
+      (sum, discount) => sum + discount.amountWithTax,
+      0,
+    ) || 0;
+
+  const totalWithoutDiscounts = activeOrder
+    ? activeOrder.totalWithTax - discountSum
+    : 0;
+
   const product = {} as any;
 
   return (
@@ -91,7 +101,6 @@ export default function Checkout() {
                 availableCountries={availableCountries}
                 eligibleShippingMethods={eligibleShippingMethods}
                 eligiblePaymentMethods={eligiblePaymentMethods}
-                refreshActiveOrder={refresh}
               />
             </div>
             <div className="flex h-full flex-col gap-16">
@@ -150,7 +159,7 @@ export default function Checkout() {
                         <Summary>
                           <div className="flex flex-col gap-2">
                             <SummarySubTotal
-                              value={activeOrder?.subTotalWithTax}
+                              value={totalWithoutDiscounts}
                               currencyCode={activeOrder?.currencyCode}
                             />
                             <SummaryTaxRate
@@ -162,9 +171,16 @@ export default function Checkout() {
                               value={activeOrder?.shippingWithTax}
                               currencyCode={activeOrder?.currencyCode}
                             />
-                            {/* <SummaryDiscount
-                            
-                          /> */}
+                            {Array.isArray(activeOrder?.discounts) &&
+                              activeOrder?.discounts.map((discount) => {
+                                return (
+                                  <SummaryDiscount
+                                    discount={discount.amountWithTax}
+                                    currencyCode={activeOrder?.currencyCode}
+                                    description={discount.description}
+                                  />
+                                );
+                              })}
                           </div>
                           <SummaryTotal
                             className="text-xl font-bold"

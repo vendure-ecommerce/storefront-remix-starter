@@ -23,6 +23,7 @@ import FormField from '~/components/form/checkoutForm/FormField';
 import { useFetcher } from '@remix-run/react';
 import { typingDelay } from '~/constants';
 import { useActiveOrder } from '~/utils/use-active-order';
+import { action as loginAction } from '~/routes/api/user/sign-in-with-button';
 
 interface CheckoutFormProps {
   availableCountries: {
@@ -46,16 +47,15 @@ interface CheckoutFormProps {
     eligibilityMessage?: string | null;
     isEligible: boolean;
   }[];
-  refreshActiveOrder(): void;
 }
 
 const CheckoutForm: React.FC<CheckoutFormProps> = ({
   availableCountries,
   eligibleShippingMethods,
   eligiblePaymentMethods,
-  refreshActiveOrder,
 }) => {
-  const { activeCustomerFetcher, activeCustomer } = useActiveOrder();
+  const { activeCustomerFetcher, activeCustomer, activeCustomerAddresses } =
+    useActiveOrder();
 
   const [isAccountSectionFilled, setIsAccountSectionFilled] = useState(
     activeCustomer !== null && activeCustomer !== undefined,
@@ -78,6 +78,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   const [shippingProvince, setShippingProvince] = useState('');
   const [shippingPostalCode, setShippingPostalCode] = useState('');
   const [shippingPhoneNumber, setShippingPhoneNumber] = useState('');
+  const [shippingMethodId, setShippingMethodId] = useState('');
 
   const [billingFullName, setBillingFullName] = useState('');
   const [billingCompany, setBillingCompany] = useState('');
@@ -87,6 +88,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   const [billingProvince, setBillingProvince] = useState('');
   const [billingPostalCode, setBillingPostalCode] = useState('');
   const [billingPhoneNumber, setBillingPhoneNumber] = useState('');
+  const [paymentMethodCode, setPaymentMethodCode] = useState('');
+
+  const [coupon, setcoupon] = useState('');
 
   const rfInputTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -102,9 +106,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     result: { registeredEmail: boolean };
   }>();
 
-  const loginFetcher = useFetcher<{
-    result: { __typename: string; _headers: JSON };
-  }>();
+  const loginFetcher = useFetcher<string | ReturnType<typeof loginAction>>();
 
   const orderFetcher = useFetcher<{
     result: { success: boolean; message: string };
@@ -125,12 +127,19 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       if (emailFetcher.data && password) {
         loginFetcher.submit(
           { email: emailAddress, password: password, rememberMe: false },
-          { action: '/api/user/sign-in-with-button', method: 'post' },
+          {
+            action: '/api/user/sign-in-with-button',
+            method: 'post',
+            navigate: false,
+          },
         );
+      }
 
-        console.log(loginFetcher.data);
-
-        activeCustomerFetcher.load('/api/user/get-active-customer');
+      if (coupon) {
+        orderFetcher.submit(
+          { couponCode: coupon },
+          { action: '/api/order/apply-coupon', method: 'post' },
+        );
       }
     }, typingDelay);
     return () => {
@@ -138,10 +147,19 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         clearTimeout(rfInputTimer.current);
       }
     };
-  }, [emailAddress, password]);
+  }, [emailAddress, password, coupon]);
 
   useEffect(() => {
-    if (activeCustomer?.activeCustomer) {
+    if (typeof loginFetcher.data === 'string') {
+      const result = JSON.parse(loginFetcher.data) as { success: boolean };
+      if (result.success) {
+        activeCustomerFetcher.load('/api/user/get-active-customer');
+      }
+    }
+  }, [loginFetcher]);
+
+  useEffect(() => {
+    if (activeCustomer?.activeCustomer?.emailAddress) {
       setIsAccountSectionFilled(true);
     }
   }, [activeCustomer]);
@@ -178,25 +196,27 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
   const validateShippingSection = () => {
     return (
-      shippingFullName &&
-      shippingStreetLine1 &&
-      shippingStreetLine2 &&
-      shippingCity &&
-      shippingProvince &&
-      shippingPostalCode &&
-      shippingPhoneNumber
+      (activeCustomerAddresses?.[0]?.fullName || shippingFullName) &&
+      (activeCustomerAddresses?.[0]?.streetLine1 || shippingStreetLine1) &&
+      (activeCustomerAddresses?.[0]?.streetLine2 || shippingStreetLine2) &&
+      (activeCustomerAddresses?.[0]?.city || shippingCity) &&
+      (activeCustomerAddresses?.[0]?.province || shippingProvince) &&
+      (activeCustomerAddresses?.[0]?.postalCode || shippingPostalCode) &&
+      (activeCustomerAddresses?.[0]?.phoneNumber || shippingPhoneNumber) &&
+      shippingMethodId
     );
   };
 
   const validateBillingSection = () => {
     return (
-      billingFullName &&
-      billingStreetLine1 &&
-      billingStreetLine2 &&
-      billingCity &&
-      billingProvince &&
-      billingPostalCode &&
-      billingPhoneNumber
+      (activeCustomerAddresses?.[0]?.fullName || billingFullName) &&
+      (activeCustomerAddresses?.[0]?.streetLine1 || billingStreetLine1) &&
+      (activeCustomerAddresses?.[0]?.streetLine2 || billingStreetLine2) &&
+      (activeCustomerAddresses?.[0]?.city || billingCity) &&
+      (activeCustomerAddresses?.[0]?.province || billingProvince) &&
+      (activeCustomerAddresses?.[0]?.postalCode || billingPostalCode) &&
+      (activeCustomerAddresses?.[0]?.phoneNumber || billingPhoneNumber) &&
+      paymentMethodCode
     );
   };
 
@@ -231,8 +251,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
             postalCode: billingPostalCode,
             phoneNumber: billingPhoneNumber,
           }),
-          paymentMethodId:
-            eligiblePaymentMethods.find((pm) => pm.isEligible)?.id || '',
+          paymentMethodCode: paymentMethodCode,
+          shippingMethodId: shippingMethodId,
           isSubscribed: isSubscribed.toString(),
         },
         {
@@ -244,6 +264,16 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       alert('Please fill all required billing fields.');
     }
   };
+
+  function handleShippingMethodSelect(id: string): void {
+    console.log('Shipping Method: ' + id);
+    setShippingMethodId(id);
+  }
+
+  function handlePaymentMethodSelect(id: string): void {
+    console.log('Payment Method: ' + id);
+    setPaymentMethodCode(id);
+  }
 
   return (
     <>
@@ -467,7 +497,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="shippingAddress[fullName]"
                         label="Teljes név"
                         type="text"
-                        value={shippingFullName}
+                        value={
+                          activeCustomerAddresses?.[0]?.fullName ??
+                          shippingFullName
+                        }
                         onChange={(e) => setShippingFullName(e.target.value)}
                       />
                       <FormField
@@ -476,7 +509,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="shippingAddress[company]"
                         label="Cégnév"
                         type="text"
-                        value={shippingCompany}
+                        value={
+                          activeCustomerAddresses?.[0]?.company ??
+                          shippingCompany
+                        }
                         onChange={(e) => setShippingCompany(e.target.value)}
                       />
                       <div className="flex gap-6">
@@ -486,7 +522,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[streetLine1]"
                           label="Utca"
                           type="text"
-                          value={shippingStreetLine1}
+                          value={
+                            activeCustomerAddresses?.[0]?.streetLine1 ??
+                            shippingStreetLine1
+                          }
                           onChange={(e) =>
                             setShippingStreetLine1(e.target.value)
                           }
@@ -497,7 +536,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[streetLine2]"
                           label="Házszám"
                           type="text"
-                          value={shippingStreetLine2}
+                          value={
+                            activeCustomerAddresses?.[0]?.streetLine2 ??
+                            shippingStreetLine2
+                          }
                           onChange={(e) =>
                             setShippingStreetLine2(e.target.value)
                           }
@@ -510,7 +552,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[city]"
                           label="Város"
                           type="text"
-                          value={shippingCity}
+                          value={
+                            activeCustomerAddresses?.[0]?.city ?? shippingCity
+                          }
                           onChange={(e) => setShippingCity(e.target.value)}
                         />
                         <FormField
@@ -519,7 +563,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[province]"
                           label="Megye"
                           type="text"
-                          value={shippingProvince}
+                          value={
+                            activeCustomerAddresses?.[0]?.province ??
+                            shippingProvince
+                          }
                           onChange={(e) => setShippingProvince(e.target.value)}
                         />
                       </div>
@@ -530,7 +577,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[postalCode]"
                           label="Irányítószám"
                           type="number"
-                          value={shippingPostalCode}
+                          value={
+                            activeCustomerAddresses?.[0]?.postalCode ??
+                            shippingPostalCode
+                          }
                           onChange={(e) =>
                             setShippingPostalCode(e.target.value)
                           }
@@ -541,7 +591,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                           name="shippingAddress[phoneNumber]"
                           label="Telefonszám"
                           type="number"
-                          value={shippingPhoneNumber}
+                          value={
+                            activeCustomerAddresses?.[0]?.phoneNumber ??
+                            shippingPhoneNumber
+                          }
                           onChange={(e) =>
                             setShippingPhoneNumber(e.target.value)
                           }
@@ -569,9 +622,11 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                       {eligibleShippingMethods.map((shippingMethod, index) => (
                         <SelectCard
                           key={index}
+                          methodId={shippingMethod.id}
                           title={shippingMethod.name}
                           description="Várható kézbesítés: aug. 9. - aug. 15"
                           price={shippingMethod.priceWithTax.toString()}
+                          onSelect={handleShippingMethodSelect}
                         />
                       ))}
                     </div>
@@ -731,9 +786,27 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                   <h4 className="mb-8 text-lg font-bold">Fizetési mód</h4>
                   <div className="flex flex-col gap-4">
                     {eligiblePaymentMethods.map((paymentMethod, index) => (
-                      <SelectCard key={index} title={paymentMethod.name} />
+                      <SelectCard
+                        key={index}
+                        methodId={paymentMethod.code}
+                        title={paymentMethod.name}
+                        description={paymentMethod.name}
+                        price={paymentMethod.code}
+                        onSelect={handlePaymentMethodSelect}
+                      />
                     ))}
                   </div>
+                </div>
+                <div className="flex flex-col gap-6">
+                  <FormField
+                    className="grid w-full items-center"
+                    id="coupon"
+                    name="coupon"
+                    label="Kupon kód"
+                    type="text"
+                    value={coupon}
+                    onChange={(e) => setcoupon(e.target.value)}
+                  />
                 </div>
                 <div>
                   <h4 className="mb-8 text-lg font-bold">Számlázási cím</h4>
@@ -754,7 +827,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                       name="billingAddress[fullName]"
                       label="Teljes név"
                       type="text"
-                      value={'Valami'}
+                      value={
+                        activeCustomerAddresses?.[0]?.fullName ??
+                        billingFullName
+                      }
                       onChange={(e) => setBillingFullName(e.target.value)}
                     />
                     <FormField
@@ -763,7 +839,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                       name="billingAddress[company]"
                       label="Cég név"
                       type="text"
-                      value={billingCompany}
+                      value={
+                        activeCustomerAddresses?.[0]?.company ?? billingCompany
+                      }
                       onChange={(e) => setBillingCompany(e.target.value)}
                     />
                     <div className="flex gap-6">
@@ -773,7 +851,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[streetLine1]"
                         label="Utca"
                         type="text"
-                        value={billingStreetLine1}
+                        value={
+                          activeCustomerAddresses?.[0]?.streetLine1 ??
+                          billingStreetLine1
+                        }
                         onChange={(e) => setBillingStreetLine1(e.target.value)}
                       />
                       <FormField
@@ -782,7 +863,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[streetLine2]"
                         label="Házszám"
                         type="text"
-                        value={billingStreetLine2}
+                        value={
+                          activeCustomerAddresses?.[0]?.streetLine2 ??
+                          billingStreetLine2
+                        }
                         onChange={(e) => setBillingStreetLine2(e.target.value)}
                       />
                     </div>
@@ -793,7 +877,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[city]"
                         label="Város"
                         type="text"
-                        value={billingCity}
+                        value={
+                          activeCustomerAddresses?.[0]?.city ?? billingCity
+                        }
                         onChange={(e) => setBillingCity(e.target.value)}
                       />
                       <FormField
@@ -802,7 +888,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[province]"
                         label="Megye"
                         type="text"
-                        value={billingProvince}
+                        value={
+                          activeCustomerAddresses?.[0]?.province ??
+                          billingProvince
+                        }
                         onChange={(e) => setBillingProvince(e.target.value)}
                       />
                     </div>
@@ -813,7 +902,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[postalCode]"
                         label="Irányítószám"
                         type="number"
-                        value={billingPostalCode}
+                        value={
+                          activeCustomerAddresses?.[0]?.postalCode ??
+                          billingPostalCode
+                        }
                         onChange={(e) => setBillingPostalCode(e.target.value)}
                       />
                       <FormField
@@ -822,7 +914,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                         name="billingAddress[phoneNumber]"
                         label="Telefonszám"
                         type="number"
-                        value={billingPhoneNumber}
+                        value={
+                          activeCustomerAddresses?.[0]?.phoneNumber ??
+                          billingPhoneNumber
+                        }
                         onChange={(e) => setBillingPhoneNumber(e.target.value)}
                       />
                     </div>

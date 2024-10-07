@@ -1,14 +1,22 @@
-import React from "react";
+import React from 'react';
 
 interface SummaryDiscountProps {
-  className?: string;
+  discount?: number;
+  currencyCode?: string;
+  description?: string;
 }
 
-const SummaryDiscount: React.FC<SummaryDiscountProps> = ({ className }) => {
+const SummaryDiscount: React.FC<SummaryDiscountProps> = ({
+  discount,
+  currencyCode,
+  description,
+}) => {
   return (
-    <div className='flex items-center justify-between gap-4'>
-      <div>Összes kedvezmény:</div>
-      <div>-105 000 Ft</div>
+    <div className="flex items-center justify-between gap-4">
+      <div>{description}:</div>
+      <div>
+        {discount || 0} {currencyCode}
+      </div>
     </div>
   );
 };

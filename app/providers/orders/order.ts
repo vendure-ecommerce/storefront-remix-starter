@@ -68,6 +68,9 @@ export function setOrderBillingAddress(
   return sdk.setOrderBillingAddress({ input }, options);
 }
 
+export function applyCouponCode(couponCode: string, options: QueryOptions) {
+  return sdk.applyCouponCode({ couponCode }, options);
+}
 
 gql`
   mutation setCustomerForOrder($input: CreateCustomerInput!) {
@@ -169,6 +172,13 @@ gql`
       taxRate
       taxTotal
     }
+    discounts {
+      adjustmentSource
+      type
+      description
+      amount
+      amountWithTax
+    }
     shippingWithTax
     totalWithTax
     customer {
@@ -255,6 +265,33 @@ gql`
   mutation setOrderBillingAddress($input: CreateAddressInput!) {
     setOrderBillingAddress(input: $input) {
       ...OrderDetail
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation applyCouponCode($couponCode: String!) {
+    applyCouponCode(couponCode: $couponCode) {
+      ...OrderDetail
+      ... on CouponCodeLimitError {
+        errorCode
+        message
+        couponCode
+      }
+      ... on CouponCodeInvalidError {
+        errorCode
+        message
+        couponCode
+      }
+      ... on CouponCodeExpiredError {
+        errorCode
+        message
+        couponCode
+      }
       ... on ErrorResult {
         errorCode
         message
