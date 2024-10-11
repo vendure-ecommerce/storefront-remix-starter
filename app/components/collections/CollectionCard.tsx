@@ -8,6 +8,7 @@ export function CollectionCard({
 }) {
   return (
     <Link
+      preventScrollReset
       to={'/collections/' + collection.slug}
       prefetch="intent"
       key={collection.id}

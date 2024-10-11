@@ -61,6 +61,17 @@ export function setOrderShippingMethod(
   return sdk.setOrderShippingMethod({ shippingMethodId }, options);
 }
 
+export function setOrderBillingAddress(
+  input: CreateAddressInput,
+  options: QueryOptions,
+) {
+  return sdk.setOrderBillingAddress({ input }, options);
+}
+
+export function applyCouponCode(couponCode: string, options: QueryOptions) {
+  return sdk.applyCouponCode({ couponCode }, options);
+}
+
 gql`
   mutation setCustomerForOrder($input: CreateCustomerInput!) {
     setCustomerForOrder(input: $input) {
@@ -161,6 +172,13 @@ gql`
       taxRate
       taxTotal
     }
+    discounts {
+      adjustmentSource
+      type
+      description
+      amount
+      amountWithTax
+    }
     shippingWithTax
     totalWithTax
     customer {
@@ -170,6 +188,17 @@ gql`
       emailAddress
     }
     shippingAddress {
+      fullName
+      streetLine1
+      streetLine2
+      company
+      city
+      province
+      postalCode
+      countryCode
+      phoneNumber
+    }
+    billingAddress {
       fullName
       streetLine1
       streetLine2
@@ -228,6 +257,45 @@ gql`
   query orderByCode($code: String!) {
     orderByCode(code: $code) {
       ...OrderDetail
+    }
+  }
+`;
+
+gql`
+  mutation setOrderBillingAddress($input: CreateAddressInput!) {
+    setOrderBillingAddress(input: $input) {
+      ...OrderDetail
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation applyCouponCode($couponCode: String!) {
+    applyCouponCode(couponCode: $couponCode) {
+      ...OrderDetail
+      ... on CouponCodeLimitError {
+        errorCode
+        message
+        couponCode
+      }
+      ... on CouponCodeInvalidError {
+        errorCode
+        message
+        couponCode
+      }
+      ... on CouponCodeExpiredError {
+        errorCode
+        message
+        couponCode
+      }
+      ... on ErrorResult {
+        errorCode
+        message
+      }
     }
   }
 `;

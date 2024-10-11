@@ -22,7 +22,7 @@ export function Breadcrumbs({
         </li>
         {items
           .filter((item) => item.name !== '__root_collection__')
-          .map((item, index) => (
+          ?.map((item, index) => (
             <li key={item.name}>
               <div className="flex items-center">
                 <svg

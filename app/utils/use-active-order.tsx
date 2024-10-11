@@ -1,8 +1,16 @@
 import { useFetcher } from '@remix-run/react';
-import { CartLoaderData } from '~/routes/api/active-order';
 import { useEffect } from 'react';
+import { CartLoaderData } from '~/_routes/api/active-order';
+import { ActiveCustomerData } from '~/routes/api/user/get-active-customer';
 
 export function useActiveOrder() {
+  const activeCustomerFetcher = useFetcher<ActiveCustomerData>();
+  useEffect(() => {
+    if (activeCustomerFetcher.state === 'idle' && !activeCustomerFetcher.data) {
+      activeCustomerFetcher.load('/api/user/get-active-customer');
+    }
+  }, [activeCustomerFetcher]);
+
   const activeOrderFetcher = useFetcher<CartLoaderData>();
   useEffect(() => {
     if (activeOrderFetcher.state === 'idle' && !activeOrderFetcher.data) {
@@ -14,7 +22,12 @@ export function useActiveOrder() {
     activeOrderFetcher.load('/api/active-order');
   }
 
+  const activeCustomer = activeCustomerFetcher.data?.activeCustomer ?? null;
+  const activeCustomerAddresses =
+    activeCustomerFetcher.data?.activeCustomerAddresses ?? null;
+
   const { activeOrder } = activeOrderFetcher.data ?? {};
+
   const removeItem = (lineId: string) => {
     activeOrderFetcher.submit(
       {
@@ -41,6 +54,9 @@ export function useActiveOrder() {
     );
   };
   return {
+    activeCustomerFetcher,
+    activeCustomerAddresses,
+    activeCustomer,
     activeOrderFetcher,
     activeOrder,
     removeItem,

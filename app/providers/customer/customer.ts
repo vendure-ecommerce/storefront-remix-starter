@@ -14,16 +14,29 @@ export function getActiveCustomerAddresses(options: QueryOptions) {
   return sdk.activeCustomerAddresses(undefined, options);
 }
 
-export function getActiveCustomerOrderList(orderListOptions: OrderListOptions, options: QueryOptions) {
-  return sdk.activeCustomerOrderList({orderListOptions}, options);
+export function getActiveCustomerOrderList(
+  orderListOptions: OrderListOptions,
+  options: QueryOptions,
+) {
+  return sdk.activeCustomerOrderList({ orderListOptions }, options);
+}
+
+export function customerExistsByEmail(
+  emailAddress: string,
+  options: QueryOptions,
+) {
+  return sdk.customerExistsByEmail({ emailAddress }, options);
 }
 
 gql`
   query activeCustomer {
     activeCustomer {
       id
+      title
       firstName
       lastName
+      emailAddress
+      phoneNumber
     }
   }
 `;
@@ -45,6 +58,9 @@ gql`
   query activeCustomerAddresses {
     activeCustomer {
       id
+      firstName
+      lastName
+      emailAddress
       addresses {
         id
         company
@@ -124,5 +140,11 @@ gql`
         }
       }
     }
+  }
+`;
+
+gql`
+  query customerExistsByEmail($emailAddress: String!) {
+    customerExistsByEmail(emailAddress: $emailAddress)
   }
 `;

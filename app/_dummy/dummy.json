@@ -1,0 +1,1143 @@
+{
+  "accountMenuOptions": [
+    {
+      "active": [
+        {
+          "id": "1",
+          "title": "Kezdőlap",
+          "link": "/account/dashboard",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 0
+        },
+        {
+          "id": "2",
+          "title": "Személyes adatok",
+          "link": "/account/settings",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 0
+        },
+        {
+          "id": "3",
+          "title": "Rendelési előzmények",
+          "link": "/account/orders",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 3
+        },
+        {
+          "id": "4",
+          "title": "Kedvenc termékek",
+          "link": "/account/favorites",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 5
+        },
+        {
+          "id": "6",
+          "title": "Szállítási címek",
+          "link": "/account/addresses/shipping",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 2
+        },
+        {
+          "id": "7",
+          "title": "Számlázási adatok",
+          "link": "/account/addresses/billing",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 3
+        },
+        {
+          "id": "8",
+          "title": "Feliratkozások",
+          "link": "/account/subscriptions",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 5
+        }
+      ]
+    },
+    {
+      "inactive": [
+        {
+          "id": "5",
+          "title": "Értékelések",
+          "link": "/account/reviews",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 99
+        },
+        {
+          "id": "9",
+          "title": "Tevékenységek",
+          "link": "/account/actions",
+          "imageSrc": "/47AIDGHB603.webp",
+          "notification": 0
+        }
+      ]
+    }
+  ],
+  "addressOptions": [
+    {
+      "id": "1",
+      "title": "Cím",
+      "shipping": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ],
+      "billing": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Cím",
+      "shipping": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ],
+      "billing": [
+        {
+          "name": "Név",
+          "address": "Cim",
+          "company": "Cég",
+          "taxNumber": "Adoszám",
+          "postCode": "Irányítószám",
+          "county": "Megye",
+          "country": "Ország",
+          "phoneNumber": "Telefonszám"
+        }
+      ]
+    }
+  ],
+  "articleOptions": [
+    {
+      "id": "1",
+      "title": "Ez egy bejegyzés",
+      "link": "/article",
+      "imageSrc": "/13AB77BE603.webp",
+      "description": "Ez egy leírás",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Szerző",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Ez egy bejegyzés",
+      "link": "/article",
+      "imageSrc": "/13AB77BE603.webp",
+      "description": "Ez egy leírás",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Szerző",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Ez egy bejegyzés",
+      "link": "/article",
+      "imageSrc": "/13AB77BE603.webp",
+      "description": "Ez egy leírás",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Szerző",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Ez egy bejegyzés",
+      "link": "/article",
+      "imageSrc": "/13AB77BE603.webp",
+      "description": "Ez egy leírás",
+      "category": "Kategória",
+      "date": "2023.10.10.",
+      "author": [
+        {
+          "title": "Szerző",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "categoryOptions": [
+    {
+      "id": "1",
+      "title": "Kategória 1",
+      "link": "/collection/product/category",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Kategória 2",
+      "link": "/collection/product/category",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Kategória 3",
+      "link": "/collection/product/category",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Kategória 4",
+      "link": "/collection/product/category",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "categoryTreeOptions": [
+    {
+      "id": "1",
+      "title": "Kategória 1",
+      "imageSrc": "/47AIDGHB603.webp",
+      "children": [
+        {
+          "id": "2",
+          "title": "Alkategória 1",
+          "imageSrc": "/47AIDGHB603.webp",
+          "children": [
+            {
+              "id": "3",
+              "title": "Al-alkategória 1",
+              "imageSrc": "/47AIDGHB603.webp",
+              "children": [
+                {
+                  "id": "4",
+                  "title": "Al-al-alkategória 1",
+                  "imageSrc": "/47AIDGHB603.webp"
+                },
+                {
+                  "id": "5",
+                  "title": "Al-al-alkategória 2",
+                  "imageSrc": "/47AIDGHB603.webp"
+                }
+              ]
+            },
+            {
+              "id": "6",
+              "title": "Al-alkategória 2",
+              "imageSrc": "/47AIDGHB603.webp",
+              "children": [
+                {
+                  "id": "7",
+                  "title": "Al-al-alkategória 1",
+                  "imageSrc": "/47AIDGHB603.webp"
+                },
+                {
+                  "id": "8",
+                  "title": "Al-al-alkategória 2",
+                  "imageSrc": "/47AIDGHB603.webp"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "9",
+          "title": "Alkategória 2",
+          "imageSrc": "/47AIDGHB603.webp",
+          "children": [
+            {
+              "id": "10",
+              "title": "Al-alkategória 1",
+              "imageSrc": "/47AIDGHB603.webp",
+              "children": [
+                {
+                  "id": "11",
+                  "title": "Al-al-alkategória 1",
+                  "imageSrc": "/47AIDGHB603.webp"
+                },
+                {
+                  "id": "12",
+                  "title": "Al-al-alkategória 2",
+                  "imageSrc": "/47AIDGHB603.webp"
+                }
+              ]
+            },
+            {
+              "id": "13",
+              "title": "Al-alkategória 2",
+              "imageSrc": "/47AIDGHB603.webp",
+              "children": [
+                {
+                  "id": "14",
+                  "title": "Al-al-alkategória 1",
+                  "imageSrc": "/47AIDGHB603.webp"
+                },
+                {
+                  "id": "15",
+                  "title": "Al-al-alkategória 2",
+                  "imageSrc": "/47AIDGHB603.webp"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkboxOptions": [
+    {
+      "id": "option1",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option2",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option3",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option4",
+      "label": "Tulajdonság"
+    },
+    {
+      "id": "option5",
+      "label": "Tulajdonság"
+    }
+  ],
+  "checkboxRatingOptions": [
+    {
+      "id": "option1",
+      "label": "Nagyon rossz",
+      "rating": 1
+    },
+    {
+      "id": "option2",
+      "label": "Rossz",
+      "rating": 2
+    },
+    {
+      "id": "option3",
+      "label": "Átlagos",
+      "rating": 3
+    },
+    {
+      "id": "option4",
+      "label": "Jó",
+      "rating": 4
+    },
+    {
+      "id": "option5",
+      "label": "Kiváló",
+      "rating": 5
+    }
+  ],
+  "customerOptions": [
+    {
+      "title": "Vásárló",
+      "imageSrc": "https://github.com/shadcn.png"
+    }
+  ],
+  "filterChipsOptions": [
+    {
+      "id": "remove-chip-1",
+      "attribute": "Gyűjtőkapacitás",
+      "value": "25 l"
+    },
+    {
+      "id": "remove-chip-2",
+      "attribute": "Indítás",
+      "value": "Elektromos"
+    },
+    {
+      "id": "remove-chip-3",
+      "attribute": "Energiaforrás",
+      "value": "Akkumulátor"
+    }
+  ],
+  "footerMenuOptions": [
+    {
+      "title": "Footer Menu 1",
+      "items": ["List item 1", "List item 2", "List item 3"]
+    },
+    {
+      "title": "Footer Menu 2",
+      "items": ["List item A", "List item B", "List item C"]
+    },
+    {
+      "title": "Footer Menu 3",
+      "items": ["List item A", "List item B", "List item C"]
+    },
+    {
+      "title": "Footer Menu 4",
+      "items": ["List item A", "List item B", "List item C"]
+    }
+  ],
+  "manufacturerOptions": [
+    {
+      "id": "1",
+      "title": "Cub Cadet",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Cub Cadet",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Cub Cadet",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Cub Cadet",
+      "link": "/collection/product/manufacturer",
+      "imageSrc": "/cub-cadet.webp",
+      "productCount": 83,
+      "sampleProducts": [
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        },
+        {
+          "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+          "imageSrc": "/13AB78BY603.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "orderOptions": [
+    {
+      "id": "1",
+      "title": "#218489HT81",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "/13AB77BE603.webp",
+      "connectedProducts": [
+        {
+          "id": "10",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "11",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "12",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "13",
+          "imageSrc": "/13AB77BE603.webp"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "#218489HT82",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "/13AB77BE603.webp",
+      "connectedProducts": [
+        {
+          "id": "20",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "21",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "22",
+          "imageSrc": "/13AB77BE603.webp"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "#218489HT83",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "/13AB77BE603.webp",
+      "connectedProducts": [
+        {
+          "id": "30",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "31",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "32",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "33",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "34",
+          "imageSrc": "/13AB77BE603.webp"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "#218489HT84",
+      "link": "/order",
+      "date": "2023.10.20, 20:22",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "imageSrc": "/13AB77BE603.webp",
+      "connectedProducts": [
+        {
+          "id": "40",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "41",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "42",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "43",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "44",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "45",
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "46",
+          "imageSrc": "/13AB77BE603.webp"
+        }
+      ]
+    }
+  ],
+  "productOptions": [
+    {
+      "id": "1",
+      "title": "Cub Cadet LT1 NR92 fűgyűjtős Fűnyíró traktor (13AB77BE603) 2023",
+      "link": "/product",
+      "number": "13AB77BE603",
+      "priceNormal": 982000,
+      "priceNet": 773228,
+      "priceCrossed": 982000,
+      "imageSrc": "/13AB77BE603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.92,
+      "reviews": 83,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ],
+      "connectedProducts": [
+        {
+          "id": "10",
+          "title": "Kapcsolódó Termék 1",
+          "link": "/product",
+          "number": "456",
+          "priceNormal": 500,
+          "priceNet": 400,
+          "priceCrossed": 600,
+          "imageSrc": "/13AB77BE603.webp"
+        },
+        {
+          "id": "11",
+          "title": "Kapcsolódó Termék 2",
+          "link": "/product",
+          "number": "456",
+          "priceNormal": 500,
+          "priceNet": 400,
+          "priceCrossed": 600,
+          "imageSrc": "/13AB77BE603.webp"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Cub Cadet LT2 NS92 Fűnyíró traktor (13AB78BY603) 2023",
+      "link": "/product",
+      "number": "13AB78BY603",
+      "priceNormal": 891900,
+      "priceNet": 702283,
+      "priceCrossed": 891900,
+      "imageSrc": "/13AB78BY603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.56,
+      "reviews": 15,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Cub Cadet XT1 OR106 Hátsó kiszórású fűnyírótraktor (13A8A1TR603) 2022",
+      "link": "/product",
+      "number": "13A8A1TR603",
+      "priceNormal": 1560000,
+      "priceNet": 1228346,
+      "priceCrossed": 1560000,
+      "imageSrc": "/13A8A1TR603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.78,
+      "reviews": 112,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Cub Cadet XT1 OS107 Oldalkidobós fűnyírótraktor RevTek Technológia (13A8A1TS603) 2022",
+      "link": "/product",
+      "number": "13A8A1TS603",
+      "priceNormal": 1429000,
+      "priceNet": 1125197,
+      "priceCrossed": 1429000,
+      "imageSrc": "/13A8A1TS603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.28,
+      "reviews": 6,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Cub Cadet XT2 ES107 oldalkidobós Elektromos fűnyírótraktor (33ABA7ES603) 2023",
+      "link": "/product",
+      "number": "33ABA7ES603",
+      "priceNormal": 2987180,
+      "priceNet": 2352110,
+      "priceCrossed": 2987180,
+      "imageSrc": "/33ABA7ES603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 5,
+      "reviews": 2,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Cub Cadet XT3 QR106 Hátsó Kiszórású Fűnyíró Traktor RevTek Technológia (13AFA5TR603) 2022",
+      "link": "/product",
+      "number": "13AFA5TR603",
+      "priceNormal": 1560000,
+      "priceNet": 1228346,
+      "priceCrossed": 1560000,
+      "imageSrc": "/13AFA5TR603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.43,
+      "reviews": 17,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Cub Cadet XT3 QS127 Oldalkidobós Fűnyíró Traktor (14AFA5TQ603) 2022",
+      "link": "/product",
+      "number": "14AFA5TQ603",
+      "priceNormal": 2121990,
+      "priceNet": 1670858,
+      "priceCrossed": 2121990,
+      "imageSrc": "/14AFA5TQ603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.11,
+      "reviews": 3,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Cub Cadet XZ3 122 Zero-turn Fűnyíró traktor (47AIDGHB603) 2022",
+      "link": "/product",
+      "number": "47AIDGHB603",
+      "priceNormal": 2499000,
+      "priceNet": 1967717,
+      "priceCrossed": 2499000,
+      "imageSrc": "/47AIDGHB603.webp",
+      "hoverImageSrc": "/cub-cadet.webp",
+      "rating": 4.99,
+      "reviews": 99,
+      "manufacturer": [
+        {
+          "title": "Cub Cadet",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "productReviewOptions": [
+    {
+      "id": "1",
+      "title": "Termék",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 1,
+      "textRating": "Nagyon rossz",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "2",
+      "title": "Termék",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 2,
+      "textRating": "Rossz",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "3",
+      "title": "Termék",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 3,
+      "textRating": "Közepes",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "4",
+      "title": "Termék",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "textRating": "Jó",
+      "description": "Ez egy leírás"
+    },
+    {
+      "id": "5",
+      "title": "Termék",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 5,
+      "textRating": "Nagyon jó",
+      "description": "Ez egy leírás"
+    }
+  ],
+  "radioOptions": [
+    {
+      "id": "option1",
+      "label": "Tulajdonság",
+      "value": "option-1"
+    },
+    {
+      "id": "option2",
+      "label": "Tulajdonság",
+      "value": "option-2"
+    },
+    {
+      "id": "option3",
+      "label": "Tulajdonság",
+      "value": "option-3"
+    },
+    {
+      "id": "option4",
+      "label": "Tulajdonság",
+      "value": "option-4"
+    },
+    {
+      "id": "option5",
+      "label": "Tulajdonság",
+      "value": "option-5"
+    }
+  ],
+  "radioRatingOptions": [
+    {
+      "id": "option1",
+      "label": "Nagyon rossz",
+      "value": "option-1",
+      "rating": 1
+    },
+    {
+      "id": "option2",
+      "label": "Rossz",
+      "value": "option-2",
+      "rating": 2
+    },
+    {
+      "id": "option3",
+      "label": "Átlagos",
+      "value": "option-3",
+      "rating": 3
+    },
+    {
+      "id": "option4",
+      "label": "Jó",
+      "value": "option-4",
+      "rating": 4
+    },
+    {
+      "id": "option5",
+      "label": "Kiváló",
+      "value": "option-5",
+      "rating": 5
+    }
+  ],
+  "reviewOptions": [
+    {
+      "id": "1",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Kontextus",
+      "imageSrc": "/13AB77BE603.webp",
+      "date": "2023.10.10.",
+      "rating": 4,
+      "description": "Ez egy leírás",
+      "customer": [
+        {
+          "title": "Vásárló",
+          "imageSrc": "/cub-cadet.webp",
+          "link": "/"
+        }
+      ]
+    }
+  ],
+  "selectChipOptions": [
+    {
+      "id": "select-chip-1",
+      "label": "Engem válassz!"
+    },
+    {
+      "id": "select-chip-2",
+      "label": "Ide kattints!"
+    },
+    {
+      "id": "select-chip-3",
+      "label": "Ne ide!"
+    }
+  ],
+  "serviceOptions": [
+    {
+      "id": "1",
+      "title": "Szállítás",
+      "number": "13AB77BE603",
+      "priceNormal": 10000,
+      "priceNet": 10000,
+      "priceCrossed": 10000,
+      "imageSrc": "/13AB77BE603.webp"
+    }
+  ],
+  "uspCardOptions": [
+    {
+      "id": "1",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    },
+    {
+      "id": "2",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    },
+    {
+      "id": "3",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    },
+    {
+      "id": "4",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    },
+    {
+      "id": "5",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    },
+    {
+      "id": "6",
+      "title": "Ingyenes tanácsadás",
+      "description": "Mi vagyunk a legjobb webáruház a világon!",
+      "imageSrc": "/13AB77BE603.webp"
+    }
+  ]
+}
