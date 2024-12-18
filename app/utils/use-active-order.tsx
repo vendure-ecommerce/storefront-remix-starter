@@ -1,5 +1,5 @@
 import { useFetcher } from '@remix-run/react';
-import { CartLoaderData } from '~/routes/api/active-order';
+import { CartLoaderData } from '~/routes/api.active-order';
 import { useEffect } from 'react';
 
 export function useActiveOrder() {
