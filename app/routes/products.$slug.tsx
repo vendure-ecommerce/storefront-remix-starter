@@ -12,7 +12,7 @@ import {
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
-import { CartLoaderData } from '~/routes/api/active-order';
+import { CartLoaderData } from '~/routes/api.active-order';
 import { getSessionStorage } from '~/sessions';
 import { ErrorCode, ErrorResult } from '~/generated/graphql';
 import Alert from '~/components/Alert';

@@ -57,7 +57,7 @@ export async function action({ request, params }: DataFunctionArgs) {
 export default function NewAddress() {
   const { availableCountries } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
-  const actionData = useActionData();
+  const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
   const { state, close } = useToggleState(true);
   const { t } = useTranslation();
