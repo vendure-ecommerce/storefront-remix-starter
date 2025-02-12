@@ -1,11 +1,11 @@
 import { RemixI18Next } from 'remix-i18next/server';
-
-import i18n from '~/i18n'; // your i18n configuration file
+import i18nOptions from '~/i18n'; // your i18n configuration file
 import HttpBackend from 'i18next-http-backend';
 import { IS_CF_PAGES } from '~/utils/platform-adapter';
 import { RemixI18NextOption } from 'remix-i18next/server';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { findLanguageJSON } from '~/languages.server';
+import { resolve } from 'node:path';
 
 export async function getPlatformBackend() {
   if (IS_CF_PAGES) {
@@ -44,13 +44,13 @@ export async function platformAdapti18nConfig(config: RemixI18NextOption) {
 export async function getI18NextServer() {
   return platformAdapti18nConfig({
     detection: {
-      supportedLanguages: i18n.supportedLngs,
-      fallbackLanguage: i18n.fallbackLng,
+      supportedLanguages: i18nOptions.supportedLngs,
+      fallbackLanguage: i18nOptions.fallbackLng,
     },
     // This is the configuration for i18next used
     // when translating messages server-side only
     i18next: {
-      ...i18n,
+      ...i18nOptions,
     },
     // The i18next plugins you want RemixI18next to use for `i18n.getFixedT` inside loaders and actions.
     // E.g. The Backend plugin for loading translations from the file system
@@ -62,3 +62,24 @@ export async function getI18NextServer() {
 export async function getFixedT(request: Request) {
   return getI18NextServer().then((i18next) => i18next.getFixedT(request));
 }
+
+let i18next = new RemixI18Next({
+  detection: {
+    supportedLanguages: i18nOptions.supportedLngs,
+    fallbackLanguage: i18nOptions.fallbackLng,
+  },
+  // This is the configuration for i18next used
+  // when translating messages server-side only
+  i18next: {
+    ...i18nOptions,
+    backend: {
+      loadPath: resolve('./public/locales/{{lng}}.json'),
+    },
+  },
+  // The i18next plugins you want RemixI18next to use for `i18n.getFixedT` inside loaders and actions.
+  // E.g. The Backend plugin for loading translations from the file system
+  // Tip: You could pass `resources` to the `i18next` configuration and avoid a backend here
+  plugins: [(await import('i18next-fs-backend')).default],
+});
+
+export default i18next;

@@ -8,7 +8,7 @@ import type { RenderToPipeableStreamOptions } from 'react-dom/server';
 import { renderToPipeableStream } from 'react-dom/server';
 
 import { createInstance } from 'i18next';
-import { getI18NextServer, getPlatformBackend } from './i18next.server';
+import i18nServer from './i18next.server';
 import { resolve as resolvePath } from 'node:path';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from './i18n';
@@ -24,16 +24,17 @@ export default function handleRequest(
 ) {
   return new Promise(async (resolve, reject) => {
     let instance = createInstance();
-    let lng = await getI18NextServer().then((i18next) =>
-      i18next.getLocale(request),
-    );
+    let lng = await i18nServer.getLocale(request);
+    let ns = i18nServer.getRouteNamespaces(routerContext);
 
     await instance
-      .use(initReactI18next)
-      .use(await getPlatformBackend())
+      .use(initReactI18next) // Tell our instance to use react-i18next
+      .use((await import('i18next-fs-backend')).default) // Setup our backend
       .init({
-        ...i18n,
-        lng,
+        ...i18n, // spread the configuration
+        lng, // The locale we detected above
+        ns, // The namespaces the routes about to render wants to use
+        backend: { loadPath: resolvePath('./public/locales/{{lng}}.json') },
       });
 
     let shellRendered = false;

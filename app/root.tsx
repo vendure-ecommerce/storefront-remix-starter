@@ -25,7 +25,7 @@ import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { useTranslation } from 'react-i18next';
-import { getI18NextServer } from '~/i18next.server';
+import i18nServer from '~/i18next.server';
 
 export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
@@ -81,9 +81,7 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
     (collection) => collection.parent?.name === '__root_collection__',
   );
   const activeCustomer = await getActiveCustomer({ request });
-  const locale = await getI18NextServer().then((i18next) =>
-    i18next.getLocale(request),
-  );
+  const locale = await i18nServer.getLocale(request);
   const loaderData: RootLoaderData = {
     activeCustomer,
     activeChannel: await activeChannel({ request }),
@@ -93,6 +91,8 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 
   return data(loaderData, { headers: activeCustomer._headers });
 }
+
+export const handle = { i18n: ['common'] };
 
 export default function App() {
   const [open, setOpen] = useState(false);
