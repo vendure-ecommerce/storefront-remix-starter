@@ -6,15 +6,18 @@
   "type": "module",
   "scripts": {
     "build:cf": "cross-env CF_PAGES=1 react-router build",
-    "build:nf": "cross-env NETLIFY=1 react-router build",
+    "build:nf": "react-router build && node netlify/prepare.js",
     "build": "react-router build",
     "dev:wrangler": "cross-env CF_PAGES=1 wrangler pages dev ./public",
-    "dev": "cross-env NODE_ENV=development node server.js",
     "dev:cf": "cross-env CF_PAGES=1 NODE_ENV=development node server.js --manual -c \"yarn run dev:wrangler\"",
+    "dev:nf": "cross-env NODE_ENV=development node ./dev-server.js",
+    "dev": "cross-env NODE_ENV=development node server.js",
     "start:cf": "cross-env NODE_ENV=production yarn run dev:wrangler",
+    "start:nf": "netlify serve",
     "start": "node server.js",
     "generate": "graphql-codegen --config codegen.yml",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@graphql-codegen/typescript-generic-sdk": "^3.0.4",

@@ -1,11 +1,11 @@
 [build]
   command = "yarn run build:nf"
   functions = "netlify/functions"
-  publish = "public"
+  publish = "build/client"
 
 [dev]
-  command = "remix watch"
-  port = 3000
+  command = "yarn run dev:nf"
+  framework = "vite"
 
 [[redirects]]
   from = "/*"
@@ -13,6 +13,6 @@
   status = 200
 
 [[headers]]
-  for = "/build/*"
+  for = "/assets/*"
   [headers.values]
     "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
