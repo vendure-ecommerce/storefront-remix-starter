@@ -79,7 +79,7 @@ let i18next = new RemixI18Next({
   // The i18next plugins you want RemixI18next to use for `i18n.getFixedT` inside loaders and actions.
   // E.g. The Backend plugin for loading translations from the file system
   // Tip: You could pass `resources` to the `i18next` configuration and avoid a backend here
-  plugins: [(await import('i18next-fs-backend')).default],
+  // plugins: [(await import('i18next-fs-backend')).default],
 });
 
 export default i18next;
