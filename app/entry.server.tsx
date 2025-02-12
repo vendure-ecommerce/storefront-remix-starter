@@ -8,7 +8,7 @@ import type { RenderToPipeableStreamOptions } from 'react-dom/server';
 import { renderToPipeableStream } from 'react-dom/server';
 
 import { createInstance } from 'i18next';
-import i18nServer from './i18next.server';
+import i18nServer, { getPlatformBackend } from './i18next.server';
 import { resolve as resolvePath } from 'node:path';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from './i18n';
@@ -29,7 +29,7 @@ export default function handleRequest(
 
     await instance
       .use(initReactI18next) // Tell our instance to use react-i18next
-      .use((await import('i18next-fs-backend')).default) // Setup our backend
+      .use(await getPlatformBackend()) // Setup our backend
       .init({
         ...i18n, // spread the configuration
         lng, // The locale we detected above

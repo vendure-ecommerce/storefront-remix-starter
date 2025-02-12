@@ -1,7 +1,7 @@
 import { RemixI18Next } from 'remix-i18next/server';
 import i18nOptions from '~/i18n'; // your i18n configuration file
 import HttpBackend from 'i18next-http-backend';
-import { IS_CF_PAGES } from '~/utils/platform-adapter';
+import { IS_CF_PAGES, safeRequireNodeDependency } from '~/utils/platform-adapter';
 import { RemixI18NextOption } from 'remix-i18next/server';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { findLanguageJSON } from '~/languages.server';
@@ -11,10 +11,10 @@ export async function getPlatformBackend() {
   if (IS_CF_PAGES) {
     return HttpBackend;
   } else {
-    return (await import('i18next-fs-backend')).default
-    // return await safeRequireNodeDependency('i18next-fs-backend').then(
-    //   (module) => module.default,
-    // );
+    // return (await import('i18next-fs-backend')).default
+    return await safeRequireNodeDependency('i18next-fs-backend').then(
+      (module) => module.default,
+    );
   }
 }
 
