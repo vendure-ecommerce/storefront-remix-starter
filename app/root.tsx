@@ -1,9 +1,8 @@
-import { cssBundleHref } from '@remix-run/css-bundle';
+import type { Route } from './+types/root';
 import {
   isRouteErrorResponse,
   Link,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -12,14 +11,10 @@ import {
   useLoaderData,
   useRouteError,
   MetaFunction,
-} from '@remix-run/react';
-import stylesheet from './tailwind.css';
+  data,
+} from 'react-router';
+import './tailwind.css';
 import { Header } from './components/header/Header';
-import {
-  DataFunctionArgs,
-  json,
-  LinksFunction,
-} from '@remix-run/server-runtime';
 import { getCollections } from '~/providers/collections/collections';
 import { activeChannel } from '~/providers/channel/channel';
 import { APP_META_DESCRIPTION, APP_META_TITLE } from '~/constants';
@@ -28,7 +23,7 @@ import { CartTray } from '~/components/cart/CartTray';
 import { getActiveCustomer } from '~/providers/customer/customer';
 import Footer from '~/components/footer/Footer';
 import { useActiveOrder } from '~/utils/use-active-order';
-import { useChangeLanguage } from 'remix-i18next';
+import { useChangeLanguage } from 'remix-i18next/react';
 import { useTranslation } from 'react-i18next';
 import { getI18NextServer } from '~/i18next.server';
 
@@ -36,9 +31,17 @@ export const meta: MetaFunction = () => {
   return [{ title: APP_META_TITLE }, { description: APP_META_DESCRIPTION }];
 };
 
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: stylesheet },
-  ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
+export const links: Route.LinksFunction = () => [
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  {
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous',
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+  },
 ];
 
 const devMode =
@@ -72,7 +75,7 @@ export type RootLoaderData = {
   locale: string;
 };
 
-export async function loader({ request, params, context }: DataFunctionArgs) {
+export async function loader({ request, params, context }: Route.LoaderArgs) {
   const collections = await getCollections(request, { take: 20 });
   const topLevelCollections = collections.filter(
     (collection) => collection.parent?.name === '__root_collection__',
@@ -88,7 +91,7 @@ export async function loader({ request, params, context }: DataFunctionArgs) {
     locale,
   };
 
-  return json(loaderData, { headers: activeCustomer._headers });
+  return data(loaderData, { headers: activeCustomer._headers });
 }
 
 export default function App() {
@@ -147,8 +150,6 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <Footer collections={collections}></Footer>
-
-        {devMode && <LiveReload />}
       </body>
     </html>
   );
@@ -202,7 +203,6 @@ function DefaultSparseErrorPage({
         </main>
         <ScrollRestoration />
         <Scripts />
-        {devMode && <LiveReload />}
       </body>
     </html>
   );

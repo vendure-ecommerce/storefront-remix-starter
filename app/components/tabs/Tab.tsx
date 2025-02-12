@@ -1,5 +1,5 @@
-import { NavLink, useMatches, useResolvedPath } from '@remix-run/react';
-import { To } from '@remix-run/router';
+import { NavLink, useMatches, useResolvedPath } from 'react-router';
+import { To } from 'react-router';
 
 type IconElement = React.SVGProps<SVGSVGElement> & {
   title?: string;

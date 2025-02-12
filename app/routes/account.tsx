@@ -4,19 +4,18 @@ import {
   ShoppingBagIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/solid';
-import { Form, Outlet, useLoaderData, useMatches } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { Form, LoaderFunctionArgs, Outlet, redirect, useLoaderData, data } from 'react-router';
 import { TabProps } from '~/components/tabs/Tab';
 import { TabsContainer } from '~/components/tabs/TabsContainer';
 import { getActiveCustomerDetails } from '~/providers/customer/customer';
 import { useTranslation } from 'react-i18next';
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerDetails({ request });
   if (!activeCustomer) {
     return redirect('/sign-in');
   }
-  return json({ activeCustomer });
+  return data({ activeCustomer });
 }
 
 export default function AccountDashboard() {

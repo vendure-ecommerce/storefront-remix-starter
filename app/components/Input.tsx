@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { useField } from 'remix-validated-form';
+import { useField } from '@rvf/react-router';
 import FormElement from './FormElement';
 
 type InputProps = Omit<

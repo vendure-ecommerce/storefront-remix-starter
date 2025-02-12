@@ -1,4 +1,4 @@
-import { ValidationErrorResponseData } from "remix-validated-form";
+import { ValidationErrorResponseData } from "@rvf/react-router";
 import { ErrorResult } from "~/generated/graphql";
 
 export function isErrorResult(input: any): input is ErrorResult {

@@ -7,7 +7,6 @@ import {
   setOrderShippingAddress,
   setOrderShippingMethod,
 } from '~/providers/orders/order';
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import {
   CreateAddressInput,
   CreateCustomerInput,
@@ -17,16 +16,17 @@ import {
 } from '~/generated/graphql';
 import { getSessionStorage } from '~/sessions';
 import { shippingFormDataIsValid } from '~/utils/validation';
+import { ActionFunctionArgs, data, LoaderFunctionArgs } from 'react-router';
 
 export type CartLoaderData = Awaited<ReturnType<typeof loader>>;
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return {
     activeOrder: await getActiveOrder({ request }),
   };
 }
 
-export async function action({ request, params }: DataFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const body = await request.formData();
   const formAction = body.get('action');
   let activeOrder: OrderDetailFragment | undefined = undefined;
@@ -154,7 +154,7 @@ export async function action({ request, params }: DataFunctionArgs) {
   headers = {
     'Set-Cookie': await sessionStorage.commitSession(session),
   };
-  return json(
+  return data(
     { activeOrder: activeOrder || (await getActiveOrder({ request })) },
     {
       headers,

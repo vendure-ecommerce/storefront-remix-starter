@@ -1,6 +1,5 @@
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
-import { Form } from '@remix-run/react';
-import { redirect } from '@remix-run/server-runtime';
+import { Form, redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 export async function action() {

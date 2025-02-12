@@ -1,9 +1,8 @@
-import { MetaFunction, useLoaderData, useSubmit } from '@remix-run/react';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
-import { withZod } from '@remix-validated-form/with-zod';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData, useSubmit } from 'react-router';
+import { withZod } from '@rvf/zod';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ValidatedForm } from 'remix-validated-form';
+import { ValidatedForm } from '@rvf/react-router';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { CollectionCard } from '~/components/collections/CollectionCard';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
@@ -34,7 +33,7 @@ const { validator, filteredSearchLoader } = filteredSearchLoaderFromPagination(
   paginationLimitMinimumDefault,
 );
 
-export async function loader({ params, request, context }: DataFunctionArgs) {
+export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const {
     result,
     resultWithoutFacetValueFilters,

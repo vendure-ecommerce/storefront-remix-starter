@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { PropsWithChildren } from 'react';
-import { useField } from 'remix-validated-form';
+import { useField } from '@rvf/react-router';
 
 type FormElementProps = {
   name: string;
@@ -27,7 +27,7 @@ const FormElement: React.FC<PropsWithChildren<FormElementProps>> = ({
       <div className={label && "mt-1"}>{children}</div>
       {error && (
         <div className="pt-1 text-rose-500 text-sm">
-          <span>{error}</span>
+          <span>{error()}</span>
         </div>
       )}
     </div>

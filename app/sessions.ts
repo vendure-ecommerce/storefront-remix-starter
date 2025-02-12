@@ -1,20 +1,15 @@
-import {
-  IS_CF_PAGES,
-  safeRequireNodeDependency,
-} from '~/utils/platform-adapter';
-import { SessionStorage } from '@remix-run/server-runtime/dist/sessions';
-import { ErrorResult } from '~/generated/graphql';
-import { createCookieSessionStorage } from '@remix-run/cloudflare';
-import { CreateCookieSessionStorageFunction } from '@remix-run/server-runtime';
 
-async function getCookieSessionStorageFactory(): Promise<CreateCookieSessionStorageFunction> {
-  if (IS_CF_PAGES) {
+import { ErrorResult } from '~/generated/graphql';
+import { createCookieSessionStorage, type SessionStorage } from 'react-router';
+
+async function getCookieSessionStorageFactory() {
+  // if (IS_CF_PAGES) {
     return createCookieSessionStorage;
-  } else {
-    return safeRequireNodeDependency('@remix-run/node').then(
-      (module) => module.createCookieSessionStorage,
-    );
-  }
+  // } else {
+  //   return safeRequireNodeDependency('@remix-run/node').then(
+  //     (module) => module.createCookieSessionStorage,
+  //   );
+  // }
 }
 let sessionStorage: SessionStorage<
   { activeOrderError: ErrorResult } & Record<string, any>

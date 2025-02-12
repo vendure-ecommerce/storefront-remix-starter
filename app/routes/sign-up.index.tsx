@@ -1,5 +1,4 @@
-import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
-import { ActionFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, data, Form, Link, redirect, useActionData, useSearchParams } from 'react-router';
 import { registerCustomerAccount } from '~/providers/account/account';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import {
@@ -34,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formError: RegisterValidationErrors = {
       form: result.errorCode,
     };
-    return json(formError, { status: 401 });
+    return data(formError, { status: 401 });
   }
 }
 

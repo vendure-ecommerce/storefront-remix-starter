@@ -1,136 +1,87 @@
-import type { EntryContext } from '@remix-run/server-runtime';
-import { RemixServer } from '@remix-run/react';
-import isbot from 'isbot';
+import { PassThrough } from 'node:stream';
 
-import ReactDOM from 'react-dom/server';
+import type { AppLoadContext, EntryContext } from 'react-router';
+import { createReadableStreamFromReadable } from '@react-router/node';
+import { ServerRouter } from 'react-router';
+import { isbot } from 'isbot';
+import type { RenderToPipeableStreamOptions } from 'react-dom/server';
+import { renderToPipeableStream } from 'react-dom/server';
 
 import { createInstance } from 'i18next';
 import { getI18NextServer, getPlatformBackend } from './i18next.server';
+import { resolve as resolvePath } from 'node:path';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from './i18n';
-import {
-  IS_CF_PAGES,
-  safeRequireNodeDependency,
-} from '~/utils/platform-adapter';
 
-const ABORT_DELAY = 5000;
+export const streamTimeout = 5_000;
 
-type PlatformRequestHandler = (
-  arg0: Request,
-  arg1: number,
-  arg2: Headers,
-  arg3: EntryContext,
-  arg4: JSX.Element,
-) => Response | Promise<Response>;
-
-async function handleCfRequest(
+export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
-  jsx: JSX.Element,
+  routerContext: EntryContext,
+  loadContext: AppLoadContext,
 ) {
-  const body = await ReactDOM.renderToReadableStream(jsx, {
-    signal: request.signal,
-    onError(error: unknown) {
-      // Log streaming rendering errors from inside the shell
-      console.error(error);
-      responseStatusCode = 500;
-    },
-  });
+  return new Promise(async (resolve, reject) => {
+    let instance = createInstance();
+    let lng = await getI18NextServer().then((i18next) =>
+      i18next.getLocale(request),
+    );
 
-  if (isbot(request.headers.get('user-agent'))) {
-    await body.allReady;
-  }
+    await instance
+      .use(initReactI18next)
+      .use(await getPlatformBackend())
+      .init({
+        ...i18n,
+        lng,
+      });
 
-  responseHeaders.set('Content-Type', 'text/html');
-  return new Response(body, {
-    headers: responseHeaders,
-    status: responseStatusCode,
-  });
-}
+    let shellRendered = false;
+    let userAgent = request.headers.get('user-agent');
 
-async function handleNodeRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext,
-  jsx: JSX.Element,
-): Promise<Response> {
-  let callbackName = isbot(request.headers.get('user-agent'))
-    ? 'onAllReady'
-    : 'onShellReady';
+    // Ensure requests from bots and SPA Mode renders wait for all content to load before responding
+    // https://react.dev/reference/react-dom/server/renderToPipeableStream#waiting-for-all-content-to-load-for-crawlers-and-static-generation
+    let readyOption: keyof RenderToPipeableStreamOptions = (userAgent && isbot(userAgent)) || routerContext.isSpaMode ? 'onAllReady' : 'onShellReady';
 
-  return new Promise((resolve, reject) => {
-    let didError = false;
+    const { pipe, abort } = renderToPipeableStream(
+      <I18nextProvider i18n={instance}>
+        <ServerRouter context={routerContext} url={request.url} />
+      </I18nextProvider>,
+      {
+        [readyOption]() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = createReadableStreamFromReadable(body);
 
-    let { pipe, abort } = ReactDOM.renderToPipeableStream(jsx, {
-      [callbackName]: async () => {
-        const { PassThrough } = await safeRequireNodeDependency('node:stream');
+          responseHeaders.set('Content-Type', 'text/html');
 
-        const { createReadableStreamFromReadable } =
-          await safeRequireNodeDependency('@remix-run/node');
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            }),
+          );
 
-        const body = new PassThrough();
-        const stream = createReadableStreamFromReadable(body);
-        responseHeaders.set('Content-Type', 'text/html');
-
-        resolve(
-          new Response(stream, {
-            headers: responseHeaders,
-            status: didError ? 500 : responseStatusCode,
-          }),
-        );
-        pipe(body);
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
       },
-      onShellError(error: unknown) {
-        reject(error);
-      },
-      onError(error: unknown) {
-        didError = true;
+    );
 
-        console.error(error);
-      },
-    });
-
-    setTimeout(abort, ABORT_DELAY);
+    // Abort the rendering stream after the `streamTimeout` so it has time to
+    // flush down the rejected boundaries
+    setTimeout(abort, streamTimeout + 1000);
   });
 }
 
-export default async function handleRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext,
-) {
-  let instance = createInstance();
-  let lng = await getI18NextServer().then((i18next) =>
-    i18next.getLocale(request),
-  );
-
-  await instance
-    .use(initReactI18next)
-    .use(await getPlatformBackend())
-    .init({
-      ...i18n,
-      lng,
-    });
-
-  const jsx = (
-    <I18nextProvider i18n={instance}>
-      <RemixServer context={remixContext} url={request.url} />
-    </I18nextProvider>
-  );
-
-  const requestHandler: PlatformRequestHandler = IS_CF_PAGES
-    ? handleCfRequest
-    : handleNodeRequest;
-
-  return requestHandler(
-    request,
-    responseStatusCode,
-    responseHeaders,
-    remixContext,
-    jsx,
-  );
-}

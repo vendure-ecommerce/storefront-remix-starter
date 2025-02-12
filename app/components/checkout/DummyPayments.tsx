@@ -1,5 +1,5 @@
 import { CreditCardIcon, XCircleIcon } from '@heroicons/react/24/solid';
-import { Form } from '@remix-run/react';
+import { Form } from 'react-router';
 import { EligiblePaymentMethodsQuery } from '~/generated/graphql';
 import { useTranslation } from 'react-i18next';
 

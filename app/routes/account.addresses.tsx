@@ -1,5 +1,4 @@
-import { Outlet, useLoaderData } from '@remix-run/react';
-import { ActionFunctionArgs, json } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, data, LoaderFunctionArgs, Outlet, useLoaderData } from 'react-router';
 import AddAddressCard from '~/components/account/AddAddressCard';
 import EditAddressCard from '~/components/account/EditAddressCard';
 import { Address, ErrorCode, ErrorResult } from '~/generated/graphql';
@@ -9,12 +8,11 @@ import {
 } from '~/providers/account/account';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { getFixedT } from '~/i18next.server';
-import { LoaderFunctionArgs } from '@remix-run/router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const res = await getActiveCustomerAddresses({ request });
   const activeCustomerAddresses = res.activeCustomer;
-  return json({ activeCustomerAddresses });
+  return data({ activeCustomerAddresses });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -25,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // Verify that id is set
   if (!id || id.length === 0) {
-    return json<ErrorResult>(
+    return data<ErrorResult>(
       {
         errorCode: ErrorCode.IdentifierChangeTokenInvalidError, // TODO: I dont think this error is 100% appropriate - decide later
         message: t('address.idError'),
@@ -48,10 +46,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (_action === 'deleteAddress') {
     const { success } = await deleteCustomerAddress(id, { request });
-    return json(null, { status: success ? 200 : 400 });
+    return data(null, { status: success ? 200 : 400 });
   }
 
-  return json<ErrorResult>(
+  return data<ErrorResult>(
     {
       message: t('common.unknowError'),
       errorCode: ErrorCode.UnknownError,

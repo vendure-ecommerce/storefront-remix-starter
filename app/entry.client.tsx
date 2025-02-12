@@ -1,12 +1,13 @@
-import { hydrateRoot } from 'react-dom/client';
-import { RemixBrowser } from '@remix-run/react';
 import { startTransition, StrictMode } from 'react';
-import i18n from './i18n';
+import { hydrateRoot } from 'react-dom/client';
+import { HydratedRouter } from 'react-router/dom';
+
+import i18nOptions from './i18n';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { getInitialNamespaces } from 'remix-i18next';
 import HttpBackend from 'i18next-http-backend';
+import { getInitialNamespaces } from 'remix-i18next/client';
 
 async function hydrate() {
   await i18next
@@ -14,7 +15,7 @@ async function hydrate() {
     .use(LanguageDetector) // Setup a client-side language detector
     .use(HttpBackend) // Setup your backend
     .init({
-      ...i18n, // spread the configuration
+      ...i18nOptions, // spread the configuration
       // This function detects the namespaces your routes rendered while SSR use
       ns: getInitialNamespaces(),
       backend: { loadPath: '/locales/{{lng}}.json' },
@@ -34,7 +35,7 @@ async function hydrate() {
       document,
       <I18nextProvider i18n={i18next}>
         <StrictMode>
-          <RemixBrowser />
+          <HydratedRouter />
         </StrictMode>
       </I18nextProvider>,
     );
@@ -48,3 +49,4 @@ if (window.requestIdleCallback) {
   // https://caniuse.com/requestidlecallback
   window.setTimeout(hydrate, 1);
 }
+

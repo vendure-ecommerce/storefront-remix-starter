@@ -1,7 +1,7 @@
-import { withZod } from '@remix-validated-form/with-zod';
+import { withZod } from '@rvf/zod';
 import { z } from 'zod';
 import { RefObject } from 'react';
-import { ValidatedForm } from 'remix-validated-form';
+import { ValidatedForm } from '@rvf/react-router';
 import { Address, AvailableCountriesQuery } from '~/generated/graphql';
 import { Input } from '~/components/Input';
 import { Select } from '~/components/Select';

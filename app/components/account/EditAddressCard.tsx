@@ -5,7 +5,7 @@ import {
   TrashIcon,
   TruckIcon,
 } from '@heroicons/react/24/outline';
-import { Link, useFetcher } from '@remix-run/react';
+import { Link, useFetcher } from 'react-router';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { Address, ErrorResult } from '~/generated/graphql';

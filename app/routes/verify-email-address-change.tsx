@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { useLoaderData, useSearchParams } from '@remix-run/react';
-import { ActionFunctionArgs, redirect } from '@remix-run/server-runtime';
+import { LoaderFunctionArgs, redirect, useLoaderData, useSearchParams } from 'react-router';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { updateCustomerEmailAddress } from '~/providers/account/account';
 import { useTranslation } from 'react-i18next';
 import { getFixedT } from '~/i18next.server';
-import { LoaderFunctionArgs } from '@remix-run/router';
+import { ActionFunctionArgs } from 'react-router';
 
 type LoaderReturnType = {
   success: boolean;

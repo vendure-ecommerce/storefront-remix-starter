@@ -1,5 +1,4 @@
-import { Link, useFetcher, useSearchParams } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { ActionFunctionArgs, data, Link, redirect, useFetcher, useSearchParams } from 'react-router';
 import { login } from '~/providers/account/account';
 import { ErrorResult } from '~/generated/graphql';
 import { XCircleIcon } from '@heroicons/react/24/solid';
@@ -7,7 +6,7 @@ import { Button } from '~/components/Button';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-export async function action({ params, request }: DataFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const body = await request.formData();
   const email = body.get('email');
   const password = body.get('password');
@@ -18,7 +17,7 @@ export async function action({ params, request }: DataFunctionArgs) {
     if (result.__typename === 'CurrentUser') {
       return redirect(redirectTo, { headers: result._headers });
     } else {
-      return json(result, {
+      return data(result, {
         status: 401,
       });
     }

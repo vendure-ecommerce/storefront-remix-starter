@@ -4,6 +4,6 @@ export default {
   // Disabling suspense is recommended
   react: { useSuspense: false },
   backend: {
-    loadPath: '../public/locales/{{lng}}/{{ns}}.json',
+    loadPath: '../public/locales/{{lng}}.json',
   },
 };

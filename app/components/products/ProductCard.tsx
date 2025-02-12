@@ -1,5 +1,5 @@
 import { SearchQuery } from '~/generated/graphql';
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 import { Price } from './Price';
 
 export type ProductCardProps = SearchQuery['search']['items'][number];
