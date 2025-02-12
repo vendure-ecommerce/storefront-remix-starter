@@ -90,7 +90,7 @@
     "savePassword": "Guardar contraseña",
     "changePassword": "Cambiar la contraseña",
     "changeEmailConfirmation": "pendiente de confirmación",
-    "changeEmailButton": "pendiente de confirmación",
+    "changeEmailButton": "Cambiar correo electrónico",
     "changeEmailModal": {
       "title": "Cambiar dirección de correo electrónico",
       "heading": "Le enviaremos un correo electrónico de verificación a su nueva dirección de correo electrónico.",
