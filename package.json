@@ -23,7 +23,7 @@
     "@graphql-codegen/typescript-generic-sdk": "^3.0.4",
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
-    "@netlify/functions": "^1.3.0",
+    "@netlify/functions": "^3.0.0",
     "@react-router/express": "^7.1.5",
     "@react-router/node": "^7.1.5",
     "@rvf/core": "^7.0.2",
