@@ -1,9 +1,8 @@
 import { PencilIcon } from '@heroicons/react/24/outline';
-import { useActionData, useNavigation } from '@remix-run/react';
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
-import { withZod } from '@remix-validated-form/with-zod';
+import { ActionFunctionArgs, data, useActionData, useNavigation } from 'react-router';
+import { withZod } from '@rvf/zod';
 import { useEffect, useRef, useState } from 'react';
-import { ValidatedForm, validationError } from 'remix-validated-form';
+import { ValidatedForm, validationError } from '@rvf/react-router';
 import { z } from 'zod';
 import { Button } from '~/components/Button';
 import { ErrorMessage } from '~/components/ErrorMessage';
@@ -33,7 +32,7 @@ export const validator = withZod(
     ),
 );
 
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
 
   const result = await validator.validate(body);
@@ -49,10 +48,10 @@ export async function action({ request }: DataFunctionArgs) {
   );
 
   if (res.__typename !== 'Success') {
-    return json(res, { status: 401 });
+    return data(res, { status: 401 });
   }
 
-  return json(res);
+  return data(res);
 }
 
 export default function AccountPassword() {

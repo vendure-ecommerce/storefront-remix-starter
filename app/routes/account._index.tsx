@@ -1,9 +1,8 @@
 import { CheckIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useActionData, useLoaderData, useNavigation } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
-import { withZod } from '@remix-validated-form/with-zod';
+import { ActionFunctionArgs, data, LoaderFunctionArgs, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { withZod } from '@rvf/zod';
 import { useEffect, useRef, useState } from 'react';
-import { ValidatedForm, validationError } from 'remix-validated-form';
+import { ValidatedForm, validationError } from '@rvf/react-router';
 import { z } from 'zod';
 import { Button } from '~/components/Button';
 import { ErrorMessage } from '~/components/ErrorMessage';
@@ -43,12 +42,12 @@ const changeEmailValidator = withZod(
   }),
 );
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerDetails({ request });
   if (!activeCustomer) {
     return redirect('/sign-in');
   }
-  return json({ activeCustomer });
+  return data({ activeCustomer });
 }
 
 function isFormError(err: unknown): err is FormError {
@@ -80,12 +79,12 @@ type CustomerUpdatedResponse = {
   customerUpdated: true;
 };
 
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
   const intent = body.get('intent') as FormIntent | null;
 
   const formError = (formError: FormError, init?: number | ResponseInit) => {
-    return json<FormError>(formError, init);
+    return data<FormError>(formError, init);
   };
 
   if (intent === FormIntent.UpdateEmail) {
@@ -112,7 +111,7 @@ export async function action({ request }: DataFunctionArgs) {
       );
     }
 
-    return json<EmailSavedResponse>(
+    return data<EmailSavedResponse>(
       {
         newEmailAddress: email,
       },
@@ -133,7 +132,7 @@ export async function action({ request }: DataFunctionArgs) {
       { request },
     );
 
-    return json({
+    return data({
       customerUpdated: true,
     });
   }

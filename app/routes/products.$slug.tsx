@@ -1,4 +1,3 @@
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
 import { useState } from 'react';
 import { Price } from '~/components/products/Price';
 import { getProductBySlug } from '~/providers/products/products';
@@ -8,7 +7,9 @@ import {
   useLoaderData,
   useOutletContext,
   MetaFunction,
-} from '@remix-run/react';
+  LoaderFunctionArgs,
+  data,
+} from 'react-router';
 import { CheckIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { Breadcrumbs } from '~/components/Breadcrumbs';
 import { APP_META_TITLE } from '~/constants';
@@ -31,7 +32,7 @@ export const meta: MetaFunction = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }: DataFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { product } = await getProductBySlug(params.slug!, { request });
   if (!product) {
     throw new Response('Not Found', {
@@ -43,7 +44,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
     request?.headers.get('Cookie'),
   );
   const error = session.get('activeOrderError');
-  return json(
+  return data(
     { product: product!, error },
     {
       headers: {

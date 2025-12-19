@@ -1,4 +1,3 @@
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import {
   addPaymentToOrder,
   createStripePaymentIntent,
@@ -7,7 +6,7 @@ import {
   getNextOrderStates,
   transitionOrderToState,
 } from '~/providers/checkout/checkout';
-import { useLoaderData, useOutletContext } from '@remix-run/react';
+import { data, LoaderFunctionArgs, redirect, useLoaderData, useOutletContext } from 'react-router';
 import { OutletContext } from '~/types';
 import { CurrencyCode, ErrorCode, ErrorResult } from '~/generated/graphql';
 import { StripePayments } from '~/components/checkout/stripe/StripePayments';
@@ -16,8 +15,9 @@ import { BraintreeDropIn } from '~/components/checkout/braintree/BraintreePaymen
 import { getActiveOrder } from '~/providers/orders/order';
 import { getSessionStorage } from '~/sessions';
 import { useTranslation } from 'react-i18next';
+import { ActionFunctionArgs } from 'react-router';
 
-export async function loader({ params, request }: DataFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>
     sessionStorage.getSession(request?.headers.get('Cookie')),
   );
@@ -68,7 +68,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
       brainTreeError = e.message;
     }
   }
-  return json({
+  return data({
     eligiblePaymentMethods,
     stripePaymentIntent,
     stripePublishableKey,
@@ -79,7 +79,7 @@ export async function loader({ params, request }: DataFunctionArgs) {
   });
 }
 
-export async function action({ params, request }: DataFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const body = await request.formData();
   const paymentMethodCode = body.get('paymentMethodCode');
   const paymentNonce = body.get('paymentNonce');

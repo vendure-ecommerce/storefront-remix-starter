@@ -1,10 +1,11 @@
-import { useLoaderData, useSubmit } from '@remix-run/react';
+import type { Route } from './+types/search';
+import { useLoaderData, useSubmit } from 'react-router';
 import { useRef, useState } from 'react';
 import { FacetFilterTracker } from '~/components/facet-filter/facet-filter-tracker';
 import { filteredSearchLoaderFromPagination } from '~/utils/filtered-search-loader';
 import { FiltersButton } from '~/components/FiltersButton';
-import { ValidatedForm } from 'remix-validated-form';
-import { withZod } from '@remix-validated-form/with-zod';
+import { ValidatedForm } from '@rvf/react-router';
+import { withZod } from '@rvf/zod';
 import { paginationValidationSchema } from '~/utils/pagination';
 import { FilterableProductGrid } from '~/components/products/FilterableProductGrid';
 import { useTranslation } from 'react-i18next';
@@ -16,17 +17,27 @@ const allowedPaginationLimits = new Set<number>([
   100,
 ]);
 const validator = withZod(paginationValidationSchema(allowedPaginationLimits));
+const { filteredSearchLoader } = filteredSearchLoaderFromPagination(allowedPaginationLimits, paginationLimitMinimumDefault);
 
-export const { filteredSearchLoader: loader } =
-  filteredSearchLoaderFromPagination(
-    allowedPaginationLimits,
-    paginationLimitMinimumDefault,
-  );
+  export async function loader({ params, request, context }: Route.LoaderArgs) {
+    const { result, resultWithoutFacetValueFilters, facetValueIds, appliedPaginationLimit, appliedPaginationPage, term } = await filteredSearchLoader({
+      params,
+      request,
+      context,
+    });
 
-export default function Search() {
-  const loaderData = useLoaderData<Awaited<typeof loader>>();
-  const { result, resultWithoutFacetValueFilters, term, facetValueIds } =
-    loaderData;
+    return {
+      term,
+      result,
+      resultWithoutFacetValueFilters,
+      facetValueIds,
+      appliedPaginationLimit,
+      appliedPaginationPage,
+    };
+  }
+
+export default function Search({ loaderData }: Route.ComponentProps) {
+  const { result, resultWithoutFacetValueFilters, term, facetValueIds } = loaderData;
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const facetValuesTracker = useRef(new FacetFilterTracker());
   facetValuesTracker.current.update(

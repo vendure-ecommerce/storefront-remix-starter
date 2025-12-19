@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { CartContents } from './CartContents';
-import { Link, useLocation } from '@remix-run/react';
+import { Link, useLocation } from 'react-router';
 import { Price } from '~/components/products/Price';
 import { CartLoaderData } from '~/routes/api.active-order';
 import { CurrencyCode } from '~/generated/graphql';

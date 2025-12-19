@@ -1,8 +1,8 @@
 import { search, searchFacetValues } from '~/providers/products/products';
-import { redirect } from '@remix-run/server-runtime';
+import { redirect } from 'react-router';
 
 import { paginationValidationSchema } from '~/utils/pagination';
-import { LoaderFunctionArgs } from '@remix-run/router';
+import { LoaderFunctionArgs } from 'react-router';
 
 /**
  * This loader deals with loading product searches, which is used in both the search page and the

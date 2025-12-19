@@ -1,13 +1,15 @@
 import { FormEvent, useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import {
+  data,
   Form,
+  LoaderFunctionArgs,
+  redirect,
   useLoaderData,
   useNavigate,
   useOutletContext,
-} from '@remix-run/react';
+} from 'react-router';
 import { OutletContext } from '~/types';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
 import {
   getAvailableCountries,
   getEligibleShippingMethods,
@@ -22,7 +24,7 @@ import { ShippingAddressSelector } from '~/components/checkout/ShippingAddressSe
 import { getActiveOrder } from '~/providers/orders/order';
 import { useTranslation } from 'react-i18next';
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSessionStorage().then((sessionStorage) =>
     sessionStorage.getSession(request?.headers.get('Cookie')),
   );
@@ -44,7 +46,7 @@ export async function loader({ request }: DataFunctionArgs) {
   });
   const { activeCustomer } = await getActiveCustomerAddresses({ request });
   const error = session.get('activeOrderError');
-  return json({
+  return data({
     availableCountries,
     eligibleShippingMethods,
     activeCustomer,

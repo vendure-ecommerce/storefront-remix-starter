@@ -1,13 +1,15 @@
 import {
+  ActionFunctionArgs,
+  data as rrData,
+  LoaderFunctionArgs,
   useActionData,
   useLoaderData,
   useNavigate,
   useNavigation,
   useSubmit,
-} from '@remix-run/react';
-import { DataFunctionArgs, json } from '@remix-run/server-runtime';
+} from 'react-router';
 import { useRef, useEffect } from 'react';
-import { validationError } from 'remix-validated-form';
+import { validationError } from '@rvf/react-router';
 import { Button } from '~/components/Button';
 import Modal from '~/components/modal/Modal';
 import { HighlightedButton } from '~/components/HighlightedButton';
@@ -19,13 +21,13 @@ import { createCustomerAddress } from '~/providers/account/account';
 import { getAvailableCountries } from '~/providers/checkout/checkout';
 import { useTranslation } from 'react-i18next';
 
-export async function loader({ request, params }: DataFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const { availableCountries } = await getAvailableCountries({ request });
 
-  return json({ availableCountries });
+  return rrData({ availableCountries });
 }
 
-export async function action({ request, params }: DataFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const body = await request.formData();
 
   const result = await validator.validate(body);
@@ -49,7 +51,7 @@ export async function action({ request, params }: DataFunctionArgs) {
     { request },
   );
 
-  return json({
+  return rrData({
     saved: true,
   });
 }

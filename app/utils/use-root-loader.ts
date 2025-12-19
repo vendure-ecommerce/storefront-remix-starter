@@ -1,4 +1,4 @@
-import { useMatches } from '@remix-run/react';
+import { useMatches } from 'react-router';
 import { loader as rootLoader, RootLoaderData } from '~/root';
 
 export function useRootLoader(): RootLoaderData {

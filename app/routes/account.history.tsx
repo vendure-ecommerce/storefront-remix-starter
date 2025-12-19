@@ -1,17 +1,17 @@
-import { useLoaderData, useNavigation, useSubmit } from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+import { data, redirect, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import OrderHistoryItem from '~/components/account/OrderHistoryItem';
 import { getActiveCustomerOrderList } from '~/providers/customer/customer';
 import { OrderListOptions, SortOrder } from '~/generated/graphql';
 import { Pagination } from '~/components/Pagination';
-import { ValidatedForm } from 'remix-validated-form';
-import { withZod } from '@remix-validated-form/with-zod';
+import { ValidatedForm } from '@rvf/react-router';
+import { withZod } from '@rvf/zod';
 import {
   translatePaginationFrom,
   translatePaginationTo,
   paginationValidationSchema,
 } from '~/utils/pagination';
 import { useTranslation } from 'react-i18next';
+import { LoaderFunctionArgs } from 'react-router';
 
 const paginationLimitMinimumDefault = 10;
 const allowedPaginationLimits = new Set<number>([
@@ -23,7 +23,7 @@ const orderPaginationSchema = paginationValidationSchema(
   allowedPaginationLimits,
 );
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   // Careful params are user controllable data - never blindly trust it!
   // Use the .default fallbacks in case that params are undefined i.e. `null`
@@ -52,7 +52,7 @@ export async function loader({ request }: DataFunctionArgs) {
   if (!res.activeCustomer) {
     return redirect('/sign-in');
   }
-  return json({
+  return data({
     orderList: res.activeCustomer.orders,
     appliedPaginationLimit: zodResult.data.limit,
     appliedPaginationPage: zodResult.data.page,

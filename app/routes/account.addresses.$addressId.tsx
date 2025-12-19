@@ -4,10 +4,13 @@ import {
   useNavigate,
   useSubmit,
   useNavigation,
-} from '@remix-run/react';
-import { DataFunctionArgs, json, redirect } from '@remix-run/server-runtime';
+  LoaderFunctionArgs,
+  redirect,
+  data as rrData,
+  ActionFunctionArgs,
+} from 'react-router';
 import { useRef, useEffect } from 'react';
-import { validationError } from 'remix-validated-form';
+import { validationError } from '@rvf/react-router';
 import { Button } from '~/components/Button';
 import Modal from '~/components/modal/Modal';
 import { HighlightedButton } from '~/components/HighlightedButton';
@@ -21,7 +24,7 @@ import { getAvailableCountries } from '~/providers/checkout/checkout';
 import { getActiveCustomerAddresses } from '~/providers/customer/customer';
 import { useTranslation } from 'react-i18next';
 
-export async function loader({ request, params }: DataFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const { activeCustomer } = await getActiveCustomerAddresses({ request });
   const address = activeCustomer?.addresses?.find(
     (address) => address.id === params.addressId,
@@ -33,10 +36,10 @@ export async function loader({ request, params }: DataFunctionArgs) {
 
   const { availableCountries } = await getAvailableCountries({ request });
 
-  return json({ address, availableCountries });
+  return rrData({ address, availableCountries });
 }
 
-export async function action({ request, params }: DataFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const body = await request.formData();
 
   const result = await validator.validate(body);
@@ -61,7 +64,7 @@ export async function action({ request, params }: DataFunctionArgs) {
     { request },
   );
 
-  return json({
+  return rrData({
     saved: true,
   });
 }

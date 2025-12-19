@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import dropin, { Dropin } from 'braintree-web-drop-in';
 import { classNames } from '~/utils/class-names';
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 import { addPaymentToOrder } from '~/providers/checkout/checkout';
 import { CurrencyCode } from '~/generated/graphql';
 import { useTranslation } from 'react-i18next';
