@@ -3,18 +3,25 @@ import { createRoutesFromFolders } from '@remix-run/v1-route-convention';
 /**
  * @type {import('@remix-run/dev').AppConfig}
  */
-const commonConfig = {
-  appDirectory: 'app',
-  serverModuleFormat: 'esm',
+const bareConfig = {
   serverDependenciesToBundle: [
     'remix-i18next',
     '@remix-validated-form/with-zod',
   ],
-  tailwind: true,
   routes(defineRoutes) {
     // uses the v1 convention, works in v1.15+ and v2
     return createRoutesFromFolders(defineRoutes);
   },
+};
+
+/**
+ * @type {import('@remix-run/dev').AppConfig}
+ */
+const commonConfig = {
+  appDirectory: 'app',
+  serverModuleFormat: 'esm',
+  tailwind: true,
+  ...bareConfig,
 };
 
 /**
@@ -27,6 +34,13 @@ const cloudflarePagesConfig = {
   ignoredRouteFiles: ['**/.*'],
   serverMinify: true,
   ...commonConfig,
+};
+/**
+ * @type {import('@remix-run/dev').AppConfig}
+ */
+const vercelConfig = {
+  ignoredRouteFiles: ['**/.*'],
+  ...bareConfig,
 };
 /**
  * @type {import('@remix-run/dev').AppConfig}
@@ -61,11 +75,13 @@ const buildConfig = {
 };
 
 function selectConfig() {
-  if (!['development', 'production'].includes(process.env.NODE_ENV))
-    throw new Error(`Unknown NODE_ENV: ${process.env.NODE_ENV}`);
+  const ENV = process.env?.NODE_ENV || process.env?.VERCEL_ENV;
+  if (!['preview', 'development', 'production'].includes(ENV))
+    throw new Error(`Unknown ENV: ${ENV}`);
   if (process.env.CF_PAGES) return cloudflarePagesConfig;
   if (process.env.NETLIFY) return netlifyConfig;
-  if (process.env.NODE_ENV === 'development') return devConfig;
+  if (process.env.VERCEL) return vercelConfig;
+  if (ENV === 'development') return devConfig;
   if (!process.env.CF_PAGES && !process.env.NETLIFY) return buildConfig;
   throw new Error(`Cannot select config`);
 }
