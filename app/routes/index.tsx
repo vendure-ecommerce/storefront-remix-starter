@@ -52,7 +52,7 @@ export default function Index() {
             </a>{' '}
             &{' '}
             <a
-              href="~/routes/__cart/index"
+              href="https://www.remix.run"
               className="text-red-300 hover:text-red-500"
             >
               Remix
@@ -94,16 +94,6 @@ export default function Index() {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-6 px-4 sm:hidden">
-          <a
-            href="~/routes/__cart/index#"
-            className="block text-sm font-semibold text-primary-600 hover:text-primary-500"
-          >
-            {t('common.browseCategories')}
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
         </div>
       </section>
     </>
